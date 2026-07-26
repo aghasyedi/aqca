@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | AQCA</title>
+    <meta name="description" content="AQCA - Home">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="hero-section">
+        <div class="hero-content">
+            <h2 class="hero-title">Welcome to AQCA</h2>
+            <div class="hero-subtitle">All Quantum Computing Algorithms</div>
+            <p class="hero-desc">
+                AQCA is an interactive educational platform that visualizes and simulates quantum algorithms, protocols, and error correction codes. Explore the quantum world step-by-step — from the fundamentals to the most advanced algorithms.
+            </p>
+            <div class="hero-actions">
+                <a href="algorithms.html" class="btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Explore Algorithms</a>
+                <a href="preface.html" class="btn btn-outline"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> How to Use AQCA</a>
+            </div>
+        </div>
+        <div class="hero-diagram">
+            <span>[ Bloch Sphere / Circuit Image Placeholder ]</span>
+        </div>
+    </div>
+    
+    <h3 class="section-title"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Algorithm Categories</h3>
+    
+    <div class="categories-grid">
+        <div class="category-card">
+            <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+            <h4 class="category-title">1. Quantum Communication</h4>
+            <div class="category-count">4 Protocols</div>
+            <p class="category-desc">Explore foundational communication protocols that leverage entanglement and quantum information.</p>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+            <h4 class="category-title">2. Early Oracle Algorithms</h4>
+            <div class="category-count">4 Algorithms</div>
+            <p class="category-desc">The first quantum algorithms that demonstrate quantum advantage using oracles and interference.</p>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+            <h4 class="category-title">3. Core Algorithms</h4>
+            <div class="category-count">4 Algorithms</div>
+            <p class="category-desc">Algorithms that harness phase manipulation and amplitude amplification for powerful computation.</p>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+            <h4 class="category-title">4. Top-End Algorithms</h4>
+            <div class="category-count">4 Algorithms</div>
+            <p class="category-desc">Advanced algorithms for factoring, optimization, and solving real-world quantum problems.</p>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+            <h4 class="category-title">5. Quantum Error Correction</h4>
+            <div class="category-count">3 Codes</div>
+            <p class="category-desc">Protect quantum information against noise and errors using quantum error correction codes.</p>
+        </div>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-item">
+            <div class="feature-header">
+                <span class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+                <h4 class="feature-title">Interactive Visualizations</h4>
+            </div>
+            <p class="feature-desc">Step-by-step circuit execution, state evolution, and probability visualizations.</p>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-header">
+                <span class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg></span>
+                <h4 class="feature-title">Mathematical Insights</h4>
+            </div>
+            <p class="feature-desc">Dirac notation, state vectors, and mathematical explanations at every step.</p>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-header">
+                <span class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
+                <h4 class="feature-title">Noise & Realism</h4>
+            </div>
+            <p class="feature-desc">Simulate noise, decoherence, and error correction in quantum systems.</p>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-header">
+                <span class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></span>
+                <h4 class="feature-title">Learn by Doing</h4>
+            </div>
+            <p class="feature-desc">Adjust parameters, run simulations, and see quantum phenomena in action.</p>
+        </div>
+    </div>
+    
+    <div style="margin-top: 3rem; padding: 1.25rem 1.5rem; background: var(--primary-light); border-radius: 6px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h4 style="margin: 0 0 0.25rem 0; color: var(--primary); font-family: var(--font-serif); font-size: 1.1rem;">Explore the BB84 Protocol</h4>
+            <p style="margin: 0; font-size: 0.9rem;">I have also created a dedicated BB84 Simulator, an interactive visualizer for the foundational quantum communication protocol.</p>
+        </div>
+        <a href="https://bb84qkd.netlify.app/go.html" target="_blank" rel="noopener noreferrer" class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem; white-space: nowrap;">Launch Simulator <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a>
+    </div>
+
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    
+</body>
+</html>

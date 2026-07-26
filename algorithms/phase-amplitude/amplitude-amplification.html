@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generalised Amplitude Amplification | AQCA</title>
+    <meta name="description" content="AQCA - Generalised Amplitude Amplification">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Phase & Amplitude Core <span class="breadcrumb-separator">›</span> 
+        Generalised Amplitude Amplification
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Generalised Amplitude Amplification</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Phase & Amplitude Core</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p><strong>Generalised Amplitude Amplification (GAA)</strong> is the broader mathematical framework that encompasses Grover’s Search. While Grover’s Algorithm assumes you are searching a completely unstructured dataset (starting with a uniform distribution where every item has an equal probability), real-world problems often have heuristics.</p>
+        <p>Suppose you have an arbitrary quantum algorithm (let us call it \(\mathcal{A}\)) that guesses the correct answer to a problem with a small probability \(p\). Classically, you would just run \(\mathcal{A}\) repeatedly until it succeeds. Generalised Amplitude Amplification allows a quantum computer to boost that success probability to near \(100\%\) using quadratically fewer repetitions than a classical computer.</p>
+
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Complexity</h3>
+                <div class="complexity-value">\(\mathcal{O}(1/p)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">You must run the classical heuristic algorithm roughly \(1/p\) times to find a successful outcome.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Speedup</h3>
+                <div class="complexity-value">\(\mathcal{O}(1/\sqrt{p})\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">GAA applies the quantum operator roughly \(1/\sqrt{p}\) times, achieving a <strong>quadratic speedup</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>Think of your initial quantum algorithm \(\mathcal{A}\) as a biased coin. Instead of a 50/50 chance, it might have a 1% chance of landing on "heads" (the correct answer).</p>
+        <p>In standard Grover's search, the "Diffuser" acts like a mirror reflecting probability amplitudes around the <em>average</em> of a perfectly uniform flat line.</p>
+        <p>In Generalised Amplitude Amplification, the mirror is tilted. We replace the standard diffuser with a custom operator that reflects amplitudes around the specific, biased distribution created by algorithm \(\mathcal{A}\). By wrapping your algorithm \(\mathcal{A}\) inside this custom reflection loop, the quantum interference systematically siphons probability away from the incorrect outputs of \(\mathcal{A}\) and pumps it into the correct outputs, rotating the state towards a successful measurement.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>State Preparation (\(\mathcal{A}\)):</strong> Any arbitrary quantum circuit that prepares the initial superposition. (In standard Grover's, \(\mathcal{A} = H^{\otimes n}\)).</li>
+            <li><strong>Oracle (\(U_\omega\)):</strong> Flips the phase of the "good" (target) states.</li>
+            <li><strong>Inverse Preparation (\(\mathcal{A}^{-1}\) or \(\mathcal{A}^\dagger\)):</strong> The exact reverse of the preparation circuit.</li>
+            <li><strong>Zero-Reflection (\(S_0\)):</strong> Flips the phase of the \(|00\dots0\rangle\) state.</li>
+        </ul>
+        <p>The custom Diffuser is constructed as \(Q = -\mathcal{A} S_0 \mathcal{A}^{-1} U_\omega\).</p>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Schematic</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+       ┌───┐ ┌────────┐ ┌───────┐ ┌──────┐ ┌───┐
+q_0: ──┤   ├─┤        ├─┤       ├─┤      ├─┤   ├─ ... ─ ✂ Measure
+       │   │ │ Oracle │ │       │ │ Zero │ │   │
+q_1: ──┤ A ├─┤  U_w   ├─┤ A^{-1}├─┤ Phase├─┤ A ├─ ... ─ ✂ Measure
+      ...  │ │        │ │       │ │ Flip │ │   │
+       │   │ │        │ │       │ │      │ │   │
+q_n: ──┤   ├─┤        ├─┤       ├─┤      ├─┤   ├─ ... ─ ✂ Measure
+       └───┘ └────────┘ └───────┘ └──────┘ └───┘
+             \________  _______________________/
+                      \/
+      Repeat ≈ (π/4√p) times (Amplification Loop)</pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
+        <p>We begin with the zero state and apply our arbitrary algorithm \(\mathcal{A}\):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\Psi\rangle = \mathcal{A}|0\rangle^{\otimes n}\)</p>
+        </div>
+        <p>We can split this state into two orthogonal components: the "good" states we want to find (\(|\Psi_{good}\rangle\)) and the "bad" states (\(|\Psi_{bad}\rangle\)). Let \(p\) be the probability of measuring a good state. We can rewrite \(|\Psi\rangle\) using an angle \(\theta\), where \(\sin^2(\theta) = p\):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\Psi\rangle = \sin(\theta)|\Psi_{good}\rangle + \cos(\theta)|\Psi_{bad}\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: The Oracle (\(U_\omega\))</h3>
+        <p>The oracle isolates the good states and flips their phase:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(U_\omega |\Psi\rangle = -\sin(\theta)|\Psi_{good}\rangle + \cos(\theta)|\Psi_{bad}\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 3: The Custom Diffuser</h3>
+        <p>The diffuser operator is defined as \(U_s = -\mathcal{A} S_0 \mathcal{A}^{-1}\), where \(S_0 = I - 2|0\rangle\langle0|\) flips the phase of the all-zero state.</p>
+        <p>Mathematically, this evaluates to \(U_s = 2|\Psi\rangle\langle\Psi| - I\), which is an inversion about the initial state \(|\Psi\rangle\).</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Geometric Rotation (The Q Operator)</h3>
+        <p>One full amplification iteration is \(Q = -U_s U_\omega\).</p>
+        <p>Just like Grover's, applying \(Q\) performs a rotation in the 2D plane defined by \(|\Psi_{good}\rangle\) and \(|\Psi_{bad}\rangle\). Because our initial state \(|\Psi\rangle\) is offset from the bad axis by the angle \(\theta\), each application of \(Q\) rotates the state vector by exactly \(2\theta\) towards \(|\Psi_{good}\rangle\).</p>
+        <p>After \(k\) iterations, the state becomes:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(Q^k |\Psi\rangle = \sin((2k+1)\theta)|\Psi_{good}\rangle + \cos((2k+1)\theta)|\Psi_{bad}\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Measurement</h3>
+        <p>To maximise the probability of measuring a good state, we need \(\sin((2k+1)\theta) \approx 1\).</p>
+        <p>This requires \((2k+1)\theta \approx \pi/2\). Since \(\sin(\theta) = \sqrt{p}\), for small \(p\), \(\theta \approx \sqrt{p}\).</p>
+        <p>Solving for \(k\) gives the optimal number of iterations:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(k \approx \frac{\pi}{4\sqrt{p}}\)</p>
+        </div>
+        <p>Measuring the system after \(k\) iterations yields a "good" state with a probability approaching \(100\%\).</p>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>2D Vector Plane:</strong> The visualizer will show the \(|\Psi_{good}\rangle\) vs \(|\Psi_{bad}\rangle\) plane. Unlike Grover's where the initial arrow is practically flat against the horizontal axis (because \(1/\sqrt{N}\) is tiny), GAA allows the user to set a custom initial probability \(p\). If \(p=25\%\), the initial arrow sits at a steep \(30^\circ\) angle (\(\theta\)). The user can watch how only one iteration (\(2\theta = 60^\circ\)) rotates the vector to exactly \(90^\circ\), requiring vastly fewer steps than a uniform search.</li>
+            <li><strong>Amplitude Histogram:</strong> Displays the highly irregular initial distribution created by \(\mathcal{A}\). During the diffusion step, the user can see the amplitudes reflecting not around a flat average, but mirroring across the specific "shape" of the initial distribution.</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def simulate_amplitude_amplification(p_success):
+    \"\"\"
+    Simulates Generalised Amplitude Amplification mathematically using NumPy.
+    p_success: The initial probability p of the algorithm A finding the target.
+    \"\"\"
+    # Define the 2D subspace: |bad> = [1, 0]^T, |good> = [0, 1]^T
+    theta = np.arcsin(np.sqrt(p_success))
+    
+    # Initial state |Psi> created by A
+    psi = np.array([[np.cos(theta)], [np.sin(theta)]])
+    
+    # 1. Oracle U_w (flips phase of |good>)
+    U_w = np.array([[1, 0], [0, -1]])
+    
+    # 2. Diffuser U_s = 2|Psi&gt;&lt;Psi| - I
+    U_s = 2 * np.dot(psi, psi.T) - np.eye(2)
+    
+    # 3. The Amplification Operator Q
+    Q = np.dot(U_s, U_w)
+    
+    # 4. Calculate optimal iterations k
+    k = int(np.round(np.pi / (4 * theta) - 0.5))
+    if k < 0: k = 0
+    
+    # 5. Apply Q for k iterations
+    state = psi
+    for _ in range(k):
+        state = np.dot(Q, state)
+        
+    prob_good = np.abs(state[1, 0])**2
+    return prob_good, k
+
+# If our heuristic has a 10% chance of success
+final_prob, iterations = simulate_amplitude_amplification(0.10)
+print(f"Boosted to {final_prob*100:.2f}% success in {iterations} iterations.")
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+import numpy as np
+
+def create_A_operator():
+    \"\"\"Custom algorithm A that biases towards the target state |11>.\"\"\"
+    qc = QuantumCircuit(2)
+    # Using Ry rotations to create a biased probability instead of pure Hadamards
+    qc.ry(np.pi/3, 0) 
+    qc.ry(np.pi/3, 1)
+    return qc
+
+def create_A_inverse():
+    \"\"\"The exact inverse of A.\"\"\"
+    return create_A_operator().inverse()
+
+def gaa_circuit(target_state='11'):
+    qc = QuantumCircuit(2, 2)
+    
+    # 1. Prepare initial state using A
+    qc.compose(create_A_operator(), inplace=True)
+    qc.barrier()
+    
+    iterations = 2 # Calculated based on the specific Ry angles used
+    
+    for _ in range(iterations):
+        # 2. Oracle (CZ gate for |11>)
+        qc.cz(0, 1)
+        qc.barrier()
+        
+        # 3. Custom Diffuser: A^{-1} -> Zero Reflection -> A
+        qc.compose(create_A_inverse(), inplace=True)
+        
+        # Zero reflection S_0 (flips |00>)
+        qc.x([0, 1])
+        qc.cz(0, 1)
+        qc.x([0, 1])
+        
+        qc.compose(create_A_operator(), inplace=True)
+        qc.barrier()
+        
+    qc.measure([0,1], [0,1])
+    return qc
+
+circuit = gaa_circuit()
+simulator = AerSimulator()
+counts = simulator.run(circuit, shots=1024).result().get_counts()
+print("Measurement Counts:", counts)
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>The Over-Rotation Problem (Soufflé Problem):</strong> Just like standard Grover's, if you apply the \(Q\) operator too many times, the state vector will rotate past the \(|\Psi_{good}\rangle\) axis, and your probability of success will plummet. You must have a reasonable estimate of \(p\) to know when to stop. If \(p\) is entirely unknown, you must use a schedule of varying iterations (Quantum Amplitude Estimation) to find it.</li>
+            <li><strong>Circuit Depth Multiplication:</strong> If your initial heuristic algorithm \(\mathcal{A}\) is already a deep, complex circuit, GAA requires you to run \(\mathcal{A}\) and its inverse \(\mathcal{A}^{-1}\) repeatedly. This multiplies the total circuit depth by \(\mathcal{O}(1/\sqrt{p})\), making it highly susceptible to decoherence on uncorrected hardware.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Quantum Machine Learning:</strong> Used as a subroutine to boost the probability of measuring specific basis states in quantum neural networks and clustering algorithms.</li>
+            <li><strong>Monte Carlo Speedup:</strong> The mathematical core of GAA is the backbone for Quantum Amplitude Estimation, which is used in quantum finance to perform Monte Carlo simulations (like option pricing and risk analysis) quadratically faster than classical supercomputers.</li>
+            <li><strong>State Preparation:</strong> When trying to prepare a highly complex quantum state (where standard deterministic preparation is too deep), GAA can be used to boost a simpler, probabilistic state preparation circuit.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Brassard, G., Høyer, P., Mosca, M., &amp; Tapp, A. (2002). Quantum amplitude amplification and estimation. <em>Contemporary Mathematics</em>, 305, 53-74.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <a href="grover.html" class="nav-button">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Grover's Search Algorithm</span>
+        </a>
+        <a href="../flagship-hybrid/vqe.html" class="nav-button nav-next">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Variational Quantum Eigensolver</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>

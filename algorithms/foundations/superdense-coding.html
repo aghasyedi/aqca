@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superdense Coding | AQCA</title>
+    <meta name="description" content="AQCA - Superdense Coding">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Protocols & Foundations <span class="breadcrumb-separator">›</span> 
+        Superdense Coding
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Superdense Coding</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Protocols & Foundations</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p>In classical information theory, transmitting two bits of information strictly requires sending two physical bits. Superdense coding is a quantum communication protocol that solves this problem of transmission efficiency. It allows a sender (Alice) to transmit two classical bits of information to a receiver (Bob) by sending only a single quantum bit (qubit). This remarkable feat is achieved under the assumption that the sender and receiver pre-share a maximally entangled resource, such as a Bell pair.</p>
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Bit Cost</h3>
+                <div class="complexity-value">2 bits</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Sending two classical bits requires transmitting two physical bits.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Qubit Cost</h3>
+                <div class="complexity-value">1 qubit</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Sends two classical bits by transmitting only one qubit, doubling the information density.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>Superdense coding can be conceptualised as the inverse of quantum teleportation. While teleportation uses two classical bits to transmit one quantum state, superdense coding uses one quantum state to transmit two classical bits.</p>
+        <ol style="line-height: 1.6; margin-left: 1.5rem;">
+            <li><strong>Pre-shared Entanglement:</strong> Alice and Bob share an entangled pair of qubits (e.g., the state \(|\Phi^+\rangle\)). Alice holds the first qubit, and Bob holds the second.</li>
+            <li><strong>Local Encoding:</strong> Alice wishes to send a two-bit classical message (<code>00</code>, <code>01</code>, <code>10</code>, or <code>11</code>). Instead of sending classical signals, she applies a specific quantum gate to her single qubit. Because her qubit is entangled with Bob's, her local operation shifts the global state of the entire two-qubit system into one of four orthogonal Bell states.</li>
+            <li><strong>Transmission & Decoding:</strong> Alice sends her single qubit to Bob. Bob now possesses both qubits of the entangled pair. He applies a joint measurement (decoding operation) to determine which of the four Bell states the system is in, thereby extracting Alice's original two-bit message.</li>
+        </ol>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <p>The circuit requires gates for entanglement generation, message encoding, and decoding.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard (\(H\)) & Controlled-NOT (\(CX\)):</strong> Used initially to create the shared Bell state.</li>
+            <li><strong>Pauli-\(X\) and Pauli-\(Z\) Gates:</strong> Used by Alice to encode the classical bits.</li>
+            <li><strong>Controlled-NOT (\(CX\)) & Hadamard (\(H\)):</strong> Used by Bob in reverse order to decode the Bell state back into computational basis states.</li>
+        </ul>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Schematic</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+       ┌───┐      Encoding        Sending       Decoding
+q_0: ──┤ H ├──■───[ I/X/Z/XZ ]──────(►)───────■───┌───┐─── ✂ Measure
+       └───┘  │                               │   └───┘
+q_1: ─────────■───────────────────────────────■─────────── ✂ Measure
+             Shared Entanglement             Bob's lab</pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        
+        <h3 style="margin-top: 1.5rem;">Step 1: Sharing Entanglement</h3>
+        <p>The protocol begins with the preparation of the Bell state \(|\Phi^+\rangle\) shared between Alice and Bob:</p>
+        <div class="math-container">
+            <p>\(|\psi_0\rangle = |\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\)</p>
+        </div>
+        <p>Alice possesses the first qubit (left), and Bob possesses the second (right).</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Encoding the Message</h3>
+        <p>Alice applies a unitary operation to her qubit based on the two-bit message she wishes to send. This transforms the global state:</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Message <code>00</code> (Apply \(I\)):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\((I \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle) = |\Phi^+\rangle\)</p>
+                </div>
+            </li>
+            <li><strong>Message <code>01</code> (Apply \(X\)):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\((X \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|10\rangle + |01\rangle) = |\Psi^+\rangle\)</p>
+                </div>
+            </li>
+            <li><strong>Message <code>10</code> (Apply \(Z\)):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\((Z \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle - |11\rangle) = |\Phi^-\rangle\)</p>
+                </div>
+            </li>
+            <li><strong>Message <code>11</code> (Apply \(Z\) then \(X\)):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\((XZ \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|10\rangle - |01\rangle) = |\Psi^-\rangle\)</p>
+                </div>
+            </li>
+        </ul>
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Decoding the Message</h3>
+        <p>Alice sends her qubit to Bob, who now applies a \(CX\) gate (with Alice's qubit as control and his as target), followed by a Hadamard gate on Alice's qubit.<br>Let us trace the evolution for the encoded message <code>01</code> (\(|\Psi^+\rangle\)):</p>
+        <ol style="line-height: 1.6; margin-left: 1.5rem;">
+            <li><strong>Apply \(CX\):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\(CX \left( \frac{1}{\sqrt{2}}(|10\rangle + |01\rangle) \right) = \frac{1}{\sqrt{2}}(|11\rangle + |01\rangle) = \frac{1}{\sqrt{2}}(|1\rangle + |0\rangle) \otimes |1\rangle\)</p>
+                </div>
+            </li>
+            <li><strong>Apply Hadamard to Qubit 0:</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\((H \otimes I) \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \otimes |1\rangle \right) = |0\rangle \otimes |1\rangle = |01\rangle\)</p>
+                </div>
+            </li>
+        </ol>
+
+        <h3 style="margin-top: 1.5rem;">Measurement</h3>
+        <p>Measuring the two qubits in the computational basis perfectly yields the classical string <code>01</code> with \(100\%\) probability. This deterministically works for all four encoded states.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Bloch Spheres (During Encoding):</strong> When Alice applies her gates, her local reduced density matrix remains completely mixed (a point at the centre of the Bloch sphere). No local measurement can reveal the message, illustrating the security of the protocol against eavesdropping.</li>
+            <li><strong>Statevector Histogram (Post-Decoding):</strong> After Bob applies his \(CX\) and \(H\) gates, the histogram collapses from a superposition of Bell states entirely into a single computational basis bar (e.g., a single peak at <code>10</code> of height 1.0).</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def simulate_superdense_coding(message):
+    \"\"\"
+    Simulates Superdense Coding using pure NumPy matrix multiplication.
+    message: string '00', '01', '10', or '11'
+    \"\"\"
+    I = np.eye(2, dtype=complex)
+    X = np.array([[0, 1], [1, 0]], dtype=complex)
+    Z = np.array([[1, 0], [0, -1]], dtype=complex)
+    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
+    CX = np.array([[1, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0]], dtype=complex)
+
+    # 1. Shared Entanglement (Phi+)
+    phi_plus = np.array([[1/np.sqrt(2)], [0], [0], [1/np.sqrt(2)]])
+
+    # 2. Alice's Encoding
+    encode_gate = I
+    if message == '01':
+        encode_gate = X
+    elif message == '10':
+        encode_gate = Z
+    elif message == '11':
+        encode_gate = np.dot(X, Z) # Apply Z then X
+
+    # Apply Alice's gate to her qubit (tensor with Identity for Bob's qubit)
+    psi_encoded = np.dot(np.kron(encode_gate, I), phi_plus)
+
+    # 3. Bob's Decoding
+    # Apply CX
+    psi_decoded = np.dot(CX, psi_encoded)
+    # Apply H to Qubit 0
+    psi_final = np.dot(np.kron(H, I), psi_decoded)
+
+    # 4. Measurement
+    probabilities = np.abs(psi_final.flatten())**2
+    state_names = ['00', '01', '10', '11']
+    
+    return dict(zip(state_names, np.round(probabilities, 5)))
+
+# Example
+print("Transmitted Message '10':", simulate_superdense_coding('10'))
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+def superdense_coding_circuit(message):
+    qc = QuantumCircuit(2, 2)
+    
+    # 1. Prepare Entanglement
+    qc.h(0)
+    qc.cx(0, 1)
+    qc.barrier(label="Shared")
+    
+    # 2. Alice Encodes
+    if message[1] == '1': # Check least significant bit
+        qc.x(0)
+    if message[0] == '1': # Check most significant bit
+        qc.z(0)
+    
+    qc.barrier(label="Transmitted")
+    
+    # 3. Bob Decodes
+    qc.cx(0, 1)
+    qc.h(0)
+    
+    # 4. Measure
+    qc.measure([0, 1], [0, 1])
+    return qc
+
+# Simulate
+circuit = superdense_coding_circuit('11')
+simulator = AerSimulator()
+result = simulator.run(circuit, shots=1024).result()
+print("Measurement Counts:", result.get_counts())
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Requires Pre-shared Entanglement:</strong> If Alice and Bob do not have prior entanglement established, transmitting two classical bits with one qubit is physically impossible and would violate Holevo's bound.</li>
+            <li><strong>Noise and Decoherence:</strong> Physical quantum channels are prone to depolarising noise. If the entangled pair degrades due to environmental decoherence before Bob can decode it, the error rate in the transmitted classical bits will rise dramatically.</li>
+            <li><strong>Transmission Loss:</strong> If Alice's qubit is absorbed or lost in the optical fibre en route to Bob, the entire protocol fails, and the message cannot be recovered.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Quantum Networks & Communication:</strong> Superdense coding is a fundamental protocol for the future quantum internet, allowing for higher information density across optical networks.</li>
+            <li><strong>Secure Communication:</strong> It acts as a form of secure quantum communication. If an eavesdropper (Eve) intercepts Alice's qubit en route, they only obtain part of a maximally mixed state. Without Bob's entangled half, no classical information can be extracted.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Bennett, C. H., &amp; Wiesner, S. J. (1992). Communication via one- and two-particle operators on Einstein-Podolsky-Rosen states. <em>Physical Review Letters</em>, 69(20), 2881.</li>
+            <li>Mattle, K., Weinfurter, H., Kwiat, P. G., &amp; Zeilinger, A. (1996). Dense coding in experimental quantum communication. <em>Physical Review Letters</em>, 76(25), 4656.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <a href="bell-state.html" class="nav-button">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Bell State Generator</span>
+        </a>
+        <a href="quantum-teleportation.html" class="nav-button nav-next">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Quantum Teleportation</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>

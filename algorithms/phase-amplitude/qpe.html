@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Phase Estimation (QPE) | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Phase Estimation (QPE)">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Phase & Amplitude Core <span class="breadcrumb-separator">›</span> 
+        Quantum Phase Estimation (QPE)
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Quantum Phase Estimation (QPE)</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Phase & Amplitude Core</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p><strong>Quantum Phase Estimation (QPE)</strong> is a central subroutine in quantum algorithms. It is designed to solve the following problem: suppose you are given a unitary operator \(U\) and a quantum state \(|\psi\rangle\) which is an exact eigenvector of \(U\). By definition, applying \(U\) to \(|\psi\rangle\) simply multiplies the state by a global phase:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(U|\psi\rangle = e^{2\pi i \theta}|\psi\rangle\)</p>
+        </div>
+        <p>The problem is to estimate the unknown phase \(\theta\) (where \(0 \le \theta &lt; 1\)) to a high degree of precision using \(t\) bits.</p>
+
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Complexity</h3>
+                <div class="complexity-value">\(\mathcal{O}(2^n)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Classically finding eigenvalues of an exponentially large \(2^n \times 2^n\) matrix is computationally intractable.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Speedup</h3>
+                <div class="complexity-value">\(\mathcal{O}(t^2)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A quantum computer extracts the phase using \(\mathcal{O}(t^2)\) gates alongside controlled applications of \(U\), yielding an <strong>exponential speedup</strong> over classical eigensolvers.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>If you apply \(U\) to an eigenvector, the phase \(\theta\) is purely global, meaning it is physically unobservable.</p>
+        <p>To measure it, QPE uses the <strong>Phase Kickback</strong> trick across two distinct quantum registers: a "target register" holding the state \(|\psi\rangle\), and a "counting register" holding \(t\) qubits initialised in a superposition.</p>
+        <p>By applying controlled versions of \(U\) (specifically \(U^1, U^2, U^4, \dots, U^{2^{t-1}}\)), the global phase generated by the eigenvector is "kicked back" as a relative phase into the counting register. The successive squaring of \(U\) shifts the binary decimal point of the phase, systematically writing the binary representation of \(\theta\) into the relative phases of the counting qubits.</p>
+        <p>At this point, the counting register contains the Quantum Fourier Transform of the phase. By applying an <strong>Inverse Quantum Fourier Transform (\(QFT^\dagger\))</strong>, we translate these abstract phase rotations back into a standard computational basis state. Measuring the counting register then directly yields a binary string representing \(\theta\).</p>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard (\(H^{\otimes t}\)):</strong> Applied to the counting register to create an equal superposition of all measurement outcomes.</li>
+            <li><strong>Controlled-Unitary (\(CU^{2^j}\)):</strong> A sequence of controlled gates applying \(U\) raised to increasing powers of 2.</li>
+            <li><strong>Inverse Quantum Fourier Transform (\(QFT^\dagger\)):</strong> A subroutine of \(H\) and \(CP^\dagger\) gates used to map the phase state back to the computational basis.</li>
+        </ul>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Schematic</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+Counting Register (t qubits)
+         ┌───┐                                                       ┌───────┐
+  q_0: ──┤ H ├─■─────────────────────────────────────────────────────┤       ├── ✂ Measure
+         ├───┤ │                                                     │       │
+  q_1: ──┤ H ├─┼────────■────────────────────────────────────────────┤ QFT^† ├── ✂ Measure
+        ...    │        │                                            │       │
+         ├───┤ │        │                                            │       │
+q_t-1: ──┤ H ├─┼────────┼────────────────────────■───────────────────┤       ├── ✂ Measure
+         └───┘ │        │                        │                   └───────┘
+Target Register (n qubits)
+               │        │                        │
+|ψ⟩_0: ────────U^1──────U^2────── ... ───────────U^{2^{t-1}}──────────────────</pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
+        <p>We start with a \(t\)-qubit counting register initialised to \(|0\rangle^{\otimes t}\) and an \(n\)-qubit target register initialised to the eigenvector \(|\psi\rangle\):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_0\rangle = |0\rangle^{\otimes t} \otimes |\psi\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Hadamard Gates</h3>
+        <p>Applying \(H^{\otimes t}\) to the counting register creates a superposition over all integers \(x\) from \(0\) to \(2^t-1\):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_1\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |\psi\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Controlled Unitary Operations & Phase Kickback</h3>
+        <p>We apply the sequence of controlled-\(U^{2^j}\) operations. For a specific state \(|x\rangle\) in the superposition, the operator \(U\) is applied exactly \(x\) times. Since \(U|\psi\rangle = e^{2\pi i \theta}|\psi\rangle\), applying \(U\) \(x\) times yields a phase factor of \(e^{2\pi i x \theta}\):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_2\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} e^{2\pi i x \theta} |x\rangle \otimes |\psi\rangle\)</p>
+        </div>
+        <p>The target register remains \(|\psi\rangle\) and is completely unentangled from the counting register. We can ignore it for the rest of the algorithm. The counting register is now exactly in the state of a Quantum Fourier Transform applied to the value \(2^t \theta\).</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Inverse Quantum Fourier Transform</h3>
+        <p>We apply the \(QFT^\dagger\) to the counting register. The mathematical action of \(QFT^\dagger\) on a state \(|x\rangle\) is to map it to \(\frac{1}{\sqrt{2^t}} \sum_{y=0}^{2^t-1} e^{-2\pi i x y / 2^t} |y\rangle\):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_3\rangle = \frac{1}{2^t} \sum_{y=0}^{2^t-1} \sum_{x=0}^{2^t-1} e^{2\pi i x \left(\theta - \frac{y}{2^t}\right)} |y\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Measurement</h3>
+        <p>If \(\theta\) can be expressed exactly in \(t\) bits, then there exists some integer \(y\) such that \(\theta = y/2^t\). For this specific \(y\), the exponent becomes \(0\), the inner sum constructively interferes to \(2^t\), and the amplitude for \(|y\rangle\) becomes \(1\).</p>
+        <p>If \(\theta\) is not exactly representable in \(t\) bits, the probability distribution peaks sharply around the integer \(y\) that is closest to \(2^t \theta\). Measuring the counting register yields this integer \(y\), allowing us to estimate \(\theta \approx y/2^t\).</p>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Phase Disks (Post-Kickback):</strong> Before the \(QFT^\dagger\), the amplitude for every counting state \(|x\rangle\) is equal. However, the phase arrows form a perfect corkscrew pattern. The "tightness" of this spiral is proportional to the unknown phase \(\theta\).</li>
+            <li><strong>Amplitude Histogram:</strong> Following the \(QFT^\dagger\), the flat probability distribution collapses. A single, dominant bar will appear at the integer \(y\). As you dynamically change \(\theta\) in the interactive module, you will see this peak slide continuously across the histogram.</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def simulate_qpe(theta, t_qubits):
+    \"\"\"
+    Simulates QPE mathematically using NumPy for a 1-qubit unitary.
+    \"\"\"
+    N = 2**t_qubits
+    
+    # 1. Prepare the counting register after phase kickback
+    # State is 1/sqrt(N) * sum_x exp(2 * pi * i * x * theta) |x>
+    psi_2 = np.zeros(N, dtype=complex)
+    for x in range(N):
+        psi_2[x] = np.exp(2 * np.pi * 1j * x * theta) / np.sqrt(N)
+        
+    # 2. Build the Inverse QFT Matrix
+    omega = np.exp(-2 * np.pi * 1j / N) # Notice the negative sign for inverse
+    iqft_matrix = np.zeros((N, N), dtype=complex)
+    for row in range(N):
+        for col in range(N):
+            iqft_matrix[row, col] = (omega ** (row * col)) / np.sqrt(N)
+            
+    # 3. Apply IQFT
+    psi_final = np.dot(iqft_matrix, psi_2)
+    
+    # 4. Measure
+    probabilities = np.abs(psi_final)**2
+    measured_y = np.argmax(probabilities)
+    estimated_theta = measured_y / N
+    
+    return estimated_theta, probabilities
+
+# Estimate theta = 0.375 using 3 qubits (0.375 * 8 = 3.0, should peak at exactly 3)
+estimated, probs = simulate_qpe(0.375, 3)
+print(f"Estimated Phase: {estimated}")
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit
+from qiskit.circuit.library import QFT
+from qiskit_aer import AerSimulator
+import numpy as np
+
+def qpe_circuit(theta, t_qubits):
+    # Total qubits = counting qubits (t) + target qubits (1)
+    qc = QuantumCircuit(t_qubits + 1, t_qubits)
+    
+    # 1. Prepare target eigenvector (for a simple P gate, |1> is the eigenvector)
+    qc.x(t_qubits)
+    
+    # 2. Apply H to counting register
+    for q in range(t_qubits):
+        qc.h(q)
+        
+    qc.barrier()
+    
+    # 3. Controlled Unitary operations (U = PhaseGate(2 * pi * theta))
+    repetitions = 1
+    for counting_qubit in range(t_qubits):
+        for _ in range(repetitions):
+            # Apply controlled phase rotation
+            qc.cp(2 * np.pi * theta, counting_qubit, t_qubits)
+        repetitions *= 2
+        
+    qc.barrier()
+    
+    # 4. Apply Inverse QFT to counting register
+    iqft = QFT(num_qubits=t_qubits, inverse=True, do_swaps=True).to_gate()
+    qc.append(iqft, range(t_qubits))
+    
+    # 5. Measure counting register
+    qc.measure(range(t_qubits), range(t_qubits))
+    
+    return qc
+# Simulate
+t = 3
+actual_theta = 0.375 # Corresponds to 3/8
+circuit = qpe_circuit(actual_theta, t)
+simulator = AerSimulator()
+counts = simulator.run(circuit, shots=1024).result().get_counts()
+
+print(f"Actual Phase: {actual_theta}")
+print(f"Measurement Counts: {counts}")
+# The result '011' in binary is 3. 3 / (2^3) = 0.375.
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Circuit Depth:</strong> The algorithm requires \(U\) to be applied up to \(2^{t-1}\) times. If \(U\) is a complex operation (like a molecular Hamiltonian simulation), the circuit depth becomes exponentially long. On NISQ hardware, decoherence will completely destroy the state long before the \(QFT^\dagger\) can be applied.</li>
+            <li><strong>Eigenvector Preparation:</strong> QPE assumes you can perfectly prepare the eigenvector \(|\psi\rangle\). In reality, finding the exact eigenvector is often as hard as finding the eigenvalue. If you prepare an imperfect state (a superposition of eigenvectors \(\sum_i c_i |\psi_i\rangle\)), QPE will probabilistically collapse the target state and yield the phase of \(|\psi_i\rangle\) with probability \(|c_i|^2\).</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Shor's Algorithm:</strong> QPE is the core subroutine used to find the period of the modular exponentiation function, which directly leads to integer factorisation.</li>
+            <li><strong>Quantum Chemistry:</strong> Used to estimate the exact ground-state energies of molecular Hamiltonians (though VQE is generally preferred for near-term hardware due to QPE's prohibitive circuit depth).</li>
+            <li><strong>HHL Algorithm:</strong> The Harrow-Hassidim-Lloyd algorithm uses QPE to find the eigenvalues of a Hermitian matrix \(A\), which it then conditionally inverts to solve systems of linear equations exponentially faster than classical methods.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Kitaev, A. Y. (1995). Quantum measurements and the Abelian Stabilizer Problem. <em>arXiv preprint quant-ph/9511026</em>.</li>
+            <li>Cleve, R., Ekert, A., Macchiavello, C., &amp; Mosca, M. (1998). Quantum algorithms revisited. <em>Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences</em>, 454(1969), 339-354.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <a href="qft.html" class="nav-button">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Quantum Fourier Transform</span>
+        </a>
+        <a href="grover.html" class="nav-button nav-next">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Grover's Search Algorithm</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>

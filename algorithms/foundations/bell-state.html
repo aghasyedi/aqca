@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell State Generator | AQCA</title>
+    <meta name="description" content="AQCA - Bell State Generator">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Protocols & Foundations <span class="breadcrumb-separator">›</span> 
+        Bell State Generator
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Bell State Generator</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Protocols & Foundations</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p>The <strong>Bell State Generator</strong> is the foundational circuit used to prepare maximally entangled two-qubit states, known as <strong>Bell states</strong> or <strong>EPR (Einstein-Podolsky-Rosen) pairs</strong>.</p>
+        <p>In classical computing, the state of a multi-bit system is always separable—knowing the global state gives complete information about each individual bit. In quantum computing, entanglement allows two qubits to share a unified quantum state such that neither qubit possesses a definite individual state independent of the other. The Bell State Generator solves the problem of deterministically generating these non-local quantum correlations from simple computational basis inputs.</p>
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Complexity</h3>
+                <div class="complexity-value">Impossible \(\mathcal{O}(\infty)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Classical physics cannot generate non-local quantum entanglement that violates Bell's inequalities.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Circuit Depth</h3>
+                <div class="complexity-value">\(\mathcal{O}(1)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Constant depth: requires exactly 2 qubits and 2 gate operations (\(H\) and \(CX\)).</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>To create maximal entanglement between two independent, unentangled qubits:</p>
+        <ol style="line-height: 1.6; margin-left: 1.5rem;">
+            <li><strong>Create Superposition:</strong> We start with both qubits in the ground state \(|00\rangle\). We apply a Hadamard (\(H\)) gate to the first qubit (control qubit). This puts Qubit 0 into an equal superposition of \(|0\rangle\) and \(|1\rangle\), while Qubit 1 remains strictly \(|0\rangle\). At this stage, the system is still separable:
+                <div class="math-container" style="margin: 1rem 0;">
+                    <p>\(\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle) \otimes |0\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |10\rangle)\)</p>
+                </div>
+            </li>
+            <li><strong>Entangle via Control:</strong> We then apply a Controlled-NOT (\(CX\)) gate, using Qubit 0 as the control and Qubit 1 as the target:
+                <ul style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                    <li>If Qubit 0 is \(|0\rangle\), Qubit 1 remains \(|0\rangle \longrightarrow |00\rangle\).</li>
+                    <li>If Qubit 0 is \(|1\rangle\), Qubit 1 flips to \(|1\rangle \longrightarrow |11\rangle\).</li>
+                </ul>
+            </li>
+        </ol>
+        <p>Because Qubit 0 is in a superposition of both states simultaneously, the \(CX\) gate executes both actions in superposition, entangling the two qubits into the state \(|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\). Neither qubit has a defined state on its own, but measuring Qubit 0 instantly determines the state of Qubit 1.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <p>The standard Bell State Generator utilizes:</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard Gate (\(H\)):</strong> Creates an equal superposition.</li>
+            <li><strong>Controlled-NOT Gate (\(CX\)):</strong> Generates two-qubit conditional entanglement.</li>
+            <li><strong>Pauli-X (\(X\)) / Pauli-Z (\(Z\)) Gates:</strong> Optional pre-rotation gates used on the inputs to select which of the four orthogonal Bell states to prepare.</li>
+        </ul>
+
+        <h3 style="margin-top: 1.5rem;">Input-to-Bell State Mapping</h3>
+        <p>Depending on the initial computational basis input \(|q_1 q_0\rangle\), the circuit constructs one of four distinct maximally entangled Bell states:</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.5rem;">Input State \(|q_1 q_0\rangle\)</th>
+                    <th style="padding: 0.5rem;">Pre-Gates Applied</th>
+                    <th style="padding: 0.5rem;">Resulting Bell State</th>
+                    <th style="padding: 0.5rem;">State Equation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;">\(|00\rangle\)</td>
+                    <td style="padding: 0.5rem;">None</td>
+                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;">\(|01\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(X\) on \(q_0\)</td>
+                    <td style="padding: 0.5rem;">\(|\Phi^-\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|00\rangle - |11\rangle)\)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;">\(|10\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(X\) on \(q_1\)</td>
+                    <td style="padding: 0.5rem;">\(|\Psi^+\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|01\rangle + |10\rangle)\)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;">\(|11\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(X\) on \(q_1\) &amp; \(q_0\)</td>
+                    <td style="padding: 0.5rem;">\(|\Psi^-\rangle\)</td>
+                    <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|01\rangle - |10\rangle)\)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Diagram (\(|\Phi^+\rangle\) Generation)</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+q_0: ──|0⟩───[ H ]───■───
+                     │   
+q_1: ──|0⟩───────────■───</pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        <p><em>(Note: Standard textbook Dirac convention \(|q_0\rangle \otimes |q_1\rangle = |q_0 q_1\rangle\) is used below).</em></p>
+        
+        <h3 style="margin-top: 1.5rem;">Step 0: Initial State Preparation</h3>
+        <p>The system starts in the pure computational ground state:</p>
+        <div class="math-container">
+            <p>\(|\psi_0\rangle = |0\rangle \otimes |0\rangle = |00\rangle = \begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix}\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Applying the Hadamard Gate to Qubit 0</h3>
+        <p>We apply \(H \otimes I\) to the composite system:</p>
+        <div class="math-container">
+            <p>\(H = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, \quad I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\)</p>
+            <p>\(|\psi_1\rangle = (H \otimes I)|\psi_0\rangle = \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \right) \otimes |0\rangle = \frac{1}{\sqrt{2}}|00\rangle + \frac{1}{\sqrt{2}}|10\rangle = \begin{bmatrix} \frac{1}{\sqrt{2}} \\ 0 \\ \frac{1}{\sqrt{2}} \\ 0 \end{bmatrix}\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Controlled-NOT (\(CX\)) Gate</h3>
+        <p>The \(CX\) gate operator with control on qubit 0 and target on qubit 1 is represented in matrix form as:</p>
+        <div class="math-container">
+            <p>\(CX = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix}\)</p>
+        </div>
+        <p>Multiplying \(CX\) by \(|\psi_1\rangle\):</p>
+        <div class="math-container">
+            <p>\(|\psi_2\rangle = CX |\psi_1\rangle = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sqrt{2}} \\ 0 \\ \frac{1}{\sqrt{2}} \\ 0 \end{bmatrix} = \begin{bmatrix} \frac{1}{\sqrt{2}} \\ 0 \\ 0 \\ \frac{1}{\sqrt{2}} \end{bmatrix}\)</p>
+        </div>
+        <p>Rewriting in Dirac notation yields the entangled Bell state \(|\Phi^+\rangle\):</p>
+        <div class="math-container">
+            <p>\(|\psi_2\rangle = \frac{1}{\sqrt{2}}|00\rangle + \frac{1}{\sqrt{2}}|11\rangle = |\Phi^+\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Measurement Distribution</h3>
+        <p>When measuring both qubits in the computational \(Z\)-basis:</p>
+        <ul style="line-height: 1.6;">
+            <li>\(P(00) = \left| \frac{1}{\sqrt{2}} \right|^2 = \frac{1}{2} \quad (50\%)\)</li>
+            <li>\(P(01) = |0|^2 = 0 \quad (0\%)\)</li>
+            <li>\(P(10) = |0|^2 = 0 \quad (0\%)\)</li>
+            <li>\(P(11) = \left| \frac{1}{\sqrt{2}} \right|^2 = \frac{1}{2} \quad (50\%)\)</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <p>When observing a Bell State generator inside an interactive tracking module, notice these distinct behaviors:</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Amplitude Histogram:</strong> Shows two distinct probability peaks of height \(0.5\) at \(|00\rangle\) and \(|11\rangle\), with zero probability for cross-terms \(|01\rangle\) and \(|10\rangle\).</li>
+            <li><strong>Single-Qubit Bloch Spheres:</strong> For a maximally entangled Bell state, inspecting Qubit 0 or Qubit 1 on an individual single-qubit Bloch sphere shows the state vector shrinking to the center point \((0,0,0)\). This represents a <strong>maximally mixed reduced state</strong> (\(\\rho_A = \frac{1}{2}I\)), visually demonstrating that individual qubit states do not exist independently in an entangled pair.</li>
+            <li><strong>Density Matrix Heatmap:</strong> Shows non-zero off-diagonal coherences (\(\\rho_{00, 11} = \\rho_{11, 00} = 0.5\)), which prove the presence of quantum coherence rather than classical statistical uncertainty.</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def generate_bell_state(initial_bits=(0, 0)):
+    \"\"\"
+    Simulates a Bell State Generator using pure NumPy matrix multiplication.
+    initial_bits: tuple (q1, q0) representing the input computational state.
+    \"\"\"
+    # 1. Fundamental basis states
+    ket_0 = np.array([[1], [0]], dtype=complex)
+    ket_1 = np.array([[0], [1]], dtype=complex)
+    
+    # 2. Gate Definitions
+    I = np.eye(2, dtype=complex)
+    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
+    X = np.array([[0, 1], [1, 0]], dtype=complex)
+    
+    # CNOT matrix (Control: Qubit 0, Target: Qubit 1)
+    CX = np.array([
+        [1, 0, 0, 0],
+        [0, 0, 0, 1],
+        [0, 0, 1, 0],
+        [0, 1, 0, 0]
+    ], dtype=complex)
+
+    # 3. Prepare initial state
+    q1_in = ket_1 if initial_bits[0] == 1 else ket_0
+    q0_in = ket_1 if initial_bits[1] == 1 else ket_0
+    psi_0 = np.kron(q0_in, q1_in)
+
+    # 4. Apply Hadamard to Qubit 0
+    H_tensor_I = np.kron(H, I)
+    psi_1 = np.dot(H_tensor_I, psi_0)
+
+    # 5. Apply CNOT
+    psi_2 = np.dot(CX, psi_1)
+
+    # 6. Calculate Probability Distribution
+    probabilities = np.abs(psi_2.flatten())**2
+    state_names = ['|00>', '|01>', '|10>', '|11>']
+    
+    return psi_2, dict(zip(state_names, probabilities))
+
+# Example Execution
+state_vector, probs = generate_bell_state(initial_bits=(0, 0))
+print("Final State Vector:\\n", state_vector.ravel())
+print("Measurement Probabilities:\\n", probs)
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit 1.0+)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+def build_bell_circuit(bell_type="Phi+"):
+    \"\"\"
+    Constructs a Qiskit Quantum Circuit for generating Bell States.
+    \"\"\"
+    qc = QuantumCircuit(2, 2, name=f"Bell_{bell_type}")
+    
+    # Configure input state according to desired Bell state
+    if bell_type in ["Psi+", "Psi-"]:
+        qc.x(1)  # Flip Qubit 1
+    if bell_type in ["Phi-", "Psi-"]:
+        qc.x(0)  # Flip Qubit 0
+
+    qc.barrier(label="Input")
+    
+    # Core Bell State Generator
+    qc.h(0)
+    qc.cx(0, 1)
+    
+    return qc
+
+# 1. Simulate exact Statevector
+circuit = build_bell_circuit("Phi+")
+state = Statevector.from_instruction(circuit)
+
+print("Quantum Circuit Layout:")
+print(circuit.draw(output='text'))
+
+print("\\nStatevector Representation:")
+print(state.draw('latex_source'))
+
+# 2. Run Shot-based Simulation
+circuit.measure([0, 1], [0, 1])
+simulator = AerSimulator()
+result = simulator.run(circuit, shots=1024).result()
+counts = result.get_counts()
+
+print("\\nShot Measurement Counts (1024 shots):", counts)
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Two-Qubit Gate Error Rates:</strong> On modern NISQ (Noisy Intermediate-Scale Quantum) devices, single-qubit gates (\(H\)) achieve high fidelities (&gt;99.9%), but two-qubit entangling gates (\(CX\)) are roughly an order of magnitude noisier (~99.0% to 99.5% fidelity).</li>
+            <li><strong>Decoherence (\(T_1\) and \(T_2\)):</strong> Entanglement is exceptionally fragile. Thermal relaxation (\(T_1\)) and dephasing (\(T_2\)) cause the pristine state \(|\Phi^+\rangle\) to degrade over time into a mixed state described as a <strong>Werner State</strong>:
+                <div class="math-container" style="margin: 1rem 0;">
+                    <p>\(\\rho = p |\Phi^+\rangle\langle\Phi^+| + \frac{1-p}{4} I_4\)</p>
+                </div>
+            </li>
+            <li><strong>Measurement Readout Errors:</strong> Imperfections in state discrimination can cause an physical detector to misclassify a \(|00\rangle\) state as \(|01\rangle\) or \(|10\rangle\), creating false noise in the output histogram.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Quantum Teleportation:</strong> The prepared Bell pair serves as the non-local quantum resource channel required to transmit an unknown qubit state across classical links.</li>
+            <li><strong>Superdense Coding:</strong> Allows two classical bits of information to be sent using a single physical qubit transmission by manipulating an entangled Bell pair.</li>
+            <li><strong>Quantum Key Distribution (E91 Protocol):</strong> Uses the violation of Bell's inequalities (CHSH testing) on generated Bell pairs to detect eavesdroppers in quantum networks.</li>
+            <li><strong>Entanglement Swapping:</strong> Forms the baseline building block for quantum repeaters, enabling long-distance quantum communication across disparate nodes.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+            <li>Einstein, A., Podolsky, B., &amp; Rosen, N. (1935). Can quantum-mechanical description of physical reality be considered complete? <em>Physical Review</em>, 47(10), 777.</li>
+            <li>Kaye, P., Laflamme, R., &amp; Mosca, M. (2007). <em>An Introduction to Quantum Computing</em>. Oxford University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <!-- No previous for the first algorithm -->
+        <a href="superdense-coding.html" class="nav-button nav-next" style="margin-left: auto;">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Superdense Coding</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>

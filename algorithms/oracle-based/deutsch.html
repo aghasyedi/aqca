@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch's Algorithm | AQCA</title>
+    <meta name="description" content="AQCA - Deutsch's Algorithm">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Oracle-Based <span class="breadcrumb-separator">›</span> 
+        Deutsch's Algorithm
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Deutsch's Algorithm</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Oracle-Based</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p><strong>Deutsch’s Algorithm</strong> was the first algorithm to demonstrate a rigorous, mathematical quantum advantage over classical computers.</p>
+        <p>Imagine you are given a "black box" function (an oracle) that takes a single binary input (0 or 1) and produces a single binary output (0 or 1). There are only four possible such functions, which fall into two categories:</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Constant:</strong> The output is the same for both inputs (always 0, or always 1). So, \(f(0) = f(1)\).</li>
+            <li><strong>Balanced:</strong> The output is different for both inputs (returns 0 for one input and 1 for the other). So, \(f(0) \neq f(1)\).</li>
+        </ul>
+        <p>The problem is to determine whether the hidden function is constant or balanced with the absolute minimum number of queries to the oracle.</p>
+
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Complexity</h3>
+                <div class="complexity-value">\(\mathcal{O}(2)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A classical computer must evaluate both \(f(0)\) and \(f(1)\) to compare them.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Speedup</h3>
+                <div class="complexity-value">\(\mathcal{O}(1)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A quantum computer evaluates the oracle exactly once to find the answer.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>To solve this classically, you have to query the black box twice, looking at the answers one by one.</p>
+        <p>In the quantum world, we can query the function using a <strong>superposition</strong> of both 0 and 1 simultaneously. However, simply getting a superposition of the answers is not enough, because measuring it would just randomly collapse it to one answer, forcing us to run it again.</p>
+        <p>The brilliance of Deutsch's Algorithm lies in a trick called <strong>Phase Kickback</strong>. By preparing the target (output) qubit in a specific negative superposition state, the oracle's output does not alter the state of the target qubit; instead, it "kicks back" a phase shift (a minus sign) onto the input qubit.</p>
+        <ul style="line-height: 1.6;">
+            <li>If the function is constant, the phases of the input superposition stay aligned.</li>
+            <li>If the function is balanced, the phases shift, inverting the superposition.</li>
+        </ul>
+        <p>A final Hadamard gate then perfectly maps this phase difference into a deterministic measurement: \(|0\rangle\) means constant, and \(|1\rangle\) means balanced.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Pauli-\(X\) (\(X\)):</strong> Used to flip the target qubit from \(|0\rangle\) to \(|1\rangle\) prior to the Hadamard gate.</li>
+            <li><strong>Hadamard (\(H\)):</strong> Used to create superpositions and later to interfere the phases back into a measurable basis state.</li>
+            <li><strong>Quantum Oracle (\(U_f\)):</strong> A unitary matrix representing the black box function, acting on the input and target qubits as \(U_f |x\rangle|y\rangle = |x\rangle|y \oplus f(x)\rangle\).</li>
+        </ul>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Schematic</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+       ┌───┐                ┌───┐
+q_0: ──┤ H ├───────■────────┤ H ├─── ✂ Measure
+       ├───┤ ┌───┐ │ (U_f)  └───┘
+q_1: ──┤ X ├─┤ H ├─■────────────────
+       └───┘ └───┘</pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">*(Note: \(q_0\) is the input qubit, and \(q_1\) is the target/ancilla qubit).*</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
+        <p>The system starts with the input qubit in \(|0\rangle\) and the target qubit flipped to \(|1\rangle\) using an \(X\) gate:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_0\rangle = |0\rangle \otimes |1\rangle\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Hadamard Gates</h3>
+        <p>We apply Hadamard gates to both qubits to create the required superpositions:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_1\rangle = (H \otimes H)|\psi_0\rangle = \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \right) \otimes \left( \frac{|0\rangle - |1\rangle}{\sqrt{2}} \right)\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 3: The Oracle Query & Phase Kickback</h3>
+        <p>We apply the oracle \(U_f\). Because the target qubit is in the \(|-\rangle\) state, the action \(y \oplus f(x)\) translates into a phase factor \((-1)^{f(x)}\) on the input state:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_2\rangle = U_f |\psi_1\rangle = \frac{1}{2} \left[ (-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle \right] \otimes (|0\rangle - |1\rangle)\)</p>
+        </div>
+        <p>We can factor out \((-1)^{f(0)}\) from the input qubit:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_2\rangle = (-1)^{f(0)} \left( \frac{|0\rangle + (-1)^{f(0) \oplus f(1)}|1\rangle}{\sqrt{2}} \right) \otimes |-\rangle\)</p>
+        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>If Constant (\(f(0) = f(1)\)):</strong> \(f(0) \oplus f(1) = 0\), so \((-1)^0 = 1\). The input state is \(\frac{|0\rangle + |1\rangle}{\sqrt{2}} = |+\rangle\).</li>
+            <li><strong>If Balanced (\(f(0) \neq f(1)\)):</strong> \(f(0) \oplus f(1) = 1\), so \((-1)^1 = -1\). The input state is \(\frac{|0\rangle - |1\rangle}{\sqrt{2}} = |-\rangle\).</li>
+        </ul>
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Final Interference</h3>
+        <p>We apply a final Hadamard gate to the input qubit (\(q_0\)). The target qubit is ignored.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>If Constant:</strong> \(H|+\rangle = |0\rangle\). (The global phase \((-1)^{f(0)}\) is physically unobservable).</li>
+            <li><strong>If Balanced:</strong> \(H|-\rangle = |1\rangle\).</li>
+        </ul>
+
+        <h3 style="margin-top: 1.5rem;">Measurement</h3>
+        <p>Measuring \(q_0\) in the computational basis perfectly yields:</p>
+        <ul style="line-height: 1.6;">
+            <li><code>0</code> with \(100\%\) probability if the function is <strong>constant</strong>.</li>
+            <li><code>1</code> with \(100\%\) probability if the function is <strong>balanced</strong>.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Bloch Sphere (Input Qubit):</strong>
+                <ol>
+                    <li>After the first \(H\) gate, the vector points along the positive X-axis (\(|+\rangle\)).</li>
+                    <li>As the Oracle is applied, watch the phase kickback: if the function is balanced, the vector immediately rotates 180 degrees around the Z-axis to point along the negative X-axis (\(|-\rangle\)). If constant, it stays still.</li>
+                    <li>The final \(H\) gate forces the vector to snap to the North Pole (\(|0\rangle\)) if constant, or the South Pole (\(|1\rangle\)) if balanced.</li>
+                </ol>
+            </li>
+            <li><strong>Amplitude Histogram:</strong> Before the final \(H\) gate, both \(|0\rangle\) and \(|1\rangle\) have a 50% probability, regardless of the oracle. The interference step is what deterministically shifts all the amplitude to a single correct bar.</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def simulate_deutsch(oracle_type):
+    \"\"\"
+    Simulates Deutsch's Algorithm using pure NumPy.
+    oracle_type: 'constant_0', 'constant_1', 'balanced_id', 'balanced_not'
+    \"\"\"
+    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
+    I = np.eye(2, dtype=complex)
+    
+    # Oracles (acting on |input> (x) |target>)
+    oracles = {
+        'constant_0': np.eye(4, dtype=complex),
+        'constant_1': np.kron(I, np.array([[0, 1], [1, 0]], dtype=complex)), # X on target
+        'balanced_id': np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], dtype=complex), # CNOT
+        'balanced_not': np.array([[0, 1, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [0, 1, 0, 0]], dtype=complex) # Zero-controlled NOT
+    }
+    
+    U_f = oracles[oracle_type]
+    
+    # 1. Initialise |0>|1>
+    q0 = np.array([[1], [0]])
+    q1 = np.array([[0], [1]])
+    psi_0 = np.kron(q0, q1)
+    
+    # 2. Apply H to both
+    H2 = np.kron(H, H)
+    psi_1 = np.dot(H2, psi_0)
+    
+    # 3. Apply Oracle
+    psi_2 = np.dot(U_f, psi_1)
+    
+    # 4. Apply H to input qubit
+    psi_final = np.dot(np.kron(H, I), psi_2)
+    
+    # 5. Measure input qubit
+    prob_0 = np.abs(psi_final[0][0])**2 + np.abs(psi_final[1][0])**2
+    return 'Constant' if prob_0 > 0.99 else 'Balanced'
+
+print("Testing Balanced Oracle:", simulate_deutsch('balanced_id'))
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+def deutsch_circuit(oracle_type="balanced"):
+    qc = QuantumCircuit(2, 1)
+    
+    # 1. Prepare target qubit in |-> state
+    qc.x(1)
+    qc.h(0)
+    qc.h(1)
+    qc.barrier()
+    
+    # 2. Oracle Application
+    if oracle_type == "balanced":
+        qc.cx(0, 1) # CNOT creates a balanced function (f(x) = x)
+    elif oracle_type == "constant":
+        pass # Identity creates a constant function (f(x) = 0)
+        
+    qc.barrier()
+    
+    # 3. Final Interference
+    qc.h(0)
+    
+    # 4. Measurement
+    qc.measure(0, 0)
+    return qc
+
+# Simulate
+circuit = deutsch_circuit("balanced")
+simulator = AerSimulator()
+result = simulator.run(circuit, shots=1).result()
+counts = result.get_counts()
+print("Result (0=Constant, 1=Balanced):", counts)
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Oracle Implementation Cost:</strong> The algorithm assumes the oracle \(U_f\) is given to us as a black box that takes \(\mathcal{O}(1)\) time to run. In reality, building the reversible quantum circuit to represent a complex classical function can require significant gate depth, which introduces noise.</li>
+            <li><strong>Limited Utility:</strong> Deutsch's algorithm solves a highly contrived mathematical problem that has no practical real-world application. Its true value is purely educational—proving that quantum computers can perform tasks with fewer operations than classical computers.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Pedagogical Foundation:</strong> It is universally used as the first teaching algorithm in quantum computing because it perfectly demonstrates superposition, quantum parallelism, phase kickback, and interference in a two-qubit circuit.</li>
+            <li><strong>The Precursor:</strong> It forms the direct mathematical baseline for the <strong>Deutsch–Jozsa algorithm</strong> (which scales the problem up to \(n\) qubits) and later algorithms like Grover's and Simon's, which utilise the exact same phase kickback mechanism.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Deutsch, D. (1985). Quantum theory, the Church-Turing principle and the universal quantum computer. <em>Proceedings of the Royal Society of London. A. Mathematical and Physical Sciences</em>, 400(1818), 97–117.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <a href="../../algorithms.html" class="nav-button">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Algorithm Catalogue</span>
+        </a>
+        <a href="deutsch-jozsa.html" class="nav-button nav-next">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Deutsch-Jozsa Algorithm</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>

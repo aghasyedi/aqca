@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Fourier Transform (QFT) | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Fourier Transform (QFT)">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Phase & Amplitude Core <span class="breadcrumb-separator">›</span> 
+        Quantum Fourier Transform (QFT)
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Quantum Fourier Transform (QFT)</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Phase & Amplitude Core</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p>The <strong>Quantum Fourier Transform (QFT)</strong> is the quantum analogue of the classical Discrete Fourier Transform (DFT). It is not typically used as a standalone algorithm to solve a specific problem; rather, it is one of the most powerful subroutines in all of quantum computing.</p>
+        <p>Its primary function is to transform a quantum state encoded in the computational basis (where information is stored in binary probabilities) into the Fourier basis (where information is stored in relative quantum phases). It is the engine that allows quantum computers to find hidden periodicities and estimate eigenvalues.</p>
+
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Complexity (FFT)</h3>
+                <div class="complexity-value">\(\mathcal{O}(n 2^n)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">The classical Fast Fourier Transform operates on \(N = 2^n\) data points.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Speedup</h3>
+                <div class="complexity-value">\(\mathcal{O}(n^2)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A quantum computer performs the transform using only \(\approx n^2/2\) gates, yielding an <strong>exponential speedup</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>In a classical computer, you can think of the Fourier transform as taking a complex audio wave and breaking it down into its fundamental frequencies.</p>
+        <p>In a quantum computer, we use the QFT to manipulate the phase of a superposition. Imagine the probability amplitude of a quantum state as a clock face with a hand pointing in a specific direction (its phase).</p>
+        <ul style="line-height: 1.6;">
+            <li>In the computational basis, a number like <code>5</code> (\(|101\rangle\)) is just a binary string.</li>
+            <li>When we apply the QFT to this state, we create an equal superposition of all possible states, but we twist the clock hands. The amount of "twist" (phase shift) applied to each state's clock hand is directly proportional to the original number <code>5</code>.</li>
+        </ul>
+        <p>Because different original numbers produce distinct, predictable twisting patterns, we can use the QFT (and its inverse) to decode highly complex phase patterns back into readable binary numbers.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <p>The QFT circuit requires a cascading sequence of Hadamard gates and increasingly smaller Controlled-Phase rotations, followed by a reversal of the qubit order.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard (\(H\)):</strong> Creates the initial equal superposition and applies a fundamental phase shift based on the qubit's binary value.</li>
+            <li><strong>Controlled-Phase (\(CP\) or \(R_k\)):</strong> Applies a fractional phase rotation \(\theta = 2\pi / 2^k\) to a target qubit, controlled by the state of another qubit.</li>
+            <li><strong>SWAP:</strong> Reverses the order of the qubits at the end of the circuit to match the standard mathematical definition of the QFT.</li>
+        </ul>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Schematic (3-Qubit Example)</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+       ┌───┐ ┌─────────┐ ┌─────────┐                                 
+q_0: ──┤ H ├─┤ CP(π/2) ├─┤ CP(π/4) ├───────────────────────────X─
+       └───┘ └────┬────┘ └────┬────┘ ┌───┐ ┌─────────┐         │ 
+q_1: ─────────────■───────────┼──────┤ H ├─┤ CP(π/2) ├─────────┼─
+                              │      └───┘ └────┬────┘ ┌───┐   │ 
+q_2: ─────────────────────────■─────────────────■──────┤ H ├───X─
+                                                       └───┘     </pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        
+        <h3 style="margin-top: 1.5rem;">Step 1: Definition of the QFT</h3>
+        <p>For an \(n\)-qubit state \(|x\rangle\) (where \(x\) is an integer from \(0\) to \(2^n-1\)), the QFT is defined as:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(QFT|x\rangle = \frac{1}{\sqrt{2^n}} \sum_{y=0}^{2^n-1} e^{\frac{2\pi i x y}{2^n}} |y\rangle\)</p>
+        </div>
+        <p>This can be factored into a beautiful product state, which dictates the circuit design. Using binary fractional notation (\(0.x_1 x_2 \dots = x_1/2 + x_2/4 + \dots\)), the state becomes:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(QFT|x\rangle = \frac{1}{\sqrt{2^n}} \left( |0\rangle + e^{2\pi i 0.x_n} |1\rangle \right) \otimes \left( |0\rangle + e^{2\pi i 0.x_{n-1}x_n} |1\rangle \right) \otimes \dots \otimes \left( |0\rangle + e^{2\pi i 0.x_1x_2\dots x_n} |1\rangle \right)\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Evolving a 3-Qubit State</h3>
+        <p>Let the initial state be \(|x\rangle = |x_1 x_2 x_3\rangle\).</p>
+        <ol style="line-height: 1.6;">
+            <li><strong>Apply \(H\) to \(q_0\) (\(x_1\)):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\(|x_1 x_2 x_3\rangle \xrightarrow{H_0} \frac{1}{\sqrt{2}} \left( |0\rangle + e^{2\pi i 0.x_1} |1\rangle \right) \otimes |x_2 x_3\rangle\)</p>
+                </div>
+            </li>
+            <li><strong>Apply \(CP(\pi/2)\) controlled by \(q_1\) (\(x_2\)):</strong><br>
+                This adds a phase if both qubits are \(1\), modifying the phase of \(q_0\) to include \(x_2/4\).
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\(\xrightarrow{CP_{1,0}} \frac{1}{\sqrt{2}} \left( |0\rangle + e^{2\pi i 0.x_1 x_2} |1\rangle \right) \otimes |x_2 x_3\rangle\)</p>
+                </div>
+            </li>
+            <li><strong>Apply \(CP(\pi/4)\) controlled by \(q_2\) (\(x_3\)):</strong>
+                <div class="math-container" style="margin: 0.5rem 0;">
+                    <p>\(\xrightarrow{CP_{2,0}} \frac{1}{\sqrt{2}} \left( |0\rangle + e^{2\pi i 0.x_1 x_2 x_3} |1\rangle \right) \otimes |x_2 x_3\rangle\)</p>
+                </div>
+            </li>
+        </ol>
+        <p>We repeat this process for \(q_1\) (using \(H\) and one \(CP\) from \(q_2\)) and then for \(q_2\) (just an \(H\)).</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 3: SWAP and Final State</h3>
+        <p>The sequence above produces the correct product states, but in reverse order. Applying SWAP gates between \(q_0 \leftrightarrow q_2\) yields the exact mathematical definition outlined in Step 1.</p>
+
+        <h3 style="margin-top: 1.5rem;">Measurement</h3>
+        <p>If you input a computational basis state \(|x\rangle\) and apply the QFT, you produce a state with equal probability amplitudes across all \(2^n\) possible outcomes. Measuring the QFT directly yields a completely random bitstring. The QFT is almost never measured on its own; it is instead used as an internal transformation before an <em>Inverse QFT</em> translates the phases back into measurable probabilities.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Amplitude Histogram:</strong> Boring for the forward QFT. If you input a single basis state (e.g., \(|5\rangle\)), the final histogram will be a completely flat line, showing a probability of \(1/2^n\) for every possible state.</li>
+            <li><strong>Phase Disks (Q-Spheres):</strong> This is where the QFT shines. While all disks have the same radius (amplitude), the internal arrows (phases) will exhibit a stunning spiral pattern. The frequency of this phase wrapping is directly proportional to the integer value of the input state \(|x\rangle\).</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def simulate_qft(n_qubits, input_state):
+    \"\"\"
+    Simulates the Quantum Fourier Transform matrix acting on a state.
+    \"\"\"
+    N = 2**n_qubits
+    
+    # Generate the QFT Matrix
+    omega = np.exp(2 * np.pi * 1j / N)
+    qft_matrix = np.zeros((N, N), dtype=complex)
+    
+    for row in range(N):
+        for col in range(N):
+            qft_matrix[row, col] = (omega ** (row * col)) / np.sqrt(N)
+            
+    # Apply to input state
+    state_vector = np.zeros((N, 1), dtype=complex)
+    state_vector[input_state] = 1.0
+    
+    transformed_state = np.dot(qft_matrix, state_vector)
+    
+    return transformed_state
+
+# Example: QFT on state |1> for 3 qubits
+print("Transformed State (phases): \n", np.round(simulate_qft(3, 1), 3))
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+import numpy as np
+
+def build_qft_circuit(n):
+    \"\"\"Builds a QFT circuit for n qubits.\"\"\"
+    qc = QuantumCircuit(n)
+    
+    for target in range(n):
+        qc.h(target)
+        for control in range(target + 1, n):
+            # Phase is pi / 2^(distance)
+            theta = np.pi / (2 ** (control - target))
+            qc.cp(theta, control, target)
+        qc.barrier()
+        
+    # Swap qubits to match mathematical ordering
+    for i in range(n // 2):
+        qc.swap(i, n - i - 1)
+        
+    return qc
+
+# Generate 4-qubit QFT
+n_qubits = 4
+circuit = build_qft_circuit(n_qubits)
+print(circuit.draw(output='text'))
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hardware Noise on Tiny Rotations:</strong> The standard QFT requires \(CP\) gates with incredibly small angles (e.g., \(\pi/2^{10}\)). On modern NISQ devices, such minute rotations get completely drowned out by hardware noise.</li>
+            <li><strong>Approximate QFT (AQFT):</strong> To run on real hardware, physicists often discard the smallest \(CP\) gates (where the distance between qubits is \(> 3\) or \(4\)). This drastically reduces the circuit depth \(\mathcal{O}(n \log n)\) and noise without severely impacting the algorithm's accuracy.</li>
+            <li><strong>No Direct Classical Extraction:</strong> Although the QFT calculates the Fourier transform exponentially faster than a classical computer, you cannot extract the full array of Fourier coefficients. Measurement collapses the state, giving you only one random sample.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Quantum Phase Estimation (QPE):</strong> Uses the Inverse QFT to measure the phase eigenvalues of a unitary operator.</li>
+            <li><strong>Shor's Algorithm:</strong> Uses QPE and the Inverse QFT to find the period of a modular exponentiation function, which is the key to factoring RSA primes.</li>
+            <li><strong>Quantum Addition (Draper Adder):</strong> Allows two quantum registers to be added together in the Fourier basis without requiring ancilla qubits to track carry operations.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Coppersmith, D. (1994). An approximate Fourier transform useful in quantum factoring. <em>arXiv preprint quant-ph/0201067</em>.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <a href="../oracle-based/simon.html" class="nav-button">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Simon's Algorithm</span>
+        </a>
+        <a href="qpe.html" class="nav-button nav-next">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Quantum Phase Estimation</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>

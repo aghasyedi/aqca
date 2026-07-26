@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithms | AQCA</title>
+    <meta name="description" content="AQCA - Algorithms">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="page-header">
+        <h1>Algorithm Catalogue</h1>
+        <p style="color: var(--muted-text);">An index of all implemented quantum algorithms and protocols.</p>
+    </div>
+    
+    <div style="margin-top: 2rem;">
+        <input type="text" id="algoSearch" placeholder="Search algorithms..." class="search-input">
+    </div>
+    
+    <section class="content-section" id="algoList">
+        <div class="algo-category">
+            <h2>Foundations</h2>
+            <ul>
+                <li><a href="algorithms/foundations/bell-state.html">Bell State Generator</a></li>
+                <li><a href="algorithms/foundations/superdense-coding.html">Superdense Coding</a></li>
+                <li><a href="algorithms/foundations/quantum-teleportation.html">Quantum Teleportation</a></li>
+                <li><a href="algorithms/foundations/entanglement-swapping.html">Entanglement Swapping</a></li>
+            </ul>
+        </div>
+        
+        <div class="algo-category">
+            <h2>Oracle-Based Algorithms</h2>
+            <ul>
+                <li><a href="algorithms/oracle-based/deutsch.html">Deutsch's Algorithm</a></li>
+                <li><a href="algorithms/oracle-based/deutsch-jozsa.html">Deutsch-Jozsa Algorithm</a></li>
+                <li><a href="algorithms/oracle-based/bernstein-vazirani.html">Bernstein-Vazirani Algorithm</a></li>
+                <li><a href="algorithms/oracle-based/simon.html">Simon's Algorithm</a></li>
+            </ul>
+        </div>
+        
+        <div class="algo-category">
+            <h2>Phase & Amplitude</h2>
+            <ul>
+                <li><a href="algorithms/phase-amplitude/qft.html">Quantum Fourier Transform (QFT)</a></li>
+                <li><a href="algorithms/phase-amplitude/qpe.html">Quantum Phase Estimation (QPE)</a></li>
+                <li><a href="algorithms/phase-amplitude/grover.html">Grover's Search</a></li>
+                <li><a href="algorithms/phase-amplitude/amplitude-amplification.html">Amplitude Amplification</a></li>
+            </ul>
+        </div>
+        
+        <div class="algo-category">
+            <h2>Flagship & Hybrid Models</h2>
+            <ul>
+                <li><a href="algorithms/flagship-hybrid/shor.html">Shor's Algorithm</a></li>
+                <li><a href="algorithms/flagship-hybrid/vqe.html">Variational Quantum Eigensolver (VQE)</a></li>
+                <li><a href="algorithms/flagship-hybrid/qaoa.html">Quantum Approximate Optimisation Algorithm (QAOA)</a></li>
+                <li><a href="algorithms/flagship-hybrid/hhl.html">HHL Algorithm</a></li>
+            </ul>
+        </div>
+        
+        <div class="algo-category">
+            <h2>Fault Tolerance & Error Correction</h2>
+            <ul>
+                <li><a href="algorithms/fault-tolerance/3-qubit-code.html">3-Qubit Code</a></li>
+                <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html">Shor's 9-Qubit Code</a></li>
+                <li><a href="algorithms/fault-tolerance/steane-code.html">Steane 7-Qubit Code</a></li>
+            </ul>
+        </div>
+    </section>
+    
+    <script>
+        document.getElementById('algoSearch').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const categories = document.querySelectorAll('.algo-category');
+            
+            categories.forEach(cat => {
+                let hasVisibleLinks = false;
+                const links = cat.querySelectorAll('li');
+                
+                links.forEach(li => {
+                    const text = li.textContent.toLowerCase();
+                    if (text.includes(query)) {
+                        li.style.display = '';
+                        hasVisibleLinks = true;
+                    } else {
+                        li.style.display = 'none';
+                    }
+                });
+                
+                if (hasVisibleLinks) {
+                    cat.style.display = '';
+                } else {
+                    cat.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    
+</body>
+</html>

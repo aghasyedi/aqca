@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Teleportation | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Teleportation">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Visual Tools</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Learning Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer / Contact</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">About AQCA</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
+        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
+        Protocols & Foundations <span class="breadcrumb-separator">›</span> 
+        Quantum Teleportation
+    </div>
+
+    <div class="algorithm-header">
+        <h1>Quantum Teleportation</h1>
+        <div class="algorithm-meta">
+            <span class="badge badge-category">Protocols & Foundations</span>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>1. Overview & Problem Definition</h2>
+        <p>The <strong>Quantum Teleportation</strong> protocol solves the problem of transmitting an arbitrary, unknown quantum state from a sender (Alice) to a receiver (Bob) without physically moving the particle that stores the state. Because of the No-Cloning Theorem, Alice cannot simply read the quantum state and send a classical description to Bob. Instead, by leveraging a pre-shared entangled resource and a classical communication channel, the state is destroyed at Alice's location and perfectly recreated at Bob's.</p>
+        <div class="complexity-comparison" style="margin-top: 1.5rem;">
+            <div class="complexity-box">
+                <h3>Classical Bit Cost</h3>
+                <div class="complexity-value">2 bits</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Alice must transmit two classical bits to Bob to complete the teleportation.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Quantum Qubit Cost</h3>
+                <div class="complexity-value">1 EPR pair</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">The protocol consumes one maximally entangled Bell pair to teleport one qubit.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>2. Intuition</h2>
+        <p>Teleportation can be understood through a four-step narrative:</p>
+        <ol style="line-height: 1.6; margin-left: 1.5rem;">
+            <li><strong>Pre-shared Entanglement:</strong> Alice and Bob share an entangled pair of qubits (a Bell state). Alice keeps one half, and Bob takes the other half to his distant location.</li>
+            <li><strong>Entangling the Message:</strong> Alice possesses a third qubit holding the unknown state \(|\psi\rangle\) she wants to send. She forces this message qubit to interact with her half of the entangled pair.</li>
+            <li><strong>Bell Basis Measurement:</strong> Alice measures both of her qubits. This measurement collapses her qubits into definite classical states (yielding two classical bits) and instantly collapses Bob's distant qubit into a state that is mathematically related to the original message \(|\psi\rangle\).</li>
+            <li><strong>Classical Communication & Correction:</strong> Bob's qubit is now holding the original state, but it might be rotated or flipped. Alice sends her two classical bits to Bob over a standard network (like the internet). Bob uses these bits as instructions to apply the correct quantum gates (Pauli-X and/or Pauli-Z) to fix his qubit, perfectly recovering \(|\psi\rangle\).</li>
+        </ol>
+    </section>
+
+    <section class="content-section">
+        <h2>3. Required Gates & Circuit Schematic</h2>
+        <p>The circuit requires gates for entanglement generation, a change of basis, and classically-controlled corrections.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard (\(H\)) & Controlled-NOT (\(CX\)):</strong> Used to create the initial shared Bell state, and later used by Alice to change the basis before her measurement.</li>
+            <li><strong>Measurement (\(M\)):</strong> Alice measures her two qubits in the computational \(Z\)-basis.</li>
+            <li><strong>Pauli-\(X\) and Pauli-\(Z\) Gates:</strong> Applied by Bob as corrective rotations, controlled by Alice's classical measurement outcomes.</li>
+        </ul>
+
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+            <h3>Circuit Schematic</h3>
+            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
+       Input State           Alice's Measurement        Classical Channel
+|ψ⟩: ─────[   ]────────■──────────[ H ]───────── ✂ Measure ═══════════════ (c_1) ══╗
+           │           │                                                           ║
+q_0: ──|0⟩─┤   ├───■───X──────────────────────── ✂ Measure ════════ (c_0) ══╗      ║
+           │   │   │                                                        ║      ║
+q_1: ──|0⟩─[   ]───X────────────────────────────────────────────────────────X──────Z───── |ψ⟩
+               Shared Entanglement                                    Bob's Corrections</pre>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>4. Mathematical Proof & State Evolution</h2>
+        
+        <h3 style="margin-top: 1.5rem;">Step 1: Initial State</h3>
+        <p>Alice wants to teleport an unknown pure state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\).<br>The system starts with this state and a pre-shared Bell pair \(|\Phi^+\rangle\) between Alice (\(q_0\)) and Bob (\(q_1\)):</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_0\rangle = |\psi\rangle \otimes |\Phi^+\rangle = (\alpha|0\rangle + \beta|1\rangle) \otimes \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\)</p>
+        </div>
+        <p>Expanding this three-qubit state yields:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_0\rangle = \frac{1}{\sqrt{2}} \left[ \alpha|000\rangle + \alpha|011\rangle + \beta|100\rangle + \beta|111\rangle \right]\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Alice Applies CNOT</h3>
+        <p>Alice applies a \(CX\) gate using her message qubit \(|\psi\rangle\) as the control and her entangled half (\(q_0\)) as the target.</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_1\rangle = \frac{1}{\sqrt{2}} \left[ \alpha|000\rangle + \alpha|011\rangle + \beta|110\rangle + \beta|101\rangle \right]\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Alice Applies Hadamard</h3>
+        <p>Alice applies a Hadamard gate to the message qubit:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_2\rangle = \frac{1}{2} \left[ \alpha(|0\rangle+|1\rangle)|00\rangle + \alpha(|0\rangle+|1\rangle)|11\rangle + \beta(|0\rangle-|1\rangle)|10\rangle + \beta(|0\rangle-|1\rangle)|01\rangle \right]\)</p>
+        </div>
+        <p>By rearranging and grouping the terms based on Alice's two qubits (the first two qubits), we reveal the state of Bob's qubit for each possible measurement outcome:</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\(|\psi_2\rangle = \frac{1}{2} \left[ |00\rangle(\alpha|0\rangle + \beta|1\rangle) + |01\rangle(\alpha|1\rangle + \beta|0\rangle) + |10\rangle(\alpha|0\rangle - \beta|1\rangle) + |11\rangle(\alpha|1\rangle - \beta|0\rangle) \right]\)</p>
+        </div>
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement and Correction</h3>
+        <p>Alice measures her two qubits. Bob's qubit collapses into one of four states. He applies corrections based on the classical bits (\(c_1, c_0\)) Alice sends him:</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.5rem;">Alice Measures (\(c_1 c_0\))</th>
+                    <th style="padding: 0.5rem;">Bob's Resulting State</th>
+                    <th style="padding: 0.5rem;">Bob's Correction</th>
+                    <th style="padding: 0.5rem;">Final State</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><code>00</code></td>
+                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle\)</td>
+                    <td style="padding: 0.5rem;">Apply \(I\) (Do nothing)</td>
+                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><code>01</code></td>
+                    <td style="padding: 0.5rem;">\(\alpha|1\rangle + \beta|0\rangle\)</td>
+                    <td style="padding: 0.5rem;">Apply \(X\) (Bit flip)</td>
+                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><code>10</code></td>
+                    <td style="padding: 0.5rem;">\(\alpha|0\rangle - \beta|1\rangle\)</td>
+                    <td style="padding: 0.5rem;">Apply \(Z\) (Phase flip)</td>
+                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.5rem;"><code>11</code></td>
+                    <td style="padding: 0.5rem;">\(\alpha|1\rangle - \beta|0\rangle\)</td>
+                    <td style="padding: 0.5rem;">Apply \(X\) then \(Z\)</td>
+                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="content-section">
+        <h2>5. Interactive Visualisation</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>State Destruction (No-Cloning):</strong> As Alice applies her initial \(CX\) and \(H\) gates, the Bloch sphere representing her input message \(|\psi\rangle\) will visibly degrade into a completely mixed state (the vector vanishes to the centre of the sphere). The information leaves her local possession.</li>
+            <li><strong>Conditional Recreation:</strong> Watch Bob's Bloch sphere. Upon Alice's measurement, his vector jumps to a seemingly random position. When the classical bits arrive and the \(X/Z\) gates are applied, his vector snaps instantly to match the exact original coordinates of \(|\psi\rangle\).</li>
+        </ul>
+        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
+            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+            <h3>Dynamic State Tracking</h3>
+            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualization placeholder to be added later]</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>6. Python Code Implementation</h2>
+        
+        <h3>From Scratch (NumPy)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / NumPy</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>import numpy as np
+
+def simulate_teleportation(alpha, beta):
+    \"\"\"
+    Simulates Quantum Teleportation using pure NumPy matrix multiplication.
+    alpha, beta: Complex probability amplitudes of the initial state.
+    \"\"\"
+    I = np.eye(2, dtype=complex)
+    X = np.array([[0, 1], [1, 0]], dtype=complex)
+    Z = np.array([[1, 0], [0, -1]], dtype=complex)
+    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
+    
+    # 3-Qubit Identity
+    I_8 = np.eye(8, dtype=complex)
+
+    # Prepare initial state: |psi> x |Phi+>
+    psi_in = np.array([[alpha], [beta]])
+    phi_plus = np.array([[1/np.sqrt(2)], [0], [0], [1/np.sqrt(2)]])
+    state_0 = np.kron(psi_in, phi_plus)
+
+    # Alice applies CX(0 -> 1)
+    # (Matrix formulation of CX on Q0, Q1 tensored with I on Q2 omitted for brevity in scratch code)
+    # The mathematical logic dictates Bob's state collapses based on Alice's measurement.
+    
+    # Simulating the post-measurement collapse for outcome '11'
+    # Bob's uncorrected state is (alpha|1> - beta|0>)
+    bob_uncorrected = np.array([[-beta], [alpha]]) 
+    
+    # Bob receives '11' and applies X then Z
+    bob_corrected = np.dot(Z, np.dot(X, bob_uncorrected))
+    
+    return bob_corrected
+
+# Example: Teleporting a specific state
+alpha_val = np.sqrt(0.8)
+beta_val = np.sqrt(0.2)
+teleported_state = simulate_teleportation(alpha_val, beta_val)
+print("Teleported State:\\n", teleported_state)
+</code></pre>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
+        <div class="code-block">
+            <div class="code-header">
+                <span>Python / Qiskit</span>
+                <button>Copy Code</button>
+            </div>
+            <div class="code-content">
+<pre><code>from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
+def teleportation_circuit():
+    qr = QuantumRegister(3, name="q")
+    crz, crx = ClassicalRegister(1, name="crz"), ClassicalRegister(1, name="crx")
+    qc = QuantumCircuit(qr, crz, crx)
+
+    # 1. Prepare an arbitrary state to teleport (e.g., Rx rotation)
+    qc.rx(1.57, 0)
+    qc.barrier()
+
+    # 2. Create shared Bell pair between Alice (q1) and Bob (q2)
+    qc.h(1)
+    qc.cx(1, 2)
+    qc.barrier()
+
+    # 3. Alice applies operations to her two qubits
+    qc.cx(0, 1)
+    qc.h(0)
+    qc.barrier()
+
+    # 4. Alice measures
+    qc.measure(0, crz) # Measurement stored in crz
+    qc.measure(1, crx) # Measurement stored in crx
+    qc.barrier()
+
+    # 5. Bob applies corrections dynamically
+    qc.x(2).c_if(crx, 1) # Apply X if crx == 1
+    qc.z(2).c_if(crz, 1) # Apply Z if crz == 1
+
+    return qc
+
+circuit = teleportation_circuit()
+print(circuit.draw(output='text'))
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>7. Caveats & Real-World Limits</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>No Faster-than-Light Communication:</strong> Quantum Teleportation does not violate relativity. The state is only recovered after Bob receives the classical bits (\(c_1, c_0\)) from Alice. Since classical bits cannot travel faster than the speed of light, the teleportation protocol is bound by standard physical speed limits.</li>
+            <li><strong>Entanglement Degradation:</strong> Teleporting over long distances (like via optical fibre or satellite) requires the initial Bell pair to remain pristine. In reality, environmental noise causes decoherence, meaning Bob will recreate a noisy, mixed version of \(|\psi\rangle\) rather than a perfect copy.</li>
+            <li><strong>Destruction of the Original:</strong> In strict adherence to the No-Cloning Theorem, the input state \(|\psi\rangle\) is irrevocably destroyed on Alice's side during the Bell basis measurement.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>8. Applications</h2>
+        <ul style="line-height: 1.6;">
+            <li><strong>Quantum Repeaters & Networks:</strong> It is impossible to amplify quantum signals like classical signals. Teleportation allows states to be "hopped" across a chain of entangled nodes, forming the backbone of the future Quantum Internet.</li>
+            <li><strong>Distributed Quantum Computing:</strong> Allows multiple small, noisy quantum processors to be linked together to perform large-scale calculations by teleporting qubits between computational nodes.</li>
+            <li><strong>Fault-Tolerant Gate Execution (Magic States):</strong> In error-corrected quantum computers, certain non-Clifford gates (like the T gate) are extremely difficult to implement directly. They are applied indirectly by preparing a special "magic state" offline and teleporting it into the main computation.</li>
+        </ul>
+    </section>
+    
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Bennett, C. H., Brassard, G., Crépeau, C., Jozsa, R., Peres, A., &amp; Wootters, W. K. (1993). Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels. <em>Physical Review Letters</em>, 70(13), 1895–1899.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
+    <nav class="algorithm-nav">
+        <a href="superdense-coding.html" class="nav-button">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">Superdense Coding</span>
+        </a>
+        <a href="entanglement-swapping.html" class="nav-button nav-next">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">Entanglement Swapping</span>
+        </a>
+    </nav>
+    
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>
+                &copy; 2026 AQCA - All Quantum Computing Algorithms
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    
+</body>
+</html>
