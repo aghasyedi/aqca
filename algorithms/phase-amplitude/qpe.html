@@ -166,23 +166,13 @@
             <li><strong>Inverse Quantum Fourier Transform (\(QFT^\dagger\)):</strong> A subroutine of \(H\) and \(CP^\dagger\) gates used to map the phase state back to the computational basis.</li>
         </ul>
 
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Schematic</h3>
-            <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 1rem; color: var(--text-color);">
-Counting Register (t qubits)
-         ┌───┐                                                       ┌───────┐
-  q_0: ──┤ H ├─■─────────────────────────────────────────────────────┤       ├── ✂ Measure
-         ├───┤ │                                                     │       │
-  q_1: ──┤ H ├─┼────────■────────────────────────────────────────────┤ QFT^† ├── ✂ Measure
-        ...    │        │                                            │       │
-         ├───┤ │        │                                            │       │
-q_t-1: ──┤ H ├─┼────────┼────────────────────────■───────────────────┤       ├── ✂ Measure
-         └───┘ │        │                        │                   └───────┘
-Target Register (n qubits)
-               │        │                        │
-|ψ⟩_0: ────────U^1──────U^2────── ... ───────────U^{2^{t-1}}──────────────────</pre>
-            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Circuit image placeholder to be added later]</p>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/qpe-circuit.png" alt="Circuit Schematic for Quantum Phase Estimation (QPE)" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </section>
 

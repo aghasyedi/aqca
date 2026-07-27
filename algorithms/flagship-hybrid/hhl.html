@@ -114,134 +114,250 @@
 
         <main id="main-content" class="main-content">
             
-    <div class="breadcrumb">
-        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
-        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
-        Flagship & Hybrid <span class="breadcrumb-separator">›</span> 
-        HHL Algorithm
-    </div>
-
     <div class="algorithm-header">
-        <h1>HHL Algorithm</h1>
+        <h1>HHL Algorithm (Harrow-Hassidim-Lloyd)</h1>
         <div class="algorithm-meta">
-            <span class="badge badge-category">Flagship & Hybrid</span>
+            <span class="badge badge-category">Flagship & Hybrid Models</span>
         </div>
     </div>
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>A high-level explanation of the problem HHL Algorithm aims to solve.</p>
+        <p>The <strong>HHL Algorithm</strong> solves systems of linear equations on a quantum computer. Given a Hermitian \(N \times N\) matrix \(A\) and a known vector \(\vec{b}\), the algorithm finds the solution vector \(\vec{x}\) such that \(A\vec{x} = \vec{b}\).</p>
+        <p>In modern computation, solving large linear systems is the bottleneck for everything from fluid dynamics and differential equations to machine learning and financial modeling. HHL was a landmark breakthrough because it offered a theoretical exponential speedup over the best known classical algorithms.</p>
+
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
                 <h3>Classical Complexity</h3>
-                <div class="complexity-value">O(?)</div>
+                <div class="complexity-value">\(\mathcal{O}(N \kappa)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">The classical Conjugate Gradient method scales linearly with the number of variables \(N\) (where \(\kappa\) is the condition number of \(A\)).</p>
             </div>
             <div class="complexity-box">
                 <h3>Quantum Speedup</h3>
-                <div class="complexity-value">O(?)</div>
+                <div class="complexity-value">\(\mathcal{O}(\log(N) \kappa^2 / \epsilon)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">HHL solves the system in time proportional to the <em>logarithm</em> of \(N\), yielding an <strong>exponential speedup</strong>, provided the matrix is sparse and well-conditioned.</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>The core conceptual idea behind the algorithm, explained without heavy mathematics.</p>
+        <p>If we want to compute \(\vec{x} = A^{-1}\vec{b}\), we can think about this problem in terms of the eigenvalues and eigenvectors of \(A\).</p>
+        <ol style="line-height: 1.6;">
+            <li><strong>Eigenbasis:</strong> Any matrix \(A\) stretches space along specific directions (eigenvectors) by specific amounts (eigenvalues). If we break the vector \(\vec{b}\) into a combination of these eigenvectors, applying \(A^{-1}\) simply means dividing the length of each eigenvector component by its corresponding eigenvalue.</li>
+            <li><strong>Quantum Parallelism:</strong> The HHL algorithm encodes \(\vec{b}\) into the amplitudes of a quantum state \(|b\rangle\). It then uses <strong>Quantum Phase Estimation (QPE)</strong> to "read" the eigenvalues of \(A\) and write them into a temporary register.</li>
+            <li><strong>The Inversion:</strong> The quantum computer applies a controlled rotation to a separate ancilla qubit. The trick is that the angle of rotation is inversely proportional to the eigenvalues stored in the temporary register.</li>
+            <li><strong>Cleanup and Collapse:</strong> The temporary register is cleared using Inverse QPE. Finally, we measure the ancilla qubit. If it measures as \(|1\rangle\), quantum mechanics dictates that the rest of the system collapses exactly into a state proportional to \(A^{-1}|b\rangle\), our solution.</li>
+        </ol>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
-        <p>The specific quantum gates required to build this circuit.</p>
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Visualisation</h3>
-            <p>Interactive or static rendering of the quantum circuit.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>State Preparation (\(U_b\)):</strong> A unitary that encodes the classical vector \(\vec{b}\) into the quantum state \(|b\rangle\).</li>
+            <li><strong>Quantum Phase Estimation (QPE):</strong> A deep sub-circuit utilizing Hadamard gates, Controlled-Hamiltonian simulations (\(e^{i A t}\)), and the Inverse Quantum Fourier Transform (\(QFT^\dagger\)) to extract eigenvalues.</li>
+            <li><strong>Controlled-Rotation (\(CR_y\)):</strong> An ancilla rotation gate controlled by the eigenvalue register, applying \(\theta \propto \arcsin(C/\lambda)\).</li>
+            <li><strong>Inverse QPE (\(QPE^\dagger\)):</strong> Uncomputes the eigenvalue register to un-entangle it from the solution.</li>
+        </ul>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/hhl-circuit.png" alt="Circuit Schematic for HHL Algorithm" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p>Rigorous step-by-step derivation tracking the exact state vector \(|\psi\rangle\) after every gate application.</p>
         <div class="math-container">
-            <p>\(|\psi_0\rangle = ...\)</p>
-            <p>\(|\psi_1\rangle = ...\)</p>
+            <h3>Step 1: State Preparation</h3>
+            <p>We begin with three registers: an ancilla qubit, a clock register with \(t\) qubits, and a target register encoding \(|b\rangle\). Let \(|u_j\rangle\) be the eigenvectors of \(A\) with eigenvalues \(\lambda_j\). We can express \(|b\rangle\) in this eigenbasis: \(|b\rangle = \sum_j \beta_j |u_j\rangle\).</p>
+            <p>\(|\psi_0\rangle = |0\rangle_{anc} \otimes |0\rangle^{\otimes t}_{clock} \otimes \sum_j \beta_j |u_j\rangle\)</p>
+
+            <h3>Step 2: Quantum Phase Estimation (QPE)</h3>
+            <p>Applying QPE evaluates the Hamiltonian \(e^{i A t}\) conditionally on the clock register. Because \(|u_j\rangle\) are eigenvectors of \(A\), this writes the eigenvalues \(\lambda_j\) into the clock register:</p>
+            <p>\(|\psi_1\rangle = |0\rangle_{anc} \otimes \sum_j \beta_j |\lambda_j\rangle_{clock} \otimes |u_j\rangle\)</p>
+
+            <h3>Step 3: Controlled Ancilla Rotation</h3>
+            <p>We apply a controlled \(R_y\) rotation to the ancilla qubit. The angle of rotation depends on the value \(\lambda_j\) stored in the clock register. We rotate such that the amplitude of \(|1\rangle\) is \(C/\lambda_j\) (where \(C\) is a scaling constant chosen such that \(C \le \min |\lambda_j|\) to ensure the probability does not exceed 1).</p>
+            <p>\(|\psi_2\rangle = \sum_j \beta_j \left( \sqrt{1 - \frac{C^2}{\lambda_j^2}} |0\rangle_{anc} + \frac{C}{\lambda_j} |1\rangle_{anc} \right) \otimes |\lambda_j\rangle_{clock} \otimes |u_j\rangle\)</p>
+
+            <h3>Step 4: Inverse QPE (Uncomputation)</h3>
+            <p>We apply the exact inverse of the QPE sub-circuit. This erases the \(\lambda_j\) values from the clock register, returning it to \(|0\rangle^{\otimes t}\):</p>
+            <p>\(|\psi_3\rangle = \sum_j \beta_j \left( \sqrt{1 - \frac{C^2}{\lambda_j^2}} |0\rangle_{anc} + \frac{C}{\lambda_j} |1\rangle_{anc} \right) \otimes |0\rangle^{\otimes t}_{clock} \otimes |u_j\rangle\)</p>
+
+            <h3>Measurement and Post-Selection</h3>
+            <p>We measure the ancilla qubit. We only care about the outcome where the ancilla is \(|1\rangle\). If we measure \(|1\rangle\), the target register collapses to:</p>
+            <p>\(|x\rangle = \frac{1}{\mathcal{N}} \sum_j \beta_j \frac{C}{\lambda_j} |u_j\rangle\)</p>
+            <p>Because \(A^{-1} = \sum_j \frac{1}{\lambda_j} |u_j\rangle\langle u_j|\), this resulting state is mathematically exactly proportional to \(A^{-1}|b\rangle\). We have solved the linear system.</p>
         </div>
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Explanation of the measurement basis and expected probability distribution.</p>
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
-        <div class="simulation-placeholder">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>Ancilla Success Probability Tracker:</strong> A visual meter showing the total probability of measuring \(|1\rangle\) on the ancilla. As the condition number of matrix \(A\) increases (meaning some eigenvalues get very close to zero), the user can watch the success probability drastically shrink, illustrating the need for Amplitude Amplification in HHL.</li>
+            <li><strong>Eigenvalue Inversion Plot:</strong> A side-by-side graph showing the initial spectrum of \(|b\rangle\) mapped against \(\lambda\), and the final spectrum of \(|x\rangle\) mapped against \(1/\lambda\), visualizing how high-frequency (high eigenvalue) components are dampened while low-frequency components are amplified.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
-        
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
-                <button>Copy Code</button>
+                <span>From Scratch (NumPy)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# NumPy implementation placeholder
-import numpy as np
+<pre><code>import numpy as np
 
-def simulate_hhl():
-    pass
-</pre>
+def simulate_hhl_math(A, b):
+    """
+    Simulates the mathematical state-vector logic of HHL.
+    """
+    # 1. Classical exact solution for verification
+    x_exact = np.linalg.solve(A, b)
+    
+    # 2. Eigendecomposition of A
+    evals, evecs = np.linalg.eigh(A)
+    
+    # 3. Express |b&gt; in the eigenbasis of A (beta_j = &lt;u_j | b&gt;)
+    betas = np.dot(evecs.conj().T, b)
+    
+    # 4. HHL Eigenvalue Inversion
+    # Constant C ensures all rotation amplitudes C/lambda &lt;= 1
+    C = np.min(np.abs(evals))
+    
+    success_prob = 0.0
+    x_quantum_state = np.zeros_like(b, dtype=complex)
+    
+    for j in range(len(evals)):
+        # Amplitude written to the |1&gt; ancilla state
+        amplitude = C / evals[j] 
+        
+        # Track probability of measuring this branch
+        success_prob += np.abs(betas[j] * amplitude)**2
+        
+        # Construct the collapsed target state
+        x_quantum_state += (amplitude * betas[j]) * evecs[:, j]
+        
+    # 5. Normalise the collapsed quantum state
+    x_quantum_normalized = x_quantum_state / np.linalg.norm(x_quantum_state)
+    x_exact_normalized = x_exact / np.linalg.norm(x_exact)
+    
+    return x_quantum_normalized, x_exact_normalized, success_prob
+
+# Define a simple 2x2 Hermitian matrix and vector
+A_matrix = np.array([[1.5, 0.5], [0.5, 1.5]])
+b_vector = np.array([1.0, 0.0])
+
+q_sol, c_sol, p_success = simulate_hhl_math(A_matrix, b_vector)
+print(f"Post-selection success probability: {p_success*100:.2f}%")
+print(f"HHL Normalized State: {np.round(q_sol, 4)}")
+print(f"Classical Normalized: {np.round(c_sol, 4)}")
+</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
+
+        <div class="code-block" style="margin-top: 2rem;">
             <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
+                <span>Framework (Qiskit)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# Qiskit implementation placeholder
-from qiskit import QuantumCircuit
+<pre><code>from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit.circuit.library import QFT
+import numpy as np
 
-def create_circuit():
-    qc = QuantumCircuit(2)
+def build_hhl_structure(num_clock_qubits=2):
+    """
+    Constructs the structural skeleton of an HHL circuit.
+    Note: A full HHL implementation requires complex Hamiltonian simulation 
+    compilation which is abstracted here for structural clarity.
+    """
+    ancilla = QuantumRegister(1, 'ancilla')
+    clock = QuantumRegister(num_clock_qubits, 'clock')
+    target = QuantumRegister(1, 'target') # 2x2 system
+    c = ClassicalRegister(1, 'measure')
+    
+    qc = QuantumCircuit(ancilla, clock, target, c)
+    
+    # 1. State Preparation U_b (Assume we want to load some vector)
+    qc.ry(np.pi/3, target[0])
+    qc.barrier(label="State Prep")
+    
+    # 2. QPE (Quantum Phase Estimation)
+    qc.h(clock)
+    # Placeholder for controlled Hamiltonian simulation: C-U(e^iAt)
+    for i in range(num_clock_qubits):
+        qc.cp(np.pi / (2**i), clock[i], target[0]) 
+    qc.append(QFT(num_clock_qubits, inverse=True).to_gate(), clock)
+    qc.barrier(label="QPE Complete")
+    
+    # 3. Controlled Eigenvalue Inversion (Rotation on Ancilla)
+    # The rotation angles depend on the binary value of the clock register
+    # In practice, this is a sequence of multi-controlled Ry gates
+    qc.cry(np.pi/2, clock[0], ancilla[0])
+    qc.cry(np.pi/4, clock[1], ancilla[0])
+    qc.barrier(label="Eigenvalue Inversion")
+    
+    # 4. Inverse QPE
+    qc.append(QFT(num_clock_qubits).to_gate(), clock)
+    for i in reversed(range(num_clock_qubits)):
+        qc.cp(-np.pi / (2**i), clock[i], target[0])
+    qc.h(clock)
+    qc.barrier(label="IQPE Complete")
+    
+    # 5. Post-selection measurement
+    qc.measure(ancilla, c)
+    
     return qc
-</pre>
+
+circuit = build_hhl_structure()
+print(circuit.draw(output='text'))
+</code></pre>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
-        <p>Assumptions (e.g. perfect oracles), hardware connectivity requirements, and noise limitations on NISQ devices.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>The I/O Bottleneck:</strong> HHL assumes you can load the vector \(\vec{b}\) into the quantum state \(|b\rangle\) in \(\mathcal{O}(\log N)\) time. If \(\vec{b}\) is highly arbitrary, preparing this state requires \(\mathcal{O}(N)\) gates, completely wiping out the exponential speedup. True implementation requires hypothetical Quantum RAM (qRAM).</li>
+            <li><strong>Condition Number (\(\kappa\)):</strong> If the matrix \(A\) is ill-conditioned (meaning the ratio of the largest to smallest eigenvalue is huge), the rotation constant \(C\) must be exceedingly small. This means the probability of measuring \(|1\rangle\) on the ancilla drops exponentially, forcing you to run the circuit millions of times to get one successful measurement.</li>
+            <li><strong>Measurement Limitations:</strong> You cannot extract the full classical vector \(\vec{x}\) out of the quantum computer efficiently. You can only evaluate global, scalar properties of the solution, such as the expectation value \(\langle x | M | x \rangle\) (e.g., calculating the total risk in a portfolio without knowing the exact weights of individual stocks).</li>
+            <li><strong>Dequantization:</strong> In 2018, Ewin Tang proved that classical algorithms with access to similar data structures (classical RAM analogous to qRAM) can solve the exact same problem in poly-logarithmic time, effectively "dequantizing" the exponential speedup of HHL for low-rank matrices.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
-        <p>Where this algorithm is used in modern quantum computing.</p>
-    </section>
-    
-    <section class="content-section">
-        <h2>9. References</h2>
-        <ul>
-            <li>Primary academic sources and textbooks.</li>
+        <ul style="line-height: 1.6;">
+            <li><strong>Machine Learning:</strong> Serves as a primary subroutine for quantum versions of Support Vector Machines (SVMs), Principal Component Analysis (PCA), and linear regression, accelerating the training of large models.</li>
+            <li><strong>Differential Equations:</strong> Used in solving massive linearized discretized grids (like the Finite Element Method) for computational fluid dynamics, weather forecasting, and heat transfer simulations.</li>
+            <li><strong>Quantitative Finance:</strong> Used to solve massive covariance matrices in Markowitz portfolio optimization, risk modeling, and asset allocation.</li>
         </ul>
     </section>
 
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Harrow, A. W., Hassidim, A., &amp; Lloyd, S. (2009). Quantum algorithm for linear systems of equations. <em>Physical Review Letters</em>, 103(15), 150502.</li>
+            <li>Tang, E. (2019). A quantum-inspired classical algorithm for recommendation systems. <em>Proceedings of the 51st Annual ACM SIGACT Symposium on Theory of Computing</em>, 217-228.</li>
+            <li>Montanaro, A., &amp; Pallister, S. (2016). Quantum algorithms and the finite element method. <em>Physical Review A</em>, 93(3), 032324.</li>
+        </ol>
+    </section>
+
     <nav class="algorithm-nav">
-        <a href="#" class="nav-button">
+        <a href="qaoa.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">QAOA</span>
         </a>
-        <a href="#" class="nav-button nav-next">
+        <a href="../fault-tolerance/3-qubit-code.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">3-Qubit Bit-Flip / Phase-Flip Codes</span>
         </a>
     </nav>
     

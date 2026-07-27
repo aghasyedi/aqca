@@ -114,13 +114,6 @@
 
         <main id="main-content" class="main-content">
             
-    <div class="breadcrumb">
-        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
-        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
-        Fault Tolerance <span class="breadcrumb-separator">›</span> 
-        Steane 7-Qubit Code
-    </div>
-
     <div class="algorithm-header">
         <h1>Steane 7-Qubit Code</h1>
         <div class="algorithm-meta">
@@ -130,118 +123,209 @@
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>A high-level explanation of the problem Steane 7-Qubit Code aims to solve.</p>
+        <p>The <strong>Steane 7-Qubit Code</strong> is a monumental leap in quantum error correction. While Shor’s 9-qubit code proved that correcting arbitrary quantum errors was possible, it was inefficient. Andrew Steane demonstrated that you can achieve the exact same level of protection using fewer qubits by mapping a highly efficient classical error correction scheme—the classical \([7,4,3]\) Hamming code—directly into the quantum realm.</p>
+        <p>This code is the premier example of a <strong>CSS (Calderbank-Shor-Steane) Code</strong>, a class of quantum codes constructed from two classical linear codes.</p>
+
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
-                <h3>Classical Complexity</h3>
-                <div class="complexity-value">O(?)</div>
+                <h3>Classical Code Base</h3>
+                <div class="complexity-value">\([7,4,3]\) Hamming Code</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Uses overlapping parity checks for maximum efficiency.</p>
             </div>
             <div class="complexity-box">
-                <h3>Quantum Speedup</h3>
-                <div class="complexity-value">O(?)</div>
+                <h3>Quantum Overhead</h3>
+                <div class="complexity-value">7 to 1</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Encodes 1 logical qubit into 7 physical data qubits.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Fault Tolerance</h3>
+                <div class="complexity-value">Arbitrary Single Error</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Corrects any single-qubit \(X\), \(Y\), or \(Z\) error (Distance \(d=3\)).</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>The core conceptual idea behind the algorithm, explained without heavy mathematics.</p>
+        <p>Shor’s code protects information by brute-force nesting (a code inside a code). Steane’s code protects information using <strong>symmetry and overlapping checks</strong>.</p>
+        <p>Imagine a Venn diagram with three overlapping circles. We place 7 qubits into this diagram: one in the absolute centre, three in the overlapping petals, and three in the outer non-overlapping sections.</p>
+        <ol style="line-height: 1.6;">
+            <li><strong>The Checks:</strong> Each circle contains exactly four qubits. We measure the parity (whether the number of <code>1</code>s is even or odd) of each circle independently.</li>
+            <li><strong>The Isolation:</strong> If a single qubit flips, it changes the parity of <em>only</em> the circles it sits inside. By looking at which specific combination of circles report an error, you can instantly pinpoint the exact qubit that failed.</li>
+            <li><strong>The CSS Magic:</strong> Because of the mathematical elegance of the Hamming code, we can use the exact same Venn diagram structure to check for bit-flips (using \(Z\)-parity checks) and phase-flips (using \(X\)-parity checks) completely independently, without them interfering with each other.</li>
+        </ol>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
-        <p>The specific quantum gates required to build this circuit.</p>
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Visualisation</h3>
-            <p>Interactive or static rendering of the quantum circuit.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard (\(H\)):</strong> Used in encoding to create the necessary superposition of codewords, and in syndrome measurement to switch to the \(X\)-basis.</li>
+            <li><strong>Controlled-NOT (\(CX\)):</strong> Used to entangle the data qubits during encoding and to extract parity information into the ancilla qubits.</li>
+            <li><strong>Syndrome Ancillas:</strong> Requires 6 auxiliary qubits (3 to check for \(X\) errors, 3 to check for \(Z\) errors).</li>
+        </ul>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/steane-code-circuit.png" alt="Circuit Schematic for Steane 7-Qubit Code" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
+        <p><em>(Note: Qubits \(q_4, q_5, q_6\) dictate the superposition of the remaining data qubits, forming the logical \(|0_L\rangle\) state).</em></p>
     </section>
 
     <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p>Rigorous step-by-step derivation tracking the exact state vector \(|\psi\rangle\) after every gate application.</p>
         <div class="math-container">
-            <p>\(|\psi_0\rangle = ...\)</p>
-            <p>\(|\psi_1\rangle = ...\)</p>
+            <h3>Step 1: The Parity Check Matrix</h3>
+            <p>The classical \([7,4,3]\) Hamming code is defined by a parity check matrix \(H\). The rows of this matrix dictate which qubits are grouped together in our "Venn diagram" circles:</p>
+            <p>\(H = \begin{pmatrix}  0 & 0 & 0 & 1 & 1 & 1 & 1 \\  0 & 1 & 1 & 0 & 0 & 1 & 1 \\  1 & 0 & 1 & 0 & 1 & 0 & 1  \end{pmatrix}\)</p>
+
+            <h3>Step 2: Stabiliser Generators</h3>
+            <p>In the quantum realm, we convert this binary matrix into tensor products of Pauli operators. The Steane code is defined by 6 stabiliser generators (3 for phase-flips, 3 for bit-flips):</p>
+            <ul>
+                <li>\(g_1 = I \otimes I \otimes I \otimes X \otimes X \otimes X \otimes X\)</li>
+                <li>\(g_2 = I \otimes X \otimes X \otimes I \otimes I \otimes X \otimes X\)</li>
+                <li>\(g_3 = X \otimes I \otimes X \otimes I \otimes X \otimes I \otimes X\)</li>
+            </ul>
+            <p><em>(Generators \(g_4, g_5, g_6\) are identical to above, but using \(Z\) instead of \(X\)).</em></p>
+
+            <h3>Step 3: The Logical States</h3>
+            <p>A valid quantum codeword must be an eigenstate (with eigenvalue \(+1\)) of all 6 generators.</p>
+            <p>To construct the logical zero state \(|0_L\rangle\), we take the uniform superposition of all 8 classical bitstrings that satisfy the classical Hamming parity checks (the "even weight" codewords):</p>
+            <p>\(|0_L\rangle = \frac{1}{\sqrt{8}} \Big( |0000000\rangle + |1010101\rangle + |0110011\rangle + |1100110\rangle + |0001111\rangle + |1011010\rangle + |0111100\rangle + |1101001\rangle \Big)\)</p>
+            <p>The logical one state \(|1_L\rangle\) is the bit-wise inverse (the "odd weight" codewords):</p>
+            <p>\(|1_L\rangle = \frac{1}{\sqrt{8}} \Big( |1111111\rangle + |0101010\rangle + |1001100\rangle + |0011001\rangle + |1110000\rangle + |0100101\rangle + |1000011\rangle + |0010110\rangle \Big)\)</p>
+
+            <h3>Step 4: Error Correction</h3>
+            <p>If an arbitrary error \(E\) occurs, measuring the \(Z\)-generators (\(g_4, g_5, g_6\)) yields a 3-bit syndrome for bit-flips, and measuring the \(X\)-generators (\(g_1, g_2, g_3\)) yields a 3-bit syndrome for phase-flips.</p>
+            <p>Because the binary representation of the syndrome maps directly to the binary index of the flipped qubit (e.g., a syndrome of <code>110</code> means qubit 6 flipped), the classical controller can instantly apply the corrective Pauli gate.</p>
         </div>
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Explanation of the measurement basis and expected probability distribution.</p>
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
-        <div class="simulation-placeholder">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>Venn Diagram Syndrome Tracker:</strong> A visual representation of three overlapping circles. If a user injects an error into a specific qubit (e.g., Qubit 3, which sits in the intersection of Circle A and Circle B), the visualizer highlights circles A and B, instantly yielding the binary syndrome <code>110</code>.</li>
+            <li><strong>The Fano Plane / Colour Code:</strong> The Steane code is mathematically equivalent to the smallest possible <strong>Topological Colour Code</strong>. The visualizer can map the 7 qubits onto the vertices of a 2D triangular grid, showing how local triangular faces map directly to the stabiliser parity checks.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
-        
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
-                <button>Copy Code</button>
+                <span>From Scratch (NumPy)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# NumPy implementation placeholder
-import numpy as np
+<pre><code>import numpy as np
 
-def simulate_steane-code():
-    pass
-</pre>
+def construct_steane_logical_zero():
+    """
+    Constructs the 7-qubit |0_L&gt; state vector using NumPy.
+    """
+    # The 8 valid codewords satisfying the Hamming [7,4,3] parity checks
+    valid_codewords = [
+        "0000000", "1010101", "0110011", "1100110",
+        "0001111", "1011010", "0111100", "1101001"
+    ]
+    
+    # 2^7 = 128 dimensional Hilbert space
+    logical_zero = np.zeros(128, dtype=complex)
+    
+    # Place amplitudes
+    for bitstring in valid_codewords:
+        index = int(bitstring, 2)
+        logical_zero[index] = 1.0 / np.sqrt(8)
+        
+    return logical_zero
+
+state_0L = construct_steane_logical_zero()
+print(f"Hilbert space dimension: {len(state_0L)}")
+print(f"Number of non-zero amplitudes: {np.count_nonzero(state_0L)}")
+
+# Verify normalisation
+print(f"Total probability: {np.linalg.norm(state_0L)**2:.2f}")
+</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
+
+        <div class="code-block" style="margin-top: 2rem;">
             <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
+                <span>Framework (Qiskit)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# Qiskit implementation placeholder
-from qiskit import QuantumCircuit
+<pre><code>from qiskit import QuantumCircuit
 
-def create_circuit():
-    qc = QuantumCircuit(2)
+def steane_encoding_circuit():
+    """Constructs a non-fault-tolerant encoding circuit for Steane |0_L&gt;"""
+    qc = QuantumCircuit(7)
+    
+    # Create superposition on the three generator qubits
+    qc.h([4, 5, 6])
+    
+    # Apply the generator CNOTs according to the H matrix
+    # Generator 1: x_4 controls x_0, x_1, x_3
+    qc.cx(4, 0)
+    qc.cx(4, 1)
+    qc.cx(4, 3)
+    
+    # Generator 2: x_5 controls x_0, x_2, x_3
+    qc.cx(5, 0)
+    qc.cx(5, 2)
+    qc.cx(5, 3)
+    
+    # Generator 3: x_6 controls x_1, x_2, x_3
+    qc.cx(6, 1)
+    qc.cx(6, 2)
+    qc.cx(6, 3)
+    
     return qc
-</pre>
+
+circuit = steane_encoding_circuit()
+print("Steane 7-Qubit Encoding:")
+print(circuit.draw(output='text'))
+</code></pre>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
-        <p>Assumptions (e.g. perfect oracles), hardware connectivity requirements, and noise limitations on NISQ devices.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Distance 3 Limitation:</strong> The code can only correct one error. If two independent bit-flips occur within the 7-qubit block before a syndrome measurement completes, the error goes undetected or is misidentified, leading to a logical failure.</li>
+            <li><strong>Non-Fault-Tolerant Syndrome Extraction:</strong> The circuit provided above for encoding is purely theoretical. In reality, a single faulty CNOT gate during syndrome measurement can propagate multiple errors into the data block. Real fault-tolerant extraction requires constructing complex verified "cat states" (Shor syndrome extraction) or utilizing flag qubits.</li>
+            <li><strong>Hardware Connectivity:</strong> The Steane code parity checks require highly non-local interactions. On superconducting architectures (like IBM's heavy-hex lattice), qubits are only connected to their nearest neighbours. Executing this code requires inserting dozens of noisy SWAP gates, negating the error correction benefits.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
-        <p>Where this algorithm is used in modern quantum computing.</p>
-    </section>
-    
-    <section class="content-section">
-        <h2>9. References</h2>
-        <ul>
-            <li>Primary academic sources and textbooks.</li>
+        <ul style="line-height: 1.6;">
+            <li><strong>Transversal Gates (Fault-Tolerant Computation):</strong> The most significant property of the Steane code is that the entire <strong>Clifford group</strong> (\(H\), \(S\), \(CX\)) is transversal. This means to apply a logical Hadamard to the encoded state, you simply apply physical Hadamards to all 7 physical qubits simultaneously. Errors cannot cascade transversally, making this exceptionally robust.</li>
+            <li><strong>Magic State Distillation:</strong> Because CSS codes cannot perform a transversal \(T\) gate (which is required for universal quantum computing alongside the Clifford group), the Steane code forms the foundational motivation for the massive sub-field of Magic State Distillation.</li>
         </ul>
     </section>
 
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Steane, A. M. (1996). Error correcting codes in quantum theory. <em>Physical Review Letters</em>, 77(13), 2953.</li>
+            <li>Calderbank, A. R., &amp; Shor, P. W. (1996). Good quantum error-correcting codes exist. <em>Physical Review A</em>, 54(2), 1098.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
     <nav class="algorithm-nav">
-        <a href="#" class="nav-button">
+        <a href="shors-9-qubit-code.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">Shor's 9-Qubit Code</span>
         </a>
-        <a href="#" class="nav-button nav-next">
+        <a href="../../algorithms.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">Algorithm Catalogue</span>
         </a>
     </nav>
     

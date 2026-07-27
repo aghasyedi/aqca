@@ -114,15 +114,8 @@
 
         <main id="main-content" class="main-content">
             
-    <div class="breadcrumb">
-        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
-        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
-        Fault Tolerance <span class="breadcrumb-separator">›</span> 
-        3-Qubit Bit-Flip / Phase-Flip Codes
-    </div>
-
     <div class="algorithm-header">
-        <h1>3-Qubit Bit-Flip / Phase-Flip Codes</h1>
+        <h1>3-Qubit Error Correction Codes</h1>
         <div class="algorithm-meta">
             <span class="badge badge-category">Fault Tolerance</span>
         </div>
@@ -130,118 +123,291 @@
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>A high-level explanation of the problem 3-Qubit Bit-Flip / Phase-Flip Codes aims to solve.</p>
+        <p>The <strong>3-Qubit Bit-Flip and Phase-Flip Codes</strong> are the foundational protocols for Quantum Error Correction (QEC).</p>
+        <p>The problem they solve is environmental noise. In classical computing, if a bit flips due to radiation, we use a repetition code: copy the bit three times (e.g., 111). If one flips to 101, we take a majority vote and correct it back to 1. In quantum computing, we face two massive roadblocks:</p>
+        <ul>
+            <li><strong>The No-Cloning Theorem:</strong> We cannot copy an unknown quantum state.</li>
+            <li><strong>Measurement Collapse:</strong> If we measure a quantum state to see if an error occurred, we destroy the superposition.</li>
+        </ul>
+
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
-                <h3>Classical Complexity</h3>
-                <div class="complexity-value">O(?)</div>
+                <h3>Error Type Addressed</h3>
+                <div class="complexity-value">Single-Qubit</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Can detect and correct exactly one error per block. Fails if two errors occur.</p>
             </div>
             <div class="complexity-box">
-                <h3>Quantum Speedup</h3>
-                <div class="complexity-value">O(?)</div>
+                <h3>Qubit Overhead</h3>
+                <div class="complexity-value">3 to 1</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Requires 3 physical qubits to protect 1 logical data qubit.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Ancilla Overhead</h3>
+                <div class="complexity-value">2 qubits</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Requires 2 additional auxiliary qubits for non-destructive measurement.</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>The core conceptual idea behind the algorithm, explained without heavy mathematics.</p>
+        <p>If we cannot copy the state, and we cannot measure the state, how do we protect it? We use <strong>entanglement as redundancy</strong>.</p>
+        <p>Instead of copying the state, we spread the information of a single qubit across a highly entangled state of three qubits. If a stray magnetic field flips one of the qubits, we do not measure the qubits directly. Instead, we measure the relationships (the parity) between them using temporary helper qubits (ancillas).</p>
+        <p>Think of it like three people holding hands in a dark room. You cannot see their faces (the data), but if you ask, "Are the first two people standing or sitting?" they can answer "We are doing the same thing" or "We are doing different things" without revealing what they are doing. This is called <strong>syndrome measurement</strong>. If qubits 1 and 2 disagree, but qubits 2 and 3 agree, logically, qubit 1 must be the one that flipped.</p>
+        <p><em>(Note: The Phase-Flip code is identical to the Bit-Flip code, but we wrap the entire protocol in Hadamard gates to change the basis from \(Z\) to \(X\).)</em></p>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
-        <p>The specific quantum gates required to build this circuit.</p>
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Visualisation</h3>
-            <p>Interactive or static rendering of the quantum circuit.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Controlled-NOT (\(CX\)):</strong> Used both to entangle the initial state (encoding) and to extract the parity information without collapsing the data.</li>
+            <li><strong>Hadamard (\(H\)):</strong> Used exclusively in the Phase-Flip code to swap between the computational basis (where bit-flips happen) and the phase basis.</li>
+            <li><strong>Measurement (\(M\)):</strong> Applied only to the ancilla qubits.</li>
+        </ul>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/3-qubit-code-circuit.png" alt="Circuit Schematic for 3-Qubit Bit-Flip / Phase-Flip Codes" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p>Rigorous step-by-step derivation tracking the exact state vector \(|\psi\rangle\) after every gate application.</p>
         <div class="math-container">
-            <p>\(|\psi_0\rangle = ...\)</p>
-            <p>\(|\psi_1\rangle = ...\)</p>
+            <p>Let us trace the Bit-Flip Code. We want to protect the arbitrary state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\).</p>
+
+            <h3>Step 1: Encoding</h3>
+            <p>We introduce two blank qubits \(|00\rangle\) and apply two CNOT gates from the data qubit to the blank qubits.</p>
+            <p>\(|\psi_0\rangle = (\alpha|0\rangle + \beta|1\rangle) \otimes |00\rangle = \alpha|000\rangle + \beta|100\rangle\)</p>
+            <p>Applying the \(CX\) gates:</p>
+            <p>\(|\psi_{encoded}\rangle = \alpha|000\rangle + \beta|111\rangle\)</p>
+            <p>The information is now distributed across a GHZ-like state.</p>
+
+            <h3>Step 2: The Error</h3>
+            <p>Suppose the environment applies a Pauli-X (bit-flip) error strictly to the first qubit (\(X_1\)):</p>
+            <p>\(|\psi_{error}\rangle = (X \otimes I \otimes I) (\alpha|000\rangle + \beta|111\rangle) = \alpha|100\rangle + \beta|011\rangle\)</p>
+
+            <h3>Step 3: Syndrome Measurement</h3>
+            <p>We introduce two ancilla qubits initialised to \(|00\rangle_{anc}\).</p>
+            <ul>
+                <li><strong>Parity 1 (Compares Q0 &amp; Q1):</strong> We apply CNOTs from Q0 and Q1 to Ancilla 0.</li>
+                <li><strong>Parity 2 (Compares Q1 &amp; Q2):</strong> We apply CNOTs from Q1 and Q2 to Ancilla 1.</li>
+            </ul>
+            <p>Let's look at the \(\alpha|100\rangle\) term.</p>
+            <ul>
+                <li>Q0 is 1, Q1 is 0. Ancilla 0 flips once. (State: \(|1\rangle\))</li>
+                <li>Q1 is 0, Q2 is 0. Ancilla 1 flips zero times. (State: \(|0\rangle\))</li>
+            </ul>
+            <p>Let's look at the \(\beta|011\rangle\) term.</p>
+            <ul>
+                <li>Q0 is 0, Q1 is 1. Ancilla 0 flips once. (State: \(|1\rangle\))</li>
+                <li>Q1 is 1, Q2 is 1. Ancilla 1 flips twice. (State: \(|0\rangle\))</li>
+            </ul>
+            <p>Because both branches of the superposition yield the exact same ancilla state (\(|10\rangle\)), measuring the ancillas does not collapse the \(\alpha, \beta\) superposition. It factors out perfectly:</p>
+            <p>\(|\psi_{syndrome}\rangle = (\alpha|100\rangle + \beta|011\rangle) \otimes |10\rangle_{anc}\)</p>
+
+            <h3>Step 4: Correction</h3>
+            <p>We measure the ancillas as 10. This classical bitstring is the <strong>syndrome</strong>. A syndrome of 10 unambiguously means "Qubit 0 flipped." We apply an \(X\) gate to Q0 to fix it:</p>
+            <p>\(|\psi_{final}\rangle = X_1 (\alpha|100\rangle + \beta|011\rangle) = \alpha|000\rangle + \beta|111\rangle\)</p>
+            <p>The state is perfectly restored.</p>
+
+            <table class="complexity-table" style="margin-top: 1.5rem;">
+                <tr>
+                    <th>Syndrome (A0A1)</th>
+                    <th>Meaning</th>
+                    <th>Correction Applied</th>
+                </tr>
+                <tr>
+                    <td>00</td>
+                    <td>No error (all agree)</td>
+                    <td>None (\(I\))</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Q0 differs from Q1</td>
+                    <td>Flip Q0 (\(X_0\))</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Q1 differs from Q0 and Q2</td>
+                    <td>Flip Q1 (\(X_1\))</td>
+                </tr>
+                <tr>
+                    <td>01</td>
+                    <td>Q2 differs from Q1</td>
+                    <td>Flip Q2 (\(X_2\))</td>
+                </tr>
+            </table>
         </div>
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Explanation of the measurement basis and expected probability distribution.</p>
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
-        <div class="simulation-placeholder">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>Bloch Spheres (No-Cloning):</strong> If you watch the three physical data qubits individually, their Bloch vectors will shrink to the centre of the sphere the moment they are encoded. Because they are maximally entangled, their local states become completely mixed. The information now lives in the global state, not the individual qubits.</li>
+            <li><strong>Amplitude Histogram:</strong> During the error, the probability bars for \(|000\rangle\) and \(|111\rangle\) vanish, replaced by bars for \(|100\rangle\) and \(|011\rangle\). The moment the classical correction is applied, the bars instantly snap back to the correct \(|000\rangle\) and \(|111\rangle\) positions, regardless of the values of \(\alpha\) and \(\beta\).</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
-        
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
-                <button>Copy Code</button>
+                <span>From Scratch (NumPy)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# NumPy implementation placeholder
-import numpy as np
+<pre><code>import numpy as np
 
-def simulate_3-qubit-code():
-    pass
-</pre>
+def simulate_bit_flip_code(alpha, beta, error_qubit):
+    """
+    Simulates the 3-Qubit Bit-Flip code via state vectors.
+    """
+    X = np.array([[0, 1], [1, 0]], dtype=complex)
+    I = np.eye(2, dtype=complex)
+    
+    # 1. Encoding (assuming we start with alpha|000&gt; + beta|111&gt;)
+    state = np.zeros(8, dtype=complex)
+    state[0] = alpha # |000&gt;
+    state[7] = beta  # |111&gt;
+    
+    # 2. Apply Error
+    if error_qubit == 0:
+        error_op = np.kron(np.kron(X, I), I)
+    elif error_qubit == 1:
+        error_op = np.kron(np.kron(I, X), I)
+    elif error_qubit == 2:
+        error_op = np.kron(np.kron(I, I), X)
+    else:
+        error_op = np.kron(np.kron(I, I), I)
+        
+    errored_state = np.dot(error_op, state)
+    
+    # 3. Simulate Parity Check (Math abstraction of the ancilla measurement)
+    # We find which basis states have non-zero amplitude to deduce the error
+    non_zero_indices = np.where(np.abs(errored_state) &gt; 1e-5)[0]
+    binary_states = [format(idx, '03b') for idx in non_zero_indices]
+    
+    # Check parities of the first non-zero state (they will be identical for the second)
+    sample = binary_states[0]
+    parity_01 = int(sample[0]) ^ int(sample[1])
+    parity_12 = int(sample[1]) ^ int(sample[2])
+    
+    # 4. Correction Logic
+    correction_op = np.kron(np.kron(I, I), I)
+    if parity_01 == 1 and parity_12 == 0:   # Q0 flipped
+        correction_op = np.kron(np.kron(X, I), I)
+    elif parity_01 == 1 and parity_12 == 1: # Q1 flipped
+        correction_op = np.kron(np.kron(I, X), I)
+    elif parity_01 == 0 and parity_12 == 1: # Q2 flipped
+        correction_op = np.kron(np.kron(I, I), X)
+        
+    final_state = np.dot(correction_op, errored_state)
+    return final_state
+
+# Test: State 0.8|0&gt; + 0.6|1&gt;, Error on Qubit 1
+alpha_val, beta_val = 0.8, 0.6
+restored = simulate_bit_flip_code(alpha_val, beta_val, error_qubit=1)
+print(f"Restored amplitudes: |000&gt; = {restored[0].real}, |111&gt; = {restored[7].real}")
+</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
+
+        <div class="code-block" style="margin-top: 2rem;">
             <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
+                <span>Framework (Qiskit)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# Qiskit implementation placeholder
-from qiskit import QuantumCircuit
+<pre><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
 
-def create_circuit():
-    qc = QuantumCircuit(2)
+def bit_flip_code_circuit(error_qubit=None):
+    # 3 Data qubits, 2 Ancilla qubits, 2 Classical bits for syndrome
+    qc = QuantumCircuit(5, 2)
+    
+    # Assume arbitrary state preparation on Q0 here...
+    qc.rx(1.57, 0)
+    qc.barrier()
+    
+    # 1. Encoding
+    qc.cx(0, 1)
+    qc.cx(0, 2)
+    qc.barrier(label="Encoded")
+    
+    # 2. Error Injection
+    if error_qubit is not None:
+        qc.x(error_qubit)
+    qc.barrier(label="Error")
+    
+    # 3. Syndrome Extraction
+    # Parity of Q0 and Q1 -&gt; Ancilla 0 (Qubit 3)
+    qc.cx(0, 3)
+    qc.cx(1, 3)
+    
+    # Parity of Q1 and Q2 -&gt; Ancilla 1 (Qubit 4)
+    qc.cx(1, 4)
+    qc.cx(2, 4)
+    
+    # Measure ancillas
+    qc.measure(3, 0)
+    qc.measure(4, 1)
+    qc.barrier(label="Syndrome")
+    
+    # 4. Classical Feedback (Dynamic circuits required for actual real-time correction)
+    # If ancillas are 01 (Binary 1), flip Q2
+    qc.x(2).c_if(qc.clbits, 1)
+    # If ancillas are 11 (Binary 3), flip Q1
+    qc.x(1).c_if(qc.clbits, 3)
+    # If ancillas are 10 (Binary 2), flip Q0
+    qc.x(0).c_if(qc.clbits, 2)
+    
     return qc
-</pre>
+
+circuit = bit_flip_code_circuit(error_qubit=0)
+print(circuit.draw(output='text'))
+</code></pre>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
-        <p>Assumptions (e.g. perfect oracles), hardware connectivity requirements, and noise limitations on NISQ devices.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Two-Error Failure:</strong> The 3-qubit code only assumes one error occurs per cycle. If two bit-flips occur (e.g., 000 becomes 110), the syndrome measurement will incorrectly assume that Q2 flipped, rather than Q0 and Q1. The correction gate will then flip Q2, turning the state into 111 — a catastrophic logical failure.</li>
+            <li><strong>Phase-Flip Vulnerability:</strong> The bit-flip code provides zero protection against phase flips (\(Z\) errors). A \(Z\) error does not change the parity of the computational basis, so it goes entirely undetected. The phase-flip code, conversely, provides zero protection against bit-flips.</li>
+            <li><strong>Fault-Tolerant Measurement:</strong> The circuit shown above is not strictly fault-tolerant. If one of the CNOT gates used to measure the parity fails, it can inject a new error directly into the data qubits. Real QEC requires carefully constructed flag qubits to catch measurement errors.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
-        <p>Where this algorithm is used in modern quantum computing.</p>
-    </section>
-    
-    <section class="content-section">
-        <h2>9. References</h2>
-        <ul>
-            <li>Primary academic sources and textbooks.</li>
+        <ul style="line-height: 1.6;">
+            <li><strong>The Shor Code:</strong> The immediate application of these two codes is combining them. By wrapping three Phase-Flip codes inside a massive 9-qubit Bit-Flip code architecture, Peter Shor created the Shor Code — the first protocol capable of correcting arbitrary quantum errors (both bit and phase simultaneously).</li>
+            <li><strong>Pedagogical Foundation:</strong> These codes form the mathematical bedrock for understanding stabilizer formalism, which is the mathematical language used to design modern Surface Codes and Color Codes.</li>
         </ul>
     </section>
 
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Shor, P. W. (1995). Scheme for reducing decoherence in quantum computer memory. <em>Physical Review A</em>, 52(4), R2493.</li>
+            <li>Steane, A. M. (1996). Error correcting codes in quantum theory. <em>Physical Review Letters</em>, 77(13), 2953.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
     <nav class="algorithm-nav">
-        <a href="#" class="nav-button">
+        <a href="../flagship-hybrid/hhl.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">HHL Algorithm</span>
         </a>
-        <a href="#" class="nav-button nav-next">
+        <a href="shors-9-qubit-code.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">Shor's 9-Qubit Code</span>
         </a>
     </nav>
     

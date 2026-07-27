@@ -114,134 +114,231 @@
 
         <main id="main-content" class="main-content">
             
-    <div class="breadcrumb">
-        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
-        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
-        Flagship & Hybrid <span class="breadcrumb-separator">›</span> 
-        Variational Quantum Eigensolver (VQE)
-    </div>
-
     <div class="algorithm-header">
         <h1>Variational Quantum Eigensolver (VQE)</h1>
         <div class="algorithm-meta">
-            <span class="badge badge-category">Flagship & Hybrid</span>
+            <span class="badge badge-category">Flagship & Hybrid Models</span>
         </div>
     </div>
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>A high-level explanation of the problem Variational Quantum Eigensolver (VQE) aims to solve.</p>
+        <p>The <strong>Variational Quantum Eigensolver (VQE)</strong> is a flagship hybrid quantum-classical algorithm designed to find the ground state energy (the lowest eigenvalue) of a given physical system, which is mathematically represented by a matrix called a Hamiltonian (\(H\)).</p>
+        <p>Simulating quantum chemistry and molecular dynamics is one of the most promising applications of quantum computing. While Quantum Phase Estimation (QPE) can theoretically find these energies with perfect accuracy, its circuit depth is far too long for modern, noisy quantum hardware. VQE solves this problem by offloading the heavy mathematical optimisation to a classical computer, keeping the quantum circuit extremely short and noise-resilient.</p>
+
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
                 <h3>Classical Complexity</h3>
-                <div class="complexity-value">O(?)</div>
+                <div class="complexity-value">\(\mathcal{O}(2^N)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Finding the eigenvalues of an exponentially large \(2^N \times 2^N\) matrix scales terribly for classical computers.</p>
             </div>
             <div class="complexity-box">
                 <h3>Quantum Speedup</h3>
-                <div class="complexity-value">O(?)</div>
+                <div class="complexity-value">Heuristic</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">VQE does not offer a strict, provable mathematical speedup like Shor's algorithm. It is a heuristic algorithm that provides a practical, polynomial-time approximation for near-term hardware.</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>The core conceptual idea behind the algorithm, explained without heavy mathematics.</p>
+        <p>VQE relies on a fundamental rule of quantum mechanics called the <strong>Variational Principle</strong>. This principle states that if you guess <em>any</em> valid quantum state (a wave function) and measure its energy, the result will always be greater than or equal to the true ground state energy of the system. You can never guess an energy lower than the absolute minimum.</p>
+        <p>VQE turns this principle into a game of "hot and cold":</p>
+        <ol style="line-height: 1.6;">
+            <li><strong>The Quantum Guess:</strong> The quantum computer prepares a parametrised guess state (an <em>ansatz</em>) using gates with adjustable knobs (angles). It then measures the energy of this state.</li>
+            <li><strong>The Classical Update:</strong> The classical computer looks at the measured energy and uses an optimisation algorithm (like gradient descent) to adjust the knobs on the quantum gates, trying to find a configuration that yields a slightly lower energy.</li>
+            <li><strong>The Loop:</strong> This loop repeats thousands of times. The classical computer continuously tunes the quantum circuit until the energy stops dropping. At this point, the system has converged on the best possible approximation of the ground state.</li>
+        </ol>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
-        <p>The specific quantum gates required to build this circuit.</p>
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Visualisation</h3>
-            <p>Interactive or static rendering of the quantum circuit.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Parametrised Rotation Gates (\(RX(\theta), RY(\theta), RZ(\theta)\)):</strong> These act as the adjustable "knobs" the classical optimizer controls.</li>
+            <li><strong>Entangling Gates (\(CX\) or \(CZ\)):</strong> Used to create quantum correlations between qubits, allowing the ansatz to represent complex molecular bonds.</li>
+            <li><strong>Measurement in Pauli Bases:</strong> To evaluate the Hamiltonian, the qubits must be measured across the \(X\), \(Y\), and \(Z\) axes.</li>
+        </ul>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/vqe-circuit.png" alt="Circuit Schematic for Variational Quantum Eigensolver (VQE)" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p>Rigorous step-by-step derivation tracking the exact state vector \(|\psi\rangle\) after every gate application.</p>
         <div class="math-container">
-            <p>\(|\psi_0\rangle = ...\)</p>
-            <p>\(|\psi_1\rangle = ...\)</p>
+            <h3>Step 1: Hamiltonian Decomposition</h3>
+            <p>A physical system is defined by its Hamiltonian \(H\). In quantum computing, any Hamiltonian can be decomposed into a weighted sum of Pauli strings (tensor products of \(I\), \(X\), \(Y\), and \(Z\) gates):</p>
+            <p>\(H = \sum_{i} c_i P_i\)</p>
+            <p>where \(c_i\) are classical real coefficients and \(P_i\) are Pauli operators.</p>
+
+            <h3>Step 2: Ansatz Preparation</h3>
+            <p>We define a parametrised unitary circuit \(U(\vec{\theta})\), where \(\vec{\theta}\) is a vector of angles. Applied to the ground state, it prepares our trial state:</p>
+            <p>\(|\psi(\vec{\theta})\rangle = U(\vec{\theta})|0\rangle^{\otimes n}\)</p>
+
+            <h3>Step 3: Expectation Value Evaluation</h3>
+            <p>According to the Variational Principle, the expectation value (average measured energy) of this state is bounded by the true ground state energy \(E_0\):</p>
+            <p>\(E(\vec{\theta}) = \langle\psi(\vec{\theta})| H |\psi(\vec{\theta})\rangle \ge E_0\)</p>
+            <p>Because expectation values are linear, we can calculate the total energy by measuring the expectation value of each individual Pauli string separately on the quantum computer, and then summing them classically:</p>
+            <p>\(E(\vec{\theta}) = \sum_{i} c_i \langle\psi(\vec{\theta})| P_i |\psi(\vec{\theta})\rangle\)</p>
+
+            <h3>Step 4: Classical Optimisation</h3>
+            <p>A classical optimiser takes the evaluated scalar \(E(\vec{\theta})\) and calculates a new set of parameters \(\vec{\theta}_{new}\) to minimise the cost function:</p>
+            <p>\(\vec{\theta}_{new} = \text{Optimizer}(E(\vec{\theta}), \vec{\theta})\)</p>
+            <p>This loop continues until \(\vec{\theta}\) converges, yielding \(\min_{\vec{\theta}} E(\vec{\theta}) \approx E_0\).</p>
+
+            <h3>Measurement</h3>
+            <p>Unlike algorithms that look for a single deterministic bitstring, VQE relies on expectation values. The circuit for a specific set of parameters \(\vec{\theta}\) must be executed hundreds or thousands of times (shots) to build a statistical average for each Pauli term \(P_i\) in the Hamiltonian.</p>
         </div>
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Explanation of the measurement basis and expected probability distribution.</p>
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
-        <div class="simulation-placeholder">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>Energy Convergence Graph:</strong> A live 2D line graph tracking the energy \(E(\vec{\theta})\) over each iteration step. The user can watch the curve drop sharply and then slowly level out as it asymptotes toward a dashed line representing the true, classical simulated ground state.</li>
+            <li><strong>Parameter Optimization Landscape:</strong> A 3D topographical map representing the cost function surface. A marker representing the current parameters \(\vec{\theta}\) visually "rolls" down the hills into the lowest valley as the classical optimiser iterates.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
-        
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
-                <button>Copy Code</button>
+                <span>From Scratch (NumPy)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# NumPy implementation placeholder
-import numpy as np
+<pre><code>import numpy as np
+from scipy.optimize import minimize
 
 def simulate_vqe():
-    pass
-</pre>
+    """
+    Simulates a 1-qubit VQE solving for the ground state of H = Z + 0.5 * X
+    """
+    # 1. Define Pauli matrices
+    I = np.array([[1, 0], [0, 1]], dtype=complex)
+    Z = np.array([[1, 0], [0, -1]], dtype=complex)
+    X = np.array([[0, 1], [1, 0]], dtype=complex)
+    
+    # Define Hamiltonian H = 1.0*Z + 0.5*X
+    H = Z + 0.5 * X
+    
+    # 2. Define the Parametrised Ansatz (RY gate)
+    def ry_matrix(theta):
+        return np.array([
+            [np.cos(theta/2), -np.sin(theta/2)],
+            [np.sin(theta/2),  np.cos(theta/2)]
+        ], dtype=complex)
+        
+    # 3. Objective function to minimize
+    def cost_function(theta_array):
+        theta = theta_array[0]
+        # Prepare state |psi&gt; = RY(theta) |0&gt;
+        state = np.dot(ry_matrix(theta), np.array([[1], [0]]))
+        
+        # Calculate expectation value &lt;psi | H | psi&gt;
+        energy = np.dot(state.conj().T, np.dot(H, state))[0, 0].real
+        return energy
+        
+    # 4. Classical Optimization
+    initial_guess = np.array([0.0])
+    result = minimize(cost_function, initial_guess, method='COBYLA')
+    
+    # Compare with exact eigenvalue
+    exact_eigenvalues = np.linalg.eigvalsh(H)
+    
+    return result.fun, exact_eigenvalues[0]
+
+vqe_energy, exact_energy = simulate_vqe()
+print(f"VQE Estimated Energy: {vqe_energy:.4f}")
+print(f"Exact Ground State Energy: {exact_energy:.4f}")
+</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
+
+        <div class="code-block" style="margin-top: 2rem;">
             <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
+                <span>Framework (Qiskit)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# Qiskit implementation placeholder
-from qiskit import QuantumCircuit
+<pre><code>from qiskit import QuantumCircuit
+from qiskit.circuit.library import EfficientSU2
+from qiskit.quantum_info import SparsePauliOp
+from qiskit_algorithms.optimizers import COBYLA
+from qiskit_primitives import Estimator
+import numpy as np
 
-def create_circuit():
-    qc = QuantumCircuit(2)
-    return qc
-</pre>
+def run_qiskit_vqe():
+    # 1. Define the Hamiltonian (e.g., a simple molecule mapping)
+    hamiltonian = SparsePauliOp.from_list([("ZZ", 1.0), ("XX", -0.5), ("IY", 0.2)])
+    
+    # 2. Define the Ansatz (Hardware-efficient heuristic)
+    ansatz = EfficientSU2(num_qubits=2, reps=1, entanglement='linear')
+    
+    # 3. Define the Estimator primitive and Optimizer
+    estimator = Estimator()
+    optimizer = COBYLA(maxiter=100)
+    
+    # 4. Objective function
+    def cost_function(params):
+        # The estimator directly calculates &lt;psi(params)| H |psi(params)&gt;
+        job = estimator.run(ansatz, hamiltonian, parameter_values=params)
+        result = job.result().values[0]
+        return result
+        
+    # 5. Run Optimization
+    initial_theta = np.random.rand(ansatz.num_parameters)
+    result = optimizer.minimize(fun=cost_function, x0=initial_theta)
+    
+    return result.fun, result.x
+
+optimal_energy, optimal_params = run_qiskit_vqe()
+print(f"Optimal Energy Found: {optimal_energy:.4f}")
+</code></pre>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
-        <p>Assumptions (e.g. perfect oracles), hardware connectivity requirements, and noise limitations on NISQ devices.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Barren Plateaus:</strong> For large, deeply parametrised circuits, the optimisation landscape becomes completely flat. The gradients (the slope pointing the optimiser towards the minimum) vanish exponentially as the number of qubits grows, making it impossible for the classical computer to know which way to adjust the knobs.</li>
+            <li><strong>Measurement Overhead:</strong> A realistic molecular Hamiltonian can decompose into millions of individual Pauli strings. Because VQE requires executing the circuit thousands of times <em>per Pauli string</em> at <em>every single iteration step</em>, the total hardware runtime can quickly become physically prohibitive.</li>
+            <li><strong>Local Minima:</strong> Because VQE relies on classical heuristic optimisers, it is prone to getting stuck in local valleys in the energy landscape, returning a slightly incorrect ground state energy.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
-        <p>Where this algorithm is used in modern quantum computing.</p>
-    </section>
-    
-    <section class="content-section">
-        <h2>9. References</h2>
-        <ul>
-            <li>Primary academic sources and textbooks.</li>
+        <ul style="line-height: 1.6;">
+            <li><strong>Quantum Chemistry:</strong> Used to simulate molecular structures (like \(H_2\), \(LiH\), or \(BeH_2\)) to find their ground state binding energies, which is critical for drug discovery and material design.</li>
+            <li><strong>Combinatorial Optimisation:</strong> A variant of VQE known as the Quantum Approximate Optimization Algorithm (QAOA) maps logistical problems (like the Travelling Salesperson or Max-Cut) to a Hamiltonian and uses the exact same variational loop to find the optimal classical solution.</li>
+            <li><strong>Condensed Matter Physics:</strong> Simulating strongly correlated electron systems and lattice models (like the Fermi-Hubbard model) to study high-temperature superconductivity.</li>
         </ul>
     </section>
 
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Peruzzo, A., McClean, J., Shadbolt, P., Yung, M. H., Zhou, X. Q., Love, P. J., ... &amp; O'Brien, J. L. (2014). A variational eigenvalue solver on a photonic quantum processor. <em>Nature Communications</em>, 5(1), 4213.</li>
+            <li>McClean, J. R., Romero, J., Ryan-Anderson, C., &amp; Aspuru-Guzik, A. (2016). The theory of variational hybrid quantum-classical algorithms. <em>New Journal of Physics</em>, 18(2), 023023.</li>
+            <li>Cerezo, M., Arrasmith, A., Babbush, R., Benjamin, S. C., Endo, S., Fujii, K., ... &amp; Coles, P. J. (2021). Variational quantum algorithms. <em>Nature Reviews Physics</em>, 3(9), 625-644.</li>
+        </ol>
+    </section>
+
     <nav class="algorithm-nav">
-        <a href="#" class="nav-button">
+        <a href="shor.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">Shor's Algorithm</span>
         </a>
-        <a href="#" class="nav-button nav-next">
+        <a href="qaoa.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">QAOA</span>
         </a>
     </nav>
     

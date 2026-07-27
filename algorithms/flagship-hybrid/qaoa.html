@@ -114,134 +114,238 @@
 
         <main id="main-content" class="main-content">
             
-    <div class="breadcrumb">
-        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
-        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
-        Flagship & Hybrid <span class="breadcrumb-separator">›</span> 
-        Quantum Approximate Optimisation Algorithm (QAOA)
-    </div>
-
     <div class="algorithm-header">
         <h1>Quantum Approximate Optimisation Algorithm (QAOA)</h1>
         <div class="algorithm-meta">
-            <span class="badge badge-category">Flagship & Hybrid</span>
+            <span class="badge badge-category">Flagship & Hybrid Models</span>
         </div>
     </div>
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>A high-level explanation of the problem Quantum Approximate Optimisation Algorithm (QAOA) aims to solve.</p>
+        <p>The <strong>Quantum Approximate Optimisation Algorithm (QAOA)</strong> is a hybrid quantum-classical algorithm designed to find approximate solutions to NP-hard combinatorial optimisation problems, such as Max-Cut, the Travelling Salesperson Problem, and Boolean Satisfiability (3-SAT).</p>
+        <p>Rather than attempting to calculate exact solutions deterministically, QAOA encodes the cost function of a classical optimisation problem into a problem Hamiltonian (\(H_C\)). It then uses a parametrised, layered quantum circuit to prepare a quantum state that concentrates probability amplitude around bitstrings that satisfy or optimize the cost function.</p>
+
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
                 <h3>Classical Complexity</h3>
-                <div class="complexity-value">O(?)</div>
+                <div class="complexity-value">NP-hard (\(\mathcal{O}(2^N)\) brute force)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Finding exact global optima for worst-case instances scales exponentially with graph size \(N\).</p>
             </div>
             <div class="complexity-box">
                 <h3>Quantum Speedup</h3>
-                <div class="complexity-value">O(?)</div>
+                <div class="complexity-value">Heuristic / NISQ-friendly</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Provides polynomial-to-superpolynomial approximate solutions on near-term, shallow-depth quantum processors.</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>The core conceptual idea behind the algorithm, explained without heavy mathematics.</p>
+        <p>QAOA is a discrete, shallow-circuit approximation of the <strong>Quantum Adiabatic Theorem</strong>.</p>
+        <p>The Quantum Adiabatic Theorem states that if you start a quantum system in the known, easy-to-prepare ground state of an initial "mixer" Hamiltonian (\(H_M\)) and evolve the system slowly enough toward a target "problem" Hamiltonian (\(H_C\)), the system will remain in its ground state—which at the end corresponds to the optimal classical solution.</p>
+        <p>Because continuous adiabatic evolution requires circuit depths far too long for modern hardware, QAOA breaks this evolution down into \(p\) discrete alternating layers (known as circuit depth \(p\)):</p>
+        <ol style="line-height: 1.6;">
+            <li><strong>Apply Problem Phase Shift:</strong> Apply the cost Hamiltonian \(H_C\) for a duration \(\gamma_k\). This shifts the quantum phases of candidate solutions based on how well they satisfy the constraints.</li>
+            <li><strong>Apply Mixer Phase Shift:</strong> Apply the mixer Hamiltonian \(H_M\) for a duration \(\beta_k\). This drives quantum interference between candidate solutions, allowing amplitudes to flow toward better configurations.</li>
+            <li><strong>Classical Optimisation:</strong> A classical loop evaluates the average cost of the measured bitstrings and adjusts the parameters \((\vec{\gamma}, \vec{\beta})\) to guide the circuit toward higher-quality solutions in subsequent runs.</li>
+        </ol>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
-        <p>The specific quantum gates required to build this circuit.</p>
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Visualisation</h3>
-            <p>Interactive or static rendering of the quantum circuit.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Hadamard (\(H^{\otimes n}\)):</strong> Prepares the initial uniform superposition \(|+\rangle^{\otimes n}\), which is the ground state of the standard mixer Hamiltonian.</li>
+            <li><strong>Cost Unitary (\(U(H_C, \gamma) = e^{-i \gamma H_C}\)):</strong> Implemented using entangling two-qubit \(RZ\) or \(CX\)-\(RZ\)-\(CX\) sub-circuits across graph edges to penalize or reward candidate bitstrings.</li>
+            <li><strong>Mixer Unitary (\(U(H_M, \beta) = e^{-i \beta H_M}\)):</strong> Implemented using single-qubit \(RX(2\beta)\) rotations across all qubits.</li>
+        </ul>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/qaoa-circuit.png" alt="Circuit Schematic for Quantum Approximate Optimisation Algorithm (QAOA)" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p>Rigorous step-by-step derivation tracking the exact state vector \(|\psi\rangle\) after every gate application.</p>
         <div class="math-container">
-            <p>\(|\psi_0\rangle = ...\)</p>
-            <p>\(|\psi_1\rangle = ...\)</p>
+            <h3>Step 1: Initial State Preparation</h3>
+            <p>The system starts in the ground state of the mixer \(H_M = \sum_{i=1}^n X_i\), which is the equal superposition over all \(2^n\) computational basis states:</p>
+            <p>\(|\gamma, \beta\rangle_0 = |+\rangle^{\otimes n} = \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} |x\rangle\)</p>
+
+            <h3>Step 2: Problem & Mixer Layering</h3>
+            <p>For a depth-\(p\) ansatz, we alternately apply the unitaries \(U(H_C, \gamma_k) = e^{-i \gamma_k H_C}\) and \(U(H_M, \beta_k) = e^{-i \beta_k H_M}\) for \(k = 1, \dots, p\):</p>
+            <p>\(|\vec{\gamma}, \vec{\beta}\rangle = \left( \prod_{k=1}^p e^{-i \beta_k H_M} e^{-i \gamma_k H_C} \right) |+\rangle^{\otimes n}\)</p>
+            <p>For a standard Max-Cut problem on a graph \(G=(V,E)\), the cost Hamiltonian is \(H_C = \frac{1}{2} \sum_{(i,j) \in E} (I - Z_i Z_j)\). The entangling term \(e^{i \frac{\gamma}{2} Z_i Z_j}\) applies a relative phase depending on whether qubits \(i\) and \(j\) are in the same or opposite computational basis states.</p>
+            <p>The mixer unitary simplifies to independent single-qubit rotations:</p>
+            <p>\(e^{-i \beta H_M} = \prod_{i=1}^n e^{-i \beta X_i} = \prod_{i=1}^n RX(2\beta)_i\)</p>
+
+            <h3>Step 3: Expectation Value Evaluation</h3>
+            <p>The goal of the algorithm is to maximize the expected value of the cost function:</p>
+            <p>\(F_p(\vec{\gamma}, \vec{\beta}) = \langle \vec{\gamma}, \vec{\beta} | H_C | \vec{\gamma}, \vec{\beta} \rangle\)</p>
+
+            <h3>Measurement</h3>
+            <p>We run the quantum circuit for a fixed \((\vec{\gamma}, \vec{\beta})\) and measure all qubits in the computational basis (\(Z\)-basis) over multiple shots to construct a probability distribution over sample bitstrings. A classical optimiser evaluates \(F_p\) from the sample results and updates \((\vec{\gamma}, \vec{\beta})\) until convergence.</p>
         </div>
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Explanation of the measurement basis and expected probability distribution.</p>
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
-        <div class="simulation-placeholder">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>Graph Partitioning View:</strong> A dynamic rendering of a graph (e.g., a 4-node ring or complete graph). As parameters update, nodes glow according to their assignment to Set 0 or Set 1, highlighting cut edges in real time.</li>
+            <li><strong>Cost Expectation Curve:</strong> A 3D or contour surface map over \((\gamma_1, \beta_1)\) showing local peaks and valleys, tracking the optimizer trajectory toward maximum cut value.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
-        
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
-                <button>Copy Code</button>
+                <span>From Scratch (NumPy)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# NumPy implementation placeholder
-import numpy as np
+<pre><code>import numpy as np
+from scipy.optimize import minimize
 
-def simulate_qaoa():
-    pass
-</pre>
+def simulate_qaoa_maxcut_2node():
+    """
+    Simulates QAOA (p=1) for a 2-node 1-edge Max-Cut problem using pure NumPy.
+    Hamiltonian H_C = 0.5 * (I - Z_0 Z_1)
+    """
+    # Pauli Matrices
+    I = np.eye(2, dtype=complex)
+    Z = np.array([[1, 0], [0, -1]], dtype=complex)
+    X = np.array([[0, 1], [1, 0]], dtype=complex)
+    
+    Z0Z1 = np.kron(Z, Z)
+    X0 = np.kron(X, I)
+    X1 = np.kron(I, X)
+    
+    # Cost Hamiltonian H_C and Mixer H_M
+    H_C = 0.5 * (np.eye(4, dtype=complex) - Z0Z1)
+    H_M = X0 + X1
+    
+    # Initial state |++&gt;
+    plus = np.array([[1], [1]], dtype=complex) / np.sqrt(2)
+    psi_0 = np.kron(plus, plus)
+    
+    def cost_expectation(params):
+        gamma, beta = params[0], params[1]
+        
+        # Matrix exponentials for unitaries
+        # e^{-i gamma H_C}
+        evals_C, evecs_C = np.linalg.eigh(H_C)
+        U_C = evecs_C @ np.diag(np.exp(-1j * gamma * evals_C)) @ evecs_C.conj().T
+        
+        # e^{-i beta H_M}
+        evals_M, evecs_M = np.linalg.eigh(H_M)
+        U_M = evecs_M @ np.diag(np.exp(-1j * beta * evals_M)) @ evecs_M.conj().T
+        
+        # Total state |gamma, beta&gt; = U_M * U_C * |psi_0&gt;
+        psi = U_M @ U_C @ psi_0
+        
+        # Calculate &lt;psi| H_C |psi&gt;
+        expectation = (psi.conj().T @ H_C @ psi)[0, 0].real
+        return -expectation  # Minimize negative cost to maximize cut
+        
+    # Classical Optimization
+    res = minimize(cost_expectation, x0=[0.5, 0.5], method='COBYLA')
+    max_cut_val = -res.fun
+    
+    return max_cut_val, res.x
+
+max_cut, optimal_params = simulate_qaoa_maxcut_2node()
+print(f"Max-Cut Expectation Value: {max_cut:.4f} (Ideal = 1.0)")
+print(f"Optimal Parameters (gamma, beta): {optimal_params}")
+</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
+
+        <div class="code-block" style="margin-top: 2rem;">
             <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
+                <span>Framework (Qiskit)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# Qiskit implementation placeholder
-from qiskit import QuantumCircuit
+<pre><code>from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+import numpy as np
 
-def create_circuit():
-    qc = QuantumCircuit(2)
+def create_qaoa_maxcut_circuit(edges, num_nodes, gamma, beta):
+    """Constructs a p=1 QAOA circuit for Max-Cut on an arbitrary graph."""
+    qc = QuantumCircuit(num_nodes, num_nodes)
+    
+    # 1. Initialise superposition |+&gt;^n
+    qc.h(range(num_nodes))
+    qc.barrier()
+    
+    # 2. Problem Layer U(H_C, gamma)
+    for u, v in edges:
+        qc.cx(u, v)
+        qc.rz(2 * gamma, v)
+        qc.cx(u, v)
+    qc.barrier()
+    
+    # 3. Mixer Layer U(H_M, beta)
+    for node in range(num_nodes):
+        qc.rx(2 * beta, node)
+    qc.barrier()
+    
+    # 4. Measurement
+    qc.measure(range(num_nodes), range(num_nodes))
     return qc
-</pre>
+
+# Example graph: 3-node triangle graph (0-1, 1-2, 2-0)
+edges = [(0, 1), (1, 2), (2, 0)]
+circuit = create_qaoa_maxcut_circuit(edges, num_nodes=3, gamma=0.3, beta=0.4)
+
+simulator = AerSimulator()
+counts = simulator.run(circuit, shots=1024).result().get_counts()
+print("Sample Measurement Outcomes:", counts)
+</code></pre>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
-        <p>Assumptions (e.g. perfect oracles), hardware connectivity requirements, and noise limitations on NISQ devices.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Barren Plateaus & Local Minima:</strong> Like VQE, high-dimensional parameter landscapes for large \(p\) or large qubit counts suffer from vanishing gradients and non-convex energy landscapes, causing classical optimisers to get trapped in suboptimal local minima.</li>
+            <li><strong>Hardware Connectivity Limits:</strong> Real hardware topology rarely matches arbitrary graph structures. Mapping non-adjacent graph edges requires inserting additional \(SWAP\) gates, significantly increasing circuit depth and gate noise.</li>
+            <li><strong>Classical Benchmark Comparison:</strong> Highly efficient classical approximation techniques (such as the Goemans-Williamson algorithm, which guarantees an approximation ratio of \(\approx 0.878\) for Max-Cut in polynomial time) set a high performance baseline that near-term NISQ hardware struggles to surpass.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
-        <p>Where this algorithm is used in modern quantum computing.</p>
-    </section>
-    
-    <section class="content-section">
-        <h2>9. References</h2>
-        <ul>
-            <li>Primary academic sources and textbooks.</li>
+        <ul style="line-height: 1.6;">
+            <li><strong>Network Partitioning & Portfolio Optimisation:</strong> Solving Max-Cut and graph clustering problems in telecommunications routing and financial asset diversification.</li>
+            <li><strong>Logistics & Scheduling:</strong> Mapping constraints in vehicle routing problems (VRP) and job-shop scheduling to Ising Hamiltonians.</li>
+            <li><strong>Combinatorial Satisfiability:</strong> Solving constraint satisfaction problems (CSPs) and 3-SAT instances across quantum-assisted scheduling domains.</li>
         </ul>
     </section>
 
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Farhi, E., Goldstone, J., &amp; Gutmann, S. (2014). A quantum approximate optimization algorithm. <em>arXiv preprint arXiv:1411.4028</em>.</li>
+            <li>Zhou, L., Wang, S. T., Choi, S., Pichler, H., &amp; Lukin, M. D. (2020). Quantum approximate optimization algorithm: Performance, preprocessing, and polynomial-time parameters. <em>Physical Review X</em>, 10(2), 021067.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
     <nav class="algorithm-nav">
-        <a href="#" class="nav-button">
+        <a href="vqe.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">Variational Quantum Eigensolver</span>
         </a>
-        <a href="#" class="nav-button nav-next">
+        <a href="hhl.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">HHL Algorithm</span>
         </a>
     </nav>
     

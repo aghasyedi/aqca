@@ -114,13 +114,6 @@
 
         <main id="main-content" class="main-content">
             
-    <div class="breadcrumb">
-        <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
-        <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
-        Fault Tolerance <span class="breadcrumb-separator">›</span> 
-        Shor's 9-Qubit Code
-    </div>
-
     <div class="algorithm-header">
         <h1>Shor's 9-Qubit Code</h1>
         <div class="algorithm-meta">
@@ -130,118 +123,210 @@
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>A high-level explanation of the problem Shor's 9-Qubit Code aims to solve.</p>
+        <p><strong>Shor's 9-Qubit Code</strong> was the first quantum error correction code capable of protecting a quantum state against <em>arbitrary</em> single-qubit errors.</p>
+        <p>In classical systems, errors are strictly bit-flips (<code>0</code> flipping to <code>1</code>). Quantum systems are vastly more fragile. A qubit can suffer a bit-flip (Pauli-\(X\)), a phase-flip (Pauli-\(Z\)), or a simultaneous bit-and-phase flip (Pauli-\(Y\)). Because measuring a quantum state destroys its superposition, and the No-Cloning Theorem prevents us from simply backing up the data, protecting quantum information requires distributing it across highly entangled states.</p>
+
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
-                <h3>Classical Complexity</h3>
-                <div class="complexity-value">O(?)</div>
+                <h3>Classical Code</h3>
+                <div class="complexity-value">Repetition</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Uses simple majority voting for bit errors.</p>
             </div>
             <div class="complexity-box">
-                <h3>Quantum Speedup</h3>
-                <div class="complexity-value">O(?)</div>
+                <h3>Quantum Overhead</h3>
+                <div class="complexity-value">9 to 1</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Requires 9 physical data qubits to protect 1 logical qubit.</p>
+            </div>
+            <div class="complexity-box">
+                <h3>Fault Tolerance</h3>
+                <div class="complexity-value">Arbitrary Single Error</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Corrects any single qubit bit-flip, phase-flip, or both simultaneously.</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>The core conceptual idea behind the algorithm, explained without heavy mathematics.</p>
+        <p>Shor's Code is essentially a <strong>concatenated code</strong>. It brilliantly nests the 3-qubit bit-flip code inside the 3-qubit phase-flip code.</p>
+        <ol style="line-height: 1.6;">
+            <li><strong>The Phase Layer:</strong> First, the single logical qubit is encoded into three physical qubits using a phase-flip code. This protects the overall phase of the system by creating a superposition of \(|+\rangle\) and \(|-\rangle\) states.</li>
+            <li><strong>The Bit Layer:</strong> However, those three qubits are still vulnerable to bit-flips. So, Shor took each of those three qubits and encoded them <em>again</em> into their own 3-qubit bit-flip codes.</li>
+            <li><strong>The Result:</strong> You end up with three blocks of three qubits. If a bit-flip happens, the parity checks inside the specific 3-qubit block catch it and fix it. If a phase-flip happens, the parity checks <em>across</em> the three distinct blocks catch it and fix it. Because any arbitrary quantum error is just a linear combination of bit and phase flips, this nested architecture can correct any single-qubit error in the universe.</li>
+        </ol>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
-        <p>The specific quantum gates required to build this circuit.</p>
-        <div class="simulation-placeholder" style="margin-top: 1.5rem;">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="7"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-            <h3>Circuit Visualisation</h3>
-            <p>Interactive or static rendering of the quantum circuit.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Controlled-NOT (\(CX\)):</strong> Used to spread the initial state across the auxiliary qubits, establishing the necessary entanglement for the bit-flip and phase-flip blocks.</li>
+            <li><strong>Hadamard (\(H\)):</strong> Used on the outer layer of the blocks to swap the computational basis (where bit-flips happen) with the phase basis (where phase-flips happen).</li>
+            <li><strong>Syndrome Measurement:</strong> Requires additional ancilla qubits (not shown in the simplified encoding diagram below) to measure parity without collapsing the data.</li>
+        </ul>
+        <div class="code-block" style="margin-top: 2rem;">
+            <div class="code-header">
+                <span>Circuit Schematic</span>
+            </div>
+            <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
+                <img src="../../assets/images/circuits/shors-9-qubit-code-circuit.png" alt="Circuit Schematic for Shor" style="max-width: 100%; border-radius: 8px;">
+            </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p>Rigorous step-by-step derivation tracking the exact state vector \(|\psi\rangle\) after every gate application.</p>
         <div class="math-container">
-            <p>\(|\psi_0\rangle = ...\)</p>
-            <p>\(|\psi_1\rangle = ...\)</p>
+            <h3>Step 1: The Logical Basis States</h3>
+            <p>By nesting the codes, the logical zero \(|0_L\rangle\) and logical one \(|1_L\rangle\) states become highly entangled 9-qubit GHZ-like states. A logical \(|0\rangle\) is encoded as three blocks of \((|000\rangle + |111\rangle)\), and a logical \(|1\rangle\) is encoded as three blocks of \((|000\rangle - |111\rangle)\):</p>
+            <p>\(|0_L\rangle = \frac{1}{2\sqrt{2}} (|000\rangle + |111\rangle) \otimes (|000\rangle + |111\rangle) \otimes (|000\rangle + |111\rangle)\)</p>
+            <p>\(|1_L\rangle = \frac{1}{2\sqrt{2}} (|000\rangle - |111\rangle) \otimes (|000\rangle - |111\rangle) \otimes (|000\rangle - |111\rangle)\)</p>
+
+            <h3>Step 2: Encoding an Arbitrary State</h3>
+            <p>We want to protect an arbitrary state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\). Passing this through the encoding circuit yields the protected logical state:</p>
+            <p>\(|\psi_{encoded}\rangle = \alpha|0_L\rangle + \beta|1_L\rangle\)</p>
+
+            <h3>Step 3: Error Injection & Digitisation</h3>
+            <p>Assume a completely arbitrary, continuous error \(E\) occurs on the first qubit. Any single-qubit operator can be expressed as a linear combination of the Pauli matrices (\(I, X, Y, Z\)):</p>
+            <p>\(E = c_1 I + c_2 X + c_3 Y + c_4 Z\)</p>
+            <p>When the environment applies \(E\) to the first qubit, the state becomes a superposition of "No Error", "Bit-Flip", "Bit-and-Phase-Flip", and "Phase-Flip".</p>
+
+            <h3>Step 4: Syndrome Measurement and Collapse</h3>
+            <p>We measure the error syndromes using non-destructive ancilla qubits.</p>
+            <ul>
+                <li>We measure the \(Z\)-parity (bit-flips) within each 3-qubit block.</li>
+                <li>We measure the \(X\)-parity (phase-flips) across the three blocks.</li>
+            </ul>
+            <p>Because quantum measurement forces a state to collapse into an eigenstate of the measurement operator, measuring the syndrome forces the continuous, arbitrary error \(E\) to snap into exactly one of the discrete Pauli errors (\(X, Y,\) or \(Z\)).</p>
+            <p>If the syndrome reads a phase-flip on Block 1 and a bit-flip on Qubit 1, the system has collapsed perfectly into a \(Y\) error on Qubit 1. We then apply the corresponding Pauli gate (\(Y_1\)) to the physical qubit to perfectly restore \(|\psi_{encoded}\rangle\).</p>
         </div>
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Explanation of the measurement basis and expected probability distribution.</p>
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
-        <div class="simulation-placeholder">
-            <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-        </div>
+        <ul style="line-height: 1.6;">
+            <li><strong>Error Discretisation (Bloch Sphere):</strong> An interactive module where a user applies a continuous, arbitrary rotation (e.g., \(R_x(\pi/4)\)) to a single physical qubit. During the "Syndrome Measurement" animation, the continuous error probabilistically snaps into either a full \(X\) flip or reverts to the identity \(I\), visually demonstrating how QEC digitises continuous quantum noise.</li>
+            <li><strong>Amplitude Histogram:</strong> Displays the massive 512-state (\(2^9\)) Hilbert space. The encoded state occupies only 8 specific amplitude bars. When an error occurs, the bars shift to a new, orthogonal subspace. The correction step instantly translates the bars back to the original 8 positions.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
-        
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
-                <button>Copy Code</button>
+                <span>From Scratch (NumPy)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# NumPy implementation placeholder
-import numpy as np
+<pre><code>import numpy as np
 
-def simulate_shors-9-qubit-code():
-    pass
-</pre>
+def simulate_shor_9qubit_logical_zero():
+    """
+    Simulates the mathematical construction of the logical |0_L&gt; state in NumPy.
+    """
+    # Define basis states |000&gt; and |111&gt;
+    state_000 = np.zeros(8)
+    state_000[0] = 1.0
+    
+    state_111 = np.zeros(8)
+    state_111[7] = 1.0
+    
+    # Construct a single phase block: (|000&gt; + |111&gt;) / sqrt(2)
+    block_plus = (state_000 + state_111) / np.sqrt(2)
+    
+    # Tensor the three blocks together to create the 9-qubit state
+    # |0_L&gt; = block_plus (x) block_plus (x) block_plus
+    block_1_2 = np.kron(block_plus, block_plus)
+    logical_zero = np.kron(block_1_2, block_plus)
+    
+    return logical_zero
+
+logical_state = simulate_shor_9qubit_logical_zero()
+# The resulting state vector has length 512 (2^9).
+print(f"State vector dimension: {len(logical_state)}")
+print(f"Number of non-zero amplitudes: {np.count_nonzero(logical_state)}")
+</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
+
+        <div class="code-block" style="margin-top: 2rem;">
             <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
+                <span>Framework (Qiskit)</span>
+                <button class="copy-btn">Copy</button>
             </div>
             <div class="code-content">
-<pre>
-# Qiskit implementation placeholder
-from qiskit import QuantumCircuit
+<pre><code>from qiskit import QuantumCircuit
 
-def create_circuit():
-    qc = QuantumCircuit(2)
+def shor_9qubit_encoding():
+    # 9 data qubits
+    qc = QuantumCircuit(9)
+    
+    # Assume arbitrary state preparation on Q0
+    # qc.rx(np.pi/3, 0)
+    
+    # --- PHASE ENCODING LAYER ---
+    qc.cx(0, 3)
+    qc.cx(0, 6)
+    
+    qc.h(0)
+    qc.h(3)
+    qc.h(6)
+    
+    # --- BIT ENCODING LAYER ---
+    # Block 1
+    qc.cx(0, 1)
+    qc.cx(0, 2)
+    
+    # Block 2
+    qc.cx(3, 4)
+    qc.cx(3, 5)
+    
+    # Block 3
+    qc.cx(6, 7)
+    qc.cx(6, 8)
+    
     return qc
-</pre>
+
+circuit = shor_9qubit_encoding()
+print("Shor 9-Qubit Encoding Circuit:")
+print(circuit.draw(output='text'))
+</code></pre>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
-        <p>Assumptions (e.g. perfect oracles), hardware connectivity requirements, and noise limitations on NISQ devices.</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Low Threshold:</strong> While groundbreaking historically, Shor's code is highly inefficient. It requires 9 physical qubits to protect 1 logical qubit, and it only protects against a single error. If two errors occur in the 9-qubit block before the correction cycle completes, the code fails catastrophically.</li>
+            <li><strong>Non-Fault-Tolerant Gates:</strong> Simply encoding the data is not enough. To compute on the data, you must apply logical gates (like a logical CNOT) directly to the 9-qubit blocks. Transversal gate implementation on Shor's code is highly limited, meaning errors can easily cascade through the circuit during computation.</li>
+            <li><strong>Measurement Overhead:</strong> Continuously measuring the syndromes to check for errors requires massive classical computing bandwidth and extremely fast control electronics, which creates a severe bottleneck for real-time fault tolerance.</li>
+        </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
-        <p>Where this algorithm is used in modern quantum computing.</p>
-    </section>
-    
-    <section class="content-section">
-        <h2>9. References</h2>
-        <ul>
-            <li>Primary academic sources and textbooks.</li>
+        <ul style="line-height: 1.6;">
+            <li><strong>The Blueprint for QEC:</strong> Shor's code is rarely used in modern hardware architectures because topological codes (like the Surface Code) are far more efficient. However, it serves as the foundational pedagogical model for understanding Concatenated Codes and the Stabilizer Formalism.</li>
+            <li><strong>Quantum Memory:</strong> In highly controlled laboratory settings where gate operations are sparse but memory coherence is required (e.g., storing a photon in a delay line), basic concatenated codes can theoretically extend the memory lifetime of the state.</li>
         </ul>
     </section>
 
+    <section class="content-section">
+        <h2>9. References</h2>
+        <ol style="line-height: 1.6;">
+            <li>Shor, P. W. (1995). Scheme for reducing decoherence in quantum computer memory. <em>Physical Review A</em>, 52(4), R2493.</li>
+            <li>Gottesman, D. (1997). Stabilizer codes and quantum error correction. <em>arXiv preprint quant-ph/9705052</em>.</li>
+            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
+        </ol>
+    </section>
+
     <nav class="algorithm-nav">
-        <a href="#" class="nav-button">
+        <a href="3-qubit-code.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">3-Qubit Bit-Flip / Phase-Flip Codes</span>
         </a>
-        <a href="#" class="nav-button nav-next">
+        <a href="steane-code.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Algorithm Title</span>
+            <span class="nav-title">Steane 7-Qubit Code</span>
         </a>
     </nav>
     
