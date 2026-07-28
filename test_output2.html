@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bernstein–Vazirani Algorithm | AQCA</title>
-    <meta name="description" content="AQCA - Bernstein–Vazirani Algorithm">
+    <title>Deutsch's Algorithm | AQCA</title>
+    <meta name="description" content="AQCA - Deutsch's Algorithm">
     
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
@@ -126,11 +126,11 @@
         <a href="../../index.html">Home</a> <span class="breadcrumb-separator">›</span> 
         <a href="../../algorithms.html">Algorithms</a> <span class="breadcrumb-separator">›</span> 
         Oracle-Based <span class="breadcrumb-separator">›</span> 
-        Bernstein–Vazirani Algorithm
+        Deutsch's Algorithm
     </div>
 
     <div class="algorithm-header">
-        <h1>Bernstein–Vazirani Algorithm</h1>
+        <h1>Deutsch's Algorithm</h1>
         <div class="algorithm-meta">
             <span class="badge badge-category">Oracle-Based</span>
         </div>
@@ -138,40 +138,46 @@
 
     <section class="content-section">
         <h2>1. Overview & Problem Definition</h2>
-        <p>The <strong>Bernstein–Vazirani Algorithm</strong> is an extension of the Deutsch–Jozsa framework, but it solves a much more specific and practical problem: learning a hidden linear function.</p>
-        <p>Imagine you are given a black-box oracle that calculates the bitwise inner product of your input string \(x\) and a secret, hidden string \(s\) (both of length \(n\)), modulo 2. The function is defined as:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(f(x) = s \cdot x \pmod 2 = (s_0 x_0 \oplus s_1 x_1 \oplus \dots \oplus s_{n-1} x_{n-1})\)</p>
-        </div>
-        <p>The goal is to determine the exact value of the secret string \(s \in \{0,1\}^n\) with the absolute minimum number of queries to the oracle.</p>
+        <p><strong>Deutsch’s Algorithm</strong> was the first algorithm to demonstrate a rigorous, mathematical quantum advantage over classical computers.</p>
+        <p>Imagine you are given a "black box" function (an oracle) that takes a single binary input (0 or 1) and produces a single binary output (0 or 1). There are only four possible such functions, which fall into two categories:</p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Constant:</strong> The output is the same for both inputs (always 0, or always 1). So, \(f(0) = f(1)\).</li>
+            <li><strong>Balanced:</strong> The output is different for both inputs (returns 0 for one input and 1 for the other). So, \(f(0) \neq f(1)\).</li>
+        </ul>
+        <p>The problem is to determine whether the hidden function is constant or balanced with the absolute minimum number of queries to the oracle.</p>
 
         <div class="complexity-comparison" style="margin-top: 1.5rem;">
             <div class="complexity-box">
                 <h3>Classical Complexity</h3>
-                <div class="complexity-value">\(\mathcal{O}(n)\)</div>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem;">You must query the oracle \(n\) times using inputs with a single '1' (e.g., <code>100</code>, <code>010</code>, <code>001</code>) to reveal the string bit by bit.</p>
+                <div class="complexity-value">\(\mathcal{O}(2)\)</div>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A classical computer must evaluate both \(f(0)\) and \(f(1)\) to compare them.</p>
             </div>
             <div class="complexity-box">
                 <h3>Quantum Speedup</h3>
                 <div class="complexity-value">\(\mathcal{O}(1)\)</div>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A quantum computer evaluates the oracle exactly once to reveal the entire \(n\)-bit string.</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">A quantum computer evaluates the oracle exactly once to find the answer.</p>
             </div>
         </div>
     </section>
 
     <section class="content-section">
         <h2>2. Intuition</h2>
-        <p>If you have a 100-bit secret string, a classical computer must ask the oracle 100 distinct questions to find every bit.</p>
-        <p>The quantum approach uses <strong>quantum parallelism</strong> and <strong>phase kickback</strong> to bypass this. By querying the oracle with a massive superposition of all possible inputs, the oracle's output (which depends on the secret string \(s\)) is kicked back as a phase factor.</p>
-        <p>The brilliant part is that the phase shifts perfectly encode the binary representation of \(s\) into the Fourier basis of the quantum state. When you apply a final layer of Hadamard gates—which effectively acts as an inverse quantum Fourier transform over the Boolean cube—the phases perfectly constructively interfere to form the exact computational basis state corresponding to the secret string \(s\). You measure it, and the string is revealed in a single shot.</p>
+        <p>To solve this classically, you have to query the black box twice, looking at the answers one by one.</p>
+        <p>In the quantum world, we can query the function using a <strong>superposition</strong> of both 0 and 1 simultaneously. However, simply getting a superposition of the answers is not enough, because measuring it would just randomly collapse it to one answer, forcing us to run it again.</p>
+        <p>The brilliance of Deutsch's Algorithm lies in a trick called <strong>Phase Kickback</strong>. By preparing the target (output) qubit in a specific negative superposition state, the oracle's output does not alter the state of the target qubit; instead, it "kicks back" a phase shift (a minus sign) onto the input qubit.</p>
+        <ul style="line-height: 1.6;">
+            <li>If the function is constant, the phases of the input superposition stay aligned.</li>
+            <li>If the function is balanced, the phases shift, inverting the superposition.</li>
+        </ul>
+        <p>A final Hadamard gate then perfectly maps this phase difference into a deterministic measurement: \(|0\rangle\) means constant, and \(|1\rangle\) means balanced.</p>
     </section>
 
     <section class="content-section">
         <h2>3. Required Gates & Circuit Schematic</h2>
         <ul style="line-height: 1.6;">
-            <li><strong>Pauli-\(X\) (\(X\)):</strong> Used to prepare the target (ancilla) qubit in the \(|1\rangle\) state.</li>
-            <li><strong>Hadamard (\(H^{\otimes n}\)):</strong> Applied to the input qubits to create the initial superposition, and later to interfere the phases to extract \(s\).</li>
-            <li><strong>Quantum Oracle (\(U_f\)):</strong> An \((n+1)\)-qubit unitary matrix that applies \(U_f |x\rangle|y\rangle = |x\rangle|y \oplus (s \cdot x)\rangle\). Inside the oracle, a \(CX\) (CNOT) gate connects each input qubit \(i\) to the target qubit if and only if the corresponding secret bit \(s_i = 1\).</li>
+            <li><strong>Pauli-\(X\) (\(X\)):</strong> Used to flip the target qubit from \(|0\rangle\) to \(|1\rangle\) prior to the Hadamard gate.</li>
+            <li><strong>Hadamard (\(H\)):</strong> Used to create superpositions and later to interfere the phases back into a measurable basis state.</li>
+            <li><strong>Quantum Oracle (\(U_f\)):</strong> A unitary matrix representing the black box function, acting on the input and target qubits as \(U_f |x\rangle|y\rangle = |x\rangle|y \oplus f(x)\rangle\).</li>
         </ul>
 
         <div class="code-block" style="margin-top: 2rem;">
@@ -179,7 +185,7 @@
                 <span>Circuit Schematic</span>
             </div>
             <div class="code-content" style="text-align: center; padding: 2rem; background: var(--bg-color);">
-                <img src="../../assets/images/circuits/bernstein-vazirani-circuit.png" alt="Circuit Schematic for Bernstein–Vazirani Algorithm" style="max-width: 100%; border-radius: 8px;">
+                <img src="../../assets/images/circuits/deutsch-circuit.png" alt="Circuit Schematic for Deutsch" style="max-width: 100%; border-radius: 8px;">
             </div>
         </div>
     </section>
@@ -188,89 +194,77 @@
         <h2>4. Mathematical Proof & State Evolution</h2>
 
         <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
-        <p>The Bernstein-Vazirani algorithm aims to find a hidden string \(s \in \{0, 1\}^n\) from an oracle that computes \(f(x) = s \cdot x \pmod 2\) using only a single query.</p>
-        <p>We start with an \(n\)-qubit input register and a 1-qubit ancilla:</p>
+        <p>Deutsch's algorithm determines if a 1-bit boolean function $f(x)$ is constant ($f(0) = f(1)$) or balanced ($f(0) \neq f(1)$) using only a single query.</p>
+        <p>We initialise two qubits: a query register in $|0\rangle$ and a target register in $|1\rangle$:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
             <p>\[
-            |\psi_0\rangle = |0\rangle^{\otimes n} |1\rangle
+            |\psi_0\rangle = |0\rangle \otimes |1\rangle
             \]</p>
         </div>
-        <p>Applying Hadamard gates to all qubits prepares the superposition and the phase-kickback ancilla state \(|-\rangle\):</p>
+        <p>Applying Hadamard gates to both qubits creates a uniform superposition in the query register and a phase-kickback state $|-\rangle$ in the target register:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
             <p>\[
-            |\psi_1\rangle = (H^{\otimes n} \otimes H) |\psi_0\rangle = \frac1{\sqrt{2^n}} \sum_x |x\rangle \otimes |-\rangle
+            |\psi_1\rangle = \left(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\right) \otimes \left(\frac{|0\rangle - |1\rangle}{\sqrt{2}}\right) = \frac{1}{2} \Big( |0\rangle|0\rangle - |0\rangle|1\rangle + |1\rangle|0\rangle - |1\rangle|1\rangle \Big)
             \]</p>
         </div>
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Oracle Evaluation & Phase Kickback</h3>
-        <p>The oracle \(U_f\) evaluates \(f(x) = s \cdot x\) and maps the result via phase kickback:</p>
+        <p>We apply the quantum oracle $U_f$, which performs the reversible operation $U_f |x\rangle|y\rangle = |x\rangle|y \oplus f(x)\rangle$.</p>
+        <p>Because the target register is in the $|-\rangle$ state, the function value $f(x)$ is kicked back into the phase of the query register:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
             <p>\[
-            U_f (|x\rangle|-\rangle) = (-1)^{f(x)} |x\rangle|-\rangle = (-1)^{s\cdot x} |x\rangle|-\rangle
+            |\psi_2\rangle = U_f |\psi_1\rangle = \left( \frac{(-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle}{\sqrt{2}} \right) \otimes |-\rangle
             \]</p>
         </div>
-        <p>Applying this to the full state directly encodes the hidden string \(s\) into the phases of the superposition:</p>
-
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\[
-            |\psi_2\rangle = \frac1{\sqrt{2^n}} \sum_x (-1)^{s\cdot x} |x\rangle |-\rangle
-            \]</p>
-        </div>
+        <p>The quantum information evaluating $f(0)$ and $f(1)$ has been computed simultaneously and encoded entirely within the relative phase.</p>
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Interference Transform</h3>
-        <p>A final Hadamard transform \(H^{\otimes n}\) is applied to the input register. Since \(H^{\otimes n}|x\rangle = \frac1{\sqrt{2^n}} \sum_z (-1)^{x\cdot z} |z\rangle\):</p>
+        <p>To extract this relative phase, we apply a second Hadamard gate to the query register:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
             <p>\[
-            |\psi_3\rangle = \frac1{2^n} \sum_x \sum_z (-1)^{s\cdot x} (-1)^{x\cdot z} |z\rangle |-\rangle
+            H \left( \frac{(-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle}{\sqrt{2}} \right) = \frac{1}{2} \Big[ (-1)^{f(0)}(|0\rangle + |1\rangle) + (-1)^{f(1)}(|0\rangle - |1\rangle) \Big]
             \]</p>
         </div>
-        <p>By combining the exponents as \((-1)^{x\cdot(s\oplus z)}\), we group the amplitudes for each measurement state \(|z\rangle\):</p>
+        <p>We can factor and simplify this expression:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
             <p>\[
-            |\psi_3\rangle = \sum_z \left[ \frac1{2^n} \sum_x (-1)^{x\cdot(s\oplus z)} \right] |z\rangle |-\rangle
+            |\psi_3\rangle = \frac{1}{2} \Big[ (-1)^{f(0)} + (-1)^{f(1)} \Big] |0\rangle + \frac{1}{2} \Big[ (-1)^{f(0)} - (-1)^{f(1)} \Big] |1\rangle
             \]</p>
         </div>
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Deterministic Recovery</h3>
-        <p>The amplitude for any state \(|z\rangle\) depends on the inner sum:</p>
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Conclusion</h3>
+        <p>The probability amplitude determines the final state of the query register:</p>
 
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\[
-            A(z) = \frac1{2^n} \sum_x (-1)^{x\cdot(s\oplus z)}
-            \]</p>
-        </div>
+        <p style="margin-top: 0.5rem;">• <strong>If $f$ is Constant ($f(0) = f(1)$):</strong> The $|0\rangle$ amplitudes constructively interfere, and the $|1\rangle$ amplitudes cancel out. The state is exactly $\pm|0\rangle$.</p>
 
-        <p style="margin-top: 0.5rem;">• <strong>Constructive Interference:</strong> If \(z = s\), then \(s \oplus z = 0\), and the sum evaluates to \(\frac{2^n}{2^n} = 1\).</p>
+        <p style="margin-top: 0.5rem;">• <strong>If $f$ is Balanced ($f(0) \neq f(1)$):</strong> The $|0\rangle$ amplitudes destructively interfere, and the $|1\rangle$ amplitudes add together. The state is exactly $\pm|1\rangle$.</p>
 
-        <p style="margin-top: 0.5rem;">• <strong>Destructive Interference:</strong> If \(z \neq s\), the sum exactly cancels out to \(0\).</p>
-        <p>Thus, the entire state collapses deterministically to the hidden string:</p>
-
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\[
-            |\psi_3\rangle = |s\rangle |-\rangle
-            \]</p>
-        </div>
-
-        <h4 style="margin-top: 1rem;"><strong>Conclusion: Measuring the input register will return the exact hidden string \(s\) with 100% certainty after just one query.</strong></h4>
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Measuring the query register yields $0$ if the function is constant, and $1$ if the function is balanced. The algorithm evaluates a global property of the function with 100% certainty using a single query, demonstrating early quantum parallelism.</strong></h4>
 
     </section>
 
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
         <ul style="line-height: 1.6;">
-            <li><strong>Amplitude Histogram:</strong> Before the final layer of Hadamard gates, the histogram shows an equal probability distribution across all \(2^n\) basis states (a flat line). The moment the final Hadamards are applied, massive constructive interference occurs at the index corresponding to \(s\), and destructive interference occurs everywhere else. A single bar shoots up to 1.0 at state \(|s\rangle\).</li>
-            <li><strong>Circuit Behaviour (Phase Disks):</strong> If you view the phase disks for the input register after the oracle, you will see a unique pattern of alternating phases. This specific geometric pattern of phases is precisely the Fourier transform of the basis state \(|s\rangle\).</li>
+            <li><strong>Bloch Sphere (Input Qubit):</strong>
+                <ol>
+                    <li>After the first \(H\) gate, the vector points along the positive X-axis (\(|+\rangle\)).</li>
+                    <li>As the Oracle is applied, watch the phase kickback: if the function is balanced, the vector immediately rotates 180 degrees around the Z-axis to point along the negative X-axis (\(|-\rangle\)). If constant, it stays still.</li>
+                    <li>The final \(H\) gate forces the vector to snap to the North Pole (\(|0\rangle\)) if constant, or the South Pole (\(|1\rangle\)) if balanced.</li>
+                </ol>
+            </li>
+            <li><strong>Amplitude Histogram:</strong> Before the final \(H\) gate, both \(|0\rangle\) and \(|1\rangle\) have a 50% probability, regardless of the oracle. The interference step is what deterministically shifts all the amplitude to a single correct bar.</li>
         </ul>
         <div class="simulation-placeholder" style="margin-top: 1.5rem;">
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
@@ -292,50 +286,45 @@
 <pre><code>import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
-from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.quantum_info import Statevector, Operator
 from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
-# ==========================================
-# CONFIGURATION
-# ==========================================
-secret_string = &quot;1011&quot;
-n = len(secret_string)
+# You can toggle this between &quot;balanced&quot; and &quot;constant&quot;
+oracle_type = &quot;balanced&quot; 
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(n + 1, name=&quot;q&quot;)
-cr = ClassicalRegister(n, name=&quot;c&quot;)
+qr = QuantumRegister(2, name=&quot;q&quot;)
+cr = ClassicalRegister(1, name=&quot;c&quot;)
 qc = QuantumCircuit(qr, cr)
 
-# 2. Initialisation
-qc.x(n) # Prepare target qubit in |1&gt;
-for i in range(n + 1):
-    qc.h(i) # Apply Hadamard to all qubits
+# 2. Initialisation: Prepare target qubit (q1) in |-&gt; and query qubit (q0) in |+&gt;
+qc.x(1)
+qc.h(0)
+qc.h(1)
 qc.barrier(label=&quot;Init&quot;)
 
-# 3. Oracle Construction (f(x) = s * x)
-# Reversing string for Qiskit&#x27;s endianness (q_0 is the rightmost bit)
-reversed_secret = secret_string[::-1]
-for qubit in range(n):
-    if reversed_secret[qubit] == &#x27;1&#x27;:
-        qc.cx(qubit, n)
+# 3. Oracle Application
+if oracle_type == &quot;balanced&quot;:
+    qc.cx(0, 1)  # CNOT creates a balanced function (f(x) = x)
+elif oracle_type == &quot;constant&quot;:
+    pass         # Identity creates a constant function (f(x) = 0)
 qc.barrier(label=&quot;Oracle&quot;)
 
 # 4. Final Interference
-for i in range(n):
-    qc.h(i)
+qc.h(0)
 qc.barrier(label=&quot;Interference&quot;)
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
 # ==========================================
+# We calculate the Unitary Operator and Statevector here because 
+# adding a measurement operation makes the circuit non-unitary.
 unitary = Operator(qc)
 final_state = Statevector(qc)
-final_density = DensityMatrix(qc)
 
-# 5. Measurement (measure only the input register)
-for i in range(n):
-    qc.measure(i, i)
+# 5. Measurement
+qc.measure(0, cr)
 
 # 6. Execute on AerSimulator
 simulator = AerSimulator()
@@ -347,25 +336,18 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;Bernstein-Vazirani Analysis: Secret = &#x27;{secret_string}&#x27;&quot;))
+display(Markdown(f&quot;Deutsch Algorithm Analysis: {oracle_type.capitalize()} Oracle&quot;))
 
 display(Markdown(&quot;1. Circuit Visualisation&quot;))
 display(qc.draw(&#x27;mpl&#x27;))
 
 display(Markdown(&quot;2. Unitary Evolution&quot;))
-# Guardrail to prevent Jupyter output crashes on large matrices
-if n &lt;= 2: 
-    print(f&quot;The {2**(n+1)}x{2**(n+1)} unitary matrix describing the full circuit:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;, max_size=16))
-else:
-    print(f&quot;Unitary matrix omitted: {n} input qubits ({n+1} total) results in a matrix too large for clean display.&quot;)
+print(&quot;The 4x4 unitary matrix describing this specific oracle circuit:&quot;)
+display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;))
 
 display(Markdown(&quot;3. Quantum State Representation&quot;))
 print(&quot;Exact Statevector prior to measurement:&quot;)
 display(final_state.draw(&#x27;latex&#x27;))
-
-print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
 
 display(Markdown(&quot;4. State Visualisation&quot;))
 print(&quot;State prior to measurement (Bloch Spheres):&quot;)
@@ -379,40 +361,32 @@ counts = result.get_counts()
 print(f&quot;Raw measurement counts: {counts}&quot;)
 display(plot_histogram(counts))
 
-# 6. Final Verification Logic
-display(Markdown(&quot;6. Verification&quot;))
-measured_bitstring = list(counts.keys())[0]
-
-if measured_bitstring == secret_string:
-    print(f&quot;Success: 100% of measurements returned &#x27;{measured_bitstring}&#x27;, which perfectly matches the secret string!&quot;)
+# Verification statement
+measured_bit = list(counts.keys())[0]
+if measured_bit == &#x27;1&#x27;:
+    print(&quot;Conclusion: The measurement is 1. The function is BALANCED.&quot;)
 else:
-    print(f&quot;Error: Measured &#x27;{measured_bitstring}&#x27;, expected &#x27;{secret_string}&#x27;.&quot;)</code></pre>
+    print(&quot;Conclusion: The measurement is 0. The function is CONSTANT.&quot;)</code></pre>
             </div>
         </div>
-
 <div class="output-injection-wrapper">
             <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
             <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div><pre class="notebook-output-text">
-Final DensityMatrix prior to measurement:
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 4x4 unitary matrix describing this specific oracle circuit:
 </pre><div class="notebook-output-math">$$
+U_{circuit} = 
 \begin{bmatrix}
-0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+0 & \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0  \\
+ \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2}  \\
+ 0 & - \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0  \\
+ - \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2}  \\
  \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01\rangle- \frac{\sqrt{2}}{2} |11\rangle$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;1011&#x27;: 1024}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Success: 100% of measurements returned &#x27;1011&#x27;, which perfectly matches the secret string!
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;1&#x27;: 1024}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-4.png" alt="Notebook output"><pre class="notebook-output-text">Conclusion: The measurement is 1. The function is BALANCED.
 </pre>
             </div>
         </div>
@@ -421,33 +395,33 @@ State prior to measurement (Q-Sphere):
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
         <ul style="line-height: 1.6;">
-            <li><strong>Oracle Complexity:</strong> Much like Deutsch–Jozsa, the magic happens inside the black box \(U_f\). If you are physically constructing the circuit for the oracle, you must add a \(CX\) gate for every '1' in the secret string. Therefore, constructing the oracle itself requires \(\mathcal{O}(n)\) gates. The algorithm proves a query speedup, but not necessarily a gate-time speedup in physical construction.</li>
-            <li><strong>Hardware Noise:</strong> On NISQ hardware, applying a large number of CNOT gates to a single ancilla qubit can lead to significant cross-talk and phase errors, meaning the final measurement might yield an incorrect bit string probabilistically.</li>
+            <li><strong>Oracle Implementation Cost:</strong> The algorithm assumes the oracle \(U_f\) is given to us as a black box that takes \(\mathcal{O}(1)\) time to run. In reality, building the reversible quantum circuit to represent a complex classical function can require significant gate depth, which introduces noise.</li>
+            <li><strong>Limited Utility:</strong> Deutsch's algorithm solves a highly contrived mathematical problem that has no practical real-world application. Its true value is purely educational—proving that quantum computers can perform tasks with fewer operations than classical computers.</li>
         </ul>
     </section>
 
     <section class="content-section">
         <h2>8. Applications</h2>
         <ul style="line-height: 1.6;">
-            <li><strong>Learning Parity with Noise (LPN):</strong> The Bernstein–Vazirani algorithm is the foundational quantum approach to the problem of learning parities. This has significant implications for post-quantum cryptography, particularly in evaluating the security of lattice-based cryptographic schemes against quantum attacks.</li>
-            <li><strong>Quantum Machine Learning:</strong> It serves as a primitive subroutine for learning linear functions and gradient estimation in quantum machine learning architectures.</li>
+            <li><strong>Pedagogical Foundation:</strong> It is universally used as the first teaching algorithm in quantum computing because it perfectly demonstrates superposition, quantum parallelism, phase kickback, and interference in a two-qubit circuit.</li>
+            <li><strong>The Precursor:</strong> It forms the direct mathematical baseline for the <strong>Deutsch–Jozsa algorithm</strong> (which scales the problem up to \(n\) qubits) and later algorithms like Grover's and Simon's, which utilise the exact same phase kickback mechanism.</li>
         </ul>
     </section>
     
     <section class="content-section">
         <h2>References</h2>
         <p>The references and literature for this algorithm have been moved to the central References repository.</p>
-        <a href="../../references.html#bernstein-vazirani" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
+        <a href="../../references.html#deutsch" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">
-        <a href="deutsch-jozsa.html" class="nav-button">
+        <a href="../../algorithms.html" class="nav-button">
             <span class="nav-label">Previous</span>
-            <span class="nav-title">Deutsch-Jozsa Algorithm</span>
+            <span class="nav-title">Algorithm Catalogue</span>
         </a>
-        <a href="simon.html" class="nav-button nav-next">
+        <a href="deutsch-jozsa.html" class="nav-button nav-next">
             <span class="nav-label">Next</span>
-            <span class="nav-title">Simon's Algorithm</span>
+            <span class="nav-title">Deutsch-Jozsa Algorithm</span>
         </a>
     </nav>
     

@@ -276,60 +276,12 @@
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
         
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
+                <span>Qiskit Program</span>
                 <button>Copy Code</button>
             </div>
-        <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-            <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
-</pre><div class="notebook-output-math">$$
-U_{circuit} = 
-\begin{bmatrix}
-0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0  \\
- 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0  \\
- 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0  \\
- \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2}  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0  \\
- 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0  \\
- 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0  \\
- - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2}  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |0111\rangle- \frac{\sqrt{2}}{2} |1111\rangle$$</div><pre class="notebook-output-text">
-Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
-\begin{bmatrix}
-0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \frac{1}{2}  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
-State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;111&#x27;: 1024}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Conclusion: 100% of measurements returned &#x27;111&#x27;. The function is BALANCED.
-</pre>
-            </div>
-        </div>
-        
-            <div class="code-content">
+<div class="code-content">
 <pre><code>import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
@@ -438,70 +390,51 @@ else:
     print(f&quot;Conclusion: 100% of measurements returned &#x27;{measured_bitstring}&#x27;. The function is BALANCED.&quot;)</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
-            <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
-            </div>
-            <div class="code-content">
-<pre><code>from qiskit import QuantumCircuit
-from qiskit_aer import AerSimulator
 
-def dj_oracle(case, n):
-    \"\"\"Generates an n-qubit Deutsch-Jozsa oracle.\"\"\"
-    oracle_qc = QuantumCircuit(n + 1)
-    
-    if case == "balanced":
-        # Apply CNOTs from each input to the target
-        for qubit in range(n):
-            oracle_qc.cx(qubit, n)
-            
-    elif case == "constant":
-        # Do nothing (constant 0) or flip target (constant 1)
-        pass 
-        
-    return oracle_qc
-
-def dj_circuit(case, n):
-    qc = QuantumCircuit(n + 1, n)
-    
-    # 1. Prepare Target in |->
-    qc.x(n)
-    qc.h(n)
-    
-    # 2. Prepare Inputs in superpositions
-    for qubit in range(n):
-        qc.h(qubit)
-        
-    qc.barrier()
-    
-    # 3. Apply Oracle
-    oracle = dj_oracle(case, n)
-    qc.compose(oracle, inplace=True)
-    
-    qc.barrier()
-    
-    # 4. Interfere Inputs
-    for qubit in range(n):
-        qc.h(qubit)
-        
-    # 5. Measure
-    for i in range(n):
-        qc.measure(i, i)
-        
-    return qc
-
-# Simulate for n=3 qubits
-n_qubits = 3
-circuit = dj_circuit("balanced", n_qubits)
-simulator = AerSimulator()
-counts = simulator.run(circuit, shots=1024).result().get_counts()
-
-# If counts are '000', it is constant. Anything else is balanced.
-print("Result counts:", counts)
-</code></pre>
+<div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
+</pre><div class="notebook-output-math">$$
+U_{circuit} = 
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0  \\
+ 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0  \\
+ 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0  \\
+ \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2}  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0 & 0  \\
+ 0 & 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0 & 0  \\
+ 0 & - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2} & 0  \\
+ - \frac{\sqrt{2}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{\sqrt{2}}{2}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |0111\rangle- \frac{\sqrt{2}}{2} |1111\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+\begin{bmatrix}
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & \frac{1}{2}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;111&#x27;: 1024}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Conclusion: 100% of measurements returned &#x27;111&#x27;. The function is BALANCED.
+</pre>
             </div>
         </div>
     </section>

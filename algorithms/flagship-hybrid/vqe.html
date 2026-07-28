@@ -246,47 +246,13 @@
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
+        
         <div class="code-block">
             <div class="code-header">
-                <span>From Scratch (NumPy)</span>
-                <button class="copy-btn">Copy</button>
+                <span>Qiskit Program</span>
+                <button>Copy Code</button>
             </div>
-        <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-            <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">Running VQE Optimisation...
-</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/791349799.py:19: DeprecationWarning: The class ``qiskit.circuit.library.n_local.efficient_su2.EfficientSU2`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. Use the function qiskit.circuit.library.efficient_su2 instead.
-  ansatz = EfficientSU2(num_qubits=num_qubits, reps=1, entanglement=&#x27;linear&#x27;)
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Optimal Energy Found: -1.327575
-Total Iterations: 100
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 4x4 unitary matrix of the optimised ansatz:
-</pre><div class="notebook-output-math">$$
-U_{VQE} = 
-\begin{bmatrix}
-0.0945520728 + 0.1035822473 i & -0.0456557197 + 0.4198143279 i & -0.4263394763 + 0.3783851694 i & -0.5194887032 + 0.4551844799 i  \\
- 0.0926025841 + 0.4296620659 i & -0.0013122385 - 0.4858099428 i & -0.3312589781 + 0.5936941115 i & 0.1637740275 - 0.2859634721 i  \\
- 0.4910183778 + 0.7311979757 i & 0.1428314279 + 0.0764968308 i & 0.1377084483 - 0.3996601037 i & 0.0020456123 + 0.1389312468 i  \\
- 0.1042158962 - 0.0231390155 i & 0.5346752203 + 0.522999321 i & 0.0520269836 + 0.1773569386 i & -0.0707201324 - 0.6245271204 i  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector of the ground state approximation:
-</pre><div class="notebook-output-math">$$(0.0945520728 + 0.1035822473 i) |00\rangle+(0.0926025841 + 0.4296620659 i) |01\rangle+(0.4910183778 + 0.7311979757 i) |10\rangle+(0.1042158962 - 0.0231390155 i) |11\rangle$$</div><pre class="notebook-output-text">
-Final DensityMatrix:
-</pre><div class="notebook-output-math">$$
-\begin{bmatrix}
-0.0196693764 & 0.0532611287 - 0.0310334552 i & 0.122165935 - 0.0182754972 i & 0.0074570378 + 0.0129827586 i  \\
- 0.0532611287 + 0.0310334552 i & 0.1931847295 & 0.3596376035 + 0.1432611486 i & -0.0002912959 + 0.0469203499 i  \\
- 0.122165935 + 0.0182754972 i & 0.3596376035 - 0.1432611486 i & \frac{2^{\frac{67}{724}} \cdot 3^{\frac{127}{362}} \cdot 5^{\frac{175}{181}} \cdot 7^{\frac{4}{181}}}{10} & 0.034252719 + 0.0875641342 i  \\
- 0.0074570378 - 0.0129827586 i & -0.0002912959 - 0.0469203499 i & 0.034252719 - 0.0875641342 i & 0.0113963671  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
-State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;01&#x27;: 209, &#x27;00&#x27;: 27, &#x27;11&#x27;: 14, &#x27;10&#x27;: 774}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-4.png" alt="Notebook output">
-            </div>
-        </div>
-        
-            <div class="code-content">
+<div class="code-content">
 <pre><code>import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import EfficientSU2
@@ -394,46 +360,38 @@ display(plot_histogram(counts))</code></pre>
             </div>
         </div>
 
-        <div class="code-block" style="margin-top: 2rem;">
-            <div class="code-header">
-                <span>Framework (Qiskit)</span>
-                <button class="copy-btn">Copy</button>
-            </div>
-            <div class="code-content">
-<pre><code>from qiskit import QuantumCircuit
-from qiskit.circuit.library import EfficientSU2
-from qiskit.quantum_info import SparsePauliOp
-from qiskit_algorithms.optimizers import COBYLA
-from qiskit_primitives import Estimator
-import numpy as np
-
-def run_qiskit_vqe():
-    # 1. Define the Hamiltonian (e.g., a simple molecule mapping)
-    hamiltonian = SparsePauliOp.from_list([("ZZ", 1.0), ("XX", -0.5), ("IY", 0.2)])
-    
-    # 2. Define the Ansatz (Hardware-efficient heuristic)
-    ansatz = EfficientSU2(num_qubits=2, reps=1, entanglement='linear')
-    
-    # 3. Define the Estimator primitive and Optimizer
-    estimator = Estimator()
-    optimizer = COBYLA(maxiter=100)
-    
-    # 4. Objective function
-    def cost_function(params):
-        # The estimator directly calculates &lt;psi(params)| H |psi(params)&gt;
-        job = estimator.run(ansatz, hamiltonian, parameter_values=params)
-        result = job.result().values[0]
-        return result
-        
-    # 5. Run Optimization
-    initial_theta = np.random.rand(ansatz.num_parameters)
-    result = optimizer.minimize(fun=cost_function, x0=initial_theta)
-    
-    return result.fun, result.x
-
-optimal_energy, optimal_params = run_qiskit_vqe()
-print(f"Optimal Energy Found: {optimal_energy:.4f}")
-</code></pre>
+<div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">Running VQE Optimisation...
+</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/791349799.py:19: DeprecationWarning: The class ``qiskit.circuit.library.n_local.efficient_su2.EfficientSU2`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. Use the function qiskit.circuit.library.efficient_su2 instead.
+  ansatz = EfficientSU2(num_qubits=num_qubits, reps=1, entanglement=&#x27;linear&#x27;)
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Optimal Energy Found: -1.327575
+Total Iterations: 100
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 4x4 unitary matrix of the optimised ansatz:
+</pre><div class="notebook-output-math">$$
+U_{VQE} = 
+\begin{bmatrix}
+0.0945520728 + 0.1035822473 i & -0.0456557197 + 0.4198143279 i & -0.4263394763 + 0.3783851694 i & -0.5194887032 + 0.4551844799 i  \\
+ 0.0926025841 + 0.4296620659 i & -0.0013122385 - 0.4858099428 i & -0.3312589781 + 0.5936941115 i & 0.1637740275 - 0.2859634721 i  \\
+ 0.4910183778 + 0.7311979757 i & 0.1428314279 + 0.0764968308 i & 0.1377084483 - 0.3996601037 i & 0.0020456123 + 0.1389312468 i  \\
+ 0.1042158962 - 0.0231390155 i & 0.5346752203 + 0.522999321 i & 0.0520269836 + 0.1773569386 i & -0.0707201324 - 0.6245271204 i  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector of the ground state approximation:
+</pre><div class="notebook-output-math">$$(0.0945520728 + 0.1035822473 i) |00\rangle+(0.0926025841 + 0.4296620659 i) |01\rangle+(0.4910183778 + 0.7311979757 i) |10\rangle+(0.1042158962 - 0.0231390155 i) |11\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix:
+</pre><div class="notebook-output-math">$$
+\begin{bmatrix}
+0.0196693764 & 0.0532611287 - 0.0310334552 i & 0.122165935 - 0.0182754972 i & 0.0074570378 + 0.0129827586 i  \\
+ 0.0532611287 + 0.0310334552 i & 0.1931847295 & 0.3596376035 + 0.1432611486 i & -0.0002912959 + 0.0469203499 i  \\
+ 0.122165935 + 0.0182754972 i & 0.3596376035 - 0.1432611486 i & \frac{2^{\frac{67}{724}} \cdot 3^{\frac{127}{362}} \cdot 5^{\frac{175}{181}} \cdot 7^{\frac{4}{181}}}{10} & 0.034252719 + 0.0875641342 i  \\
+ 0.0074570378 - 0.0129827586 i & -0.0002912959 - 0.0469203499 i & 0.034252719 - 0.0875641342 i & 0.0113963671  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;01&#x27;: 209, &#x27;00&#x27;: 27, &#x27;11&#x27;: 14, &#x27;10&#x27;: 774}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-4.png" alt="Notebook output">
             </div>
         </div>
     </section>

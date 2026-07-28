@@ -271,51 +271,12 @@
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
         
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
+                <span>Qiskit Program</span>
                 <button>Copy Code</button>
             </div>
-        <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-            <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 8x8 unitary matrix describing the full QFT circuit:
-</pre><div class="notebook-output-math">$$
-U_{QFT} = 
-\begin{bmatrix}
-\frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
- - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
- - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
- \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
- - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
- \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
- \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
- - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{4} |000\rangle- \frac{\sqrt{2}}{4} |001\rangle- \frac{\sqrt{2} i}{4} |010\rangle+\frac{\sqrt{2} i}{4} |011\rangle+(- \frac{1}{4} + \frac{i}{4}) |100\rangle+(\frac{1}{4} - \frac{i}{4}) |101\rangle+(\frac{1}{4} + \frac{i}{4}) |110\rangle+(- \frac{1}{4} - \frac{i}{4}) |111\rangle$$</div><pre class="notebook-output-text">
-Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
-\begin{bmatrix}
-\frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8} & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i  \\
- - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8} & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i  \\
- - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8} & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i  \\
- \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8} & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i  \\
- -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & \frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8}  \\
- 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8}  \\
- 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8}  \\
- -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8}  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
-State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;101&#x27;: 135, &#x27;001&#x27;: 112, &#x27;100&#x27;: 127, &#x27;110&#x27;: 110, &#x27;010&#x27;: 118, &#x27;000&#x27;: 134, &#x27;011&#x27;: 152, &#x27;111&#x27;: 136}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-4.png" alt="Notebook output">
-            </div>
-        </div>
-        
-            <div class="code-content">
+<div class="code-content">
 <pre><code>import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
@@ -409,41 +370,42 @@ print(f&quot;Raw measurement counts: {counts}&quot;)
 display(plot_histogram(counts))</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
-            <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
-            </div>
-            <div class="code-content">
-<pre><code>from qiskit import QuantumCircuit
-from qiskit_aer import AerSimulator
-import numpy as np
 
-def build_qft_circuit(n):
-    \"\"\"Builds a QFT circuit for n qubits.\"\"\"
-    qc = QuantumCircuit(n)
-    
-    for target in range(n):
-        qc.h(target)
-        for control in range(target + 1, n):
-            # Phase is pi / 2^(distance)
-            theta = np.pi / (2 ** (control - target))
-            qc.cp(theta, control, target)
-        qc.barrier()
-        
-    # Swap qubits to match mathematical ordering
-    for i in range(n // 2):
-        qc.swap(i, n - i - 1)
-        
-    return qc
-
-# Generate 4-qubit QFT
-n_qubits = 4
-circuit = build_qft_circuit(n_qubits)
-print(circuit.draw(output='text'))
-</code></pre>
+<div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 8x8 unitary matrix describing the full QFT circuit:
+</pre><div class="notebook-output-math">$$
+U_{QFT} = 
+\begin{bmatrix}
+\frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{4} |000\rangle- \frac{\sqrt{2}}{4} |001\rangle- \frac{\sqrt{2} i}{4} |010\rangle+\frac{\sqrt{2} i}{4} |011\rangle+(- \frac{1}{4} + \frac{i}{4}) |100\rangle+(\frac{1}{4} - \frac{i}{4}) |101\rangle+(\frac{1}{4} + \frac{i}{4}) |110\rangle+(- \frac{1}{4} - \frac{i}{4}) |111\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+\begin{bmatrix}
+\frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8} & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i  \\
+ - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8} & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i  \\
+ - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8} & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i  \\
+ \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8} & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i  \\
+ -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & \frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8}  \\
+ 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8}  \\
+ 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8}  \\
+ -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;101&#x27;: 135, &#x27;001&#x27;: 112, &#x27;100&#x27;: 127, &#x27;110&#x27;: 110, &#x27;010&#x27;: 118, &#x27;000&#x27;: 134, &#x27;011&#x27;: 152, &#x27;111&#x27;: 136}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-4.png" alt="Notebook output">
             </div>
         </div>
     </section>

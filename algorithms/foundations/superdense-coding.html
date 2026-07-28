@@ -254,42 +254,12 @@
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
         
-        <h3>From Scratch (NumPy)</h3>
         <div class="code-block">
             <div class="code-header">
-                <span>Python / NumPy</span>
+                <span>Qiskit Program</span>
                 <button>Copy Code</button>
             </div>
-        <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-            <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">Quantum Circuit
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-1.png" alt="Notebook output"><pre class="notebook-output-text">Statevector
-</pre><div class="notebook-output-math">$$ |01\rangle$$</div><pre class="notebook-output-text">Density Matrix
-</pre><div class="notebook-output-math">$$
-\begin{bmatrix}
-0 & 0 & 0 & 0  \\
- 0 & 1 & 0 & 0  \\
- 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0  \\
- \end{bmatrix}
-$$</div><pre class="notebook-output-text">Bloch Sphere
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-2.png" alt="Notebook output"><pre class="notebook-output-text">QSphere
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-3.png" alt="Notebook output"><pre class="notebook-output-text">Unitary Operator
-</pre><pre class="notebook-output-text">array([[0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j],
-       [1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
-       [0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j],
-       [0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j]])</pre><pre class="notebook-output-text">Sampler Counts
-{&#x27;01&#x27;: 1024}
-
-Aer Simulator Counts
-{&#x27;01&#x27;: 1024}
-Measurement Histogram
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-4.png" alt="Notebook output">
-            </div>
-        </div>
-        
-            <div class="code-content">
+<div class="code-content">
 <pre><code>from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
 from qiskit.visualization import (
@@ -437,48 +407,33 @@ print(&quot;Measurement Histogram&quot;)
 display(plot_histogram(counts))</code></pre>
             </div>
         </div>
-        
-        <h3 style="margin-top: 1.5rem;">Framework (Qiskit)</h3>
-        <div class="code-block">
-            <div class="code-header">
-                <span>Python / Qiskit</span>
-                <button>Copy Code</button>
-            </div>
-            <div class="code-content">
-<pre><code>from qiskit import QuantumCircuit
-from qiskit_aer import AerSimulator
-from qiskit.visualization import plot_histogram
 
-def superdense_coding_circuit(message):
-    qc = QuantumCircuit(2, 2)
-    
-    # 1. Prepare Entanglement
-    qc.h(0)
-    qc.cx(0, 1)
-    qc.barrier(label="Shared")
-    
-    # 2. Alice Encodes
-    if message[1] == '1': # Check least significant bit
-        qc.x(0)
-    if message[0] == '1': # Check most significant bit
-        qc.z(0)
-    
-    qc.barrier(label="Transmitted")
-    
-    # 3. Bob Decodes
-    qc.cx(0, 1)
-    qc.h(0)
-    
-    # 4. Measure
-    qc.measure([0, 1], [0, 1])
-    return qc
+<div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">Quantum Circuit
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-1.png" alt="Notebook output"><pre class="notebook-output-text">Statevector
+</pre><div class="notebook-output-math">$$ |01\rangle$$</div><pre class="notebook-output-text">Density Matrix
+</pre><div class="notebook-output-math">$$
+\begin{bmatrix}
+0 & 0 & 0 & 0  \\
+ 0 & 1 & 0 & 0  \\
+ 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">Bloch Sphere
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-2.png" alt="Notebook output"><pre class="notebook-output-text">QSphere
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-3.png" alt="Notebook output"><pre class="notebook-output-text">Unitary Operator
+</pre><pre class="notebook-output-text">array([[0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j],
+       [1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
+       [0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j],
+       [0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j]])</pre><pre class="notebook-output-text">Sampler Counts
+{&#x27;01&#x27;: 1024}
 
-# Simulate
-circuit = superdense_coding_circuit('11')
-simulator = AerSimulator()
-result = simulator.run(circuit, shots=1024).result()
-print("Measurement Counts:", result.get_counts())
-</code></pre>
+Aer Simulator Counts
+{&#x27;01&#x27;: 1024}
+Measurement Histogram
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-4.png" alt="Notebook output">
             </div>
         </div>
     </section>

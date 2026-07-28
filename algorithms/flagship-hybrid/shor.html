@@ -259,59 +259,13 @@
 
     <section class="content-section">
         <h2>6. Python Code Implementation</h2>
+        
         <div class="code-block">
             <div class="code-header">
-                <span>From Scratch (NumPy)</span>
-                <button class="copy-btn">Copy</button>
+                <span>Qiskit Program</span>
+                <button>Copy Code</button>
             </div>
-        <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-            <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">Calculating Statevector...
-Statevector computed successfully.
-Running Aer Simulator...
-Simulation Complete.
-</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/3941126773.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
-  iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Statevector successfully calculated.
-
-Total amplitudes: 4096
-
-First 16 amplitudes:
-
-|000000000000&gt; : 0j
-|000000000001&gt; : 0j
-|000000000010&gt; : 0j
-|000000000011&gt; : 0j
-|000000000100&gt; : 0j
-|000000000101&gt; : 0j
-|000000000110&gt; : 0j
-|000000000111&gt; : 0j
-|000000001000&gt; : 0j
-|000000001001&gt; : 0j
-|000000001010&gt; : 0j
-|000000001011&gt; : 0j
-|000000001100&gt; : 0j
-|000000001101&gt; : 0j
-|000000001110&gt; : 0j
-|000000001111&gt; : 0j
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">{&#x27;00000000&#x27;: 241, &#x27;01000000&#x27;: 260, &#x27;10000000&#x27;: 252, &#x27;11000000&#x27;: 271}
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">------------------------------------------------------------
-Measured Binary : 11000000
-Decimal         : 192
-Estimated Phase : 0.750000
-Fraction        : 3/4
-Estimated Order : 4
-gcd(a^(r/2)-1,N) = 3
-gcd(a^(r/2)+1,N) = 5
-
-SUCCESS!
-Factors of 15 are 3 and 5
-</pre>
-            </div>
-        </div>
-        
-            <div class="code-content">
+<div class="code-content">
 <pre><code>import math
 from fractions import Fraction
 
@@ -482,57 +436,50 @@ if not success:
             </div>
         </div>
 
-        <div class="code-block" style="margin-top: 2rem;">
-            <div class="code-header">
-                <span>Framework (Qiskit)</span>
-                <button class="copy-btn">Copy</button>
-            </div>
-            <div class="code-content">
-<pre><code>from qiskit import QuantumCircuit
-from qiskit.circuit.library import QFT
-from qiskit_aer import AerSimulator
-import math
+<div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">Calculating Statevector...
+Statevector computed successfully.
+Running Aer Simulator...
+Simulation Complete.
+</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/3941126773.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+  iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Statevector successfully calculated.
 
-# Factoring N=15, a=7 requires a highly specific, hardcoded modular exponentiation 
-# circuit on NISQ simulators. Here we build the theoretical structure.
+Total amplitudes: 4096
 
-def c_amod15(a, power):
-    """Controlled modular exponentiation for a=7, N=15 (Simplified Oracle)."""
-    U = QuantumCircuit(4)        
-    for _iteration in range(power):
-        U.swap(2, 3)
-        U.swap(1, 2)
-        U.swap(0, 1)
-        for q in range(4):
-            U.x(q)
-    U = U.to_gate()
-    U.name = f"{a}^{power} mod 15"
-    return U.control()
+First 16 amplitudes:
 
-def shors_circuit_15():
-    n_count = 8  # Number of counting qubits
-    qc = QuantumCircuit(n_count + 4, n_count)
-    
-    # 1. Initialise counting qubits in superposition
-    qc.h(range(n_count))
-    
-    # 2. Initialise target register to |1&gt;
-    qc.x(n_count)
-    
-    # 3. Apply Controlled Modular Exponentiation
-    for q in range(n_count):
-        qc.append(c_amod15(7, 2**q), [q] + list(range(n_count, n_count+4)))
-        
-    # 4. Apply Inverse QFT to counting register
-    qc.append(QFT(n_count, inverse=True, do_swaps=True).to_gate(), range(n_count))
-    
-    # 5. Measure
-    qc.measure(range(n_count), range(n_count))
-    return qc
+|000000000000&gt; : 0j
+|000000000001&gt; : 0j
+|000000000010&gt; : 0j
+|000000000011&gt; : 0j
+|000000000100&gt; : 0j
+|000000000101&gt; : 0j
+|000000000110&gt; : 0j
+|000000000111&gt; : 0j
+|000000001000&gt; : 0j
+|000000001001&gt; : 0j
+|000000001010&gt; : 0j
+|000000001011&gt; : 0j
+|000000001100&gt; : 0j
+|000000001101&gt; : 0j
+|000000001110&gt; : 0j
+|000000001111&gt; : 0j
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">{&#x27;00000000&#x27;: 241, &#x27;01000000&#x27;: 260, &#x27;10000000&#x27;: 252, &#x27;11000000&#x27;: 271}
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">------------------------------------------------------------
+Measured Binary : 11000000
+Decimal         : 192
+Estimated Phase : 0.750000
+Fraction        : 3/4
+Estimated Order : 4
+gcd(a^(r/2)-1,N) = 3
+gcd(a^(r/2)+1,N) = 5
 
-circuit = shors_circuit_15()
-print("Shor's Circuit architecture built successfully.")
-</code></pre>
+SUCCESS!
+Factors of 15 are 3 and 5
+</pre>
             </div>
         </div>
     </section>
