@@ -369,9 +369,9 @@ for bitstring in counts.keys():
 <div class="output-injection-wrapper">
             <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
             <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Graph Edges: [(0, 1), (1, 2), (2, 0)]
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QAOA Max-Cut Analysis: 3-Node Triangle Graph</p><pre class="notebook-output-text">Graph Edges: [(0, 1), (1, 2), (2, 0)]
 Parameters: gamma = 0.3, beta = 0.4
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 8x8 unitary matrix describing the QAOA circuit:
+</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 8x8 unitary matrix describing the QAOA circuit:
 </pre><div class="notebook-output-math">$$
 U_{QAOA} = 
 \begin{bmatrix}
@@ -384,7 +384,7 @@ U_{QAOA} =
  0.1102417855 - 0.1846915951 i & 0.4942783602 - 0.0209996287 i & -0.2092958323 + 0.0495932572 i & -0.379943075 - 0.1355090579 i & -0.2092958323 + 0.0495932572 i & -0.379943075 - 0.1355090579 i & 0.1608820222 + 0.3200216373 i & 0.1675006415 + 0.3669645489 i  \\
  0.1501015272 - 0.5819594675 i & -0.2370663818 + 0.3263724492 i & -0.2370663818 + 0.3263724492 i & 0.2007417639 - 0.077246235 i & -0.2370663818 + 0.3263724492 i & 0.2007417639 - 0.077246235 i & 0.2007417639 - 0.077246235 i & 0.089711337 - 0.0615917283 i  \\
  \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre><div class="notebook-output-math">$$(0.1501015272 - 0.5819594675 i) |000\rangle+(0.1102417855 - 0.1846915951 i) |001\rangle+(0.1102417855 - 0.1846915951 i) |010\rangle+(0.1102417855 - 0.1846915951 i) |011\rangle+(0.1102417855 - 0.1846915951 i) |100\rangle+(0.1102417855 - 0.1846915951 i) |101\rangle+(0.1102417855 - 0.1846915951 i) |110\rangle+(0.1501015272 - 0.5819594675 i) |111\rangle$$</div><pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre><div class="notebook-output-math">$$
@@ -398,11 +398,11 @@ Final DensityMatrix prior to measurement:
  0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
  0.3612072902 & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.3612072902  \\
  \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;011&#x27;: 52, &#x27;111&#x27;: 347, &#x27;110&#x27;: 40, &#x27;100&#x27;: 59, &#x27;001&#x27;: 49, &#x27;101&#x27;: 47, &#x27;010&#x27;: 62, &#x27;000&#x27;: 368}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Evaluating cut values for each measured bitstring (partition cut size):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;011&#x27;: 52, &#x27;111&#x27;: 347, &#x27;110&#x27;: 40, &#x27;100&#x27;: 59, &#x27;001&#x27;: 49, &#x27;101&#x27;: 47, &#x27;010&#x27;: 62, &#x27;000&#x27;: 368}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification: Max-Cut Evaluation</p><pre class="notebook-output-text">Evaluating cut values for each measured bitstring (partition cut size):
 Bitstring |011\rangle -&gt; Cut Size: 2 (Frequency: 52)
 Bitstring |111\rangle -&gt; Cut Size: 0 (Frequency: 347)
 Bitstring |110\rangle -&gt; Cut Size: 2 (Frequency: 40)

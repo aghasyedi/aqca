@@ -379,8 +379,8 @@ print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% 
   iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()
 /var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/1307333756.py:45: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
   qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Clock qubits: 2 | Target system: 2x2 | Total qubits: 4
-</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 8x8 unitary matrix describing the structural circuit:
+</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">HHL Algorithm Structural Analysis</p><pre class="notebook-output-text">Clock qubits: 2 | Target system: 2x2 | Total qubits: 4
+</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 8x8 unitary matrix describing the structural circuit:
 </pre><div class="notebook-output-math">$$
 U_{HHL} = 
 \begin{bmatrix}
@@ -401,7 +401,7 @@ U_{HHL} =
  0.0405529186 & 0.0270965939 & 0.1137762233 i & 0.2038732892 i & 0.0405529186 i & 0.0270965939 i & 0.3862237767 & -0.2038732892 & 0.0702397154 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.1970661995 i & 0.3531188952 i & 0.0702397154 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.6689592043 & -0.3531188952  \\
  -0.0270965939 & 0.0405529186 & - 0.2038732892 i & 0.1137762233 i & - 0.0270965939 i & 0.0405529186 i & 0.2038732892 & 0.3862237767 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.0702397154 & - 0.3531188952 i & 0.1970661995 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.0702397154 i & 0.3531188952 & 0.6689592043  \\
  \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre><div class="notebook-output-math">$$\frac{\sqrt{3}}{2} |0000\rangle+0.3671936598 |1000\rangle+0.2995441473 |1001\rangle+0.0405529186 i |1010\rangle- 0.0270965939 i |1011\rangle+0.0947461064 i |1100\rangle- 0.1082024311 i |1101\rangle+0.0405529186 |1110\rangle-0.0270965939 |1111\rangle$$</div><pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre><div class="notebook-output-math">$$
@@ -415,10 +415,10 @@ Final DensityMatrix prior to measurement:
  0.0351198577 & 0 & 0 & 0 & \cdots & 0.0043879244 i & 0.0016445392 & -0.001098846  \\
  - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0 & 0 & 0 & \cdots & - 0.0029319173 i & -0.001098846 & 0.0007342254  \\
  \end{bmatrix}
-$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {&#x27;1&#x27;: 110, &#x27;0&#x27;: 914}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Ancilla Post-Selection)</p><pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {&#x27;1&#x27;: 110, &#x27;0&#x27;: 914}
 </pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-4.png" alt="Notebook output"><pre class="notebook-output-text">
 Post-Selection Success Rate: 10.74% of shots successfully inverted the eigenvalue onto the ancilla.
 </pre>
