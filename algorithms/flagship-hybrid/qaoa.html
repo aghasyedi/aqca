@@ -367,7 +367,10 @@ for bitstring in counts.keys():
         </div>
 
 <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+                <a href="../../assets/notebooks/qaoa.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+            </div>
             <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QAOA Max-Cut Analysis: 3-Node Triangle Graph</p><pre class="notebook-output-text">Graph Edges: [(0, 1), (1, 2), (2, 0)]
 Parameters: gamma = 0.3, beta = 0.4

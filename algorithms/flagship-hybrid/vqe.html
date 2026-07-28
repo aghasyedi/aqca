@@ -361,7 +361,10 @@ display(plot_histogram(counts))</code></pre>
         </div>
 
 <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+                <a href="../../assets/notebooks/vqe.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+            </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">Running VQE Optimisation...
 </pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/791349799.py:19: DeprecationWarning: The class ``qiskit.circuit.library.n_local.efficient_su2.EfficientSU2`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. Use the function qiskit.circuit.library.efficient_su2 instead.

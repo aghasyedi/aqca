@@ -373,7 +373,10 @@ print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% 
         </div>
 
 <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+                <a href="../../assets/notebooks/hhl.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+            </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/1307333756.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
   iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()

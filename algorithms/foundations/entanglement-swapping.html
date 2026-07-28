@@ -354,7 +354,10 @@ else:
         </div>
 
 <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+                <a href="../../assets/notebooks/entanglement-swapping.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+            </div>
             <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Final DensityMatrix (Alice Q0 and Bob Q3 after swap):
 </pre><div class="notebook-output-math">$$

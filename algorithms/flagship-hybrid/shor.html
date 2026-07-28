@@ -437,7 +437,10 @@ if not success:
         </div>
 
 <div class="output-injection-wrapper">
-            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+                <a href="../../assets/notebooks/shor.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+            </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">Calculating Statevector...
 Statevector computed successfully.
