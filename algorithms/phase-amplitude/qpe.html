@@ -176,37 +176,81 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
-        <p>We start with a \(t\)-qubit counting register initialised to \(|0\rangle^{\otimes t}\) and an \(n\)-qubit target register initialised to the eigenvector \(|\psi\rangle\):</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
+        <p>Quantum Phase Estimation (QPE) approximates the phase $\phi$ of a unitary operator $U$ with $t$-bit precision, given an eigenstate $|\psi\rangle$ such that $U|\psi\rangle = e^{2\pi i \phi}|\psi\rangle$.</p>
+        <p>The algorithm uses a $t$-qubit counting register and a target register:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = |0\rangle^{\otimes t} \otimes |\psi\rangle\)</p>
+            <p>\[
+            |\psi_0\rangle = |0\rangle^{\otimes t} \otimes |\psi\rangle
+            \]</p>
+        </div>
+        <p>We apply a Hadamard transform $H^{\otimes t}$ to the counting register to create an equal superposition:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_1\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |\psi\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Hadamard Gates</h3>
-        <p>Applying \(H^{\otimes t}\) to the counting register creates a superposition over all integers \(x\) from \(0\) to \(2^t-1\):</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Controlled Unitary Operations & Phase Kickback</h3>
+        <p>We apply a sequence of controlled-$U^{2^j}$ operations. If the $j$-th control qubit is $|1\rangle$, $U^{2^j}$ is applied to the target state $|\psi\rangle$.</p>
+        <p>Since $|\psi\rangle$ is an eigenstate of $U$, applying $U^x$ kicks back a phase proportional to $x$:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_1\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |\psi\rangle\)</p>
+            <p>\[
+            U^x|\psi\rangle = e^{2\pi i \phi x} |\psi\rangle
+            \]</p>
+        </div>
+        <p>This phase kickback is transferred directly to the amplitudes of the counting register:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_2\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} e^{2\pi i \phi x} |x\rangle \otimes |\psi\rangle
+            \]</p>
+        </div>
+        <p>The phase information $\phi$ is now fully encoded in the Fourier basis of the counting register.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Inverse Quantum Fourier Transform (IQFT)</h3>
+        <p>To extract $\phi$ into the computational basis, we apply the Inverse Quantum Fourier Transform ($QFT^\dagger$) to the counting register. The general action of $QFT^\dagger$ is:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            QFT^\dagger |x\rangle = \frac{1}{\sqrt{2^t}} \sum_{y=0}^{2^t-1} e^{-2\pi i \frac{xy}{2^t}} |y\rangle
+            \]</p>
+        </div>
+        <p>Applying $QFT^\dagger$ transforms the state into a probability distribution over all possible measurement outcomes $y$:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \frac{1}{2^t} \sum_{y=0}^{2^t-1} \sum_{x=0}^{2^t-1} e^{2\pi i x \left(\phi - \frac{y}{2^t}\right)} |y\rangle \otimes |\psi\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: Controlled Unitary Operations & Phase Kickback</h3>
-        <p>We apply the sequence of controlled-\(U^{2^j}\) operations. For a specific state \(|x\rangle\) in the superposition, the operator \(U\) is applied exactly \(x\) times. Since \(U|\psi\rangle = e^{2\pi i \theta}|\psi\rangle\), applying \(U\) \(x\) times yields a phase factor of \(e^{2\pi i x \theta}\):</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} e^{2\pi i x \theta} |x\rangle \otimes |\psi\rangle\)</p>
-        </div>
-        <p>The target register remains \(|\psi\rangle\) and is completely unentangled from the counting register. We can ignore it for the rest of the algorithm. The counting register is now exactly in the state of a Quantum Fourier Transform applied to the value \(2^t \theta\).</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Inverse Quantum Fourier Transform</h3>
-        <p>We apply the \(QFT^\dagger\) to the counting register. The mathematical action of \(QFT^\dagger\) on a state \(|x\rangle\) is to map it to \(\frac{1}{\sqrt{2^t}} \sum_{y=0}^{2^t-1} e^{-2\pi i x y / 2^t} |y\rangle\):</p>
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Phase Extraction</h3>
+        <p>The probability amplitude for measuring any state $|y\rangle$ is determined by the geometric sum:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_3\rangle = \frac{1}{2^t} \sum_{y=0}^{2^t-1} \sum_{x=0}^{2^t-1} e^{2\pi i x \left(\theta - \frac{y}{2^t}\right)} |y\rangle\)</p>
+            <p>\[
+            A(y) = \frac{1}{2^t} \sum_{x=0}^{2^t-1} \left( e^{2\pi i \left(\phi - \frac{y}{2^t}\right)} \right)^x
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>If \(\theta\) can be expressed exactly in \(t\) bits, then there exists some integer \(y\) such that \(\theta = y/2^t\). For this specific \(y\), the exponent becomes \(0\), the inner sum constructively interferes to \(2^t\), and the amplitude for \(|y\rangle\) becomes \(1\).</p>
-        <p>If \(\theta\) is not exactly representable in \(t\) bits, the probability distribution peaks sharply around the integer \(y\) that is closest to \(2^t \theta\). Measuring the counting register yields this integer \(y\), allowing us to estimate \(\theta \approx y/2^t\).</p>
+        <p style="margin-top: 0.5rem;">• <strong>Exact Representation:</strong> If the phase $\phi$ can be exactly represented in $t$ bits (i.e., $\phi = \frac{y}{2^t}$), the exponent is $0$. The sum evaluates to $1$, resulting in a 100% probability of measuring the exact phase.</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Approximate Representation:</strong> If $\phi$ cannot be exactly represented, the probability distribution heavily peaks at the integer $y$ closest to $2^t \phi$. Constructive interference guarantees we measure the best $t$-bit approximation with high probability.</p>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Measuring the counting register yields an integer $y$. The desired phase is then extracted classically as $\phi \approx \frac{y}{2^t}$.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -232,42 +276,135 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/2483705642.py:36: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+  iqft = QFT(num_qubits=t, inverse=True, do_swaps=True).to_gate()
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Final DensityMatrix of counting register prior to measurement:
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Counting register state prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+Counting register state prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;011&#x27;: 1024}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Target Phase Set (θ): 0.375
+Most frequent measurement: |011\rangle
+Decimal equivalent: 3
+Estimated Phase (θ) = 3 / 2^3 = 0.375
+Success: The estimated phase perfectly matches the target hidden phase!
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, partial_trace
+from qiskit.circuit.library import QFT
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from IPython.display import display, Markdown
 
-def simulate_qpe(theta, t_qubits):
-    \"\"\"
-    Simulates QPE mathematically using NumPy for a 1-qubit unitary.
-    \"\"\"
-    N = 2**t_qubits
-    
-    # 1. Prepare the counting register after phase kickback
-    # State is 1/sqrt(N) * sum_x exp(2 * pi * i * x * theta) |x>
-    psi_2 = np.zeros(N, dtype=complex)
-    for x in range(N):
-        psi_2[x] = np.exp(2 * np.pi * 1j * x * theta) / np.sqrt(N)
-        
-    # 2. Build the Inverse QFT Matrix
-    omega = np.exp(-2 * np.pi * 1j / N) # Notice the negative sign for inverse
-    iqft_matrix = np.zeros((N, N), dtype=complex)
-    for row in range(N):
-        for col in range(N):
-            iqft_matrix[row, col] = (omega ** (row * col)) / np.sqrt(N)
-            
-    # 3. Apply IQFT
-    psi_final = np.dot(iqft_matrix, psi_2)
-    
-    # 4. Measure
-    probabilities = np.abs(psi_final)**2
-    measured_y = np.argmax(probabilities)
-    estimated_theta = measured_y / N
-    
-    return estimated_theta, probabilities
+# ==========================================
+# CONFIGURATION
+# ==========================================
+t = 3                  # Number of counting qubits
+actual_theta = 0.375   # The hidden phase we want to estimate (e.g., 3/8)
 
-# Estimate theta = 0.375 using 3 qubits (0.375 * 8 = 3.0, should peak at exactly 3)
-estimated, probs = simulate_qpe(0.375, 3)
-print(f"Estimated Phase: {estimated}")
-</code></pre>
+# 1. Set up Registers &amp; Circuit
+# t counting qubits + 1 state qubit for the eigenvector
+qr_count = QuantumRegister(t, name=&quot;count&quot;)
+qr_state = QuantumRegister(1, name=&quot;psi&quot;)
+cr = ClassicalRegister(t, name=&quot;c&quot;)
+qc = QuantumCircuit(qr_count, qr_state, cr)
+
+# 2. Initialisation
+qc.x(qr_state[0])  # Prepare target register in eigenstate |1&gt;
+qc.h(qr_count)     # Prepare counting register in a superposition
+qc.barrier(label=&quot;Init&quot;)
+
+# 3. Apply Controlled Unitaries (U = PhaseGate(2 * pi * theta))
+# Instead of a nested loop, we calculate the cumulative angle mathematically
+for j in range(t):
+    # The phase kicked back to the j-th qubit is U^(2^j)
+    angle = 2 * np.pi * actual_theta * (2 ** j)
+    qc.cp(angle, qr_count[j], qr_state[0])
+qc.barrier(label=&quot;C-U Operations&quot;)
+
+# 4. Apply Inverse QFT to counting register
+iqft = QFT(num_qubits=t, inverse=True, do_swaps=True).to_gate()
+iqft.name = &quot;IQFT&quot;
+qc.append(iqft, qr_count)
+qc.barrier(label=&quot;IQFT Complete&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+final_state = Statevector(qc)
+rho_full = DensityMatrix(qc)
+# Trace out the eigenstate qubit (index t) to view just the counting register
+rho_count = partial_trace(rho_full, [t])
+
+# 5. Measurement (measure only the counting register)
+qc.measure(qr_count, cr)
+
+# 6. Execute on AerSimulator
+simulator = AerSimulator()
+t_qc = transpile(qc, simulator)
+job = simulator.run(t_qc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;QPE Analysis: Hidden Phase Estimation&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Quantum State Representation&quot;))
+print(&quot;Final DensityMatrix of counting register prior to measurement:&quot;)
+display(rho_count.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;3. State Visualisation&quot;))
+print(&quot;Counting register state prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(rho_count))
+
+print(&quot;\nCounting register state prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(rho_count))
+
+display(Markdown(&quot;4. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# 5. Final Verification Logic
+display(Markdown(&quot;5. Verification: Phase Calculation&quot;))
+measured_binary = list(counts.keys())[0]
+measured_decimal = int(measured_binary, 2)
+estimated_phase = measured_decimal / (2 ** t)
+
+print(f&quot;Target Phase Set (θ): {actual_theta}&quot;)
+print(f&quot;Most frequent measurement: |{measured_binary}\\rangle&quot;)
+print(f&quot;Decimal equivalent: {measured_decimal}&quot;)
+print(f&quot;Estimated Phase (θ) = {measured_decimal} / 2^{t} = {estimated_phase:.3f}&quot;)
+
+if np.isclose(estimated_phase, actual_theta):
+    print(&quot;Success: The estimated phase perfectly matches the target hidden phase!&quot;)
+else:
+    print(&quot;Note: The estimated phase is an approximation of the true phase (increase counting qubits for higher precision).&quot;)</code></pre>
             </div>
         </div>
         
@@ -347,12 +484,9 @@ print(f"Measurement Counts: {counts}")
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Kitaev, A. Y. (1995). Quantum measurements and the Abelian Stabilizer Problem. <em>arXiv preprint quant-ph/9511026</em>.</li>
-            <li>Cleve, R., Ekert, A., Macchiavello, C., &amp; Mosca, M. (1998). Quantum algorithms revisited. <em>Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences</em>, 454(1969), 339-354.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#qpe" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

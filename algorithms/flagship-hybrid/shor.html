@@ -168,32 +168,77 @@
         <p><em>(Note: \(U\) represents the operation multiplying by \(a \pmod N\)).</em></p>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <div class="math-container">
-            <h3>Step 1: Initialisation</h3>
-            <p>We use two registers. The upper counting register has \(t\) qubits (chosen such that \(N^2 \le 2^t &lt; 2N^2\)) initialised to \(|0\rangle\). The lower target register has \(n\) qubits (where \(2^n \ge N\)) initialised to the computational state \(|1\rangle\).</p>
-            <p>\(|\psi_0\rangle = |0\rangle^{\otimes t} \otimes |1\rangle^{\otimes n}\)</p>
 
-            <h3>Step 2: Superposition</h3>
-            <p>We apply \(H^{\otimes t}\) to the counting register:</p>
-            <p>\(|\psi_1\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |1\rangle\)</p>
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
+        <p>Shor's Algorithm finds the prime factors of an integer \(N\) by finding the period \(r\) of the function \(f(x) = a^x \pmod N\), where \(a\) is coprime to \(N\).</p>
+        <p>We initialise a \(t\)-qubit counting register (where \(2^t \ge N^2\)) and an \(n\)-qubit target register (where \(2^n \ge N\)):</p>
 
-            <h3>Step 3: Controlled Modular Exponentiation</h3>
-            <p>We apply the unitary operator \(U_x\) which computes \(a^x \pmod N\) in the target register. This highly entangles the two registers:</p>
-            <p>\(|\psi_2\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |a^x \pmod N\rangle\)</p>
-
-            <h3>Step 4: Inverse Quantum Fourier Transform</h3>
-            <p>Because the function \(a^x \pmod N\) is periodic with period \(r\), the amplitudes in the counting register possess a repeating wave-like structure. We apply the \(QFT^\dagger\) to the counting register to extract this frequency.</p>
-            <p>The mathematics of the \(QFT^\dagger\) causes total destructive interference for almost all states, and massive constructive interference at states \(|y\rangle\) that are integer multiples of \(2^t / r\):</p>
-            <p>\(|\psi_3\rangle \approx \sum_{s=0}^{r-1} \left( \text{amplitude} \right) \left| y \approx s \frac{2^t}{r} \right\rangle\)</p>
-
-            <h3>Measurement</h3>
-            <p>When we measure the counting register, we observe an integer \(y\) that is very close to a multiple of \(2^t / r\). This gives us the ratio:</p>
-            <p>\(\frac{y}{2^t} \approx \frac{s}{r}\)</p>
-            <p>A classical computer then uses the <strong>Continued Fractions Algorithm</strong> on the known fraction \(y/2^t\) to find the denominator \(r\). Once \(r\) is found (and assuming \(r\) is even), the prime factors are calculated via:</p>
-            <p>\(\text{Factors} = \gcd(a^{r/2} \pm 1, N)\)</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_0\rangle = |0\rangle^{\otimes t} \otimes |1\rangle
+            \]</p>
         </div>
+        <p>Applying a Hadamard transform \(H^{\otimes t}\) to the counting register prepares an equal superposition of all possible exponents:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_1\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |1\rangle
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Controlled Modular Exponentiation</h3>
+        <p>A unitary operator \(U_f\) evaluates the modular exponentiation and writes the output to the target register:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_2\rangle = U_f |\psi_1\rangle = \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} |x\rangle \otimes |a^x \pmod N\rangle
+            \]</p>
+        </div>
+        <p>Because \(a^x \pmod N\) is periodic with period \(r\), this state exhibits massive entanglement. Using the eigenvector basis \(|u_s\rangle\) of the modular multiplication operator, we can rewrite this to reveal the phase kickback:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_2\rangle = \frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \left[ \frac{1}{\sqrt{2^t}} \sum_{x=0}^{2^t-1} e^{2\pi i x \frac{s}{r}} |x\rangle \right] \otimes |u_s\rangle
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Inverse Quantum Fourier Transform (IQFT)</h3>
+        <p>To extract the hidden frequency \(\frac{s}{r}\), we apply the Inverse Quantum Fourier Transform (\(QFT^\dagger\)) to the counting register.</p>
+        <p>Since \(QFT^\dagger |x\rangle = \frac{1}{\sqrt{2^t}} \sum_y e^{-2\pi i \frac{xy}{2^t}} |y\rangle\), the state becomes:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \frac{1}{\sqrt{r}} \sum_{s=0}^{r-1} \left[ \frac{1}{2^t} \sum_{y=0}^{2^t-1} \sum_{x=0}^{2^t-1} e^{2\pi i x \left( \frac{s}{r} - \frac{y}{2^t} \right)} |y\rangle \right] \otimes |u_s\rangle
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Classical Factoring</h3>
+        <p>The probability of measuring a state \(|y\rangle\) peaks sharply when the interference term is purely constructive, which occurs when:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            \frac{y}{2^t} \approx \frac{s}{r}
+            \]</p>
+        </div>
+        <p>Measuring the counting register gives the integer \(y\). We then use the classical **Continued Fractions Algorithm** on the known ratio \(\frac{y}{2^t}\) to find the best rational approximation \(\frac{s}{r}\), successfully recovering the period \(r\).</p>
+        <p>Finally, we compute the prime factors of \(N\) using the greatest common divisor:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            \text{Factors} = \gcd(a^{r/2} \pm 1, N)
+            \]</p>
+        </div>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Shor's algorithm provides an exponential speedup by translating factorisation into period finding, using phase kickback and the IQFT to isolate the period in \(O((\log N)^3)\) operations.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -211,42 +256,221 @@
                 <span>From Scratch (NumPy)</span>
                 <button class="copy-btn">Copy</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">Calculating Statevector...
+Statevector computed successfully.
+Running Aer Simulator...
+Simulation Complete.
+</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/3941126773.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+  iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Statevector successfully calculated.
+
+Total amplitudes: 4096
+
+First 16 amplitudes:
+
+|000000000000&gt; : 0j
+|000000000001&gt; : 0j
+|000000000010&gt; : 0j
+|000000000011&gt; : 0j
+|000000000100&gt; : 0j
+|000000000101&gt; : 0j
+|000000000110&gt; : 0j
+|000000000111&gt; : 0j
+|000000001000&gt; : 0j
+|000000001001&gt; : 0j
+|000000001010&gt; : 0j
+|000000001011&gt; : 0j
+|000000001100&gt; : 0j
+|000000001101&gt; : 0j
+|000000001110&gt; : 0j
+|000000001111&gt; : 0j
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">{&#x27;00000000&#x27;: 241, &#x27;01000000&#x27;: 260, &#x27;10000000&#x27;: 252, &#x27;11000000&#x27;: 271}
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">------------------------------------------------------------
+Measured Binary : 11000000
+Decimal         : 192
+Estimated Phase : 0.750000
+Fraction        : 3/4
+Estimated Order : 4
+gcd(a^(r/2)-1,N) = 3
+gcd(a^(r/2)+1,N) = 5
+
+SUCCESS!
+Factors of 15 are 3 and 5
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
-<pre><code>import numpy as np
-import math
+<pre><code>import math
+from fractions import Fraction
 
-def classical_shor_simulation(N, a):
-    """
-    Simulates the mathematical logic of Shor's algorithm for small N.
-    """
-    if math.gcd(a, N) != 1:
-        return f"Lucky guess! Factor is {math.gcd(a, N)}"
-        
-    # 1. Quantum subroutine simulation: Finding the period 'r'
-    # In a real quantum computer, this is done via QPE and modular exponentiation.
-    # Here, we classically compute the period for the sake of simulation.
-    r = 1
-    while (a**r) % N != 1:
-        r += 1
-        
-    print(f"Quantum Circuit found period r = {r}")
-    
-    # 2. Classical Post-processing
-    if r % 2 != 0:
-        return "Failed: Period is odd. Try a different 'a'."
-    
-    val = (a**(r//2)) % N
-    if val == N - 1:
-        return "Failed: Trivial factors found. Try a different 'a'."
-        
-    factor1 = math.gcd(val - 1, N)
-    factor2 = math.gcd(val + 1, N)
-    
-    return f"Success! The factors of {N} are {factor1} and {factor2}"
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector
+from qiskit.circuit.library import QFT
+from qiskit.visualization import plot_histogram
+from IPython.display import display, Markdown
 
-# Factor 15 using a=7
-print(classical_shor_simulation(15, 7))
-</code></pre>
+# ==========================================================
+# CONFIGURATION
+# ==========================================================
+
+a = 7
+N = 15
+n_count = 8
+
+# ==========================================================
+# Controlled Modular Multiplication
+# ==========================================================
+
+def c_amod15(a, power):
+    &quot;&quot;&quot;Controlled multiplication by 7 mod 15.&quot;&quot;&quot;
+
+    U = QuantumCircuit(4)
+
+    for _ in range(power):
+        U.swap(2, 3)
+        U.swap(1, 2)
+        U.swap(0, 1)
+
+        for q in range(4):
+            U.x(q)
+
+    U = U.to_gate()
+    U.name = f&quot;{a}^{power} mod 15&quot;
+    return U.control()
+
+# ==========================================================
+# Registers
+# ==========================================================
+
+qr_count = QuantumRegister(n_count, &quot;count&quot;)
+qr_target = QuantumRegister(4, &quot;target&quot;)
+cr = ClassicalRegister(n_count, &quot;c&quot;)
+
+qc = QuantumCircuit(qr_count, qr_target, cr)
+
+# ==========================================================
+# Initialise
+# ==========================================================
+
+qc.h(qr_count)
+qc.x(qr_target[0])
+qc.barrier(label=&quot;Init&quot;)
+
+# ==========================================================
+# Oracle
+# ==========================================================
+
+for q in range(n_count):
+    qc.append(c_amod15(a, 2 ** q), [qr_count[q]] + list(qr_target))
+
+qc.barrier(label=&quot;Oracle&quot;)
+
+# ==========================================================
+# Inverse QFT
+# ==========================================================
+
+iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
+iqft.name = &quot;IQFT&quot;
+
+qc.append(iqft, qr_count)
+qc.barrier(label=&quot;IQFT&quot;)
+
+# ==========================================================
+# Statevector
+# ==========================================================
+
+print(&quot;Calculating Statevector...&quot;)
+state = Statevector.from_instruction(qc)
+print(&quot;Statevector computed successfully.&quot;)
+
+# ==========================================================
+# Measurement
+# ==========================================================
+
+qc.measure(qr_count, cr)
+
+# ==========================================================
+# Simulation
+# ==========================================================
+
+print(&quot;Running Aer Simulator...&quot;)
+
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+
+result = simulator.run(tqc, shots=1024).result()
+counts = result.get_counts()
+
+print(&quot;Simulation Complete.&quot;)
+
+# ==========================================================
+# Outputs
+# ==========================================================
+
+display(Markdown(f&quot;# Shor&#x27;s Algorithm (N={N}, a={a})&quot;))
+
+display(Markdown(&quot;1. Circuit&quot;))
+display(qc.draw(&quot;mpl&quot;))
+
+display(Markdown(&quot;2. Quantum State&quot;))
+
+print(&quot;Statevector successfully calculated.&quot;)
+print(&quot;\nTotal amplitudes:&quot;, len(state))
+
+print(&quot;\nFirst 16 amplitudes:\n&quot;)
+for i, amp in enumerate(state.data[:16]):
+    print(f&quot;|{i:012b}&gt; : {amp}&quot;)
+
+display(Markdown(&quot;3. Measurement Histogram&quot;))
+display(plot_histogram(counts))
+
+display(Markdown(&quot;4. Raw Counts&quot;))
+print(counts)
+
+display(Markdown(&quot;5. Classical Post-Processing&quot;))
+
+success = False
+
+for measured_binary in sorted(counts, key=counts.get, reverse=True):
+
+    measured_decimal = int(measured_binary, 2)
+    phase = measured_decimal / (2 ** n_count)
+
+    frac = Fraction(phase).limit_denominator(N)
+    r = frac.denominator
+
+    print(&quot;-&quot; * 60)
+    print(f&quot;Measured Binary : {measured_binary}&quot;)
+    print(f&quot;Decimal         : {measured_decimal}&quot;)
+    print(f&quot;Estimated Phase : {phase:.6f}&quot;)
+    print(f&quot;Fraction        : {frac}&quot;)
+    print(f&quot;Estimated Order : {r}&quot;)
+
+    if r % 2 != 0 or r == 0:
+        print(&quot;Order invalid.\n&quot;)
+        continue
+
+    guess1 = math.gcd(a ** (r // 2) - 1, N)
+    guess2 = math.gcd(a ** (r // 2) + 1, N)
+
+    print(f&quot;gcd(a^(r/2)-1,N) = {guess1}&quot;)
+    print(f&quot;gcd(a^(r/2)+1,N) = {guess2}&quot;)
+
+    if guess1 not in [1, N] or guess2 not in [1, N]:
+        print(&quot;\nSUCCESS!&quot;)
+        print(f&quot;Factors of {N} are {guess1} and {guess2}&quot;)
+        success = True
+        break
+    else:
+        print(&quot;Only trivial factors obtained.&quot;)
+
+if not success:
+    print(&quot;\nNo non-trivial factors found in this run.&quot;)</code></pre>
             </div>
         </div>
 
@@ -323,12 +547,9 @@ print("Shor's Circuit architecture built successfully.")
     </section>
 
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Shor, P. W. (1994). Algorithms for quantum computation: discrete logarithms and factoring. <em>Proceedings 35th Annual Symposium on Foundations of Computer Science</em>, 124-134.</li>
-            <li>Vandersypen, L. M., Steffen, M., Breyta, G., Yannoni, C. S., Sherwood, M. H., &amp; Chuang, I. L. (2001). Experimental realization of Shor's quantum factoring algorithm using nuclear magnetic resonance. <em>Nature</em>, 414(6866), 883-887.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#shor" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

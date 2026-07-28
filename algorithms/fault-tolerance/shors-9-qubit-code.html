@@ -172,32 +172,64 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <div class="math-container">
-            <h3>Step 1: The Logical Basis States</h3>
-            <p>By nesting the codes, the logical zero \(|0_L\rangle\) and logical one \(|1_L\rangle\) states become highly entangled 9-qubit GHZ-like states. A logical \(|0\rangle\) is encoded as three blocks of \((|000\rangle + |111\rangle)\), and a logical \(|1\rangle\) is encoded as three blocks of \((|000\rangle - |111\rangle)\):</p>
-            <p>\(|0_L\rangle = \frac{1}{2\sqrt{2}} (|000\rangle + |111\rangle) \otimes (|000\rangle + |111\rangle) \otimes (|000\rangle + |111\rangle)\)</p>
-            <p>\(|1_L\rangle = \frac{1}{2\sqrt{2}} (|000\rangle - |111\rangle) \otimes (|000\rangle - |111\rangle) \otimes (|000\rangle - |111\rangle)\)</p>
 
-            <h3>Step 2: Encoding an Arbitrary State</h3>
-            <p>We want to protect an arbitrary state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\). Passing this through the encoding circuit yields the protected logical state:</p>
-            <p>\(|\psi_{encoded}\rangle = \alpha|0_L\rangle + \beta|1_L\rangle\)</p>
+        <h3 style="margin-top: 1.5rem;">Step 1: The Logical Basis States & Redundant Encoding</h3>
+        <p>Shor's 9-Qubit Code protects an arbitrary single-qubit state $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$ against the full spectrum of arbitrary quantum errors (both bit-flips and phase-flips). It concatenates a 3-qubit phase-flip code *outside* a 3-qubit bit-flip code.</p>
+        <p>The encoding maps the basis states to highly entangled, 9-qubit GHZ-like logical states. A logical $|0_L\rangle$ is encoded as a positive superposition of three 3-qubit blocks, while $|1_L\rangle$ uses negative superpositions:</p>
 
-            <h3>Step 3: Error Injection & Digitisation</h3>
-            <p>Assume a completely arbitrary, continuous error \(E\) occurs on the first qubit. Any single-qubit operator can be expressed as a linear combination of the Pauli matrices (\(I, X, Y, Z\)):</p>
-            <p>\(E = c_1 I + c_2 X + c_3 Y + c_4 Z\)</p>
-            <p>When the environment applies \(E\) to the first qubit, the state becomes a superposition of "No Error", "Bit-Flip", "Bit-and-Phase-Flip", and "Phase-Flip".</p>
-
-            <h3>Step 4: Syndrome Measurement and Collapse</h3>
-            <p>We measure the error syndromes using non-destructive ancilla qubits.</p>
-            <ul>
-                <li>We measure the \(Z\)-parity (bit-flips) within each 3-qubit block.</li>
-                <li>We measure the \(X\)-parity (phase-flips) across the three blocks.</li>
-            </ul>
-            <p>Because quantum measurement forces a state to collapse into an eigenstate of the measurement operator, measuring the syndrome forces the continuous, arbitrary error \(E\) to snap into exactly one of the discrete Pauli errors (\(X, Y,\) or \(Z\)).</p>
-            <p>If the syndrome reads a phase-flip on Block 1 and a bit-flip on Qubit 1, the system has collapsed perfectly into a \(Y\) error on Qubit 1. We then apply the corresponding Pauli gate (\(Y_1\)) to the physical qubit to perfectly restore \(|\psi_{encoded}\rangle\).</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |0_L\rangle = \frac{1}{2\sqrt{2}} \Big( |000\rangle + |111\rangle \Big)^{\otimes 3}, \quad |1_L\rangle = \frac{1}{2\sqrt{2}} \Big( |000\rangle - |111\rangle \Big)^{\otimes 3}
+            \]</p>
         </div>
+        <p>The completely protected logical state becomes $|\psi_{encoded}\rangle = \alpha|0_L\rangle + \beta|1_L\rangle$. The complex amplitudes $\alpha$ and $\beta$ are non-locally distributed across all 9 qubits.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Error Injection & Discretisation</h3>
+        <p>An arbitrary single-qubit error $E$ can be rigorously decomposed into a continuous linear combination of the fundamental Pauli matrices ($I, X, Y, Z$):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            E = c_1 I + c_2 X + c_3 Y + c_4 Z
+            \]</p>
+        </div>
+        <p>When the environment applies this arbitrary error to the encoded state, the system evolves into a continuous superposition of four distinct error branches:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Psi_{corrupted}\rangle = E |\psi_{encoded}\rangle = c_1 I|\psi_{encoded}\rangle + c_2 X|\psi_{encoded}\rangle + c_3 Y|\psi_{encoded}\rangle + c_4 Z|\psi_{encoded}\rangle
+            \]</p>
+        </div>
+        <p>The system exists simultaneously in states containing "No Error", a "Bit-Flip", a "Phase-Flip", and a "Bit-and-Phase-Flip" (since $Y = iXZ$).</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Syndrome Measurement & Wavefunction Collapse</h3>
+        <p>To diagnose the error, we introduce a register of auxiliary non-destructive ancilla qubits to measure the error syndromes via parity checks:</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Bit-Flip Detection:</strong> Uses $Z$-parity measurements to compare adjacent qubits *within* each 3-qubit block (detecting $X$ errors).</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Phase-Flip Detection:</strong> Uses $X$-parity measurements to compare the overall phase *across* the three distinct blocks (detecting $Z$ errors).</p>
+        <p>According to quantum mechanics, measuring these discrete syndromes forces the continuous error superposition $|\Psi_{corrupted}\rangle$ to collapse deterministically into exactly one of the four orthogonal Pauli error branches ($I, X, Y,$ or $Z$). The classical continuous information of the error is destroyed, effectively "digitizing" the arbitrary quantum error.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Deterministic Correction & Recovery</h3>
+        <p>The resulting classical bitstring from the ancilla measurements (the syndrome) acts as a direct diagnostic lookup.</p>
+        <p>For instance, if the syndrome indicates a phase-flip on Block 1 and a bit-flip on Qubit 1 within that block, the mathematical collapse guarantees that the system is now perfectly in the state corresponding to a $Y_1$ error ($Y_1|\psi_{encoded}\rangle$).</p>
+        <p>We apply the corresponding inverse Pauli gate (e.g., $Y_1$) to the corrupted physical qubit:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            Y_1 \Big( Y_1|\psi_{encoded}\rangle \Big) = I|\psi_{encoded}\rangle = |\psi_{encoded}\rangle
+            \]</p>
+        </div>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: The error is perfectly reversed, and the exact continuous logical state $|\psi_{encoded}\rangle$ is deterministically recovered without ever measuring or disturbing the protected quantum payload $\alpha$ and $\beta$.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -311,12 +343,9 @@ print(circuit.draw(output='text'))
     </section>
 
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Shor, P. W. (1995). Scheme for reducing decoherence in quantum computer memory. <em>Physical Review A</em>, 52(4), R2493.</li>
-            <li>Gottesman, D. (1997). Stabilizer codes and quantum error correction. <em>arXiv preprint quant-ph/9705052</em>.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#shors-9-qubit-code" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

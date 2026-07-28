@@ -175,72 +175,52 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Preparing Two Independent Bell Pairs</h3>
-        <p>Alice (\(q_0\)) and Charlie (\(q_1\)) share a Bell pair. Charlie (\(q_2\)) and Bob (\(q_3\)) share a second Bell pair. The global initial state is:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = |\Phi^+\rangle_{01} \otimes |\Phi^+\rangle_{23} = \left( \frac{|00\rangle + |11\rangle}{\sqrt{2}} \right)_{01} \otimes \left( \frac{|00\rangle + |11\rangle}{\sqrt{2}} \right)_{23}\)</p>
-        </div>
-        <p>Expanding this four-qubit state yields:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = \frac{1}{2} \big( |0000\rangle + |0011\rangle + |1100\rangle + |1111\rangle \big)_{0123}\)</p>
-        </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Bell Basis Rewrite</h3>
-        <p>Charlie holds qubits \(q_1\) and \(q_2\). We can mathematically regroup the terms by rewriting the computational basis of Charlie's qubits in terms of the four Bell states (\(|\Phi^\pm\rangle_{12}, |\Psi^\pm\rangle_{12}\)). Through algebraic rearrangement, the global state can be perfectly re-expressed as:</p>
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Independent Bell Pairs</h3>
+        <p>Entanglement Swapping establishes entanglement between two qubits that have never directly interacted.</p>
+        <p>We begin with two independent, non-interacting maximally entangled Bell pairs. Alice and Bob share pair 1 (qubits $A$ and $B$), while Bob and Charlie share pair 2 (qubits $C$ and $D$).</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = \frac{1}{2} \Big[ |\Phi^+\rangle_{12}|\Phi^+\rangle_{03} + |\Phi^-\rangle_{12}|\Phi^-\rangle_{03} + |\Psi^+\rangle_{12}|\Psi^+\rangle_{03} + |\Psi^-\rangle_{12}|\Psi^-\rangle_{03} \Big]\)</p>
+            <p>\[
+            |\Psi_0\rangle = |\Phi^+\rangle_{AB} \otimes |\Phi^+\rangle_{CD} = \frac{1}{2} \Big( |0_A 0_B 0_C 0_D\rangle + |0_A 0_B 1_C 1_D\rangle + |1_A 1_B 0_C 0_D\rangle + |1_A 1_B 1_C 1_D\rangle \Big)
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: Bell State Measurement (BSM)</h3>
-        <p>Charlie applies a \(CX\) gate (control \(q_1\), target \(q_2\)) followed by a Hadamard on \(q_1\), and then measures both. According to the rearranged equation above, finding his qubits in a specific Bell state instantly collapses the state of the outer qubits (\(q_0\) and \(q_3\)) into the corresponding entangled Bell state.</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Classical Communication and Correction</h3>
-        <p>Charlie sends his two classical measurement bits (\(c_1, c_0\)) to Bob. Bob applies Pauli corrections to \(q_3\) to deterministically align their shared state back to the standard \(|\Phi^+\rangle_{03}\).</p>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-            <thead>
-                <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
-                    <th style="padding: 0.5rem;">Charlie Measures (\(c_1 c_0\))</th>
-                    <th style="padding: 0.5rem;">Implies State (\(q_1, q_2\))</th>
-                    <th style="padding: 0.5rem;">Collapsed State (\(q_0, q_3\))</th>
-                    <th style="padding: 0.5rem;">Bob's Correction</th>
-                    <th style="padding: 0.5rem;">Final State (\(q_0, q_3\))</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>00</code></td>
-                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
-                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(I\)</td>
-                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>01</code></td>
-                    <td style="padding: 0.5rem;">\(|\Psi^+\rangle\)</td>
-                    <td style="padding: 0.5rem;">\(|\Psi^+\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(X\)</td>
-                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>10</code></td>
-                    <td style="padding: 0.5rem;">\(|\Phi^-\rangle\)</td>
-                    <td style="padding: 0.5rem;">\(|\Phi^-\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(Z\)</td>
-                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>11</code></td>
-                    <td style="padding: 0.5rem;">\(|\Psi^-\rangle\)</td>
-                    <td style="padding: 0.5rem;">\(|\Psi^-\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(X\) then \(Z\)</td>
-                    <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="margin-top: 1.5rem;">Step 2: Bell-State Measurement (BSM)</h3>
+        <p>Bob takes his two qubits ($B$ and $C$) and performs a joint Bell-State Measurement (BSM). He applies a CX gate (control $B$, target $C$) followed by a Hadamard on $B$, and then measures both qubits.</p>
+        <p>To understand the effect, we mathematically rewrite the initial global state by factoring out Bob's qubits into the Bell basis:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Psi_0\rangle = \frac{1}{2} \Big[ |\Phi^+\rangle_{BC} |\Phi^+\rangle_{AD} + |\Phi^-\rangle_{BC} |\Phi^-\rangle_{AD} + |\Psi^+\rangle_{BC} |\Psi^+\rangle_{AD} + |\Psi^-\rangle_{BC} |\Psi^-\rangle_{AD} \Big]
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Measurement Collapse & Classical Communication</h3>
+        <p>When Bob measures his qubits $B$ and $C$, the global state collapses. If Bob measures the state $|\Phi^+\rangle_{BC}$, the remaining qubits $A$ and $D$ instantly collapse into the entangled state $|\Phi^+\rangle_{AD}$.</p>
+        <p>Bob's measurement effectively "swaps" the entanglement. However, just like quantum teleportation, qubits $A$ and $D$ may differ from a perfect $|\Phi^+\rangle$ state by a Pauli rotation depending on Bob's exact measurement outcome. Bob must broadcast his 2-bit classical measurement result.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Pauli Correction</h3>
+        <p>Depending on Bob's broadcasted measurement, Alice (or Charlie) applies a local Pauli correction to their qubit to complete the swap:</p>
+
+        <p style="margin-top: 0.5rem;">• If Bob measured $|\Phi^+\rangle_{BC}$, apply $I_{A/D} \to$ yields $|\Phi^+\rangle_{AD}$</p>
+
+        <p style="margin-top: 0.5rem;">• If Bob measured $|\Phi^-\rangle_{BC}$, apply $Z_{A/D} \to$ yields $|\Phi^+\rangle_{AD}$</p>
+
+        <p style="margin-top: 0.5rem;">• If Bob measured $|\Psi^+\rangle_{BC}$, apply $X_{A/D} \to$ yields $|\Phi^+\rangle_{AD}$</p>
+
+        <p style="margin-top: 0.5rem;">• If Bob measured $|\Psi^-\rangle_{BC}$, apply $XZ_{A/D} \to$ yields $|\Phi^+\rangle_{AD}$</p>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Qubits $A$ and $D$, which have never physically interacted, are now maximally entangled in the exact Bell state $|\Phi^+\rangle_{AD}$. This is the fundamental mechanism underpinning quantum repeaters and the Quantum Internet.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -267,39 +247,124 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Final DensityMatrix (Alice Q0 and Bob Q3 after swap):
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+\frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+ 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0  \\
+ \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Final State (Bloch Spheres for Q0 and Q3):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+Final State (Q-Sphere for Q0 and Q3):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;00 0 0&#x27;: 104, &#x27;00 1 0&#x27;: 143, &#x27;11 1 0&#x27;: 146, &#x27;11 0 0&#x27;: 133, &#x27;00 0 1&#x27;: 127, &#x27;11 1 1&#x27;: 117, &#x27;00 1 1&#x27;: 125, &#x27;11 0 1&#x27;: 129}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Entanglement Swapping Fidelity = 1.000000
+Success: Q0 and Q3 are maximally entangled without ever interacting.
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, partial_trace, state_fidelity
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from IPython.display import display, Markdown
 
-def simulate_entanglement_swapping():
-    \"\"\"
-    Simulates Entanglement Swapping using pure NumPy matrix multiplication.
-    \"\"\"
-    I = np.eye(2, dtype=complex)
-    X = np.array([[0, 1], [1, 0]], dtype=complex)
-    Z = np.array([[1, 0], [0, -1]], dtype=complex)
-    
-    # Define Bell state Phi+
-    phi_plus = np.array([[1/np.sqrt(2)], [0], [0], [1/np.sqrt(2)]])
-    
-    # Initial state: |Phi+>_01 (X) |Phi+>_23
-    psi_init = np.kron(phi_plus, phi_plus)
-    
-    # Charlie performs BSM on q1 and q2
-    # In a full matrix implementation, you would construct the 16x16 CX and H matrices
-    # For simulation, we can directly collapse the state based on the theoretical math.
-    
-    # Assume Charlie measures '01' (which corresponds to |Psi+>_12)
-    # The state of q0 and q3 collapses to |Psi+>_03
-    q0_q3_collapsed = np.array([[0], [1/np.sqrt(2)], [1/np.sqrt(2)], [0]])
-    
-    # Bob receives '01' and applies X to q3 to correct it back to |Phi+>
-    correction = np.kron(I, X) # I on q0, X on q3
-    q0_q3_final = np.dot(correction, q0_q3_collapsed)
-    
-    return q0_q3_final
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(4, name=&quot;q&quot;)
+crz = ClassicalRegister(1, name=&quot;crz&quot;)  # Charlie&#x27;s Z measurement
+crx = ClassicalRegister(1, name=&quot;crx&quot;)  # Charlie&#x27;s X measurement
+cr_ab = ClassicalRegister(2, name=&quot;ab_meas&quot;) # Final measurement for Alice and Bob
+qc = QuantumCircuit(qr, crz, crx, cr_ab)
 
-print("Final Swapped State (q0, q3):\\n", simulate_entanglement_swapping())
-</code></pre>
+# 2. Prepare Pair 1 (Alice q0, Charlie q1)
+qc.h(0)
+qc.cx(0, 1)
+
+# 3. Prepare Pair 2 (Charlie q2, Bob q3)
+qc.h(2)
+qc.cx(2, 3)
+qc.barrier(label=&quot;Pairs Ready&quot;)
+
+# 4. Charlie performs Bell State Measurement on q1 and q2
+qc.cx(1, 2)
+qc.h(1)
+qc.barrier(label=&quot;Charlie BSM&quot;)
+
+# 5. Charlie measures and sends classical bits
+qc.measure(1, crz)
+qc.measure(2, crx)
+qc.barrier(label=&quot;Classical&quot;)
+
+# 6. Bob applies dynamic corrections to q3 based on Charlie&#x27;s bits
+with qc.if_test((crx, 1)):
+    qc.x(3)
+with qc.if_test((crz, 1)):
+    qc.z(3)
+qc.barrier(label=&quot;Bob Corr&quot;)
+
+# Save the full density matrix before final measurement collapses the state
+qc.save_density_matrix()
+
+# 7. Alice and Bob measure their qubits to prove correlation
+qc.measure(0, cr_ab[0])
+qc.measure(3, cr_ab[1])
+
+# 8. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Quantum State Representation&quot;))
+# Extract the joint state of Alice (q0) and Bob (q3) by tracing out Charlie (q1, q2)
+rho_full = result.data()[&#x27;density_matrix&#x27;]
+rho_ab = partial_trace(rho_full, [1, 2])
+
+print(&quot;Final DensityMatrix (Alice Q0 and Bob Q3 after swap):&quot;)
+display(rho_ab.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;3. State Visualisation&quot;))
+print(&quot;Final State (Bloch Spheres for Q0 and Q3):&quot;)
+# Note: Bloch vectors will be length 0 (points at origin) because the individual 
+# qubits in a Bell state are completely mixed when viewed locally.
+display(plot_bloch_multivector(rho_ab))
+
+print(&quot;\nFinal State (Q-Sphere for Q0 and Q3):&quot;)
+display(plot_state_qsphere(rho_ab))
+
+display(Markdown(&quot;4. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+display(Markdown(&quot;5. Verification&quot;))
+# The ideal target state is a perfect Bell state between Q0 and Q3
+reference_circuit = QuantumCircuit(2)
+reference_circuit.h(0)
+reference_circuit.cx(0, 1)
+ideal_state = Statevector(reference_circuit)
+
+fidelity = state_fidelity(ideal_state, rho_ab)
+print(f&quot;Entanglement Swapping Fidelity = {fidelity:.6f}&quot;)
+if np.isclose(fidelity, 1.0):
+    print(&quot;Success: Q0 and Q3 are maximally entangled without ever interacting.&quot;)
+else:
+    print(&quot;Warning: Fidelity is less than 1.&quot;)</code></pre>
             </div>
         </div>
         
@@ -370,12 +435,9 @@ print(circuit.draw(output='text'))
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Żukowski, M., Zeilinger, A., Horne, M. A., &amp; Ekert, A. K. (1993). "Event-ready-detectors" Bell experiment via entanglement swapping. <em>Physical Review Letters</em>, 71(26), 4287–4290.</li>
-            <li>Pan, J. W., Bouwmeester, D., Weinfurter, H., &amp; Zeilinger, A. (1998). Experimental entanglement swapping: entangling photons that never interacted. <em>Physical Review Letters</em>, 80(18), 3891–3894.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#entanglement-swapping" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

@@ -174,74 +174,75 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <div class="math-container">
-            <p>Let us trace the Bit-Flip Code. We want to protect the arbitrary state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\).</p>
 
-            <h3>Step 1: Encoding</h3>
-            <p>We introduce two blank qubits \(|00\rangle\) and apply two CNOT gates from the data qubit to the blank qubits.</p>
-            <p>\(|\psi_0\rangle = (\alpha|0\rangle + \beta|1\rangle) \otimes |00\rangle = \alpha|000\rangle + \beta|100\rangle\)</p>
-            <p>Applying the \(CX\) gates:</p>
-            <p>\(|\psi_{encoded}\rangle = \alpha|000\rangle + \beta|111\rangle\)</p>
-            <p>The information is now distributed across a GHZ-like state.</p>
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Redundant Encoding</h3>
+        <p>The 3-Qubit Bit-Flip Code protects a fragile logical qubit state $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$ from a single bit-flip error. Due to the No-Cloning Theorem, we cannot duplicate the qubit. Instead, we use quantum entanglement.</p>
+        <p>We append two auxiliary $|0\rangle$ qubits, making the initial state:</p>
 
-            <h3>Step 2: The Error</h3>
-            <p>Suppose the environment applies a Pauli-X (bit-flip) error strictly to the first qubit (\(X_1\)):</p>
-            <p>\(|\psi_{error}\rangle = (X \otimes I \otimes I) (\alpha|000\rangle + \beta|111\rangle) = \alpha|100\rangle + \beta|011\rangle\)</p>
-
-            <h3>Step 3: Syndrome Measurement</h3>
-            <p>We introduce two ancilla qubits initialised to \(|00\rangle_{anc}\).</p>
-            <ul>
-                <li><strong>Parity 1 (Compares Q0 &amp; Q1):</strong> We apply CNOTs from Q0 and Q1 to Ancilla 0.</li>
-                <li><strong>Parity 2 (Compares Q1 &amp; Q2):</strong> We apply CNOTs from Q1 and Q2 to Ancilla 1.</li>
-            </ul>
-            <p>Let's look at the \(\alpha|100\rangle\) term.</p>
-            <ul>
-                <li>Q0 is 1, Q1 is 0. Ancilla 0 flips once. (State: \(|1\rangle\))</li>
-                <li>Q1 is 0, Q2 is 0. Ancilla 1 flips zero times. (State: \(|0\rangle\))</li>
-            </ul>
-            <p>Let's look at the \(\beta|011\rangle\) term.</p>
-            <ul>
-                <li>Q0 is 0, Q1 is 1. Ancilla 0 flips once. (State: \(|1\rangle\))</li>
-                <li>Q1 is 1, Q2 is 1. Ancilla 1 flips twice. (State: \(|0\rangle\))</li>
-            </ul>
-            <p>Because both branches of the superposition yield the exact same ancilla state (\(|10\rangle\)), measuring the ancillas does not collapse the \(\alpha, \beta\) superposition. It factors out perfectly:</p>
-            <p>\(|\psi_{syndrome}\rangle = (\alpha|100\rangle + \beta|011\rangle) \otimes |10\rangle_{anc}\)</p>
-
-            <h3>Step 4: Correction</h3>
-            <p>We measure the ancillas as 10. This classical bitstring is the <strong>syndrome</strong>. A syndrome of 10 unambiguously means "Qubit 0 flipped." We apply an \(X\) gate to Q0 to fix it:</p>
-            <p>\(|\psi_{final}\rangle = X_1 (\alpha|100\rangle + \beta|011\rangle) = \alpha|000\rangle + \beta|111\rangle\)</p>
-            <p>The state is perfectly restored.</p>
-
-            <table class="complexity-table" style="margin-top: 1.5rem;">
-                <tr>
-                    <th>Syndrome (A0A1)</th>
-                    <th>Meaning</th>
-                    <th>Correction Applied</th>
-                </tr>
-                <tr>
-                    <td>00</td>
-                    <td>No error (all agree)</td>
-                    <td>None (\(I\))</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>Q0 differs from Q1</td>
-                    <td>Flip Q0 (\(X_0\))</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>Q1 differs from Q0 and Q2</td>
-                    <td>Flip Q1 (\(X_1\))</td>
-                </tr>
-                <tr>
-                    <td>01</td>
-                    <td>Q2 differs from Q1</td>
-                    <td>Flip Q2 (\(X_2\))</td>
-                </tr>
-            </table>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Psi_{init}\rangle = (\alpha|0\rangle + \beta|1\rangle) \otimes |00\rangle = \alpha|000\rangle + \beta|100\rangle
+            \]</p>
         </div>
+        <p>Two Controlled-NOT (CX) gates encode the state by spreading the information non-locally:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Psi_{enc}\rangle = CX_{0,2} CX_{0,1} (\alpha|000\rangle + \beta|100\rangle) = \alpha|000\rangle + \beta|111\rangle
+            \]</p>
+        </div>
+        <p>The amplitudes $\alpha$ and $\beta$ are now safely distributed across all three physical qubits.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: The Quantum Error Channel</h3>
+        <p>If a single bit-flip (Pauli $X$) error occurs on any of the qubits, the state evolves deterministically. Because the error operator $E_i$ acts linearly, the superposition coefficients $\alpha$ and $\beta$ remain completely unchanged.</p>
+        <p>For example, if an error hits Qubit 0 ($E_0 = X \otimes I \otimes I$):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_{err}\rangle = E_0 (\alpha|000\rangle + \beta|111\rangle) = \alpha|100\rangle + \beta|011\rangle
+            \]</p>
+        </div>
+        <p>Similar distinct orthogonal states are produced if the error hits Qubit 1 ($|010\rangle, |101\rangle$) or Qubit 2 ($|001\rangle, |110\rangle$).</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Syndrome Extraction (Parity Measurement)</h3>
+        <p>To detect the error without measuring the data qubits (which would irreversibly collapse $\alpha$ and $\beta$), we measure the **parity** between adjacent qubits using two ancilla qubits.</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Parity 1 ($S_1 = Z_0 Z_1$):</strong> Compares Qubit 0 and Qubit 1.</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Parity 2 ($S_2 = Z_1 Z_2$):</strong> Compares Qubit 1 and Qubit 2.</p>
+        <p>We apply a sequence of CX gates from the data qubits to the ancilla qubits. For the Qubit 0 error case ($\alpha|100\rangle + \beta|011\rangle$), the parity extraction strictly factors out the ancilla state:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Psi_{eval}\rangle = \Big( \alpha|100\rangle + \beta|011\rangle \Big) \otimes |10\rangle_{anc}
+            \]</p>
+        </div>
+        <p>Because the ancilla state $|10\rangle_{anc}$ is identical for both the $\alpha$ and $\beta$ branches, it fully factors out of the superposition.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Deterministic Correction & Decoding</h3>
+        <p>Measuring the ancilla qubits yields a 2-bit classical string called the **syndrome**. For our example, we measure `10` with 100% probability.</p>
+        <p>Because the measurement yields no information about $\alpha$ or $\beta$, the quantum superposition remains perfectly intact. The classical syndrome acts as an exact lookup key for the recovery operator:</p>
+        <p>* `00` $\to$ No Error ($I$)</p>
+        <p>* `10` $\to$ Error on Qubit 0 ($X_0$)</p>
+        <p>* `11` $\to$ Error on Qubit 1 ($X_1$)</p>
+        <p>* `01` $\to$ Error on Qubit 2 ($X_2$)</p>
+        <p>We apply the required Pauli $X_0$ correction, perfectly restoring the encoded logical state:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            X_0 \Big( \alpha|100\rangle + \beta|011\rangle \Big) = \alpha|000\rangle + \beta|111\rangle
+            \]</p>
+        </div>
+        <p>Applying the CX gates in reverse perfectly uncomputes the auxiliary qubits, cleanly recovering the initial state $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$.</p>
+
     </section>
 
     <section class="content-section">
@@ -392,12 +393,9 @@ print(circuit.draw(output='text'))
     </section>
 
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Shor, P. W. (1995). Scheme for reducing decoherence in quantum computer memory. <em>Physical Review A</em>, 52(4), R2493.</li>
-            <li>Steane, A. M. (1996). Error correcting codes in quantum theory. <em>Physical Review Letters</em>, 77(13), 2953.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#3-qubit-code" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

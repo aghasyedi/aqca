@@ -175,48 +175,88 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
-        <p>We start with two \(n\)-qubit registers, both initialised to \(|0\rangle^{\otimes n}\):</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
+        <p>Simon's algorithm finds a hidden period \(s \in \{0, 1\}^n\) for a two-to-one function where \(f(x) = f(y) \iff y = x \oplus s\).</p>
+        <p>The algorithm uses two \(n\)-qubit registers, both initialised to \(|0\rangle\):</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = |0\rangle^{\otimes n} \otimes |0\rangle^{\otimes n}\)</p>
+            <p>\[
+            |\psi_0\rangle = |0\rangle^{\otimes n} |0\rangle^{\otimes n}
+            \]</p>
+        </div>
+        <p>We apply a Hadamard transform \(H^{\otimes n}\) to the first register, creating an equal superposition of all possible inputs:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_1\rangle = \frac1{\sqrt{2^n}} \sum_{x\in\{0,1\}^n} |x\rangle |0\rangle^{\otimes n}
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Hadamard Gates</h3>
-        <p>Applying \(H^{\otimes n}\) to the first register creates an equal superposition over all \(x \in \{0,1\}^n\):</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Oracle Evaluation & Entanglement</h3>
+        <p>The oracle \(U_f\) computes \(f(x)\) and writes it into the second register:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_1\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle \otimes |0\rangle^{\otimes n}\)</p>
+            <p>\[
+            |\psi_2\rangle = U_f |\psi_1\rangle = \frac1{\sqrt{2^n}} \sum_{x} |x\rangle |f(x)\rangle
+            \]</p>
+        </div>
+        <p>Because \(f(x) = f(x \oplus s)\), each output \(y = f(x)\) is produced by exactly two inputs. We can rewrite the state by grouping these pairs:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_2\rangle = \frac1{\sqrt{2^n}} \sum_{y} \left( |x_y\rangle + |x_y\oplus s\rangle \right) |y\rangle
+            \]</p>
+        </div>
+        <p>The registers are now highly entangled, with the hidden period \(s\) encoded into the coupled pairs.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Interference Transform</h3>
+        <p>We apply a second Hadamard transform \(H^{\otimes n}\) exclusively to the first register. Recall that \(H^{\otimes n}|x\rangle = \frac1{\sqrt{2^n}} \sum_z (-1)^{x\cdot z} |z\rangle\):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \frac1{2^n} \sum_y \sum_z \left[ (-1)^{x\cdot z} + (-1)^{(x\oplus s)\cdot z} \right] |z\rangle|y\rangle
+            \]</p>
+        </div>
+        <p>Using the property \((x\oplus s)\cdot z = x\cdot z \oplus s\cdot z\), we can factor out the phase:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            (-1)^{(x\oplus s)\cdot z} = (-1)^{x\cdot z} (-1)^{s\cdot z}
+            \]</p>
+        </div>
+        <p>Substituting this back gives the core interference equation:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \frac1{2^n} \sum_y \sum_z (-1)^{x\cdot z} \left[ 1+ (-1)^{s\cdot z} \right] |z\rangle|y\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: The Oracle Query</h3>
-        <p>Applying the oracle \(U_f\) writes the function evaluation into the second register. This entangles the two registers:</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Classical Post-Processing</h3>
+        <p>The probability amplitude for any basis state \(|z\rangle\) depends on the interference term \([1 + (-1)^{s\cdot z}]\):</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Destructive Interference:</strong> If \(s \cdot z = 1 \pmod 2\), the term becomes \([1 - 1] = 0\). These states vanish completely.</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Constructive Interference:</strong> If \(s \cdot z = 0 \pmod 2\), the term becomes \([1 + 1] = 2\). These states survive.</p>
+        <p>Thus, measuring the first register will *always* yield a string \(z\) such that:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle \otimes |f(x)\rangle\)</p>
+            <p>\[
+            z \cdot s = 0 \pmod 2
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Final Interference</h3>
-        <p>We apply \(H^{\otimes n}\) to the first register. Recall that \(H^{\otimes n}|x\rangle = \frac{1}{\sqrt{2^n}} \sum_{z} (-1)^{x \cdot z} |z\rangle\):</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_3\rangle = \frac{1}{2^n} \sum_{x=0}^{2^n-1} \sum_{z=0}^{2^n-1} (-1)^{x \cdot z} |z\rangle \otimes |f(x)\rangle\)</p>
-        </div>
-        <p>Because \(f(x)\) is a two-to-one function where \(f(x) = f(x \oplus s)\), for every unique output \(y\), there are exactly two inputs, \(x\) and \(x \oplus s\), that produce it. We can rewrite the sum by pairing these terms together:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_3\rangle = \frac{1}{2^{n-1}} \sum_{y} \sum_{z=0}^{2^n-1} \left[ (-1)^{x \cdot z} + (-1)^{(x \oplus s) \cdot z} \right] |z\rangle \otimes |y\rangle\)</p>
-        </div>
-        <p>Factor out \((-1)^{x \cdot z}\) from the bracket:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\((-1)^{x \cdot z} \left[ 1 + (-1)^{s \cdot z} \right]\)</p>
-        </div>
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: By running the circuit \(O(n)\) times, we obtain a system of \(n-1\) linearly independent equations. We can solve this system classically using Gaussian elimination over \(GF(2)\) to efficiently reveal the hidden period \(s\).</strong></h4>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Look at the term \(\left[ 1 + (-1)^{s \cdot z} \right]\):</p>
-        <ul style="line-height: 1.6;">
-            <li>If \(s \cdot z = 1 \pmod 2\), then \((-1)^1 = -1\), and the amplitude is \(1 - 1 = 0\). This state perfectly destructively interferes.</li>
-            <li>If \(s \cdot z = 0 \pmod 2\), then \((-1)^0 = 1\), and the amplitude is \(1 + 1 = 2\). This state constructively interferes.</li>
-        </ul>
-        <p>Therefore, when we measure the first register, we have a \(100\%\) probability of observing a state \(z\) such that \(s \cdot z = 0 \pmod 2\).</p>
     </section>
 
     <section class="content-section">
@@ -242,57 +282,179 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
+</pre><div class="notebook-output-math">$$
+U_{circuit} = 
+\begin{bmatrix}
+\frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0  \\
+ 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
+ 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
+ \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2}  \\
+ 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & - \frac{1}{2} & 0  \\
+ 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0  \\
+ 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+ \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0  \\
+ 0 & \frac{1}{2} & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
+ 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
+ - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+ 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0  \\
+ 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0  \\
+ 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{1}{2} |0000\rangle+\frac{1}{2} |0011\rangle+\frac{1}{2} |1000\rangle- \frac{1}{2} |1011\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+\frac{1}{4} & 0 & 0 & \frac{1}{4} & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ \frac{1}{4} & 0 & 0 & \frac{1}{4} & \cdots & 0 & 0 & 0  \\
+ \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;11&#x27;: 502, &#x27;00&#x27;: 522}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Secret string (s): 11
+Verifying the dot product of measured strings (z) with secret string (s) modulo 2:
+z = 11 -&gt; s·z mod 2 = 0
+z = 00 -&gt; s·z mod 2 = 0
+
+Success: All measured strings are orthogonal to the secret string &#x27;11&#x27;.
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from IPython.display import display, Markdown
 
-def simulate_simon_2bit():
-    \"\"\"
-    Simulates a 2-qubit input (+ 2-qubit target) Simon's algorithm using NumPy.
-    Secret string s = '11'.
-    \"\"\"
-    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
-    I = np.eye(2, dtype=complex)
-    
-    # Tensored Hadamards for input register
-    H2 = np.kron(H, H)
-    H_in = np.kron(H2, np.eye(4)) # H on input, I on target
-    
-    # 1. Initialise |00>|00>
-    state_0000 = np.zeros((16, 1), dtype=complex)
-    state_0000[0] = 1.0  
-    
-    # 2. H on input register
-    psi_1 = np.dot(H_in, state_0000)
-    
-    # 3. Construct Oracle for s = '11'
-    # f(00)=00, f(11)=00
-    # f(01)=10, f(10)=10
-    U_f = np.zeros((16, 16), dtype=complex)
-    mapping = {0:0, 1:2, 2:2, 3:0} # Decimal representations of x -> f(x)
-    for x in range(4):
-        for y in range(4):
-            new_y = y ^ mapping[x]
-            U_f[x*4 + new_y, x*4 + y] = 1.0
-            
-    psi_2 = np.dot(U_f, psi_1)
-    
-    # 4. Final H on input qubits
-    psi_final = np.dot(H_in, psi_2)
-    
-    # 5. Calculate probabilities for the input register (tracing out the target)
-    probs = np.zeros(4)
-    for i in range(16):
-        input_state = i // 4
-        probs[input_state] += np.abs(psi_final[i][0])**2
-        
-    # Strings with non-zero probability must satisfy z dot s = 0 mod 2. 
-    # For s='11', valid z's are '00' and '11'.
-    measured_states = [format(i, '02b') for i in range(4) if probs[i] > 0.01]
-    
-    return measured_states
+# ==========================================
+# CONFIGURATION
+# ==========================================
+secret_string = &quot;11&quot;
+n = len(secret_string)
 
-print("Possible measurement outcomes (z) for secret s='11':", simulate_simon_2bit())
-</code></pre>
+# 1. Set up Registers &amp; Circuit
+# Simon&#x27;s algorithm requires n input qubits and n ancilla (output) qubits
+qr_in = QuantumRegister(n, name=&quot;q_in&quot;)
+qr_out = QuantumRegister(n, name=&quot;q_out&quot;)
+cr = ClassicalRegister(n, name=&quot;c&quot;)
+qc = QuantumCircuit(qr_in, qr_out, cr)
+
+# 2. Initialisation
+for i in range(n):
+    qc.h(qr_in[i])
+qc.barrier(label=&quot;Init&quot;)
+
+# 3. Oracle Construction
+# First, copy inputs to outputs (f(x) = x initially)
+for i in range(n):
+    qc.cx(qr_in[i], qr_out[i])
+
+# Create the collision for the secret string s
+pivot = secret_string.find(&#x27;1&#x27;)
+if pivot != -1:
+    # Reverse string to match Qiskit&#x27;s little-endian ordering
+    reversed_s = secret_string[::-1] 
+    for i in range(n):
+        if reversed_s[i] == &#x27;1&#x27;:
+            qc.cx(qr_in[pivot], qr_out[i])
+qc.barrier(label=&quot;Oracle&quot;)
+
+# 4. Final Interference
+for i in range(n):
+    qc.h(qr_in[i])
+qc.barrier(label=&quot;Interference&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+unitary = Operator(qc)
+final_state = Statevector(qc)
+final_density = DensityMatrix(qc)
+
+# 5. Measurement (measure only the input register)
+for i in range(n):
+    qc.measure(qr_in[i], cr[i])
+
+# 6. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;Simon&#x27;s Algorithm Analysis: Secret = &#x27;{secret_string}&#x27;&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+# Guardrail: A total of 4 qubits (n=2) yields a 16x16 matrix. 
+# Anything larger risks crashing the Jupyter output.
+total_qubits = 2 * n
+if total_qubits &lt;= 4: 
+    print(f&quot;The {2**total_qubits}x{2**total_qubits} unitary matrix describing the full circuit:&quot;)
+    display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;, max_size=16))
+else:
+    print(f&quot;Unitary matrix omitted: {total_qubits} total qubits results in a matrix too large for clean display.&quot;)
+
+display(Markdown(&quot;3. Quantum State Representation&quot;))
+print(&quot;Exact Statevector prior to measurement:&quot;)
+display(final_state.draw(&#x27;latex&#x27;))
+
+print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
+display(final_density.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;4. State Visualisation&quot;))
+print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(final_state))
+
+print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(final_state))
+
+display(Markdown(&quot;5. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# 6. Final Verification Logic
+display(Markdown(&quot;6. Verification&quot;))
+print(f&quot;Secret string (s): {secret_string}&quot;)
+print(&quot;Verifying the dot product of measured strings (z) with secret string (s) modulo 2:&quot;)
+
+all_valid = True
+for z in counts.keys():
+    # Calculate s·z mod 2
+    dot_product = sum(int(s_bit) * int(z_bit) for s_bit, z_bit in zip(secret_string, z)) % 2
+    print(f&quot;z = {z} -&gt; s·z mod 2 = {dot_product}&quot;)
+    if dot_product != 0:
+        all_valid = False
+
+if all_valid:
+    print(f&quot;\nSuccess: All measured strings are orthogonal to the secret string &#x27;{secret_string}&#x27;.&quot;)
+    if set(counts.keys()) == {&#x27;00&#x27;}:
+        print(&quot;Note: If only &#x27;00&#x27; was measured, the function is 1-to-1 (s=&#x27;00&#x27;).&quot;)
+else:
+    print(&quot;\nError: Found a measurement not orthogonal to the secret string.&quot;)</code></pre>
             </div>
         </div>
         
@@ -380,11 +542,9 @@ print(f"Measured equations (z): {list(counts.keys())}")
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Simon, D. R. (1994). On the power of quantum computation. <em>Proceedings of the 35th Annual Symposium on Foundations of Computer Science</em>, 116-123.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#simon" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

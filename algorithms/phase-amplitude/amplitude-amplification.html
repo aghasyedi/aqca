@@ -174,45 +174,89 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
-        <p>We begin with the zero state and apply our arbitrary algorithm \(\mathcal{A}\):</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Subspace Decomposition</h3>
+        <p>Generalised Amplitude Amplification relaxes Grover's requirement of a uniform superposition. Instead, an arbitrary quantum algorithm $\mathcal{A}$ prepares the initial state:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\Psi\rangle = \mathcal{A}|0\rangle^{\otimes n}\)</p>
+            <p>\[
+            |\Psi\rangle = \mathcal{A}|0^n\rangle
+            \]</p>
         </div>
-        <p>We can split this state into two orthogonal components: the "good" states we want to find (\(|\Psi_{good}\rangle\)) and the "bad" states (\(|\Psi_{bad}\rangle\)). Let \(p\) be the probability of measuring a good state. We can rewrite \(|\Psi\rangle\) using an angle \(\theta\), where \(\sin^2(\theta) = p\):</p>
+        <p>We decompose this state into two orthogonal subspaces: the "good" (target) state $|\Psi_{\mathrm{good}}\rangle$ and the "bad" state $|\Psi_{\mathrm{bad}}\rangle$:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\Psi\rangle = \sin(\theta)|\Psi_{good}\rangle + \cos(\theta)|\Psi_{bad}\rangle\)</p>
+            <p>\[
+            |\Psi\rangle = \sin\theta |\Psi_{\mathrm{good}}\rangle + \cos\theta |\Psi_{\mathrm{bad}}\rangle
+            \]</p>
+        </div>
+        <p>where $\sin^2\theta = p$ is the initial success probability of the algorithm $\mathcal{A}$. The entire amplification dynamics are now confined to this 2D plane.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: The Phase Oracle</h3>
+        <p>An oracle operator $U_\omega$ recognizes the successful states and flips their phase by $-1$:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            U_\omega = I - 2\Pi_{\mathrm{good}}
+            \]</p>
+        </div>
+        <p>Applying $U_\omega$ to the initial state geometrically reflects the state across the bad-state axis:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            U_\omega|\Psi\rangle = -\sin\theta|\Psi_{\mathrm{good}}\rangle + \cos\theta|\Psi_{\mathrm{bad}}\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: The Oracle (\(U_\omega\))</h3>
-        <p>The oracle isolates the good states and flips their phase:</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: The Generalised Diffuser</h3>
+        <p>Instead of reflecting around the uniform superposition, we reflect around the specific state prepared by $\mathcal{A}$. The custom diffuser is:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(U_\omega |\Psi\rangle = -\sin(\theta)|\Psi_{good}\rangle + \cos(\theta)|\Psi_{bad}\rangle\)</p>
+            <p>\[
+            U_s = -\mathcal{A} (I - 2|0^n\rangle\langle0^n|) \mathcal{A}^{-1} = 2|\Psi\rangle\langle\Psi| - I
+            \]</p>
+        </div>
+        <p>Combining the oracle and the diffuser creates the amplification operator $Q = U_s U_\omega$. In the $\{|\Psi_{\mathrm{good}}\rangle, |\Psi_{\mathrm{bad}}\rangle\}$ basis, $Q$ is exactly a rotation matrix:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            Q = \begin{pmatrix} \cos2\theta & -\sin2\theta \\ \sin2\theta & \cos2\theta \end{pmatrix}
+            \]</p>
+        </div>
+        <p>Applying $Q$ iterates a rotation of $2\theta$ towards the good state. After $k$ iterations:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            Q^k|\Psi\rangle = \sin((2k+1)\theta) |\Psi_{\mathrm{good}}\rangle + \cos((2k+1)\theta) |\Psi_{\mathrm{bad}}\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: The Custom Diffuser</h3>
-        <p>The diffuser operator is defined as \(U_s = -\mathcal{A} S_0 \mathcal{A}^{-1}\), where \(S_0 = I - 2|0\rangle\langle0|\) flips the phase of the all-zero state.</p>
-        <p>Mathematically, this evaluates to \(U_s = 2|\Psi\rangle\langle\Psi| - I\), which is an inversion about the initial state \(|\Psi\rangle\).</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Geometric Rotation (The Q Operator)</h3>
-        <p>One full amplification iteration is \(Q = -U_s U_\omega\).</p>
-        <p>Just like Grover's, applying \(Q\) performs a rotation in the 2D plane defined by \(|\Psi_{good}\rangle\) and \(|\Psi_{bad}\rangle\). Because our initial state \(|\Psi\rangle\) is offset from the bad axis by the angle \(\theta\), each application of \(Q\) rotates the state vector by exactly \(2\theta\) towards \(|\Psi_{good}\rangle\).</p>
-        <p>After \(k\) iterations, the state becomes:</p>
+        <h3 style="margin-top: 1.5rem;">Step 4: Optimal Iterations & Speedup</h3>
+        <p>To maximize the probability of measuring the good state, we require $\sin((2k+1)\theta) \approx 1$, meaning:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(Q^k |\Psi\rangle = \sin((2k+1)\theta)|\Psi_{good}\rangle + \cos((2k+1)\theta)|\Psi_{bad}\rangle\)</p>
+            <p>\[
+            (2k+1)\theta \approx \frac{\pi}{2}
+            \]</p>
+        </div>
+        <p>For small initial probabilities $p \ll 1$, we can approximate $\theta \approx \sqrt{p}$, yielding the optimal number of iterations:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            k_{\mathrm{opt}} \approx \frac{\pi}{4\sqrt{p}} = O\left(\frac{1}{\sqrt{p}}\right)
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>To maximise the probability of measuring a good state, we need \(\sin((2k+1)\theta) \approx 1\).</p>
-        <p>This requires \((2k+1)\theta \approx \pi/2\). Since \(\sin(\theta) = \sqrt{p}\), for small \(p\), \(\theta \approx \sqrt{p}\).</p>
-        <p>Solving for \(k\) gives the optimal number of iterations:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(k \approx \frac{\pi}{4\sqrt{p}}\)</p>
-        </div>
-        <p>Measuring the system after \(k\) iterations yields a "good" state with a probability approaching \(100\%\).</p>
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Classical repetition requires $O(1/p)$ trials to find a solution. Generalised Amplitude Amplification achieves the same result coherently in $O(1/\sqrt{p})$ iterations, generalizing the quadratic quantum speedup to any initialization algorithm.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -238,45 +282,184 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Iterations applied: 2
+Initial bias angle (Ry): 1.047 radians
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 4x4 unitary matrix describing the full circuit:
+</pre><div class="notebook-output-math">$$
+U_{GAA} = 
+\begin{bmatrix}
+0.234375 & -0.6765823467 & -0.6765823467 & -0.171875  \\
+ 0.1353164693 & 0.609375 & -0.390625 & -0.6765823467  \\
+ 0.1353164693 & -0.390625 & 0.609375 & -0.6765823467  \\
+ 0.953125 & 0.1353164693 & 0.1353164693 & 0.234375  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$0.234375 |00\rangle+0.1353164693 |01\rangle+0.1353164693 |10\rangle+0.953125 |11\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+0.0549316406 & 0.0317147975 & 0.0317147975 & 0.2233886719  \\
+ 0.0317147975 & 0.0183105469 & 0.0183105469 & 0.1289735098  \\
+ 0.0317147975 & 0.0183105469 & 0.0183105469 & 0.1289735098  \\
+ 0.2233886719 & 0.1289735098 & 0.1289735098 & 0.9084472656  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;01&#x27;: 23, &#x27;10&#x27;: 26, &#x27;00&#x27;: 58, &#x27;11&#x27;: 917}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Success: The algorithm correctly amplified the target state &#x27;11&#x27;.
+Final Success Probability: 89.55%
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from IPython.display import display, Markdown
 
-def simulate_amplitude_amplification(p_success):
-    \"\"\"
-    Simulates Generalised Amplitude Amplification mathematically using NumPy.
-    p_success: The initial probability p of the algorithm A finding the target.
-    \"\"\"
-    # Define the 2D subspace: |bad> = [1, 0]^T, |good> = [0, 1]^T
-    theta = np.arcsin(np.sqrt(p_success))
-    
-    # Initial state |Psi> created by A
-    psi = np.array([[np.cos(theta)], [np.sin(theta)]])
-    
-    # 1. Oracle U_w (flips phase of |good>)
-    U_w = np.array([[1, 0], [0, -1]])
-    
-    # 2. Diffuser U_s = 2|Psi&gt;&lt;Psi| - I
-    U_s = 2 * np.dot(psi, psi.T) - np.eye(2)
-    
-    # 3. The Amplification Operator Q
-    Q = np.dot(U_s, U_w)
-    
-    # 4. Calculate optimal iterations k
-    k = int(np.round(np.pi / (4 * theta) - 0.5))
-    if k < 0: k = 0
-    
-    # 5. Apply Q for k iterations
-    state = psi
-    for _ in range(k):
-        state = np.dot(Q, state)
-        
-    prob_good = np.abs(state[1, 0])**2
-    return prob_good, k
+# ==========================================
+# CONFIGURATION
+# ==========================================
+target_string = &quot;11&quot;
+n = len(target_string)
+iterations = 2           # Number of amplifications
+ry_angle = np.pi / 3     # The bias angle for our custom A operator
 
-# If our heuristic has a 10% chance of success
-final_prob, iterations = simulate_amplitude_amplification(0.10)
-print(f"Boosted to {final_prob*100:.2f}% success in {iterations} iterations.")
-</code></pre>
+# Helper function for multi-controlled Z (scales to n qubits)
+def apply_mcz(qc, qubits):
+    if len(qubits) == 1:
+        qc.z(qubits[0])
+    elif len(qubits) == 2:
+        qc.cz(qubits[0], qubits[1])
+    else:
+        qc.h(qubits[-1])
+        qc.mcx(qubits[:-1], qubits[-1])
+        qc.h(qubits[-1])
+
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(n, name=&quot;q&quot;)
+cr = ClassicalRegister(n, name=&quot;c&quot;)
+qc = QuantumCircuit(qr, cr)
+
+# ==========================================
+# CUSTOM OPERATOR DEFINITIONS
+# ==========================================
+def append_A(circuit, register):
+    &quot;&quot;&quot;Custom algorithm A that biases the initial state.&quot;&quot;&quot;
+    for i in range(n):
+        circuit.ry(ry_angle, register[i])
+
+def append_A_inv(circuit, register):
+    &quot;&quot;&quot;The exact inverse of A (Ry(-theta)).&quot;&quot;&quot;
+    for i in range(n):
+        circuit.ry(-ry_angle, register[i])
+
+# 2. Initialisation (Apply A)
+append_A(qc, qr)
+qc.barrier(label=&quot;Init (A)&quot;)
+
+# ==========================================
+# AMPLITUDE AMPLIFICATION ITERATIONS
+# ==========================================
+for step in range(iterations):
+    # --- ORACLE (Flip target state) ---
+    reversed_target = target_string[::-1]
+    
+    # Flip &#x27;0&#x27;s to apply MCZ correctly
+    for i in range(n):
+        if reversed_target[i] == &#x27;0&#x27;:
+            qc.x(qr[i])
+            
+    apply_mcz(qc, list(range(n)))
+    
+    # Undo X gates
+    for i in range(n):
+        if reversed_target[i] == &#x27;0&#x27;:
+            qc.x(qr[i])
+    qc.barrier(label=f&quot;Oracle {step+1}&quot;)
+    
+    # --- CUSTOM DIFFUSER (A^-1 -&gt; Zero Reflection -&gt; A) ---
+    append_A_inv(qc, qr)
+    
+    # Zero reflection S_0 (flips sign of |0...0&gt;)
+    qc.x(qr)
+    apply_mcz(qc, list(range(n)))
+    qc.x(qr)
+    
+    append_A(qc, qr)
+    qc.barrier(label=f&quot;Diffuser {step+1}&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+unitary = Operator(qc)
+final_state = Statevector(qc)
+final_density = DensityMatrix(qc)
+
+# 3. Measurement
+qc.measure(qr, cr)
+
+# 4. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;GAA Analysis: Target = $|{target_string}\\rangle$&quot;))
+print(f&quot;Iterations applied: {iterations}&quot;)
+print(f&quot;Initial bias angle (Ry): {ry_angle:.3f} radians&quot;)
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+if n &lt;= 3:
+    print(f&quot;The {2**n}x{2**n} unitary matrix describing the full circuit:&quot;)
+    display(array_to_latex(unitary.data, prefix=&quot;U_{GAA} = &quot;, max_size=16))
+else:
+    print(f&quot;Unitary matrix omitted: {n} qubits results in a matrix too large for clean display.&quot;)
+
+display(Markdown(&quot;3. Quantum State Representation&quot;))
+print(&quot;Exact Statevector prior to measurement:&quot;)
+display(final_state.draw(&#x27;latex&#x27;))
+
+print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
+display(final_density.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;4. State Visualisation&quot;))
+print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(final_state))
+
+print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(final_state))
+
+display(Markdown(&quot;5. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# 6. Final Verification Logic
+display(Markdown(&quot;6. Verification&quot;))
+measured_bitstring = max(counts, key=counts.get)
+success_probability = counts[measured_bitstring] / 1024
+
+if measured_bitstring == target_string:
+    print(f&quot;Success: The algorithm correctly amplified the target state &#x27;{target_string}&#x27;.&quot;)
+    print(f&quot;Final Success Probability: {success_probability * 100:.2f}%&quot;)
+else:
+    print(f&quot;Error: The algorithm identified &#x27;{measured_bitstring}&#x27; instead of &#x27;{target_string}&#x27;.&quot;)</code></pre>
             </div>
         </div>
         
@@ -358,11 +541,9 @@ print("Measurement Counts:", counts)
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Brassard, G., Høyer, P., Mosca, M., &amp; Tapp, A. (2002). Quantum amplitude amplification and estimation. <em>Contemporary Mathematics</em>, 305, 53-74.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#amplitude-amplification" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

@@ -122,6 +122,9 @@
                 Jump to Quantum Gates List
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
             </a>
+            <button id="expandAllBtn" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; width: fit-content; text-decoration: none; height: fit-content; margin-top: 0;">
+                Expand All
+            </button>
             <input type="text" id="basicsSearch" placeholder="Search in page..." class="search-input" style="margin-bottom: 0; max-width: 300px; padding: 0.5rem 1rem; font-size: 0.9rem;">
         </div>
     </div>
@@ -154,7 +157,7 @@
         
         <h3 style="margin-top: 2rem;">Entanglement <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h3>
         <p>Entanglement is a purely quantum phenomenon where two or more qubits become perfectly correlated such that the state of one qubit cannot be described independently of the state of the others, no matter the physical distance between them. A classic example is the Bell state:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt{2}\)</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt{2}}\)</p>
         <p>Measuring the first qubit immediately determines the state of the second qubit. Entanglement is the primary resource for quantum communication (like Superdense Coding and Quantum Teleportation) and exponential computational speedups.</p>        </div>
     </details>
 
@@ -478,7 +481,7 @@
         <p>Here, \(|x\rangle\) is the input register and \(|y\rangle\) is a target/ancilla qubit.</p>
 
         <h3 style="margin-top: 1.5rem;">The Kickback Mechanism <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h3>
-        <p>If the target qubit is prepared in the orthogonal state \(|-\rangle = \frac{|0\rangle - |1\rangle}{\sqrt{2}\), applying the oracle does not change the state of the target qubit. Instead, the function's output is "kicked back" as a phase factor onto the control input register:</p>
+        <p>If the target qubit is prepared in the orthogonal state \(|-\rangle = \frac{|0\rangle - |1\rangle}{\sqrt{2}}\), applying the oracle does not change the state of the target qubit. Instead, the function's output is "kicked back" as a phase factor onto the control input register:</p>
         <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left( |x\rangle |-\rangle \right) = (-1)^{f(x)} |x\rangle |-\rangle\)</p>        </div>
     </details>
 
@@ -492,7 +495,7 @@
         
         <h3 style="margin-top: 1.5rem;">Quantum Parallelism <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h3>
         <p>By preparing an \(n\)-qubit register in an equal superposition of all \(2^n\) computational basis states, a single execution of a quantum gate or oracle evaluates \(f(x)\) for all inputs simultaneously:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left( \frac{1}{\sqrt{2^n} \sum_{x=0}^{2^n-1} |x\rangle |0\rangle \right) = \frac{1}{\sqrt{2^n} \sum_{x=0}^{2^n-1} |x\rangle |f(x)\rangle\)</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left( \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle |0\rangle \right) = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle |f(x)\rangle\)</p>
 
         <h3 style="margin-top: 1.5rem;">Constructive & Destructive Interference <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h3>
         <p>Because measuring a superposition collapses it to a single random value, quantum parallelism alone yields no speed-up. Quantum algorithms use interference to alter probability amplitudes:</p>
@@ -509,7 +512,7 @@
         </summary>
         <div class="basics-content">
 <h3 style="margin-top: 1.5rem;">Measurement & Wavefunction Collapse <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h3>
-        <p>Measuring a quantum state irrevocably collapses its superposition. For example, if a qubit is in the state \(|+\rangle = \frac{1}{\sqrt{2}|0\rangle + \frac{1}{\sqrt{2}|1\rangle\), it has no definite computational value. The moment it is measured in the standard computational basis, the wavefunction collapses to either \(|0\rangle\) or \(|1\rangle\) with equal probability:</p>
+        <p>Measuring a quantum state irrevocably collapses its superposition. For example, if a qubit is in the state \(|+\rangle = \frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}}|1\rangle\), it has no definite computational value. The moment it is measured in the standard computational basis, the wavefunction collapses to either \(|0\rangle\) or \(|1\rangle\) with equal probability:</p>
         <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(P(\text{measure } 0 \mid \text{state } |+\rangle) = |\langle 0 | + \rangle|^2 = \frac{1}{2}\)</p>
         <p>This is not a limitation of our measuring instruments—it is a fundamental physical law. There is no way to measure a generic qubit without causing collapse, which means reading quantum information inherently disturbs it.</p>
         
@@ -572,7 +575,7 @@
         <div class="basics-content">
 <p>How do experimental physicists verify that a quantum state created in the lab actually matches the theoretical math? This requires robust verification techniques.</p>
         <ul style="line-height: 1.6;">
-            <li><strong>Fidelity (\(\mathcal{F}\)):</strong> A measure of "closeness" between two quantum states. For two pure states, it is simply the squared overlap: \(\mathcal{F} = |\langle \psi | \phi \rangle|^2\). For mixed states, the formula becomes \(\mathcal{F}(\rho, \sigma) = (\text{Tr}\sqrt{\sqrt{\rho}\sigma\sqrt{\rho})^2\).</li>
+            <li><strong>Fidelity (\(\mathcal{F}\)):</strong> A measure of "closeness" between two quantum states. For two pure states, it is simply the squared overlap: \(\mathcal{F} = |\langle \psi | \phi \rangle|^2\). For mixed states, the formula becomes \(\mathcal{F}(\rho, \sigma) = (\text{Tr}\sqrt{\sqrt{\rho}\sigma\sqrt{\rho}})^2\).</li>
             <li><strong>Trace Distance:</strong> A metric that distinguishes how easily two quantum states can be differentiated by a single measurement.</li>
             <li><strong>Quantum State Tomography:</strong> The process of reconstructing the complete density matrix of an unknown quantum state by performing identical preparation and varied measurements (in multiple bases) over a large statistical ensemble.</li>
             <li><strong>Quantum Process Tomography:</strong> Extending state tomography to completely characterize an unknown quantum channel or gate operation.</li>
@@ -703,6 +706,28 @@
     <!-- JS -->
     <script src="js/main.js"></script>
     <script src="js/navigation.js"></script>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const expandAllBtn = document.getElementById('expandAllBtn');
+            const allDetails = document.querySelectorAll('details');
+            let allExpanded = false;
+
+            if (expandAllBtn) {
+                expandAllBtn.addEventListener('click', () => {
+                    allExpanded = !allExpanded;
+                    allDetails.forEach(detail => {
+                        if (allExpanded) {
+                            detail.removeAttribute('name');
+                            detail.setAttribute('open', '');
+                        } else {
+                            detail.setAttribute('name', 'basics-accordion');
+                            detail.removeAttribute('open');
+                        }
+                    });
+                    expandAllBtn.textContent = allExpanded ? 'Collapse All' : 'Expand All';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

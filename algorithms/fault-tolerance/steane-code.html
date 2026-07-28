@@ -174,33 +174,52 @@
         <p><em>(Note: Qubits \(q_4, q_5, q_6\) dictate the superposition of the remaining data qubits, forming the logical \(|0_L\rangle\) state).</em></p>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <div class="math-container">
-            <h3>Step 1: The Parity Check Matrix</h3>
-            <p>The classical \([7,4,3]\) Hamming code is defined by a parity check matrix \(H\). The rows of this matrix dictate which qubits are grouped together in our "Venn diagram" circles:</p>
-            <p>\(H = \begin{pmatrix}  0 & 0 & 0 & 1 & 1 & 1 & 1 \\  0 & 1 & 1 & 0 & 0 & 1 & 1 \\  1 & 0 & 1 & 0 & 1 & 0 & 1  \end{pmatrix}\)</p>
 
-            <h3>Step 2: Stabiliser Generators</h3>
-            <p>In the quantum realm, we convert this binary matrix into tensor products of Pauli operators. The Steane code is defined by 6 stabiliser generators (3 for phase-flips, 3 for bit-flips):</p>
-            <ul>
-                <li>\(g_1 = I \otimes I \otimes I \otimes X \otimes X \otimes X \otimes X\)</li>
-                <li>\(g_2 = I \otimes X \otimes X \otimes I \otimes I \otimes X \otimes X\)</li>
-                <li>\(g_3 = X \otimes I \otimes X \otimes I \otimes X \otimes I \otimes X\)</li>
-            </ul>
-            <p><em>(Generators \(g_4, g_5, g_6\) are identical to above, but using \(Z\) instead of \(X\)).</em></p>
+        <h3 style="margin-top: 1.5rem;">Step 1: The Stabiliser Formalism & Parity Check Matrix</h3>
+        <p>The Steane 7-Qubit Code is a CSS code derived from the classical $[7,4,3]$ Hamming code. It protects a logical qubit against arbitrary single-qubit errors using 6 stabiliser generators.</p>
+        <p>Because it is a CSS code, the stabilisers split cleanly into three $X$-stabilisers (which detect $Z$ errors) and three identical $Z$-stabilisers (which detect $X$ errors). These generators correspond directly to the rows of the classical Hamming parity check matrix $H$:</p>
 
-            <h3>Step 3: The Logical States</h3>
-            <p>A valid quantum codeword must be an eigenstate (with eigenvalue \(+1\)) of all 6 generators.</p>
-            <p>To construct the logical zero state \(|0_L\rangle\), we take the uniform superposition of all 8 classical bitstrings that satisfy the classical Hamming parity checks (the "even weight" codewords):</p>
-            <p>\(|0_L\rangle = \frac{1}{\sqrt{8}} \Big( |0000000\rangle + |1010101\rangle + |0110011\rangle + |1100110\rangle + |0001111\rangle + |1011010\rangle + |0111100\rangle + |1101001\rangle \Big)\)</p>
-            <p>The logical one state \(|1_L\rangle\) is the bit-wise inverse (the "odd weight" codewords):</p>
-            <p>\(|1_L\rangle = \frac{1}{\sqrt{8}} \Big( |1111111\rangle + |0101010\rangle + |1001100\rangle + |0011001\rangle + |1110000\rangle + |0100101\rangle + |1000011\rangle + |0010110\rangle \Big)\)</p>
-
-            <h3>Step 4: Error Correction</h3>
-            <p>If an arbitrary error \(E\) occurs, measuring the \(Z\)-generators (\(g_4, g_5, g_6\)) yields a 3-bit syndrome for bit-flips, and measuring the \(X\)-generators (\(g_1, g_2, g_3\)) yields a 3-bit syndrome for phase-flips.</p>
-            <p>Because the binary representation of the syndrome maps directly to the binary index of the flipped qubit (e.g., a syndrome of <code>110</code> means qubit 6 flipped), the classical controller can instantly apply the corrective Pauli gate.</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            H = \begin{pmatrix} 0 & 0 & 0 & 1 & 1 & 1 & 1 \\ 0 & 1 & 1 & 0 & 0 & 1 & 1 \\ 1 & 0 & 1 & 0 & 1 & 0 & 1 \end{pmatrix}
+            \]</p>
         </div>
+        <p>Converting these rows into Pauli strings gives the stabilisers, e.g., $g_1 = IIIXXXX$ and $g_4 = IIIZZZZ$.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Construction of the Logical Basis States</h3>
+        <p>A valid logical state $|\psi_L\rangle$ must be a simultaneous $+1$ eigenstate of all 6 stabilisers.</p>
+        <p>The logical zero state $|0_L\rangle$ is constructed by symmetrizing the all-zero state over the $X$-stabilisers. This generates a uniform superposition of the 8 classical Hamming codewords with even parity:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |0_L\rangle = \frac{1}{\sqrt{8}} \Big( |0000000\rangle + |1010101\rangle + \dots + |1101001\rangle \Big)
+            \]</p>
+        </div>
+        <p>The logical one state $|1_L\rangle$ is the bit-wise complement (the 8 odd-parity codewords). An arbitrary quantum state is then safely encoded non-locally as $|\psi_{encoded}\rangle = \alpha|0_L\rangle + \beta|1_L\rangle$.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Error Evolution & Syndrome Extraction</h3>
+        <p>If a continuous arbitrary error $E$ hits physical qubit $k$, it mathematically decomposes into a superposition of discrete Pauli errors: $E = c_1 I + c_2 X_k + c_3 Y_k + c_4 Z_k$.</p>
+        <p>To correct the error without destroying $\alpha$ and $\beta$, we measure the 6 stabiliser generators using ancilla qubits.</p>
+        <p>* Measuring the $Z$-generators ($g_4, g_5, g_6$) evaluates the $Z$-parity (detecting bit-flips).</p>
+        <p>* Measuring the $X$-generators ($g_1, g_2, g_3$) evaluates the $X$-parity (detecting phase-flips).</p>
+        <p>Measuring these stabilisers forces the continuous error superposition to collapse deterministically into exactly one of the four Pauli branches ($I, X_k, Y_k,$ or $Z_k$), yielding a 6-bit classical syndrome.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Deterministic Correction</h3>
+        <p>The 6-bit syndrome splits into two 3-bit binary numbers: $S_Z$ and $S_X$. Due to the Hamming code structure, these binary numbers act as direct integer pointers to the corrupted qubit.</p>
+        <p>* If $S_Z = 110_2 = 6_{10}$, an $X$ error occurred on qubit 6. The controller applies $X_6$.</p>
+        <p>* If $S_X = 011_2 = 3_{10}$, a $Z$ error occurred on qubit 3. The controller applies $Z_3$.</p>
+        <p>* If both are non-zero, a $Y$ error occurred on the indicated qubits, and both corrections are applied.</p>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: By applying the exact inverse Pauli operators dictated by the integer value of the syndrome, the physical bit-flips and phase-flips are reversed. The state is perfectly restored to the pure logical superposition $|\psi_{encoded}\rangle$, correcting any arbitrary single-qubit error.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -310,12 +329,9 @@ print(circuit.draw(output='text'))
     </section>
 
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Steane, A. M. (1996). Error correcting codes in quantum theory. <em>Physical Review Letters</em>, 77(13), 2953.</li>
-            <li>Calderbank, A. R., &amp; Shor, P. W. (1996). Good quantum error-correcting codes exist. <em>Physical Review A</em>, 54(2), 1098.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#steane-code" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

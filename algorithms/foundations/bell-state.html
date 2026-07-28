@@ -224,45 +224,49 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <p><em>(Note: Standard textbook Dirac convention \(|q_0\rangle \otimes |q_1\rangle = |q_0 q_1\rangle\) is used below).</em></p>
-        
-        <h3 style="margin-top: 1.5rem;">Step 0: Initial State Preparation</h3>
-        <p>The system starts in the pure computational ground state:</p>
-        <div class="math-container">
-            <p>\(|\psi_0\rangle = |0\rangle \otimes |0\rangle = |00\rangle = \begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix}\)</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
+        <p>The Bell State Generator produces one of four maximally entangled two-qubit states (the Bell basis) depending on the initial computational basis state $|x, y\rangle$.</p>
+        <p>We start with two qubits initialised in a basis state (e.g., $|00\rangle$). We apply a Hadamard gate to the first qubit to create an equal superposition:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            (H \otimes I) |00\rangle = \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle) \otimes |0\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |10\rangle)
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 1: Applying the Hadamard Gate to Qubit 0</h3>
-        <p>We apply \(H \otimes I\) to the composite system:</p>
-        <div class="math-container">
-            <p>\(H = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, \quad I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\)</p>
-            <p>\(|\psi_1\rangle = (H \otimes I)|\psi_0\rangle = \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \right) \otimes |0\rangle = \frac{1}{\sqrt{2}}|00\rangle + \frac{1}{\sqrt{2}}|10\rangle = \begin{bmatrix} \frac{1}{\sqrt{2}} \\ 0 \\ \frac{1}{\sqrt{2}} \\ 0 \end{bmatrix}\)</p>
-        </div>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Controlled-NOT (\(CX\)) Gate</h3>
-        <p>The \(CX\) gate operator with control on qubit 0 and target on qubit 1 is represented in matrix form as:</p>
-        <div class="math-container">
-            <p>\(CX = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix}\)</p>
-        </div>
-        <p>Multiplying \(CX\) by \(|\psi_1\rangle\):</p>
-        <div class="math-container">
-            <p>\(|\psi_2\rangle = CX |\psi_1\rangle = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} \frac{1}{\sqrt{2}} \\ 0 \\ \frac{1}{\sqrt{2}} \\ 0 \end{bmatrix} = \begin{bmatrix} \frac{1}{\sqrt{2}} \\ 0 \\ 0 \\ \frac{1}{\sqrt{2}} \end{bmatrix}\)</p>
-        </div>
-        <p>Rewriting in Dirac notation yields the entangled Bell state \(|\Phi^+\rangle\):</p>
-        <div class="math-container">
-            <p>\(|\psi_2\rangle = \frac{1}{\sqrt{2}}|00\rangle + \frac{1}{\sqrt{2}}|11\rangle = |\Phi^+\rangle\)</p>
-        </div>
+        <h3 style="margin-top: 1.5rem;">Step 2: Entanglement Generation (CX Gate)</h3>
+        <p>Next, we apply a Controlled-NOT (CX) gate, using the first qubit as the control and the second as the target. The CX gate flips the second qubit if and only if the first qubit is $|1\rangle$:</p>
 
-        <h3 style="margin-top: 1.5rem;">Measurement Distribution</h3>
-        <p>When measuring both qubits in the computational \(Z\)-basis:</p>
-        <ul style="line-height: 1.6;">
-            <li>\(P(00) = \left| \frac{1}{\sqrt{2}} \right|^2 = \frac{1}{2} \quad (50\%)\)</li>
-            <li>\(P(01) = |0|^2 = 0 \quad (0\%)\)</li>
-            <li>\(P(10) = |0|^2 = 0 \quad (0\%)\)</li>
-            <li>\(P(11) = \left| \frac{1}{\sqrt{2}} \right|^2 = \frac{1}{2} \quad (50\%)\)</li>
-        </ul>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            CX \left( \frac{1}{\sqrt{2}} (|00\rangle + |10\rangle) \right) = \frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)
+            \]</p>
+        </div>
+        <p>This resulting state is the primary Bell state, denoted $|\Phi^+\rangle$. The states of the two qubits are now perfectly correlated and cannot be factored into independent single-qubit states.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Generating the Four Bell States</h3>
+        <p>By altering the initial input state $|x, y\rangle$, the same circuit generates the complete set of four mutually orthogonal Bell states:</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>From $|00\rangle$:</strong> $|\Phi^+\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>From $|01\rangle$:</strong> $|\Phi^-\rangle = \frac{1}{\sqrt{2}} (|00\rangle - |11\rangle)$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>From $|10\rangle$:</strong> $|\Psi^+\rangle = \frac{1}{\sqrt{2}} (|01\rangle + |10\rangle)$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>From $|11\rangle$:</strong> $|\Psi^-\rangle = \frac{1}{\sqrt{2}} (|01\rangle - |10\rangle)$</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Maximal Entanglement</h3>
+        <p>When a Bell state is measured in the computational basis, the outcome is probabilistic (50% chance of each state), but perfectly correlated. For instance, measuring $|\Phi^+\rangle$ always yields either $00$ or $11$. Measuring one qubit instantly dictates the state of the other, illustrating maximal quantum entanglement.</p>
+
     </section>
 
     <section class="content-section">
@@ -290,54 +294,171 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">Quantum Circuit
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bell-state-out-1.png" alt="Notebook output"><pre class="notebook-output-text">Statevector
+</pre><div class="notebook-output-math">$$- \frac{\sqrt{2}}{2} |01\rangle+\frac{\sqrt{2}}{2} |10\rangle$$</div><pre class="notebook-output-text">Density Matrix
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+0 & 0 & 0 & 0  \\
+ 0 & \frac{1}{2} & - \frac{1}{2} & 0  \\
+ 0 & - \frac{1}{2} & \frac{1}{2} & 0  \\
+ 0 & 0 & 0 & 0  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">Bloch Sphere
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bell-state-out-2.png" alt="Notebook output"><pre class="notebook-output-text">QSphere
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bell-state-out-3.png" alt="Notebook output"><pre class="notebook-output-text">Unitary Operator
+</pre><pre class="notebook-output-text">array([[ 0.        +0.j,  0.        +0.j,  0.70710678+0.j,
+         0.70710678+0.j],
+       [-0.70710678+0.j,  0.70710678+0.j,  0.        +0.j,
+         0.        +0.j],
+       [ 0.70710678+0.j,  0.70710678+0.j,  0.        +0.j,
+         0.        +0.j],
+       [ 0.        +0.j,  0.        +0.j, -0.70710678+0.j,
+         0.70710678+0.j]])</pre><pre class="notebook-output-text">Sampler Counts (1024 shots)
+{&#x27;01&#x27;: 500, &#x27;10&#x27;: 524}
+
+Aer Simulator Counts
+{&#x27;01&#x27;: 521, &#x27;10&#x27;: 503}
+Measurement Histogram
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bell-state-out-4.png" alt="Notebook output">
+            </div>
+        </div>
+        
             <div class="code-content">
-<pre><code>import numpy as np
+<pre><code>from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.visualization import (
+    plot_histogram,
+    plot_bloch_multivector,
+    plot_state_qsphere
+)
+from qiskit_aer import AerSimulator
+from qiskit.primitives import StatevectorSampler
+from IPython.display import display
 
-def generate_bell_state(initial_bits=(0, 0)):
-    \"\"\"
-    Simulates a Bell State Generator using pure NumPy matrix multiplication.
-    initial_bits: tuple (q1, q0) representing the input computational state.
-    \"\"\"
-    # 1. Fundamental basis states
-    ket_0 = np.array([[1], [0]], dtype=complex)
-    ket_1 = np.array([[0], [1]], dtype=complex)
-    
-    # 2. Gate Definitions
-    I = np.eye(2, dtype=complex)
-    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
-    X = np.array([[0, 1], [1, 0]], dtype=complex)
-    
-    # CNOT matrix (Control: Qubit 0, Target: Qubit 1)
-    CX = np.array([
-        [1, 0, 0, 0],
-        [0, 0, 0, 1],
-        [0, 0, 1, 0],
-        [0, 1, 0, 0]
-    ], dtype=complex)
 
-    # 3. Prepare initial state
-    q1_in = ket_1 if initial_bits[0] == 1 else ket_0
-    q0_in = ket_1 if initial_bits[1] == 1 else ket_0
-    psi_0 = np.kron(q0_in, q1_in)
+# ------------------------------------------------------------------
+# Bell State Generator
+# ------------------------------------------------------------------
+def build_bell_circuit(bell_type=&quot;Phi+&quot;):
+    qc = QuantumCircuit(2, 2, name=f&quot;Bell_{bell_type}&quot;)
 
-    # 4. Apply Hadamard to Qubit 0
-    H_tensor_I = np.kron(H, I)
-    psi_1 = np.dot(H_tensor_I, psi_0)
+    # Prepare input state
+    if bell_type in [&quot;Psi+&quot;, &quot;Psi-&quot;]:
+        qc.x(1)
 
-    # 5. Apply CNOT
-    psi_2 = np.dot(CX, psi_1)
+    if bell_type in [&quot;Phi-&quot;, &quot;Psi-&quot;]:
+        qc.x(0)
 
-    # 6. Calculate Probability Distribution
-    probabilities = np.abs(psi_2.flatten())**2
-    state_names = ['|00>', '|01>', '|10>', '|11>']
-    
-    return psi_2, dict(zip(state_names, probabilities))
+    qc.barrier(label=&quot;Input&quot;)
 
-# Example Execution
-state_vector, probs = generate_bell_state(initial_bits=(0, 0))
-print("Final State Vector:\\n", state_vector.ravel())
-print("Measurement Probabilities:\\n", probs)
-</code></pre>
+    # Bell State Generator
+    qc.h(0)
+    qc.cx(0, 1)
+
+    return qc
+
+
+# ------------------------------------------------------------------
+# Select Bell State
+# Options:
+# &quot;Phi+&quot;
+# &quot;Phi-&quot;
+# &quot;Psi+&quot;
+# &quot;Psi-&quot;
+# ------------------------------------------------------------------
+qc = build_bell_circuit(&quot;Psi-&quot;)
+
+
+# ==============================================================
+# 1. Circuit Diagram
+# ==============================================================
+print(&quot;Quantum Circuit&quot;)
+display(qc.draw(&quot;mpl&quot;))
+
+
+# ==============================================================
+# 2. Statevector
+# ==============================================================
+state = Statevector.from_instruction(qc)
+
+print(&quot;Statevector&quot;)
+display(state.draw(&quot;latex&quot;))
+
+
+# ==============================================================
+# 3. Density Matrix
+# ==============================================================
+density = DensityMatrix(state)
+
+print(&quot;Density Matrix&quot;)
+display(density.draw(&quot;latex&quot;))
+
+
+# ==============================================================
+# 4. Bloch Sphere
+# ==============================================================
+print(&quot;Bloch Sphere&quot;)
+display(plot_bloch_multivector(state))
+
+
+# ==============================================================
+# 5. QSphere
+# ==============================================================
+print(&quot;QSphere&quot;)
+display(plot_state_qsphere(state))
+
+
+# ==============================================================
+# 6. Unitary Operator
+# ==============================================================
+print(&quot;Unitary Operator&quot;)
+display(Operator(qc).data)
+
+
+# ==============================================================
+# 7. Add Measurements
+# ==============================================================
+qc_measure = qc.copy()
+qc_measure.measure([0, 1], [0, 1])
+
+
+# ==============================================================
+# 8. Sampler
+# ==============================================================
+sampler = StatevectorSampler()
+job = sampler.run([qc_measure], shots=1024)
+sampler_result = job.result()
+
+# Extract counts
+bitstrings = sampler_result[0].data.c.get_counts()
+
+print(&quot;Sampler Counts (1024 shots)&quot;)
+print(bitstrings)
+
+
+# ==============================================================
+# 9. Aer Simulator Counts
+# ==============================================================
+simulator = AerSimulator()
+
+result = simulator.run(qc_measure, shots=1024).result()
+
+counts = result.get_counts()
+
+print(&quot;\nAer Simulator Counts&quot;)
+print(counts)
+
+
+# ==============================================================
+# 10. Histogram
+# ==============================================================
+print(&quot;Measurement Histogram&quot;)
+display(plot_histogram(counts))</code></pre>
             </div>
         </div>
         
@@ -419,12 +540,9 @@ print("\\nShot Measurement Counts (1024 shots):", counts)
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-            <li>Einstein, A., Podolsky, B., &amp; Rosen, N. (1935). Can quantum-mechanical description of physical reality be considered complete? <em>Physical Review</em>, 47(10), 777.</li>
-            <li>Kaye, P., Laflamme, R., &amp; Mosca, M. (2007). <em>An Introduction to Quantum Computing</em>. Oxford University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#bell-state" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

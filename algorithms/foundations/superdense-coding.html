@@ -174,58 +174,59 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Sharing Entanglement</h3>
-        <p>The protocol begins with the preparation of the Bell state \(|\Phi^+\rangle\) shared between Alice and Bob:</p>
-        <div class="math-container">
-            <p>\(|\psi_0\rangle = |\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\)</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Entanglement Distribution</h3>
+        <p>Superdense coding allows Alice to transmit two classical bits of information to Bob by sending only a single physical qubit. The protocol begins with Alice and Bob sharing a maximally entangled Bell state:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Phi^+\rangle = \frac{1}{\sqrt{2}} (|0_A 0_B\rangle + |1_A 1_B\rangle)
+            \]</p>
         </div>
-        <p>Alice possesses the first qubit (left), and Bob possesses the second (right).</p>
+        <p>Alice possesses qubit $A$ and Bob possesses qubit $B$.</p>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Encoding the Message</h3>
-        <p>Alice applies a unitary operation to her qubit based on the two-bit message she wishes to send. This transforms the global state:</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>Message <code>00</code> (Apply \(I\)):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\((I \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle) = |\Phi^+\rangle\)</p>
-                </div>
-            </li>
-            <li><strong>Message <code>01</code> (Apply \(X\)):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\((X \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|10\rangle + |01\rangle) = |\Psi^+\rangle\)</p>
-                </div>
-            </li>
-            <li><strong>Message <code>10</code> (Apply \(Z\)):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\((Z \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle - |11\rangle) = |\Phi^-\rangle\)</p>
-                </div>
-            </li>
-            <li><strong>Message <code>11</code> (Apply \(Z\) then \(X\)):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\((XZ \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|10\rangle - |01\rangle) = |\Psi^-\rangle\)</p>
-                </div>
-            </li>
-        </ul>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 3: Decoding the Message</h3>
-        <p>Alice sends her qubit to Bob, who now applies a \(CX\) gate (with Alice's qubit as control and his as target), followed by a Hadamard gate on Alice's qubit.<br>Let us trace the evolution for the encoded message <code>01</code> (\(|\Psi^+\rangle\)):</p>
-        <ol style="line-height: 1.6; margin-left: 1.5rem;">
-            <li><strong>Apply \(CX\):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\(CX \left( \frac{1}{\sqrt{2}}(|10\rangle + |01\rangle) \right) = \frac{1}{\sqrt{2}}(|11\rangle + |01\rangle) = \frac{1}{\sqrt{2}}(|1\rangle + |0\rangle) \otimes |1\rangle\)</p>
-                </div>
-            </li>
-            <li><strong>Apply Hadamard to Qubit 0:</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\((H \otimes I) \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \otimes |1\rangle \right) = |0\rangle \otimes |1\rangle = |01\rangle\)</p>
-                </div>
-            </li>
-        </ol>
+        <h3 style="margin-top: 1.5rem;">Step 2: Local Pauli Encoding</h3>
+        <p>Alice wishes to transmit a 2-bit classical message $m_1 m_2 \in \{00, 01, 10, 11\}$. She applies a specific Pauli operator to her local qubit $A$ based on the message:</p>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Measuring the two qubits in the computational basis perfectly yields the classical string <code>01</code> with \(100\%\) probability. This deterministically works for all four encoded states.</p>
+        <p style="margin-top: 0.5rem;">• <strong>00 (Apply I):</strong> $|\psi_{00}\rangle = |\Phi^+\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |11\rangle)$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>01 (Apply Z):</strong> $|\psi_{01}\rangle = (Z \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}} (|00\rangle - |11\rangle) = |\Phi^-\rangle$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>10 (Apply X):</strong> $|\psi_{10}\rangle = (X \otimes I)|\Phi^+\rangle = \frac{1}{\sqrt{2}} (|10\rangle + |01\rangle) = |\Psi^+\rangle$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>11 (Apply Y):</strong> $|\psi_{11}\rangle = (Y \otimes I)|\Phi^+\rangle = \frac{i}{\sqrt{2}} (-|10\rangle + |01\rangle) \propto |\Psi^-\rangle$</p>
+        <p>By acting only on her qubit, Alice deterministically cycles the global entangled state into one of the four orthogonal Bell states.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Qubit Transmission & Decoding</h3>
+        <p>Alice transmits her single physical qubit $A$ to Bob. Bob now holds both qubits of the entangled pair. He applies the inverse Bell state generation circuit to decode the state back into the computational basis.</p>
+        <p>He first applies a CX gate (control $A$, target $B$), effectively untangling the qubits:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            CX |\Phi^+\rangle = \frac{1}{\sqrt{2}} (|00\rangle + |10\rangle) = \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle) \otimes |0\rangle
+            \]</p>
+        </div>
+        <p>Next, he applies a Hadamard gate to qubit $A$ to reverse the superposition:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            (H \otimes I) \left( \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle) \otimes |0\rangle \right) = |00\rangle
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Conclusion</h3>
+        <p>Measuring the two qubits in the computational basis deterministically yields the classical 2-bit string $m_1 m_2$.</p>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Alice successfully transmitted two bits of classical information by interacting with and transmitting only one quantum bit, exploiting the non-local properties of the shared entanglement.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -251,50 +252,182 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">Quantum Circuit
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-1.png" alt="Notebook output"><pre class="notebook-output-text">Statevector
+</pre><div class="notebook-output-math">$$ |01\rangle$$</div><pre class="notebook-output-text">Density Matrix
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+0 & 0 & 0 & 0  \\
+ 0 & 1 & 0 & 0  \\
+ 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">Bloch Sphere
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-2.png" alt="Notebook output"><pre class="notebook-output-text">QSphere
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-3.png" alt="Notebook output"><pre class="notebook-output-text">Unitary Operator
+</pre><pre class="notebook-output-text">array([[0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j],
+       [1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
+       [0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j],
+       [0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j]])</pre><pre class="notebook-output-text">Sampler Counts
+{&#x27;01&#x27;: 1024}
+
+Aer Simulator Counts
+{&#x27;01&#x27;: 1024}
+Measurement Histogram
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-4.png" alt="Notebook output">
+            </div>
+        </div>
+        
             <div class="code-content">
-<pre><code>import numpy as np
+<pre><code>from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.visualization import (
+    plot_histogram,
+    plot_bloch_multivector,
+    plot_state_qsphere
+)
+from qiskit.primitives import StatevectorSampler
+from qiskit_aer import AerSimulator
+from IPython.display import display
 
-def simulate_superdense_coding(message):
-    \"\"\"
-    Simulates Superdense Coding using pure NumPy matrix multiplication.
-    message: string '00', '01', '10', or '11'
-    \"\"\"
-    I = np.eye(2, dtype=complex)
-    X = np.array([[0, 1], [1, 0]], dtype=complex)
-    Z = np.array([[1, 0], [0, -1]], dtype=complex)
-    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
-    CX = np.array([[1, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0]], dtype=complex)
 
-    # 1. Shared Entanglement (Phi+)
-    phi_plus = np.array([[1/np.sqrt(2)], [0], [0], [1/np.sqrt(2)]])
+# ---------------------------------------------------------
+# Superdense Coding Circuit
+# ---------------------------------------------------------
+def superdense_coding(message=&quot;00&quot;):
 
-    # 2. Alice's Encoding
-    encode_gate = I
-    if message == '01':
-        encode_gate = X
-    elif message == '10':
-        encode_gate = Z
-    elif message == '11':
-        encode_gate = np.dot(X, Z) # Apply Z then X
+    qc = QuantumCircuit(2, 2)
 
-    # Apply Alice's gate to her qubit (tensor with Identity for Bob's qubit)
-    psi_encoded = np.dot(np.kron(encode_gate, I), phi_plus)
+    # -----------------------------------------------------
+    # Step 1 : Create Bell Pair
+    # -----------------------------------------------------
+    qc.h(0)
+    qc.cx(0, 1)
 
-    # 3. Bob's Decoding
-    # Apply CX
-    psi_decoded = np.dot(CX, psi_encoded)
-    # Apply H to Qubit 0
-    psi_final = np.dot(np.kron(H, I), psi_decoded)
+    qc.barrier(label=&quot;Bell Pair&quot;)
 
-    # 4. Measurement
-    probabilities = np.abs(psi_final.flatten())**2
-    state_names = ['00', '01', '10', '11']
-    
-    return dict(zip(state_names, np.round(probabilities, 5)))
+    # -----------------------------------------------------
+    # Step 2 : Alice Encodes Two Classical Bits
+    # -----------------------------------------------------
+    if message == &quot;00&quot;:
+        pass
+    elif message == &quot;01&quot;:
+        qc.x(0)
+    elif message == &quot;10&quot;:
+        qc.z(0)
+    elif message == &quot;11&quot;:
+        qc.z(0)
+        qc.x(0)
 
-# Example
-print("Transmitted Message '10':", simulate_superdense_coding('10'))
-</code></pre>
+    qc.barrier(label=&quot;Encoding&quot;)
+
+    # -----------------------------------------------------
+    # Step 3 : Bob Decodes
+    # -----------------------------------------------------
+    qc.cx(0, 1)
+    qc.h(0)
+
+    return qc
+
+
+# =========================================================
+# Choose Message
+# =========================================================
+message = &quot;10&quot;
+
+qc = superdense_coding(message)
+
+
+# =========================================================
+# 1. Circuit Diagram
+# =========================================================
+print(&quot;Quantum Circuit&quot;)
+display(qc.draw(&quot;mpl&quot;))
+
+
+# =========================================================
+# 2. Statevector
+# =========================================================
+state = Statevector.from_instruction(qc)
+
+print(&quot;Statevector&quot;)
+display(state.draw(&quot;latex&quot;))
+
+
+# =========================================================
+# 3. Density Matrix
+# =========================================================
+density = DensityMatrix(state)
+
+print(&quot;Density Matrix&quot;)
+display(density.draw(&quot;latex&quot;))
+
+
+# =========================================================
+# 4. Bloch Sphere
+# =========================================================
+print(&quot;Bloch Sphere&quot;)
+display(plot_bloch_multivector(state))
+
+
+# =========================================================
+# 5. QSphere
+# =========================================================
+print(&quot;QSphere&quot;)
+display(plot_state_qsphere(state))
+
+
+# =========================================================
+# 6. Unitary Operator
+# =========================================================
+print(&quot;Unitary Operator&quot;)
+display(Operator(qc).data)
+
+
+# =========================================================
+# 7. Measurement Circuit
+# =========================================================
+qc_measure = qc.copy()
+qc_measure.measure([0, 1], [0, 1])
+
+
+# =========================================================
+# 8. Sampler
+# =========================================================
+sampler = StatevectorSampler()
+
+job = sampler.run([qc_measure], shots=1024)
+
+sampler_result = job.result()
+
+sampler_counts = sampler_result[0].data.c.get_counts()
+
+print(&quot;Sampler Counts&quot;)
+print(sampler_counts)
+
+
+# =========================================================
+# 9. Aer Simulator
+# =========================================================
+simulator = AerSimulator()
+
+result = simulator.run(qc_measure, shots=1024).result()
+
+counts = result.get_counts()
+
+print(&quot;\nAer Simulator Counts&quot;)
+print(counts)
+
+
+# =========================================================
+# 10. Histogram
+# =========================================================
+print(&quot;Measurement Histogram&quot;)
+display(plot_histogram(counts))</code></pre>
             </div>
         </div>
         
@@ -361,12 +494,9 @@ print("Measurement Counts:", result.get_counts())
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Bennett, C. H., &amp; Wiesner, S. J. (1992). Communication via one- and two-particle operators on Einstein-Podolsky-Rosen states. <em>Physical Review Letters</em>, 69(20), 2881.</li>
-            <li>Mattle, K., Weinfurter, H., Kwiat, P. G., &amp; Zeilinger, A. (1996). Dense coding in experimental quantum communication. <em>Physical Review Letters</em>, 76(25), 4656.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#superdense-coding" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

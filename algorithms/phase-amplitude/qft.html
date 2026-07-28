@@ -177,46 +177,73 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Definition of the QFT</h3>
-        <p>For an \(n\)-qubit state \(|x\rangle\) (where \(x\) is an integer from \(0\) to \(2^n-1\)), the QFT is defined as:</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Definition & Initial State</h3>
+        <p>The Quantum Fourier Transform (QFT) performs the discrete Fourier transform on the amplitudes of a quantum state. For an \(n\)-qubit system, the basis states are \(|x\rangle\) where \(x \in \{0, 1, \dots, 2^n - 1\}\).</p>
+        <p>The exact mathematical definition of the QFT acting on a basis state \(|x\rangle\) is:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(QFT|x\rangle = \frac{1}{\sqrt{2^n}} \sum_{y=0}^{2^n-1} e^{\frac{2\pi i x y}{2^n}} |y\rangle\)</p>
+            <p>\[
+            QFT|x\rangle = \frac{1}{\sqrt{2^n}} \sum_{y=0}^{2^n-1} e^{2\pi i \frac{xy}{2^n}} |y\rangle
+            \]</p>
         </div>
-        <p>This can be factored into a beautiful product state, which dictates the circuit design. Using binary fractional notation (\(0.x_1 x_2 \dots = x_1/2 + x_2/4 + \dots\)), the state becomes:</p>
+        <p>We represent \(x\) and \(y\) in binary: \(x = x_1 x_2 \dots x_n\) and \(y = y_1 y_2 \dots y_n\), where \(x = \sum_{k=1}^n x_k 2^{n-k}\).</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Factoring the Superposition</h3>
+        <p>The summation over \(y\) can be factored into a tensor product of single-qubit states by splitting the phase exponent.</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(QFT|x\rangle = \frac{1}{\sqrt{2^n}} \left( |0\rangle + e^{2\pi i 0.x_n} |1\rangle \right) \otimes \left( |0\rangle + e^{2\pi i 0.x_{n-1}x_n} |1\rangle \right) \otimes \dots \otimes \left( |0\rangle + e^{2\pi i 0.x_1x_2\dots x_n} |1\rangle \right)\)</p>
+            <p>\[
+            e^{2\pi i \frac{xy}{2^n}} = e^{2\pi i x \left(\sum_{k=1}^n y_k 2^{-k}\right)} = \prod_{k=1}^n e^{2\pi i x y_k 2^{-k}}
+            \]</p>
+        </div>
+        <p>Substituting this product back into the QFT definition allows us to separate the states of each qubit \(y_k \in \{0,1\}\):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            QFT|x\rangle = \frac{1}{\sqrt{2^n}} \bigotimes_{k=1}^n \left( \sum_{y_k \in \{0,1\}} e^{2\pi i x y_k 2^{-k}} |y_k\rangle \right)
+            \]</p>
+        </div>
+        <p>Expanding the inner sum (since \(y_k\) can only be 0 or 1), the \(|0\rangle\) term always has a phase of \(e^0 = 1\):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            QFT|x\rangle = \bigotimes_{k=1}^n \frac{|0\rangle + e^{2\pi i x 2^{-k}} |1\rangle}{\sqrt{2}}
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Evolving a 3-Qubit State</h3>
-        <p>Let the initial state be \(|x\rangle = |x_1 x_2 x_3\rangle\).</p>
-        <ol style="line-height: 1.6;">
-            <li><strong>Apply \(H\) to \(q_0\) (\(x_1\)):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\(|x_1 x_2 x_3\rangle \xrightarrow{H_0} \frac{1}{\sqrt{2}} \left( |0\rangle + e^{2\pi i 0.x_1} |1\rangle \right) \otimes |x_2 x_3\rangle\)</p>
-                </div>
-            </li>
-            <li><strong>Apply \(CP(\pi/2)\) controlled by \(q_1\) (\(x_2\)):</strong><br>
-                This adds a phase if both qubits are \(1\), modifying the phase of \(q_0\) to include \(x_2/4\).
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\(\xrightarrow{CP_{1,0}} \frac{1}{\sqrt{2}} \left( |0\rangle + e^{2\pi i 0.x_1 x_2} |1\rangle \right) \otimes |x_2 x_3\rangle\)</p>
-                </div>
-            </li>
-            <li><strong>Apply \(CP(\pi/4)\) controlled by \(q_2\) (\(x_3\)):</strong>
-                <div class="math-container" style="margin: 0.5rem 0;">
-                    <p>\(\xrightarrow{CP_{2,0}} \frac{1}{\sqrt{2}} \left( |0\rangle + e^{2\pi i 0.x_1 x_2 x_3} |1\rangle \right) \otimes |x_2 x_3\rangle\)</p>
-                </div>
-            </li>
-        </ol>
-        <p>We repeat this process for \(q_1\) (using \(H\) and one \(CP\) from \(q_2\)) and then for \(q_2\) (just an \(H\)).</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 3: SWAP and Final State</h3>
-        <p>The sequence above produces the correct product states, but in reverse order. Applying SWAP gates between \(q_0 \leftrightarrow q_2\) yields the exact mathematical definition outlined in Step 1.</p>
+        <h3 style="margin-top: 1.5rem;">Step 3: Phase Simplification & Binary Fractions</h3>
+        <p>The exponent \(x 2^{-k}\) represents a shift in the binary point. We discard integer portions since \(e^{2\pi i \times \text{integer}} = 1\), leaving only the fractional binary part.</p>
+        <p>Using the binary fraction notation \(0.x_m \dots x_n = \frac{x_m}{2} + \dots + \frac{x_n}{2^{n-m+1}}\), the product state perfectly aligns with the required phase shifts for each successive qubit:</p>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>If you input a computational basis state \(|x\rangle\) and apply the QFT, you produce a state with equal probability amplitudes across all \(2^n\) possible outcomes. Measuring the QFT directly yields a completely random bitstring. The QFT is almost never measured on its own; it is instead used as an internal transformation before an <em>Inverse QFT</em> translates the phases back into measurable probabilities.</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            QFT|x_1 x_2 \dots x_n\rangle = \frac{1}{\sqrt{2^n}} \left( |0\rangle + e^{2\pi i \, 0.x_n} |1\rangle \right) \otimes \left( |0\rangle + e^{2\pi i \, 0.x_{n-1}x_n} |1\rangle \right) \otimes \dots \otimes \left( |0\rangle + e^{2\pi i \, 0.x_1 x_2 \dots x_n} |1\rangle \right)
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Gate Implementation</h3>
+        <p>This precise product state is constructed sequentially in the quantum circuit using Hadamard gates (\(H\)) and controlled-phase rotations (\(R_k\)):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            R_k = \begin{bmatrix} 1 & 0 \\ 0 & e^{2\pi i / 2^k} \end{bmatrix}
+            \]</p>
+        </div>
+
+        <p style="margin-top: 0.5rem;">• <strong>Hadamard:</strong> Generates the \(|0\rangle + |1\rangle\) superposition and embeds the highest-order fractional bit.</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Controlled-\(R_k\):</strong> Successively layers the lower-order fractional bits (\(0.0x_j\)) onto the phase by conditional rotation from neighbouring qubits.</p>
+        <p>After processing all \(n\) qubits, a final layer of SWAP gates reverses the qubit ordering to perfectly match the theoretical QFT output state.</p>
+
     </section>
 
     <section class="content-section">
@@ -242,34 +269,137 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 8x8 unitary matrix describing the full QFT circuit:
+</pre><div class="notebook-output-math">$$
+U_{QFT} = 
+\begin{bmatrix}
+\frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
+ - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{\sqrt{2} i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{4} |000\rangle- \frac{\sqrt{2}}{4} |001\rangle- \frac{\sqrt{2} i}{4} |010\rangle+\frac{\sqrt{2} i}{4} |011\rangle+(- \frac{1}{4} + \frac{i}{4}) |100\rangle+(\frac{1}{4} - \frac{i}{4}) |101\rangle+(\frac{1}{4} + \frac{i}{4}) |110\rangle+(- \frac{1}{4} - \frac{i}{4}) |111\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+\frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8} & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i  \\
+ - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8} & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i  \\
+ - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8} & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i  \\
+ \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8} & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i  \\
+ -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & \frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8}  \\
+ 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8}  \\
+ 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8}  \\
+ -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;101&#x27;: 135, &#x27;001&#x27;: 112, &#x27;100&#x27;: 127, &#x27;110&#x27;: 110, &#x27;010&#x27;: 118, &#x27;000&#x27;: 134, &#x27;011&#x27;: 152, &#x27;111&#x27;: 136}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-4.png" alt="Notebook output">
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from IPython.display import display, Markdown
 
-def simulate_qft(n_qubits, input_state):
-    \"\"\"
-    Simulates the Quantum Fourier Transform matrix acting on a state.
-    \"\"\"
-    N = 2**n_qubits
-    
-    # Generate the QFT Matrix
-    omega = np.exp(2 * np.pi * 1j / N)
-    qft_matrix = np.zeros((N, N), dtype=complex)
-    
-    for row in range(N):
-        for col in range(N):
-            qft_matrix[row, col] = (omega ** (row * col)) / np.sqrt(N)
-            
-    # Apply to input state
-    state_vector = np.zeros((N, 1), dtype=complex)
-    state_vector[input_state] = 1.0
-    
-    transformed_state = np.dot(qft_matrix, state_vector)
-    
-    return transformed_state
+# ==========================================
+# CONFIGURATION
+# ==========================================
+initial_state_str = &quot;110&quot;  # Target state to transform
+n = len(initial_state_str)
 
-# Example: QFT on state |1> for 3 qubits
-print("Transformed State (phases): \n", np.round(simulate_qft(3, 1), 3))
-</code></pre>
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(n, name=&quot;q&quot;)
+cr = ClassicalRegister(n, name=&quot;c&quot;)
+qc = QuantumCircuit(qr, cr)
+
+# 2. Initialisation
+# Reversing the string to match Qiskit&#x27;s little-endian ordering
+for i, digit in enumerate(reversed(initial_state_str)):
+    if digit == &#x27;1&#x27;:
+        qc.x(i)
+    elif digit != &#x27;0&#x27;:
+        raise ValueError(&quot;Invalid binary digit! Use only 0 or 1.&quot;)
+qc.barrier(label=&quot;Init&quot;)
+
+# 3. Apply QFT
+for i in range(n):
+    qc.h(i)
+    for j in range(i + 1, n):
+        # Phase is pi / 2^(distance)
+        theta = np.pi / (2**(j - i))
+        qc.cp(theta, j, i)
+    qc.barrier(label=f&quot;QFT q{i}&quot;)
+
+# Swap qubits to match mathematical ordering
+for i in range(n // 2):
+    qc.swap(i, n - i - 1)
+qc.barrier(label=&quot;QFT Complete&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+unitary = Operator(qc)
+final_state = Statevector(qc)
+final_density = DensityMatrix(qc)
+
+# 4. Measurement
+qc.measure(qr, cr)
+
+# 5. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;QFT Analysis for Initial State: $|{initial_state_str}\\rangle$&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+if n &lt;= 3: 
+    print(f&quot;The {2**n}x{2**n} unitary matrix describing the full QFT circuit:&quot;)
+    display(array_to_latex(unitary.data, prefix=&quot;U_{QFT} = &quot;, max_size=16))
+else:
+    print(f&quot;Unitary matrix omitted: {n} qubits results in a matrix too large for clean display.&quot;)
+
+display(Markdown(&quot;3. Quantum State Representation&quot;))
+print(&quot;Exact Statevector prior to measurement:&quot;)
+display(final_state.draw(&#x27;latex&#x27;))
+
+print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
+display(final_density.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;4. State Visualisation&quot;))
+print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(final_state))
+
+print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(final_state))
+
+display(Markdown(&quot;5. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))</code></pre>
             </div>
         </div>
         
@@ -330,11 +460,9 @@ print(circuit.draw(output='text'))
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Coppersmith, D. (1994). An approximate Fourier transform useful in quantum factoring. <em>arXiv preprint quant-ph/0201067</em>.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#qft" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

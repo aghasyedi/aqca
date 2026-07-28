@@ -176,48 +176,86 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
-        <p>We start with \(n\) input qubits in \(|0\rangle\) and one target qubit in \(|1\rangle\):</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
+        <p>The Bernstein-Vazirani algorithm aims to find a hidden string \(s \in \{0, 1\}^n\) from an oracle that computes \(f(x) = s \cdot x \pmod 2\) using only a single query.</p>
+        <p>We start with an \(n\)-qubit input register and a 1-qubit ancilla:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = |0\rangle^{\otimes n} \otimes |1\rangle\)</p>
+            <p>\[
+            |\psi_0\rangle = |0\rangle^{\otimes n} |1\rangle
+            \]</p>
+        </div>
+        <p>Applying Hadamard gates to all qubits prepares the superposition and the phase-kickback ancilla state \(|-\rangle\):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_1\rangle = (H^{\otimes n} \otimes H) |\psi_0\rangle = \frac1{\sqrt{2^n}} \sum_x |x\rangle \otimes |-\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Hadamard Gates</h3>
-        <p>Applying \(H\) to all qubits creates an equal superposition over all \(x \in \{0,1\}^n\), and places the target in the \(|-\rangle\) state:</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Oracle Evaluation & Phase Kickback</h3>
+        <p>The oracle \(U_f\) evaluates \(f(x) = s \cdot x\) and maps the result via phase kickback:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_1\rangle = (H^{\otimes n} \otimes H) |\psi_0\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle \otimes |-\rangle\)</p>
+            <p>\[
+            U_f (|x\rangle|-\rangle) = (-1)^{f(x)} |x\rangle|-\rangle = (-1)^{s\cdot x} |x\rangle|-\rangle
+            \]</p>
+        </div>
+        <p>Applying this to the full state directly encodes the hidden string \(s\) into the phases of the superposition:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_2\rangle = \frac1{\sqrt{2^n}} \sum_x (-1)^{s\cdot x} |x\rangle |-\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: The Oracle Query & Phase Kickback</h3>
-        <p>Applying the oracle \(U_f\) shifts the phase of each computational basis state \(|x\rangle\) by \((-1)^{f(x)}\). Since \(f(x) = s \cdot x\):</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Interference Transform</h3>
+        <p>A final Hadamard transform \(H^{\otimes n}\) is applied to the input register. Since \(H^{\otimes n}|x\rangle = \frac1{\sqrt{2^n}} \sum_z (-1)^{x\cdot z} |z\rangle\):</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = U_f |\psi_1\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} (-1)^{s \cdot x} |x\rangle \otimes |-\rangle\)</p>
+            <p>\[
+            |\psi_3\rangle = \frac1{2^n} \sum_x \sum_z (-1)^{s\cdot x} (-1)^{x\cdot z} |z\rangle |-\rangle
+            \]</p>
+        </div>
+        <p>By combining the exponents as \((-1)^{x\cdot(s\oplus z)}\), we group the amplitudes for each measurement state \(|z\rangle\):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \sum_z \left[ \frac1{2^n} \sum_x (-1)^{x\cdot(s\oplus z)} \right] |z\rangle |-\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Final Interference</h3>
-        <p>We apply \(H^{\otimes n}\) to the input register. The standard mathematical action of \(H^{\otimes n}\) on any state is to transform it according to the rule \(H^{\otimes n}|y\rangle = \frac{1}{\sqrt{2^n}} \sum_{z} (-1)^{y \cdot z} |z\rangle\). Applying this to our current state gives:</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Deterministic Recovery</h3>
+        <p>The amplitude for any state \(|z\rangle\) depends on the inner sum:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_3\rangle = \left( \frac{1}{2^n} \sum_{x=0}^{2^n-1} \sum_{z=0}^{2^n-1} (-1)^{s \cdot x} (-1)^{x \cdot z} |z\rangle \right) \otimes |-\rangle\)</p>
-        </div>
-        <p>We can combine the exponents: \((-1)^{s \cdot x + x \cdot z} = (-1)^{x \cdot (s \oplus z)}\).</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_3\rangle = \left( \frac{1}{2^n} \sum_{z=0}^{2^n-1} \left[ \sum_{x=0}^{2^n-1} (-1)^{x \cdot (s \oplus z)} \right] |z\rangle \right) \otimes |-\rangle\)</p>
-        </div>
-        <p>Look at the inner sum: \(\sum_x (-1)^{x \cdot (s \oplus z)}\).</p>
-        <ul style="line-height: 1.6;">
-            <li>If \(z = s\), then \(s \oplus z = 0\). The sum becomes \(\sum_x (-1)^0 = \sum_x 1 = 2^n\).</li>
-            <li>If \(z \neq s\), the positive and negative terms cancel each other out perfectly, and the sum is \(0\).</li>
-        </ul>
-        <p>Therefore, the entire input state collapses deterministically into the state \(|s\rangle\):</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_3\rangle = |s\rangle \otimes |-\rangle\)</p>
+            <p>\[
+            A(z) = \frac1{2^n} \sum_x (-1)^{x\cdot(s\oplus z)}
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>When we measure the input register in the computational basis, we will observe the secret string \(s\) with \(100\%\) probability.</p>
+        <p style="margin-top: 0.5rem;">• <strong>Constructive Interference:</strong> If \(z = s\), then \(s \oplus z = 0\), and the sum evaluates to \(\frac{2^n}{2^n} = 1\).</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>Destructive Interference:</strong> If \(z \neq s\), the sum exactly cancels out to \(0\).</p>
+        <p>Thus, the entire state collapses deterministically to the hidden string:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = |s\rangle |-\rangle
+            \]</p>
+        </div>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Measuring the input register will return the exact hidden string \(s\) with 100% certainty after just one query.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -243,63 +281,133 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;1011&#x27;: 1024}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Success: 100% of measurements returned &#x27;1011&#x27;, which perfectly matches the secret string!
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from IPython.display import display, Markdown
 
-def simulate_bernstein_vazirani(secret_string):
-    \"\"\"
-    Simulates a 2-qubit input (+1 ancilla) Bernstein-Vazirani algorithm using NumPy.
-    secret_string: A 2-bit string, e.g., '10', '11'
-    \"\"\"
-    n = len(secret_string)
-    if n != 2: raise ValueError("This NumPy scratch example is hardcoded for n=2.")
-    
-    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
-    I = np.eye(2, dtype=complex)
-    
-    # Tensored Hadamards
-    H3 = np.kron(np.kron(H, H), H)
-    H_in = np.kron(np.kron(H, H), I)
-    
-    # 1. Initialise |00>|1>
-    state_001 = np.zeros((8, 1), dtype=complex)
-    state_001[1] = 1.0  # |001>
-    
-    # 2. H on all qubits
-    psi_1 = np.dot(H3, state_001)
-    
-    # 3. Construct and apply Oracle based on secret string
-    U_f = np.eye(8, dtype=complex)
-    
-    # Matrix construction for CNOTs
-    # In a real implementation, you build the 8x8 matrix by tensoring the 
-    # control conditions. For brevity in this simulation, we compute the output manually:
-    psi_2 = np.zeros_like(psi_1)
-    for i in range(8):
-        # binary representation: input q0, input q1, target q2
-        binary = format(i, '03b')
-        x0, x1, y = int(binary[0]), int(binary[1]), int(binary[2])
-        s0, s1 = int(secret_string[0]), int(secret_string[1])
-        
-        # f(x) = s dot x mod 2
-        f_x = (s0 * x0 + s1 * x1) % 2
-        new_y = y ^ f_x
-        
-        new_index = int(f"{x0}{x1}{new_y}", 2)
-        psi_2[new_index] += psi_1[i]
-        
-    # 4. Final H on input qubits
-    psi_final = np.dot(H_in, psi_2)
-    
-    # 5. Find highest probability state
-    probs = np.abs(psi_final.flatten())**2
-    measured_index = np.argmax(probs)
-    measured_binary = format(measured_index, '03b')[:2] # Strip ancilla
-    
-    return measured_binary
+# ==========================================
+# CONFIGURATION
+# ==========================================
+secret_string = &quot;1011&quot;
+n = len(secret_string)
 
-print("Hidden String '11' Found:", simulate_bernstein_vazirani('11'))
-</code></pre>
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(n + 1, name=&quot;q&quot;)
+cr = ClassicalRegister(n, name=&quot;c&quot;)
+qc = QuantumCircuit(qr, cr)
+
+# 2. Initialisation
+qc.x(n) # Prepare target qubit in |1&gt;
+for i in range(n + 1):
+    qc.h(i) # Apply Hadamard to all qubits
+qc.barrier(label=&quot;Init&quot;)
+
+# 3. Oracle Construction (f(x) = s * x)
+# Reversing string for Qiskit&#x27;s endianness (q_0 is the rightmost bit)
+reversed_secret = secret_string[::-1]
+for qubit in range(n):
+    if reversed_secret[qubit] == &#x27;1&#x27;:
+        qc.cx(qubit, n)
+qc.barrier(label=&quot;Oracle&quot;)
+
+# 4. Final Interference
+for i in range(n):
+    qc.h(i)
+qc.barrier(label=&quot;Interference&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+unitary = Operator(qc)
+final_state = Statevector(qc)
+final_density = DensityMatrix(qc)
+
+# 5. Measurement (measure only the input register)
+for i in range(n):
+    qc.measure(i, i)
+
+# 6. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;Bernstein-Vazirani Analysis: Secret = &#x27;{secret_string}&#x27;&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+# Guardrail to prevent Jupyter output crashes on large matrices
+if n &lt;= 2: 
+    print(f&quot;The {2**(n+1)}x{2**(n+1)} unitary matrix describing the full circuit:&quot;)
+    display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;, max_size=16))
+else:
+    print(f&quot;Unitary matrix omitted: {n} input qubits ({n+1} total) results in a matrix too large for clean display.&quot;)
+
+display(Markdown(&quot;3. Quantum State Representation&quot;))
+print(&quot;Exact Statevector prior to measurement:&quot;)
+display(final_state.draw(&#x27;latex&#x27;))
+
+print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
+display(final_density.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;4. State Visualisation&quot;))
+print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(final_state))
+
+print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(final_state))
+
+display(Markdown(&quot;5. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# 6. Final Verification Logic
+display(Markdown(&quot;6. Verification&quot;))
+measured_bitstring = list(counts.keys())[0]
+
+if measured_bitstring == secret_string:
+    print(f&quot;Success: 100% of measurements returned &#x27;{measured_bitstring}&#x27;, which perfectly matches the secret string!&quot;)
+else:
+    print(f&quot;Error: Measured &#x27;{measured_bitstring}&#x27;, expected &#x27;{secret_string}&#x27;.&quot;)</code></pre>
             </div>
         </div>
         
@@ -376,11 +484,9 @@ print(f"Measured string: {list(counts.keys())[0]}")
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Bernstein, E., &amp; Vazirani, U. (1993). Quantum complexity theory. <em>Proceedings of the 25th Annual ACM Symposium on Theory of Computing</em>, 11–20.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#bernstein-vazirani" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

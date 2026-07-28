@@ -36,18 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // 3. Highlight current page
-    const currentPath = window.location.pathname;
+    // Compare full URLs without hash or search to avoid relative path issues (like ../../)
+    const currentUrl = window.location.href.split('#')[0].split('?')[0];
     const navLinks = document.querySelectorAll('.nav-link');
     
     navLinks.forEach(link => {
-        const linkPath = link.getAttribute('href');
-        // Simple matching logic (could be improved for complex paths)
-        if (linkPath && currentPath.endsWith(linkPath) && linkPath !== '/' && linkPath !== '#') {
+        if (!link.href) return;
+        const linkUrl = link.href.split('#')[0].split('?')[0];
+        
+        if (linkUrl === currentUrl) {
             link.classList.add('active');
             
             // Expand parent group if inside a subgroup
             const subgroup = link.closest('.nav-subgroup');
             if (subgroup) {
+                subgroup.style.display = 'block';
                 const toggle = subgroup.previousElementSibling;
                 if (toggle && toggle.classList.contains('nav-group-toggle')) {
                     toggle.setAttribute('aria-expanded', 'true');

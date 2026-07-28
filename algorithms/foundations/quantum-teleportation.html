@@ -175,74 +175,54 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Initial State</h3>
-        <p>Alice wants to teleport an unknown pure state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\).<br>The system starts with this state and a pre-shared Bell pair \(|\Phi^+\rangle\) between Alice (\(q_0\)) and Bob (\(q_1\)):</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = |\psi\rangle \otimes |\Phi^+\rangle = (\alpha|0\rangle + \beta|1\rangle) \otimes \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\)</p>
-        </div>
-        <p>Expanding this three-qubit state yields:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = \frac{1}{\sqrt{2}} \left[ \alpha|000\rangle + \alpha|011\rangle + \beta|100\rangle + \beta|111\rangle \right]\)</p>
-        </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Alice Applies CNOT</h3>
-        <p>Alice applies a \(CX\) gate using her message qubit \(|\psi\rangle\) as the control and her entangled half (\(q_0\)) as the target.</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_1\rangle = \frac{1}{\sqrt{2}} \left[ \alpha|000\rangle + \alpha|011\rangle + \beta|110\rangle + \beta|101\rangle \right]\)</p>
-        </div>
+        <h3 style="margin-top: 1.5rem;">Step 1: State Preparation & Entanglement Sharing</h3>
+        <p>Quantum Teleportation allows Alice to transmit an unknown quantum state $|\psi\rangle_C = \alpha|0\rangle + \beta|1\rangle$ to Bob without physically sending the qubit.</p>
+        <p>Alice and Bob pre-share an entangled Bell state $|\Phi^+\rangle_{AB} = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$. The total tripartite initial state is:</p>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: Alice Applies Hadamard</h3>
-        <p>Alice applies a Hadamard gate to the message qubit:</p>
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = \frac{1}{2} \left[ \alpha(|0\rangle+|1\rangle)|00\rangle + \alpha(|0\rangle+|1\rangle)|11\rangle + \beta(|0\rangle-|1\rangle)|10\rangle + \beta(|0\rangle-|1\rangle)|01\rangle \right]\)</p>
+            <p>\[
+            |\Psi_0\rangle = |\psi\rangle_C \otimes |\Phi^+\rangle_{AB} = \frac{1}{\sqrt{2}} \Big( \alpha|000\rangle + \alpha|011\rangle + \beta|100\rangle + \beta|111\rangle \Big)
+            \]</p>
         </div>
-        <p>By rearranging and grouping the terms based on Alice's two qubits (the first two qubits), we reveal the state of Bob's qubit for each possible measurement outcome:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = \frac{1}{2} \left[ |00\rangle(\alpha|0\rangle + \beta|1\rangle) + |01\rangle(\alpha|1\rangle + \beta|0\rangle) + |10\rangle(\alpha|0\rangle - \beta|1\rangle) + |11\rangle(\alpha|1\rangle - \beta|0\rangle) \right]\)</p>
-        </div>
+        <p>Alice holds qubits $C$ and $A$, while Bob holds qubit $B$.</p>
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Measurement and Correction</h3>
-        <p>Alice measures her two qubits. Bob's qubit collapses into one of four states. He applies corrections based on the classical bits (\(c_1, c_0\)) Alice sends him:</p>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-            <thead>
-                <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
-                    <th style="padding: 0.5rem;">Alice Measures (\(c_1 c_0\))</th>
-                    <th style="padding: 0.5rem;">Bob's Resulting State</th>
-                    <th style="padding: 0.5rem;">Bob's Correction</th>
-                    <th style="padding: 0.5rem;">Final State</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>00</code></td>
-                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(I\) (Do nothing)</td>
-                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>01</code></td>
-                    <td style="padding: 0.5rem;">\(\alpha|1\rangle + \beta|0\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(X\) (Bit flip)</td>
-                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>10</code></td>
-                    <td style="padding: 0.5rem;">\(\alpha|0\rangle - \beta|1\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(Z\) (Phase flip)</td>
-                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.5rem;"><code>11</code></td>
-                    <td style="padding: 0.5rem;">\(\alpha|1\rangle - \beta|0\rangle\)</td>
-                    <td style="padding: 0.5rem;">Apply \(X\) then \(Z\)</td>
-                    <td style="padding: 0.5rem;">\(\alpha|0\rangle + \beta|1\rangle = |\psi\rangle\)</td>
-                </tr>
-            </tbody>
-        </table>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Bell-Basis Measurement</h3>
+        <p>Alice entangles her unknown qubit $C$ with her half of the Bell pair ($A$) by applying a CX gate (control $C$, target $A$) followed by a Hadamard gate on $C$.</p>
+        <p>This transformation effectively rewrites the total state in terms of the four possible Bell states for Alice's qubits ($C$ and $A$):</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\Psi_1\rangle = \frac{1}{2} \Big[ |\Phi^+\rangle_{CA}(\alpha|0\rangle + \beta|1\rangle)_B + |\Phi^-\rangle_{CA}(\alpha|0\rangle - \beta|1\rangle)_B + |\Psi^+\rangle_{CA}(\alpha|1\rangle + \beta|0\rangle)_B + |\Psi^-\rangle_{CA}(\alpha|1\rangle - \beta|0\rangle)_B \Big]
+            \]</p>
+        </div>
+        <p>Alice then measures her two qubits $C$ and $A$, instantly collapsing the state. She obtains two classical bits, $m_1 m_2$, which correspond to one of the four Bell states.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Classical Communication</h3>
+        <p>When Alice measures her qubits, Bob's qubit $B$ deterministically collapses into a state that is directly related to the original state $|\psi\rangle_C$, but distorted by a Pauli operator depending on Alice's measurement.</p>
+        <p>Alice sends her two classical bits ($m_1, m_2$) to Bob over a classical communication channel.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Conditional Pauli Correction</h3>
+        <p>Bob receives the classical bits and uses them to apply a conditional unitary correction to his qubit $B$:</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>00:</strong> Bob applies $I \to |\psi\rangle_B = \alpha|0\rangle + \beta|1\rangle$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>01:</strong> Bob applies $X \to X(\alpha|1\rangle + \beta|0\rangle) = \alpha|0\rangle + \beta|1\rangle$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>10:</strong> Bob applies $Z \to Z(\alpha|0\rangle - \beta|1\rangle) = \alpha|0\rangle + \beta|1\rangle$</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>11:</strong> Bob applies $XZ \to XZ(\alpha|1\rangle - \beta|0\rangle) = \alpha|0\rangle + \beta|1\rangle$</p>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Bob's qubit exactly matches Alice's original state $|\psi\rangle$. The state has been teleported. The original state at Alice's location was destroyed (satisfying the No-Cloning Theorem).</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -268,46 +248,133 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Initial Statevector (Qubit 0 prior to teleportation):
+</pre><div class="notebook-output-math">$$\frac{\sqrt{3}}{3} |0\rangle+\frac{\sqrt{6}}{3} |1\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix (Qubit 2 after corrections):
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+\frac{1}{3} & \frac{\sqrt{2}}{3}  \\
+ \frac{\sqrt{2}}{3} & \frac{2}{3}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Initial State (Bloch Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+Final State (Bloch Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-3.png" alt="Notebook output"><pre class="notebook-output-text">
+Final State (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-4.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;0 0 1&#x27;: 83, &#x27;1 1 0&#x27;: 167, &#x27;1 0 0&#x27;: 183, &#x27;0 1 1&#x27;: 76, &#x27;1 1 1&#x27;: 166, &#x27;1 0 1&#x27;: 178, &#x27;0 1 0&#x27;: 93, &#x27;0 0 0&#x27;: 78}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-5.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Teleportation Fidelity = 1.000000
+Success: The state was teleported perfectly.
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, partial_trace, state_fidelity
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from IPython.display import display, Markdown
 
-def simulate_teleportation(alpha, beta):
-    \"\"\"
-    Simulates Quantum Teleportation using pure NumPy matrix multiplication.
-    alpha, beta: Complex probability amplitudes of the initial state.
-    \"\"\"
-    I = np.eye(2, dtype=complex)
-    X = np.array([[0, 1], [1, 0]], dtype=complex)
-    Z = np.array([[1, 0], [0, -1]], dtype=complex)
-    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
-    
-    # 3-Qubit Identity
-    I_8 = np.eye(8, dtype=complex)
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(3, name=&quot;q&quot;)
+crz = ClassicalRegister(1, name=&quot;crz&quot;)
+crx = ClassicalRegister(1, name=&quot;crx&quot;)
+cr_final = ClassicalRegister(1, name=&quot;q2_meas&quot;)
+qc = QuantumCircuit(qr, crz, crx, cr_final)
 
-    # Prepare initial state: |psi> x |Phi+>
-    psi_in = np.array([[alpha], [beta]])
-    phi_plus = np.array([[1/np.sqrt(2)], [0], [0], [1/np.sqrt(2)]])
-    state_0 = np.kron(psi_in, phi_plus)
+# 2. Initialise Qubit 0 to the arbitrary state |ψ&gt;
+theta = 2 * np.arccos(1 / np.sqrt(3))
+qc.ry(theta, 0)
+qc.barrier(label=&quot;Init |ψ&gt;&quot;)
 
-    # Alice applies CX(0 -> 1)
-    # (Matrix formulation of CX on Q0, Q1 tensored with I on Q2 omitted for brevity in scratch code)
-    # The mathematical logic dictates Bob's state collapses based on Alice's measurement.
-    
-    # Simulating the post-measurement collapse for outcome '11'
-    # Bob's uncorrected state is (alpha|1> - beta|0>)
-    bob_uncorrected = np.array([[-beta], [alpha]]) 
-    
-    # Bob receives '11' and applies X then Z
-    bob_corrected = np.dot(Z, np.dot(X, bob_uncorrected))
-    
-    return bob_corrected
+# Create a standalone 1-qubit reference state for the fidelity check
+reference_circuit = QuantumCircuit(1)
+reference_circuit.ry(theta, 0)
+initial_state = Statevector(reference_circuit)
 
-# Example: Teleporting a specific state
-alpha_val = np.sqrt(0.8)
-beta_val = np.sqrt(0.2)
-teleported_state = simulate_teleportation(alpha_val, beta_val)
-print("Teleported State:\\n", teleported_state)
-</code></pre>
+
+# 3. Create shared Bell pair (|Φ+&gt;) between Alice (Q1) and Bob (Q2)
+qc.h(1)
+qc.cx(1, 2)
+qc.barrier(label=&quot;|Φ+&gt;&quot;)
+
+# 4. Alice encodes the state
+qc.cx(0, 1)
+qc.h(0)
+qc.barrier(label=&quot;Alice Enc&quot;)
+
+# 5. Alice measures her qubits
+qc.measure(0, crz)
+qc.measure(1, crx)
+qc.barrier(label=&quot;Measure&quot;)
+
+# 6. Bob applies dynamic corrections based on Alice&#x27;s classical bits
+with qc.if_test((crx, 1)):
+    qc.x(2)
+with qc.if_test((crz, 1)):
+    qc.z(2)
+qc.barrier(label=&quot;Bob Corr&quot;)
+
+# Save the full density matrix before the final measurement collapses it
+qc.save_density_matrix()
+
+# 7. Bob measures his qubit to verify the final state (optional, for histogram)
+qc.measure(2, cr_final)
+
+# 8. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Quantum State Representation&quot;))
+print(&quot;Initial Statevector (Qubit 0 prior to teleportation):&quot;)
+display(initial_state.draw(&#x27;latex&#x27;))
+
+# Extract Bob&#x27;s final state by tracing out Alice&#x27;s qubits (Q0 and Q1)
+rho_full = result.data()[&#x27;density_matrix&#x27;]
+rho_bob = partial_trace(rho_full, [0, 1])
+
+print(&quot;\nFinal DensityMatrix (Qubit 2 after corrections):&quot;)
+display(rho_bob.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;3. State Visualisation&quot;))
+print(&quot;Initial State (Bloch Sphere):&quot;)
+display(plot_bloch_multivector(initial_state))
+
+print(&quot;\nFinal State (Bloch Sphere):&quot;)
+display(plot_bloch_multivector(rho_bob))
+
+print(&quot;\nFinal State (Q-Sphere):&quot;)
+display(plot_state_qsphere(rho_bob))
+
+display(Markdown(&quot;4. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# Note: Operator(qc) is omitted here because mid-circuit measurements 
+# and dynamic resets make the overall circuit non-unitary.
+
+display(Markdown(&quot;5. Verification&quot;))
+fidelity = state_fidelity(initial_state, rho_bob)
+print(f&quot;Teleportation Fidelity = {fidelity:.6f}&quot;)
+if np.isclose(fidelity, 1.0):
+    print(&quot;Success: The state was teleported perfectly.&quot;)
+else:
+    print(&quot;Warning: Teleportation fidelity is less than 1.&quot;)</code></pre>
             </div>
         </div>
         
@@ -378,11 +445,9 @@ print(circuit.draw(output='text'))
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Bennett, C. H., Brassard, G., Crépeau, C., Jozsa, R., Peres, A., &amp; Wootters, W. K. (1993). Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels. <em>Physical Review Letters</em>, 70(13), 1895–1899.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#quantum-teleportation" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

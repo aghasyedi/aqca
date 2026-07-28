@@ -182,48 +182,68 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        
-        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation</h3>
-        <p>The system starts with the input qubit in \(|0\rangle\) and the target qubit flipped to \(|1\rangle\) using an \(X\) gate:</p>
+
+        <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Superposition</h3>
+        <p>Deutsch's algorithm determines if a 1-bit boolean function $f(x)$ is constant ($f(0) = f(1)$) or balanced ($f(0) \neq f(1)$) using only a single query.</p>
+        <p>We initialise two qubits: a query register in $|0\rangle$ and a target register in $|1\rangle$:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_0\rangle = |0\rangle \otimes |1\rangle\)</p>
+            <p>\[
+            |\psi_0\rangle = |0\rangle \otimes |1\rangle
+            \]</p>
+        </div>
+        <p>Applying Hadamard gates to both qubits creates a uniform superposition in the query register and a phase-kickback state $|-\rangle$ in the target register:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_1\rangle = \left(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\right) \otimes \left(\frac{|0\rangle - |1\rangle}{\sqrt{2}}\right) = \frac{1}{2} \Big( |0\rangle|0\rangle - |0\rangle|1\rangle + |1\rangle|0\rangle - |1\rangle|1\rangle \Big)
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 2: Applying the Hadamard Gates</h3>
-        <p>We apply Hadamard gates to both qubits to create the required superpositions:</p>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Oracle Evaluation & Phase Kickback</h3>
+        <p>We apply the quantum oracle $U_f$, which performs the reversible operation $U_f |x\rangle|y\rangle = |x\rangle|y \oplus f(x)\rangle$.</p>
+        <p>Because the target register is in the $|-\rangle$ state, the function value $f(x)$ is kicked back into the phase of the query register:</p>
+
         <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_1\rangle = (H \otimes H)|\psi_0\rangle = \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \right) \otimes \left( \frac{|0\rangle - |1\rangle}{\sqrt{2}} \right)\)</p>
+            <p>\[
+            |\psi_2\rangle = U_f |\psi_1\rangle = \left( \frac{(-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle}{\sqrt{2}} \right) \otimes |-\rangle
+            \]</p>
+        </div>
+        <p>The quantum information evaluating $f(0)$ and $f(1)$ has been computed simultaneously and encoded entirely within the relative phase.</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Interference Transform</h3>
+        <p>To extract this relative phase, we apply a second Hadamard gate to the query register:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            H \left( \frac{(-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle}{\sqrt{2}} \right) = \frac{1}{2} \Big[ (-1)^{f(0)}(|0\rangle + |1\rangle) + (-1)^{f(1)}(|0\rangle - |1\rangle) \Big]
+            \]</p>
+        </div>
+        <p>We can factor and simplify this expression:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \frac{1}{2} \Big[ (-1)^{f(0)} + (-1)^{f(1)} \Big] |0\rangle + \frac{1}{2} \Big[ (-1)^{f(0)} - (-1)^{f(1)} \Big] |1\rangle
+            \]</p>
         </div>
 
-        <h3 style="margin-top: 1.5rem;">Step 3: The Oracle Query & Phase Kickback</h3>
-        <p>We apply the oracle \(U_f\). Because the target qubit is in the \(|-\rangle\) state, the action \(y \oplus f(x)\) translates into a phase factor \((-1)^{f(x)}\) on the input state:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = U_f |\psi_1\rangle = \frac{1}{2} \left[ (-1)^{f(0)}|0\rangle + (-1)^{f(1)}|1\rangle \right] \otimes (|0\rangle - |1\rangle)\)</p>
-        </div>
-        <p>We can factor out \((-1)^{f(0)}\) from the input qubit:</p>
-        <div class="math-container" style="margin: 0.5rem 0;">
-            <p>\(|\psi_2\rangle = (-1)^{f(0)} \left( \frac{|0\rangle + (-1)^{f(0) \oplus f(1)}|1\rangle}{\sqrt{2}} \right) \otimes |-\rangle\)</p>
-        </div>
-        <ul style="line-height: 1.6;">
-            <li><strong>If Constant (\(f(0) = f(1)\)):</strong> \(f(0) \oplus f(1) = 0\), so \((-1)^0 = 1\). The input state is \(\frac{|0\rangle + |1\rangle}{\sqrt{2}} = |+\rangle\).</li>
-            <li><strong>If Balanced (\(f(0) \neq f(1)\)):</strong> \(f(0) \oplus f(1) = 1\), so \((-1)^1 = -1\). The input state is \(\frac{|0\rangle - |1\rangle}{\sqrt{2}} = |-\rangle\).</li>
-        </ul>
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Final Interference</h3>
-        <p>We apply a final Hadamard gate to the input qubit (\(q_0\)). The target qubit is ignored.</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>If Constant:</strong> \(H|+\rangle = |0\rangle\). (The global phase \((-1)^{f(0)}\) is physically unobservable).</li>
-            <li><strong>If Balanced:</strong> \(H|-\rangle = |1\rangle\).</li>
-        </ul>
+        <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Conclusion</h3>
+        <p>The probability amplitude determines the final state of the query register:</p>
 
-        <h3 style="margin-top: 1.5rem;">Measurement</h3>
-        <p>Measuring \(q_0\) in the computational basis perfectly yields:</p>
-        <ul style="line-height: 1.6;">
-            <li><code>0</code> with \(100\%\) probability if the function is <strong>constant</strong>.</li>
-            <li><code>1</code> with \(100\%\) probability if the function is <strong>balanced</strong>.</li>
-        </ul>
+        <p style="margin-top: 0.5rem;">• <strong>If $f$ is Constant ($f(0) = f(1)$):</strong> The $|0\rangle$ amplitudes constructively interfere, and the $|1\rangle$ amplitudes cancel out. The state is exactly $\pm|0\rangle$.</p>
+
+        <p style="margin-top: 0.5rem;">• <strong>If $f$ is Balanced ($f(0) \neq f(1)$):</strong> The $|0\rangle$ amplitudes destructively interfere, and the $|1\rangle$ amplitudes add together. The state is exactly $\pm|1\rangle$.</p>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Measuring the query register yields $0$ if the function is constant, and $1$ if the function is balanced. The algorithm evaluates a global property of the function with 100% certainty using a single query, demonstrating early quantum parallelism.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -255,48 +275,113 @@
                 <span>Python / NumPy</span>
                 <button>Copy Code</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 4x4 unitary matrix describing this specific oracle circuit:
+</pre><div class="notebook-output-math">$$
+U_{circuit} = 
+\begin{bmatrix}
+0 & \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0  \\
+ \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2}  \\
+ 0 & - \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0  \\
+ - \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2}  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01\rangle- \frac{\sqrt{2}}{2} |11\rangle$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts: {&#x27;1&#x27;: 1024}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-4.png" alt="Notebook output"><pre class="notebook-output-text">Conclusion: The measurement is 1. The function is BALANCED.
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, Operator
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from IPython.display import display, Markdown
 
-def simulate_deutsch(oracle_type):
-    \"\"\"
-    Simulates Deutsch's Algorithm using pure NumPy.
-    oracle_type: 'constant_0', 'constant_1', 'balanced_id', 'balanced_not'
-    \"\"\"
-    H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
-    I = np.eye(2, dtype=complex)
-    
-    # Oracles (acting on |input> (x) |target>)
-    oracles = {
-        'constant_0': np.eye(4, dtype=complex),
-        'constant_1': np.kron(I, np.array([[0, 1], [1, 0]], dtype=complex)), # X on target
-        'balanced_id': np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], dtype=complex), # CNOT
-        'balanced_not': np.array([[0, 1, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [0, 1, 0, 0]], dtype=complex) # Zero-controlled NOT
-    }
-    
-    U_f = oracles[oracle_type]
-    
-    # 1. Initialise |0>|1>
-    q0 = np.array([[1], [0]])
-    q1 = np.array([[0], [1]])
-    psi_0 = np.kron(q0, q1)
-    
-    # 2. Apply H to both
-    H2 = np.kron(H, H)
-    psi_1 = np.dot(H2, psi_0)
-    
-    # 3. Apply Oracle
-    psi_2 = np.dot(U_f, psi_1)
-    
-    # 4. Apply H to input qubit
-    psi_final = np.dot(np.kron(H, I), psi_2)
-    
-    # 5. Measure input qubit
-    prob_0 = np.abs(psi_final[0][0])**2 + np.abs(psi_final[1][0])**2
-    return 'Constant' if prob_0 > 0.99 else 'Balanced'
+# You can toggle this between &quot;balanced&quot; and &quot;constant&quot;
+oracle_type = &quot;balanced&quot; 
 
-print("Testing Balanced Oracle:", simulate_deutsch('balanced_id'))
-</code></pre>
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(2, name=&quot;q&quot;)
+cr = ClassicalRegister(1, name=&quot;c&quot;)
+qc = QuantumCircuit(qr, cr)
+
+# 2. Initialisation: Prepare target qubit (q1) in |-&gt; and query qubit (q0) in |+&gt;
+qc.x(1)
+qc.h(0)
+qc.h(1)
+qc.barrier(label=&quot;Init&quot;)
+
+# 3. Oracle Application
+if oracle_type == &quot;balanced&quot;:
+    qc.cx(0, 1)  # CNOT creates a balanced function (f(x) = x)
+elif oracle_type == &quot;constant&quot;:
+    pass         # Identity creates a constant function (f(x) = 0)
+qc.barrier(label=&quot;Oracle&quot;)
+
+# 4. Final Interference
+qc.h(0)
+qc.barrier(label=&quot;Interference&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+# We calculate the Unitary Operator and Statevector here because 
+# adding a measurement operation makes the circuit non-unitary.
+unitary = Operator(qc)
+final_state = Statevector(qc)
+
+# 5. Measurement
+qc.measure(0, cr)
+
+# 6. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;Deutsch Algorithm Analysis: {oracle_type.capitalize()} Oracle&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+print(&quot;The 4x4 unitary matrix describing this specific oracle circuit:&quot;)
+display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;))
+
+display(Markdown(&quot;3. Quantum State Representation&quot;))
+print(&quot;Exact Statevector prior to measurement:&quot;)
+display(final_state.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;4. State Visualisation&quot;))
+print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(final_state))
+
+print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(final_state))
+
+display(Markdown(&quot;5. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# Verification statement
+measured_bit = list(counts.keys())[0]
+if measured_bit == &#x27;1&#x27;:
+    print(&quot;Conclusion: The measurement is 1. The function is BALANCED.&quot;)
+else:
+    print(&quot;Conclusion: The measurement is 0. The function is CONSTANT.&quot;)</code></pre>
             </div>
         </div>
         
@@ -362,11 +447,9 @@ print("Result (0=Constant, 1=Balanced):", counts)
     </section>
     
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Deutsch, D. (1985). Quantum theory, the Church-Turing principle and the universal quantum computer. <em>Proceedings of the Royal Society of London. A. Mathematical and Physical Sciences</em>, 400(1818), 97–117.</li>
-            <li>Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#deutsch" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">

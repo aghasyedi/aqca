@@ -169,30 +169,70 @@
         </div>
     </section>
 
-    <section class="content-section">
+        <section class="content-section">
         <h2>4. Mathematical Proof & State Evolution</h2>
-        <div class="math-container">
-            <h3>Step 1: State Preparation</h3>
-            <p>We begin with three registers: an ancilla qubit, a clock register with \(t\) qubits, and a target register encoding \(|b\rangle\). Let \(|u_j\rangle\) be the eigenvectors of \(A\) with eigenvalues \(\lambda_j\). We can express \(|b\rangle\) in this eigenbasis: \(|b\rangle = \sum_j \beta_j |u_j\rangle\).</p>
-            <p>\(|\psi_0\rangle = |0\rangle_{anc} \otimes |0\rangle^{\otimes t}_{clock} \otimes \sum_j \beta_j |u_j\rangle\)</p>
 
-            <h3>Step 2: Quantum Phase Estimation (QPE)</h3>
-            <p>Applying QPE evaluates the Hamiltonian \(e^{i A t}\) conditionally on the clock register. Because \(|u_j\rangle\) are eigenvectors of \(A\), this writes the eigenvalues \(\lambda_j\) into the clock register:</p>
-            <p>\(|\psi_1\rangle = |0\rangle_{anc} \otimes \sum_j \beta_j |\lambda_j\rangle_{clock} \otimes |u_j\rangle\)</p>
+        <h3 style="margin-top: 1.5rem;">Step 1: Subsystem Initialisation & Spectral Decomposition</h3>
+        <p>The HHL algorithm solves the linear system $A\mathbf{x} = \mathbf{b}$ for a non-singular Hermitian matrix $A$. The goal is to prepare the quantum state $|x\rangle$ proportional to $A^{-1}|b\rangle$.</p>
+        <p>We initialise three registers: a 1-qubit ancilla ($|0\rangle_a$), a $t$-qubit clock register ($|0\rangle_c^{\otimes t}$), and a target register containing the state $|b\rangle$.</p>
+        <p>Because $A$ is Hermitian, it has an orthonormal eigenbasis $\{|u_j\rangle\}$ with eigenvalues $\lambda_j$. We decompose $|b\rangle = \sum_j \beta_j |u_j\rangle$, making the initial global state:</p>
 
-            <h3>Step 3: Controlled Ancilla Rotation</h3>
-            <p>We apply a controlled \(R_y\) rotation to the ancilla qubit. The angle of rotation depends on the value \(\lambda_j\) stored in the clock register. We rotate such that the amplitude of \(|1\rangle\) is \(C/\lambda_j\) (where \(C\) is a scaling constant chosen such that \(C \le \min |\lambda_j|\) to ensure the probability does not exceed 1).</p>
-            <p>\(|\psi_2\rangle = \sum_j \beta_j \left( \sqrt{1 - \frac{C^2}{\lambda_j^2}} |0\rangle_{anc} + \frac{C}{\lambda_j} |1\rangle_{anc} \right) \otimes |\lambda_j\rangle_{clock} \otimes |u_j\rangle\)</p>
-
-            <h3>Step 4: Inverse QPE (Uncomputation)</h3>
-            <p>We apply the exact inverse of the QPE sub-circuit. This erases the \(\lambda_j\) values from the clock register, returning it to \(|0\rangle^{\otimes t}\):</p>
-            <p>\(|\psi_3\rangle = \sum_j \beta_j \left( \sqrt{1 - \frac{C^2}{\lambda_j^2}} |0\rangle_{anc} + \frac{C}{\lambda_j} |1\rangle_{anc} \right) \otimes |0\rangle^{\otimes t}_{clock} \otimes |u_j\rangle\)</p>
-
-            <h3>Measurement and Post-Selection</h3>
-            <p>We measure the ancilla qubit. We only care about the outcome where the ancilla is \(|1\rangle\). If we measure \(|1\rangle\), the target register collapses to:</p>
-            <p>\(|x\rangle = \frac{1}{\mathcal{N}} \sum_j \beta_j \frac{C}{\lambda_j} |u_j\rangle\)</p>
-            <p>Because \(A^{-1} = \sum_j \frac{1}{\lambda_j} |u_j\rangle\langle u_j|\), this resulting state is mathematically exactly proportional to \(A^{-1}|b\rangle\). We have solved the linear system.</p>
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_0\rangle = |0\rangle_a \otimes |0\rangle_c^{\otimes t} \otimes \sum_j \beta_j |u_j\rangle
+            \]</p>
         </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 2: Quantum Phase Estimation (Eigenvalue Encoding)</h3>
+        <p>We apply Quantum Phase Estimation (QPE) using the unitary $e^{i A \tau}$ to extract the eigenvalues of $A$ and store them in the clock register.</p>
+        <p>Because QPE is linear, it acts on the superposition of eigenvectors in $|b\rangle$ simultaneously, heavily entangling the target and clock registers:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_1\rangle = |0\rangle_a \otimes \sum_j \beta_j |\lambda_j\rangle_c \otimes |u_j\rangle
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 3: Controlled Eigenvalue Inversion (Ancilla Rotation)</h3>
+        <p>The mathematical core of HHL is to invert the eigenvalues ($\beta_j \to \frac{\beta_j}{\lambda_j}$). Since quantum operations must be unitary, we perform a controlled-$R_y$ rotation on the ancilla qubit, conditioned on the eigenvalue $\lambda_j$ in the clock register:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            R_y(\theta_j) |0\rangle_a = \sqrt{1 - \left(\frac{C}{\lambda_j}\right)^2} |0\rangle_a + \frac{C}{\lambda_j} |1\rangle_a
+            \]</p>
+        </div>
+        <p>where $C$ is a normalization constant. Applying this yields a tripartite entangled state:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_2\rangle = \sum_j \beta_j \left( \sqrt{1 - \frac{C^2}{\lambda_j^2}} |0\rangle_a + \frac{C}{\lambda_j} |1\rangle_a \right) \otimes |\lambda_j\rangle_c \otimes |u_j\rangle
+            \]</p>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <h3 style="margin-top: 1.5rem;">Step 4: Inverse QPE & Post-Selection</h3>
+        <p>To decouple the clock register, we apply Inverse QPE ($QPE^\dagger$), erasing the eigenvalues and returning the clock to $|0\rangle_c^{\otimes t}$:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |\psi_3\rangle = \sum_j \beta_j \left( \sqrt{1 - \frac{C^2}{\lambda_j^2}} |0\rangle_a + \frac{C}{\lambda_j} |1\rangle_a \right) \otimes |0\rangle_c^{\otimes t} \otimes |u_j\rangle
+            \]</p>
+        </div>
+        <p>Finally, we measure the ancilla qubit. We post-select only the outcomes where the ancilla is $|1\rangle$. This instantly collapses the state, annihilating the $|0\rangle_a$ terms and projecting the target register into:</p>
+
+        <div class="math-container" style="margin: 0.5rem 0;">
+            <p>\[
+            |x\rangle = \frac{1}{\mathcal{N}} \sum_j \frac{C \beta_j}{\lambda_j} |u_j\rangle \propto \sum_j \frac{\beta_j}{\lambda_j} |u_j\rangle
+            \]</p>
+        </div>
+
+        <h4 style="margin-top: 1rem;"><strong>Conclusion: Because $A^{-1} = \sum_j \frac{1}{\lambda_j} |u_j\rangle\langle u_j|$, it mathematically follows that $|x\rangle \propto A^{-1}|b\rangle$. The algorithm successfully prepares the exact quantum solution to the linear system in logarithmic time $O(\log N)$.</strong></h4>
+
     </section>
 
     <section class="content-section">
@@ -210,54 +250,170 @@
                 <span>From Scratch (NumPy)</span>
                 <button class="copy-btn">Copy</button>
             </div>
+        <div class="output-injection-wrapper">
+            <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+            <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/1307333756.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+  iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()
+/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/1307333756.py:45: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+  qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Clock qubits: 2 | Target system: 2x2 | Total qubits: 4
+</pre><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-1.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">The 8x8 unitary matrix describing the structural circuit:
+</pre><div class="notebook-output-math">$$
+U_{HHL} = 
+\begin{bmatrix}
+\frac{\sqrt{3}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & \frac{\sqrt{3}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0.8001031452 & -0.331413574 & 0 & 0 & 0 & 0 & 0 & 0 & -0.4619397663 & 0.1913417162 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0.331413574 & 0.8001031452 & 0 & 0 & 0 & 0 & 0 & 0 & -0.1913417162 & -0.4619397663 & 0 & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & 0.4718930049 & -0.7062377904 & 0.1404794308 i & 0.0938653547 i & 0 & 0 & 0 & 0 & -0.2724475534 & 0.4077465784 & - 0.0811058372 i & - 0.0541931878 i  \\
+ 0 & 0 & 0 & 0 & 0.7062377904 & 0.4718930049 & - 0.0938653547 i & 0.1404794308 i & 0 & 0 & 0 & 0 & -0.4077465784 & -0.2724475534 & 0.0541931878 i & - 0.0811058372 i  \\
+ 0 & 0 & 0 & 0 & - 0.1404794308 i & - 0.0938653547 i & 0.4718930049 & -0.7062377904 & 0 & 0 & 0 & 0 & 0.0811058372 i & 0.0541931878 i & -0.2724475534 & 0.4077465784  \\
+ 0 & 0 & 0 & 0 & 0.0938653547 i & - 0.1404794308 i & 0.7062377904 & 0.4718930049 & 0 & 0 & 0 & 0 & - 0.0541931878 i & 0.0811058372 i & -0.4077465784 & -0.2724475534  \\
+ 0.3671936598 & -0.2995441473 & - 0.0405529186 i & - 0.0270965939 i & - 0.0947461064 i & - 0.1082024311 i & 0.0405529186 & 0.0270965939 & 0.635998075 & -0.5188256822 & - 0.0702397154 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & - 0.1641050702 i & - 0.1874121082 i & 0.0702397154 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315}  \\
+ 0.2995441473 & 0.3671936598 & 0.0270965939 i & - 0.0405529186 i & 0.1082024311 i & - 0.0947461064 i & -0.0270965939 & 0.0405529186 & 0.5188256822 & 0.635998075 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & - 0.0702397154 i & 0.1874121082 i & - 0.1641050702 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.0702397154  \\
+ 0.0405529186 i & 0.0270965939 i & 0.3862237767 & -0.2038732892 & -0.0405529186 & -0.0270965939 & - 0.1137762233 i & - 0.2038732892 i & 0.0702397154 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.6689592043 & -0.3531188952 & -0.0702397154 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & - 0.1970661995 i & - 0.3531188952 i  \\
+ - 0.0270965939 i & 0.0405529186 i & 0.2038732892 & 0.3862237767 & 0.0270965939 & -0.0405529186 & 0.2038732892 i & - 0.1137762233 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.0702397154 i & 0.3531188952 & 0.6689592043 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & -0.0702397154 & 0.3531188952 i & - 0.1970661995 i  \\
+ 0.0947461064 i & 0.1082024311 i & -0.0405529186 & -0.0270965939 & 0.3671936598 & -0.2995441473 & - 0.0405529186 i & - 0.0270965939 i & 0.1641050702 i & 0.1874121082 i & -0.0702397154 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.635998075 & -0.5188256822 & - 0.0702397154 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315}  \\
+ - 0.1082024311 i & 0.0947461064 i & 0.0270965939 & -0.0405529186 & 0.2995441473 & 0.3671936598 & 0.0270965939 i & - 0.0405529186 i & - 0.1874121082 i & 0.1641050702 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & -0.0702397154 & 0.5188256822 & 0.635998075 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & - 0.0702397154 i  \\
+ 0.0405529186 & 0.0270965939 & 0.1137762233 i & 0.2038732892 i & 0.0405529186 i & 0.0270965939 i & 0.3862237767 & -0.2038732892 & 0.0702397154 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.1970661995 i & 0.3531188952 i & 0.0702397154 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.6689592043 & -0.3531188952  \\
+ -0.0270965939 & 0.0405529186 & - 0.2038732892 i & 0.1137762233 i & - 0.0270965939 i & 0.0405529186 i & 0.2038732892 & 0.3862237767 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.0702397154 & - 0.3531188952 i & 0.1970661995 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.0702397154 i & 0.3531188952 & 0.6689592043  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre><div class="notebook-output-math">$$\frac{\sqrt{3}}{2} |0000\rangle+0.3671936598 |1000\rangle+0.2995441473 |1001\rangle+0.0405529186 i |1010\rangle- 0.0270965939 i |1011\rangle+0.0947461064 i |1100\rangle- 0.1082024311 i |1101\rangle+0.0405529186 |1110\rangle-0.0270965939 |1111\rangle$$</div><pre class="notebook-output-text">
+Final DensityMatrix prior to measurement:
+</pre><div class="notebook-output-math">$$
+
+\begin{bmatrix}
+\frac{3}{4} & 0 & 0 & 0 & \cdots & 0.0937060541 i & 0.0351198577 & - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315}  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+ \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+ - 0.0937060541 i & 0 & 0 & 0 & \cdots & 0.0117077661 & - 0.0043879244 i & 0.0029319173 i  \\
+ 0.0351198577 & 0 & 0 & 0 & \cdots & 0.0043879244 i & 0.0016445392 & -0.001098846  \\
+ - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0 & 0 & 0 & \cdots & - 0.0029319173 i & -0.001098846 & 0.0007342254  \\
+ \end{bmatrix}
+$$</div><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+State prior to measurement (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output"><pre class="notebook-output-text">&lt;IPython.core.display.Markdown object&gt;</pre><pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {&#x27;1&#x27;: 110, &#x27;0&#x27;: 914}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-4.png" alt="Notebook output"><pre class="notebook-output-text">
+Post-Selection Success Rate: 10.74% of shots successfully inverted the eigenvalue onto the ancilla.
+</pre>
+            </div>
+        </div>
+        
             <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator
+from qiskit.circuit.library import QFT
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from IPython.display import display, Markdown
 
-def simulate_hhl_math(A, b):
-    """
-    Simulates the mathematical state-vector logic of HHL.
-    """
-    # 1. Classical exact solution for verification
-    x_exact = np.linalg.solve(A, b)
-    
-    # 2. Eigendecomposition of A
-    evals, evecs = np.linalg.eigh(A)
-    
-    # 3. Express |b&gt; in the eigenbasis of A (beta_j = &lt;u_j | b&gt;)
-    betas = np.dot(evecs.conj().T, b)
-    
-    # 4. HHL Eigenvalue Inversion
-    # Constant C ensures all rotation amplitudes C/lambda &lt;= 1
-    C = np.min(np.abs(evals))
-    
-    success_prob = 0.0
-    x_quantum_state = np.zeros_like(b, dtype=complex)
-    
-    for j in range(len(evals)):
-        # Amplitude written to the |1&gt; ancilla state
-        amplitude = C / evals[j] 
-        
-        # Track probability of measuring this branch
-        success_prob += np.abs(betas[j] * amplitude)**2
-        
-        # Construct the collapsed target state
-        x_quantum_state += (amplitude * betas[j]) * evecs[:, j]
-        
-    # 5. Normalise the collapsed quantum state
-    x_quantum_normalized = x_quantum_state / np.linalg.norm(x_quantum_state)
-    x_exact_normalized = x_exact / np.linalg.norm(x_exact)
-    
-    return x_quantum_normalized, x_exact_normalized, success_prob
+# ==========================================
+# CONFIGURATION
+# ==========================================
+num_clock_qubits = 2
 
-# Define a simple 2x2 Hermitian matrix and vector
-A_matrix = np.array([[1.5, 0.5], [0.5, 1.5]])
-b_vector = np.array([1.0, 0.0])
+# 1. Set up Registers &amp; Circuit
+ancilla = QuantumRegister(1, name=&#x27;ancilla&#x27;)
+clock = QuantumRegister(num_clock_qubits, name=&#x27;clock&#x27;)
+target = QuantumRegister(1, name=&#x27;target&#x27;) # 2x2 system
+c = ClassicalRegister(1, name=&#x27;measure&#x27;)
 
-q_sol, c_sol, p_success = simulate_hhl_math(A_matrix, b_vector)
-print(f"Post-selection success probability: {p_success*100:.2f}%")
-print(f"HHL Normalized State: {np.round(q_sol, 4)}")
-print(f"Classical Normalized: {np.round(c_sol, 4)}")
-</code></pre>
+qc = QuantumCircuit(ancilla, clock, target, c)
+
+# 2. State Preparation U_b (Loading vector b into target register)
+qc.ry(np.pi/3, target[0])
+qc.barrier(label=&quot;State Prep&quot;)
+
+# 3. Quantum Phase Estimation (QPE)
+qc.h(clock)
+# Controlled Hamiltonian simulation placeholder: C-U(e^(iAt))
+for i in range(num_clock_qubits):
+    qc.cp(np.pi / (2**i), clock[i], target[0]) 
+    
+# Apply Inverse QFT to clock register
+iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()
+iqft.name = &quot;IQFT&quot;
+qc.append(iqft, clock)
+qc.barrier(label=&quot;QPE Complete&quot;)
+
+# 4. Controlled Eigenvalue Inversion (Conditional Rotation on Ancilla)
+# Rotations scaled inversely to the eigenvalues represented by the clock register
+qc.cry(np.pi/2, clock[0], ancilla[0])
+qc.cry(np.pi/4, clock[1], ancilla[0])
+qc.barrier(label=&quot;Eigenvalue Inversion&quot;)
+
+# 5. Uncomputation / Inverse QPE (Reverse QPE steps)
+qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
+qft.name = &quot;QFT&quot;
+qc.append(qft, clock)
+
+for i in reversed(range(num_clock_qubits)):
+    qc.cp(-np.pi / (2**i), clock[i], target[0])
+qc.h(clock)
+qc.barrier(label=&quot;IQPE Complete&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+unitary = Operator(qc)
+final_state = Statevector(qc)
+final_density = DensityMatrix(qc)
+
+# 6. Post-selection Measurement (Measure ancilla)
+qc.measure(ancilla, c)
+
+# 7. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(&quot;HHL Algorithm Structural Analysis&quot;))
+print(f&quot;Clock qubits: {num_clock_qubits} | Target system: 2x2 | Total qubits: {qc.num_qubits}&quot;)
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+total_qubits = qc.num_qubits - 1  # Excluding classical register
+if total_qubits &lt;= 4:
+    print(f&quot;The {2**total_qubits}x{2**total_qubits} unitary matrix describing the structural circuit:&quot;)
+    display(array_to_latex(unitary.data, prefix=&quot;U_{HHL} = &quot;, max_size=16))
+else:
+    print(f&quot;Unitary matrix omitted: {total_qubits} qubits results in a matrix too large for clean display.&quot;)
+
+display(Markdown(&quot;3. Quantum State Representation&quot;))
+print(&quot;Exact Statevector prior to measurement:&quot;)
+display(final_state.draw(&#x27;latex&#x27;))
+
+print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
+display(final_density.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;4. State Visualisation&quot;))
+print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(final_state))
+
+print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(final_state))
+
+display(Markdown(&quot;5. Measurement Analysis (Ancilla Post-Selection)&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts (Ancilla state 0 vs 1): {counts}&quot;)
+display(plot_histogram(counts))
+
+# Verification note
+success_shots = counts.get(&#x27;1&#x27;, 0)
+print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% of shots successfully inverted the eigenvalue onto the ancilla.&quot;)</code></pre>
             </div>
         </div>
 
@@ -342,12 +498,9 @@ print(circuit.draw(output='text'))
     </section>
 
     <section class="content-section">
-        <h2>9. References</h2>
-        <ol style="line-height: 1.6;">
-            <li>Harrow, A. W., Hassidim, A., &amp; Lloyd, S. (2009). Quantum algorithm for linear systems of equations. <em>Physical Review Letters</em>, 103(15), 150502.</li>
-            <li>Tang, E. (2019). A quantum-inspired classical algorithm for recommendation systems. <em>Proceedings of the 51st Annual ACM SIGACT Symposium on Theory of Computing</em>, 217-228.</li>
-            <li>Montanaro, A., &amp; Pallister, S. (2016). Quantum algorithms and the finite element method. <em>Physical Review A</em>, 93(3), 032324.</li>
-        </ol>
+        <h2>References</h2>
+        <p>The references and literature for this algorithm have been moved to the central References repository.</p>
+        <a href="../../references.html#hhl" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500; text-align: center; margin-top: 1rem;">Go to References</a>
     </section>
 
     <nav class="algorithm-nav">
