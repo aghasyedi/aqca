@@ -374,7 +374,7 @@ print(&quot;Simulation Complete.&quot;)
 # Outputs
 # ==========================================================
 
-display(Markdown(f&quot;# Shor&#x27;s Algorithm (N={N}, a={a})&quot;))
+display(Markdown(f&quot;Shor&#x27;s Algorithm (N={N}, a={a})&quot;))
 
 display(Markdown(&quot;1. Circuit&quot;))
 display(qc.draw(&quot;mpl&quot;))
@@ -446,7 +446,7 @@ if not success:
 Statevector computed successfully.
 Running Aer Simulator...
 Simulation Complete.
-</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/3941126773.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/1787699254.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
   iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
 </pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor&#x27;s Algorithm (N=15, a=7)</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit</p><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State</p><pre class="notebook-output-text">Statevector successfully calculated.
 
@@ -470,18 +470,18 @@ First 16 amplitudes:
 |000000001101&gt; : 0j
 |000000001110&gt; : 0j
 |000000001111&gt; : 0j
-</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Measurement Histogram</p><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Raw Counts</p><pre class="notebook-output-text">{&#x27;00000000&#x27;: 241, &#x27;01000000&#x27;: 260, &#x27;10000000&#x27;: 252, &#x27;11000000&#x27;: 271}
+</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Measurement Histogram</p><img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Raw Counts</p><pre class="notebook-output-text">{&#x27;01000000&#x27;: 240, &#x27;10000000&#x27;: 278, &#x27;11000000&#x27;: 245, &#x27;00000000&#x27;: 261}
 </pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Classical Post-Processing</p><pre class="notebook-output-text">------------------------------------------------------------
-Measured Binary : 11000000
-Decimal         : 192
-Estimated Phase : 0.750000
-Fraction        : 3/4
-Estimated Order : 4
+Measured Binary : 10000000
+Decimal         : 128
+Estimated Phase : 0.500000
+Fraction        : 1/2
+Estimated Order : 2
 gcd(a^(r/2)-1,N) = 3
-gcd(a^(r/2)+1,N) = 5
+gcd(a^(r/2)+1,N) = 1
 
 SUCCESS!
-Factors of 15 are 3 and 5
+Factors of 15 are 3 and 1
 </pre>
             </div>
         </div>

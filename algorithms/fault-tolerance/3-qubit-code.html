@@ -271,58 +271,138 @@
             </div>
 <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, partial_trace, state_fidelity
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from IPython.display import display, Markdown
 
-def simulate_bit_flip_code(alpha, beta, error_qubit):
-    """
-    Simulates the 3-Qubit Bit-Flip code via state vectors.
-    """
-    X = np.array([[0, 1], [1, 0]], dtype=complex)
-    I = np.eye(2, dtype=complex)
-    
-    # 1. Encoding (assuming we start with alpha|000&gt; + beta|111&gt;)
-    state = np.zeros(8, dtype=complex)
-    state[0] = alpha # |000&gt;
-    state[7] = beta  # |111&gt;
-    
-    # 2. Apply Error
-    if error_qubit == 0:
-        error_op = np.kron(np.kron(X, I), I)
-    elif error_qubit == 1:
-        error_op = np.kron(np.kron(I, X), I)
-    elif error_qubit == 2:
-        error_op = np.kron(np.kron(I, I), X)
-    else:
-        error_op = np.kron(np.kron(I, I), I)
-        
-    errored_state = np.dot(error_op, state)
-    
-    # 3. Simulate Parity Check (Math abstraction of the ancilla measurement)
-    # We find which basis states have non-zero amplitude to deduce the error
-    non_zero_indices = np.where(np.abs(errored_state) &gt; 1e-5)[0]
-    binary_states = [format(idx, '03b') for idx in non_zero_indices]
-    
-    # Check parities of the first non-zero state (they will be identical for the second)
-    sample = binary_states[0]
-    parity_01 = int(sample[0]) ^ int(sample[1])
-    parity_12 = int(sample[1]) ^ int(sample[2])
-    
-    # 4. Correction Logic
-    correction_op = np.kron(np.kron(I, I), I)
-    if parity_01 == 1 and parity_12 == 0:   # Q0 flipped
-        correction_op = np.kron(np.kron(X, I), I)
-    elif parity_01 == 1 and parity_12 == 1: # Q1 flipped
-        correction_op = np.kron(np.kron(I, X), I)
-    elif parity_01 == 0 and parity_12 == 1: # Q2 flipped
-        correction_op = np.kron(np.kron(I, I), X)
-        
-    final_state = np.dot(correction_op, errored_state)
-    return final_state
+# ==========================================
+# CONFIGURATION
+# ==========================================
+error_qubit = 1         # Qubit to inject the bit-flip error (0, 1, or 2). Set to None for no error.
+alpha, beta = 0.8, 0.6  # Initial state amplitudes
 
-# Test: State 0.8|0&gt; + 0.6|1&gt;, Error on Qubit 1
-alpha_val, beta_val = 0.8, 0.6
-restored = simulate_bit_flip_code(alpha_val, beta_val, error_qubit=1)
-print(f"Restored amplitudes: |000&gt; = {restored[0].real}, |111&gt; = {restored[7].real}")
-</code></pre>
+# Calculate rotation angle to prepare the arbitrary state
+theta = 2 * np.arccos(alpha)
+
+# 1. Set up Registers &amp; Circuit
+qr_data = QuantumRegister(3, name=&quot;data&quot;)
+qr_ancilla = QuantumRegister(2, name=&quot;ancilla&quot;)
+cr_syndrome = ClassicalRegister(2, name=&quot;syndrome&quot;)
+cr_data = ClassicalRegister(3, name=&quot;c_data&quot;)
+qc = QuantumCircuit(qr_data, qr_ancilla, cr_syndrome, cr_data)
+
+# 2. Initialisation
+qc.ry(theta, qr_data[0])
+qc.barrier(label=&quot;Init&quot;)
+
+# Save exact initial state of Qubit 0 for fidelity check later
+ref_circ = QuantumCircuit(1)
+ref_circ.ry(theta, 0)
+initial_state = Statevector(ref_circ)
+
+# 3. Encoding (Map a|0&gt; + b|1&gt; to a|000&gt; + b|111&gt;)
+qc.cx(qr_data[0], qr_data[1])
+qc.cx(qr_data[0], qr_data[2])
+qc.barrier(label=&quot;Encoded&quot;)
+
+# 4. Error Injection
+if error_qubit is not None:
+    qc.x(qr_data[error_qubit])
+qc.barrier(label=&quot;Error Injected&quot;)
+
+# 5. Syndrome Extraction via Ancillas
+# Ancilla 0 measures parity of Data 0 and Data 1
+qc.cx(qr_data[0], qr_ancilla[0])
+qc.cx(qr_data[1], qr_ancilla[0])
+# Ancilla 1 measures parity of Data 1 and Data 2
+qc.cx(qr_data[1], qr_ancilla[1])
+qc.cx(qr_data[2], qr_ancilla[1])
+qc.barrier(label=&quot;Syndrome Extraction&quot;)
+
+# Measure ancillas to classical syndrome register
+qc.measure(qr_ancilla[0], cr_syndrome[0])
+qc.measure(qr_ancilla[1], cr_syndrome[1])
+qc.barrier(label=&quot;Measure Ancillas&quot;)
+
+# 6. Dynamic Correction Logic
+# Qiskit registers are little-endian (cr[1] cr[0])
+# 01 (Dec 1): Parity 01 failed -&gt; Error on Q0
+with qc.if_test((cr_syndrome, 1)):
+    qc.x(qr_data[0])
+# 11 (Dec 3): Both parities failed -&gt; Error on Q1
+with qc.if_test((cr_syndrome, 3)):
+    qc.x(qr_data[1])
+# 10 (Dec 2): Parity 12 failed -&gt; Error on Q2
+with qc.if_test((cr_syndrome, 2)):
+    qc.x(qr_data[2])
+qc.barrier(label=&quot;Corrected&quot;)
+
+# 7. Decoding (Isolate state back to Q0 for verification)
+qc.cx(qr_data[0], qr_data[1])
+qc.cx(qr_data[0], qr_data[2])
+qc.barrier(label=&quot;Decoded&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE FINAL MEASUREMENT
+# ==========================================
+# Save density matrix of the full 5-qubit system
+qc.save_density_matrix()
+
+# 8. Final Measurement of Data Qubits
+qc.measure(qr_data, cr_data)
+
+# 9. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;3-Qubit Error Correction Analysis&quot;))
+display(Markdown(f&quot;**Target State:** ${alpha}|0\\rangle + {beta}|1\\rangle$ | **Error Injected on:** Qubit {error_qubit}&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Quantum State Representation&quot;))
+# Trace out Qubits 1, 2, and both ancillas (indices 1, 2, 3, 4) to isolate Qubit 0
+rho_full = result.data()[&#x27;density_matrix&#x27;]
+rho_q0 = partial_trace(rho_full, [1, 2, 3, 4])
+
+print(&quot;Initial target Statevector (Qubit 0):&quot;)
+display(initial_state.draw(&#x27;latex&#x27;))
+print(&quot;\nFinal restored DensityMatrix (Qubit 0):&quot;)
+display(rho_q0.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;3. State Visualisation&quot;))
+print(&quot;Initial target state (Bloch Sphere):&quot;)
+display(plot_bloch_multivector(initial_state))
+
+print(&quot;\nFinal restored state (Bloch Sphere):&quot;)
+display(plot_bloch_multivector(rho_q0))
+
+print(&quot;\nFinal restored state (Q-Sphere):&quot;)
+display(plot_state_qsphere(rho_q0))
+
+display(Markdown(&quot;4. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts (c_data syndrome): {counts}&quot;)
+display(plot_histogram(counts))
+
+# 5. Verification Logic
+display(Markdown(&quot;5. Verification: State Fidelity&quot;))
+fidelity = state_fidelity(initial_state, rho_q0)
+print(f&quot;Restoration Fidelity = {fidelity:.6f}&quot;)
+
+if np.isclose(fidelity, 1.0):
+    print(&quot;Success: The state was perfectly restored despite the injected error.&quot;)
+else:
+    print(&quot;Warning: Fidelity is less than 1. Error correction failed.&quot;)</code></pre>
             </div>
         </div>
 

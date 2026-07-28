@@ -301,7 +301,7 @@ qc.barrier(label=&quot;QPE Complete&quot;)
 # Rotations scaled inversely to the eigenvalues represented by the clock register
 qc.cry(np.pi/2, clock[0], ancilla[0])
 qc.cry(np.pi/4, clock[1], ancilla[0])
-qc.barrier(label=&quot;Eigenvalue Inversion&quot;)
+qc.barrier(label=&quot;Eigenvalue Inv&quot;)
 
 # 5. Uncomputation / Inverse QPE (Reverse QPE steps)
 qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
@@ -311,7 +311,7 @@ qc.append(qft, clock)
 for i in reversed(range(num_clock_qubits)):
     qc.cp(-np.pi / (2**i), clock[i], target[0])
 qc.h(clock)
-qc.barrier(label=&quot;IQPE Complete&quot;)
+qc.barrier(label=&quot;IQPE Done&quot;)
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -378,9 +378,9 @@ print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% 
                 <a href="../../assets/notebooks/hhl.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/1307333756.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/2807633593.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
   iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()
-/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_16449/1307333756.py:45: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
+/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/2807633593.py:45: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
   qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
 </pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">HHL Algorithm Structural Analysis</p><pre class="notebook-output-text">Clock qubits: 2 | Target system: 2x2 | Total qubits: 4
 </pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 8x8 unitary matrix describing the structural circuit:
@@ -421,9 +421,9 @@ Final DensityMatrix prior to measurement:
 $$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Ancilla Post-Selection)</p><pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {&#x27;1&#x27;: 110, &#x27;0&#x27;: 914}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Ancilla Post-Selection)</p><pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {&#x27;1&#x27;: 117, &#x27;0&#x27;: 907}
 </pre><img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-4.png" alt="Notebook output"><pre class="notebook-output-text">
-Post-Selection Success Rate: 10.74% of shots successfully inverted the eigenvalue onto the ancilla.
+Post-Selection Success Rate: 11.43% of shots successfully inverted the eigenvalue onto the ancilla.
 </pre>
             </div>
         </div>

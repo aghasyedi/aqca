@@ -913,5 +913,5 @@ tr:last-child td {
   font-size: 1rem;
 }
 .view-output-btn:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-hover);
 }

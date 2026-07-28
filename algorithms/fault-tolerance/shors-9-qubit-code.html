@@ -258,33 +258,129 @@
             </div>
 <div class="code-content">
 <pre><code>import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector, DensityMatrix, partial_trace, state_fidelity
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from IPython.display import display, Markdown
 
-def simulate_shor_9qubit_logical_zero():
-    """
-    Simulates the mathematical construction of the logical |0_L&gt; state in NumPy.
-    """
-    # Define basis states |000&gt; and |111&gt;
-    state_000 = np.zeros(8)
-    state_000[0] = 1.0
-    
-    state_111 = np.zeros(8)
-    state_111[7] = 1.0
-    
-    # Construct a single phase block: (|000&gt; + |111&gt;) / sqrt(2)
-    block_plus = (state_000 + state_111) / np.sqrt(2)
-    
-    # Tensor the three blocks together to create the 9-qubit state
-    # |0_L&gt; = block_plus (x) block_plus (x) block_plus
-    block_1_2 = np.kron(block_plus, block_plus)
-    logical_zero = np.kron(block_1_2, block_plus)
-    
-    return logical_zero
+# ==========================================
+# CONFIGURATION
+# ==========================================
+error_qubit = 4         # Qubit to inject the error (0 through 8)
+error_type = &#x27;Y&#x27;        # Choose &#x27;X&#x27; (Bit-flip), &#x27;Z&#x27; (Phase-flip), or &#x27;Y&#x27; (Both)
+alpha, beta = 0.8, 0.6  # Initial state amplitudes
 
-logical_state = simulate_shor_9qubit_logical_zero()
-# The resulting state vector has length 512 (2^9).
-print(f"State vector dimension: {len(logical_state)}")
-print(f"Number of non-zero amplitudes: {np.count_nonzero(logical_state)}")
-</code></pre>
+# Calculate rotation angle to prepare the arbitrary state
+theta = 2 * np.arccos(alpha)
+
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(9, name=&quot;q&quot;)
+cr = ClassicalRegister(1, name=&quot;c_out&quot;) # We only need to measure the restored Q0
+qc = QuantumCircuit(qr, cr)
+
+# 2. Initialisation
+qc.ry(theta, qr[0])
+qc.barrier(label=&quot;Init&quot;)
+
+# Save exact initial state of Qubit 0 for fidelity check later
+ref_circ = QuantumCircuit(1)
+ref_circ.ry(theta, 0)
+initial_state = Statevector(ref_circ)
+
+# ==========================================
+# SHOR&#x27;S 9-QUBIT ENCODING
+# ==========================================
+# Phase-flip encoding (outer code)
+qc.cx(qr[0], qr[3])
+qc.cx(qr[0], qr[6])
+qc.h([qr[0], qr[3], qr[6]])
+
+# Bit-flip encoding (inner code)
+qc.cx(qr[0], qr[1]); qc.cx(qr[0], qr[2])
+qc.cx(qr[3], qr[4]); qc.cx(qr[3], qr[5])
+qc.cx(qr[6], qr[7]); qc.cx(qr[6], qr[8])
+qc.barrier(label=&quot;Encoded&quot;)
+
+# ==========================================
+# ERROR INJECTION
+# ==========================================
+if error_qubit is not None:
+    if error_type == &#x27;X&#x27;: qc.x(qr[error_qubit])
+    elif error_type == &#x27;Z&#x27;: qc.z(qr[error_qubit])
+    elif error_type == &#x27;Y&#x27;: qc.y(qr[error_qubit])
+qc.barrier(label=f&quot;Error: {error_type} on Q{error_qubit}&quot;)
+
+# ==========================================
+# DECODING &amp; AUTONOMOUS CORRECTION
+# ==========================================
+# Decode bit-flip and correct via Toffoli majority vote
+qc.cx(qr[0], qr[1]); qc.cx(qr[0], qr[2]); qc.ccx(qr[1], qr[2], qr[0])
+qc.cx(qr[3], qr[4]); qc.cx(qr[3], qr[5]); qc.ccx(qr[4], qr[5], qr[3])
+qc.cx(qr[6], qr[7]); qc.cx(qr[6], qr[8]); qc.ccx(qr[7], qr[8], qr[6])
+qc.barrier(label=&quot;Bit Corrected&quot;)
+
+# Decode phase-flip and correct via Toffoli majority vote
+qc.h([qr[0], qr[3], qr[6]])
+qc.cx(qr[0], qr[3]); qc.cx(qr[0], qr[6]); qc.ccx(qr[3], qr[6], qr[0])
+qc.barrier(label=&quot;Phase Corrected&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE FINAL MEASUREMENT
+# ==========================================
+# Save density matrix of the full 9-qubit system
+qc.save_density_matrix()
+
+# Final Measurement of the restored Qubit 0
+qc.measure(qr[0], cr[0])
+
+# Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;Shor&#x27;s 9-Qubit Error Correction Analysis&quot;))
+display(Markdown(f&quot;**Target State:** ${alpha}|0\\rangle + {beta}|1\\rangle$ | **Error:** {error_type} on Qubit {error_qubit}&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Quantum State Representation&quot;))
+# Trace out Qubits 1 through 8 to isolate the mathematical state of Qubit 0
+rho_full = result.data()[&#x27;density_matrix&#x27;]
+rho_q0 = partial_trace(rho_full, list(range(1, 9)))
+
+print(&quot;Initial target Statevector (Qubit 0):&quot;)
+display(initial_state.draw(&#x27;latex&#x27;))
+print(&quot;\nFinal restored DensityMatrix (Qubit 0):&quot;)
+display(rho_q0.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;3. State Visualisation&quot;))
+print(&quot;Initial target state (Bloch Sphere):&quot;)
+display(plot_bloch_multivector(initial_state))
+
+print(&quot;\nFinal restored state (Bloch Sphere):&quot;)
+display(plot_bloch_multivector(rho_q0))
+
+display(Markdown(&quot;4. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts (Restored Qubit 0): {counts}&quot;)
+display(plot_histogram(counts))
+
+# 5. Verification Logic
+display(Markdown(&quot;5. Verification: State Fidelity&quot;))
+fidelity = state_fidelity(initial_state, rho_q0)
+print(f&quot;Restoration Fidelity = {fidelity:.6f}&quot;)
+
+if np.isclose(fidelity, 1.0):
+    print(f&quot;Success: The state was perfectly restored despite the lethal {error_type} error on Qubit {error_qubit}.&quot;)
+else:
+    print(&quot;Warning: Fidelity is less than 1. Error correction failed.&quot;)</code></pre>
             </div>
         </div>
 
