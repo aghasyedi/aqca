@@ -196,7 +196,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Controlled Modular Exponentiation</h3>
         <p>A unitary operator \(U_f\) evaluates the modular exponentiation and writes the output to the target register:</p>
@@ -214,7 +214,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Inverse Quantum Fourier Transform (IQFT)</h3>
         <p>To extract the hidden frequency \(\frac{s}{r}\), we apply the Inverse Quantum Fourier Transform (\(QFT^\dagger\)) to the counting register.</p>
@@ -226,7 +226,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Classical Factoring</h3>
         <p>The probability of measuring a state \(|y\rangle\) peaks sharply when the interference term is purely constructive, which occurs when:</p>
@@ -511,9 +511,9 @@ if not success:
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/shor.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/shor.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">Calculating Statevector...
@@ -578,7 +578,7 @@ Factors of 15 are 3 and 1
         </ul>
     </section>
 
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#shor" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

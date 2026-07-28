@@ -197,7 +197,7 @@
         </div>
         <p>Alice holds qubits $C$ and $A$, while Bob holds qubit $B$.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Bell-Basis Measurement</h3>
         <p>Alice entangles her unknown qubit $C$ with her half of the Bell pair ($A$) by applying a CX gate (control $C$, target $A$) followed by a Hadamard gate on $C$.</p>
@@ -210,13 +210,13 @@
         </div>
         <p>Alice then measures her two qubits $C$ and $A$, instantly collapsing the state. She obtains two classical bits, $m_1 m_2$, which correspond to one of the four Bell states.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Classical Communication</h3>
         <p>When Alice measures her qubits, Bob's qubit $B$ deterministically collapses into a state that is directly related to the original state $|\psi\rangle_C$, but distorted by a Pauli operator depending on Alice's measurement.</p>
         <p>Alice sends her two classical bits ($m_1, m_2$) to Bob over a classical communication channel.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Conditional Pauli Correction</h3>
         <p>Bob receives the classical bits and uses them to apply a conditional unitary correction to his qubit $B$:</p>
@@ -362,9 +362,9 @@ else:
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/quantum-teleportation.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/quantum-teleportation.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Initial Statevector (Qubit 0 prior to teleportation):
@@ -406,7 +406,7 @@ Success: The state was teleported perfectly.
         </ul>
     </section>
     
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#quantum-teleportation" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

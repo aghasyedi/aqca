@@ -204,7 +204,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Oracle Evaluation & Phase Kickback</h3>
         <p>The oracle \(U_f\) evaluates the function, kicking the result back as a relative phase since the ancilla is in the \(|-\rangle\) state:</p>
@@ -222,7 +222,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Interference Transform</h3>
         <p>A final Hadamard transform \(H^{\otimes n}\) is applied to the input register. Using the identity \(H^{\otimes n}|x\rangle = \frac1{\sqrt{2^n}} \sum_z (-1)^{x\cdot z} |z\rangle\):</p>
@@ -240,7 +240,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Conclusion</h3>
         <p>We measure the probability of observing the all-zero state \(|0^n\rangle\), where \(x \cdot 0 = 0\):</p>
@@ -392,9 +392,9 @@ else:
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/deutsch-jozsa.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/deutsch-jozsa.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Generalised 3-Qubit Deutsch-Jozsa Analysis</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/deutsch-jozsa-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
@@ -458,7 +458,7 @@ State prior to measurement (Q-Sphere):
         </ul>
     </section>
     
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#deutsch-jozsa" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

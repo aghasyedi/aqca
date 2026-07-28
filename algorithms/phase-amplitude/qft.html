@@ -199,7 +199,7 @@
         </div>
         <p>We represent \(x\) and \(y\) in binary: \(x = x_1 x_2 \dots x_n\) and \(y = y_1 y_2 \dots y_n\), where \(x = \sum_{k=1}^n x_k 2^{n-k}\).</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Factoring the Superposition</h3>
         <p>The summation over \(y\) can be factored into a tensor product of single-qubit states by splitting the phase exponent.</p>
@@ -224,7 +224,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Phase Simplification & Binary Fractions</h3>
         <p>The exponent \(x 2^{-k}\) represents a shift in the binary point. We discard integer portions since \(e^{2\pi i \times \text{integer}} = 1\), leaving only the fractional binary part.</p>
@@ -236,7 +236,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Gate Implementation</h3>
         <p>This precise product state is constructed sequentially in the quantum circuit using Hadamard gates (\(H\)) and controlled-phase rotations (\(R_k\)):</p>
@@ -372,9 +372,9 @@ display(plot_histogram(counts))</code></pre>
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/qft.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/qft.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QFT Analysis for Initial State: $|110\rangle$</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 8x8 unitary matrix describing the full QFT circuit:
@@ -431,7 +431,7 @@ State prior to measurement (Q-Sphere):
         </ul>
     </section>
     
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#qft" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

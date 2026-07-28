@@ -198,7 +198,7 @@
         </div>
         <p>Converting these rows into Pauli strings gives the stabilisers, e.g., $g_1 = IIIXXXX$ and $g_4 = IIIZZZZ$.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Construction of the Logical Basis States</h3>
         <p>A valid logical state $|\psi_L\rangle$ must be a simultaneous $+1$ eigenstate of all 6 stabilisers.</p>
@@ -211,7 +211,7 @@
         </div>
         <p>The logical one state $|1_L\rangle$ is the bit-wise complement (the 8 odd-parity codewords). An arbitrary quantum state is then safely encoded non-locally as $|\psi_{encoded}\rangle = \alpha|0_L\rangle + \beta|1_L\rangle$.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Error Evolution & Syndrome Extraction</h3>
         <p>If a continuous arbitrary error $E$ hits physical qubit $k$, it mathematically decomposes into a superposition of discrete Pauli errors: $E = c_1 I + c_2 X_k + c_3 Y_k + c_4 Z_k$.</p>
@@ -220,7 +220,7 @@
         <p>* Measuring the $X$-generators ($g_1, g_2, g_3$) evaluates the $X$-parity (detecting phase-flips).</p>
         <p>Measuring these stabilisers forces the continuous error superposition to collapse deterministically into exactly one of the four Pauli branches ($I, X_k, Y_k,$ or $Z_k$), yielding a 6-bit classical syndrome.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Deterministic Correction</h3>
         <p>The 6-bit syndrome splits into two 3-bit binary numbers: $S_Z$ and $S_X$. Due to the Hamming code structure, these binary numbers act as direct integer pointers to the corrupted qubit.</p>
@@ -357,9 +357,9 @@ else:
 
     
 <div class="output-injection-wrapper">
-    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
         <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-        <a href="../../assets/notebooks/steane-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+        <a href="../../assets/notebooks/steane-code.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
     </div>
     <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Steane 7-Qubit Error Correction (Ultra-Fast Version)</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Compact Layout)</p><img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Measurement Analysis</p><pre class="notebook-output-text">Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.
@@ -385,7 +385,7 @@ else:
         </ul>
     </section>
 
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#steane-code" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>
@@ -394,10 +394,6 @@ else:
         <a href="../fault-tolerance/shors-9-qubit-code.html" class="nav-button">
             <span class="nav-label">Previous</span>
             <span class="nav-title">Shor's 9-Qubit Code</span>
-        </a>
-        <a href="../../resources.html" class="nav-button nav-next">
-            <span class="nav-label">Next</span>
-            <span class="nav-title">Visual Tools</span>
         </a>
     </nav>
     

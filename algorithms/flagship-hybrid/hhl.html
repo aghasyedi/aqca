@@ -191,7 +191,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Quantum Phase Estimation (Eigenvalue Encoding)</h3>
         <p>We apply Quantum Phase Estimation (QPE) using the unitary $e^{i A \tau}$ to extract the eigenvalues of $A$ and store them in the clock register.</p>
@@ -203,7 +203,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Controlled Eigenvalue Inversion (Ancilla Rotation)</h3>
         <p>The mathematical core of HHL is to invert the eigenvalues ($\beta_j \to \frac{\beta_j}{\lambda_j}$). Since quantum operations must be unitary, we perform a controlled-$R_y$ rotation on the ancilla qubit, conditioned on the eigenvalue $\lambda_j$ in the clock register:</p>
@@ -221,7 +221,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Inverse QPE & Post-Selection</h3>
         <p>To decouple the clock register, we apply Inverse QPE ($QPE^\dagger$), erasing the eigenvalues and returning the clock to $|0\rangle_c^{\otimes t}$:</p>
@@ -373,9 +373,9 @@ print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% 
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/hhl.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/hhl.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/2807633593.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
@@ -448,7 +448,7 @@ Post-Selection Success Rate: 11.43% of shots successfully inverted the eigenvalu
         </ul>
     </section>
 
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#hhl" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

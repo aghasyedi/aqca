@@ -187,7 +187,7 @@
         
         <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
             <thead>
-                <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                <tr style="border-bottom: 2px solid var(--border); text-align: left;">
                     <th style="padding: 0.5rem;">Input State \(|q_1 q_0\rangle\)</th>
                     <th style="padding: 0.5rem;">Pre-Gates Applied</th>
                     <th style="padding: 0.5rem;">Resulting Bell State</th>
@@ -195,25 +195,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="border-bottom: 1px solid var(--border-color);">
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">\(|00\rangle\)</td>
                     <td style="padding: 0.5rem;">None</td>
                     <td style="padding: 0.5rem;">\(|\Phi^+\rangle\)</td>
                     <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)\)</td>
                 </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">\(|01\rangle\)</td>
                     <td style="padding: 0.5rem;">\(X\) on \(q_0\)</td>
                     <td style="padding: 0.5rem;">\(|\Phi^-\rangle\)</td>
                     <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|00\rangle - |11\rangle)\)</td>
                 </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">\(|10\rangle\)</td>
                     <td style="padding: 0.5rem;">\(X\) on \(q_1\)</td>
                     <td style="padding: 0.5rem;">\(|\Psi^+\rangle\)</td>
                     <td style="padding: 0.5rem;">\(\frac{1}{\sqrt{2}}(|01\rangle + |10\rangle)\)</td>
                 </tr>
-                <tr style="border-bottom: 1px solid var(--border-color);">
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">\(|11\rangle\)</td>
                     <td style="padding: 0.5rem;">\(X\) on \(q_1\) &amp; \(q_0\)</td>
                     <td style="padding: 0.5rem;">\(|\Psi^-\rangle\)</td>
@@ -245,7 +245,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Entanglement Generation (CX Gate)</h3>
         <p>Next, we apply a Controlled-NOT (CX) gate, using the first qubit as the control and the second as the target. The CX gate flips the second qubit if and only if the first qubit is $|1\rangle$:</p>
@@ -257,7 +257,7 @@
         </div>
         <p>This resulting state is the primary Bell state, denoted $|\Phi^+\rangle$. The states of the two qubits are now perfectly correlated and cannot be factored into independent single-qubit states.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Generating the Four Bell States</h3>
         <p>By altering the initial input state $|x, y\rangle$, the same circuit generates the complete set of four mutually orthogonal Bell states:</p>
@@ -270,7 +270,7 @@
 
         <p style="margin-top: 0.5rem;">• <strong>From $|11\rangle$:</strong> $|\Psi^-\rangle = \frac{1}{\sqrt{2}} (|01\rangle - |10\rangle)$</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Conclusion</h3>
         <p>When a Bell state is measured in the computational basis, the outcome is probabilistic (50% chance of each state), but perfectly correlated. For instance, measuring $|\Phi^+\rangle$ always yields either $00$ or $11$. Measuring one qubit instantly dictates the state of the other, illustrating maximal quantum entanglement.</p>
@@ -438,9 +438,9 @@ display(plot_histogram(counts))</code></pre>
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/bell-state.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/bell-state.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">Quantum Circuit
@@ -497,7 +497,7 @@ Measurement Histogram
         </ul>
     </section>
     
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#bell-state" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

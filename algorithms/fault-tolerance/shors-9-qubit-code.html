@@ -196,7 +196,7 @@
         </div>
         <p>The completely protected logical state becomes $|\psi_{encoded}\rangle = \alpha|0_L\rangle + \beta|1_L\rangle$. The complex amplitudes $\alpha$ and $\beta$ are non-locally distributed across all 9 qubits.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Error Injection & Discretisation</h3>
         <p>An arbitrary single-qubit error $E$ can be rigorously decomposed into a continuous linear combination of the fundamental Pauli matrices ($I, X, Y, Z$):</p>
@@ -215,7 +215,7 @@
         </div>
         <p>The system exists simultaneously in states containing "No Error", a "Bit-Flip", a "Phase-Flip", and a "Bit-and-Phase-Flip" (since $Y = iXZ$).</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Syndrome Measurement & Wavefunction Collapse</h3>
         <p>To diagnose the error, we introduce a register of auxiliary non-destructive ancilla qubits to measure the error syndromes via parity checks:</p>
@@ -225,7 +225,7 @@
         <p style="margin-top: 0.5rem;">• <strong>Phase-Flip Detection:</strong> Uses $X$-parity measurements to compare the overall phase <strong>across</strong> the three distinct blocks (detecting $Z$ errors).</p>
         <p>According to quantum mechanics, measuring these discrete syndromes forces the continuous error superposition $|\Psi_{corrupted}\rangle$ to collapse deterministically into exactly one of the four orthogonal Pauli error branches ($I, X, Y,$ or $Z$). The classical continuous information of the error is destroyed, effectively "digitizing" the arbitrary quantum error.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Deterministic Correction & Recovery</h3>
         <p>The resulting classical bitstring from the ancilla measurements (the syndrome) acts as a direct diagnostic lookup.</p>
@@ -389,9 +389,9 @@ else:
 
     
 <div class="output-injection-wrapper">
-    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
         <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-        <a href="../../assets/notebooks/shors-9-qubit-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+        <a href="../../assets/notebooks/shors-9-qubit-code.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
     </div>
     <div class="code-output-data" style="display: none;">
                 <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor&#x27;s 9-Qubit Error Correction Analysis</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;"><strong>Target State:</strong> $0.8|0\rangle + 0.6|1\rangle$ | <strong>Error:</strong> Y on Qubit 4</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Initial target Statevector (Qubit 0):
@@ -429,7 +429,7 @@ Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
         </ul>
     </section>
 
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#shors-9-qubit-code" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

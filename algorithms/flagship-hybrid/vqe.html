@@ -189,7 +189,7 @@
         </div>
         <p>By framing this as an optimization problem, we can find the ground state by varying the parameters of the trial state $|\psi\rangle$ to minimize the expectation value $\langle H \rangle$.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Hamiltonian Decomposition & Ansatz Preparation</h3>
         <p>To execute on quantum hardware, the physical Hamiltonian is mapped into a weighted sum of tensor products of Pauli matrices $P_i \in \{I, X, Y, Z\}^{\otimes n}$:</p>
@@ -208,7 +208,7 @@
         </div>
         <p>where $\vec{\theta}$ represents the classical parameters (e.g., rotation angles).</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Expectation Value Evaluation</h3>
         <p>The total energy $E(\vec{\theta})$ of the trial state is measured. By exploiting the linearity of expectation values, the quantum computer measures the individual Pauli strings, and the total energy is reconstructed classically:</p>
@@ -220,7 +220,7 @@
         </div>
         <p>Because quantum measurements are probabilistic, each term $\langle P_i \rangle$ is estimated by running the circuit multiple times (shots) and averaging the observed $+1$ and $-1$ eigenvalues.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Classical Optimization & Convergence</h3>
         <p>Once the total energy $E(\vec{\theta})$ is calculated, a classical optimizer updates the parameters $\vec{\theta}$ to navigate the energy landscape downwards (often using gradient descent and the quantum parameter-shift rule):</p>
@@ -361,9 +361,9 @@ display(plot_histogram(counts))</code></pre>
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/vqe.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/vqe.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">Running VQE Optimisation...
@@ -417,7 +417,7 @@ State prior to measurement (Q-Sphere):
         </ul>
     </section>
 
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#vqe" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>

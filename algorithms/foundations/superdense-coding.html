@@ -195,7 +195,7 @@
         </div>
         <p>Alice possesses qubit $A$ and Bob possesses qubit $B$.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 2: Local Pauli Encoding</h3>
         <p>Alice wishes to transmit a 2-bit classical message $m_1 m_2 \in \{00, 01, 10, 11\}$. She applies a specific Pauli operator to her local qubit $A$ based on the message:</p>
@@ -209,7 +209,7 @@
         <p style="margin-top: 0.5rem;">• <strong>11 (Apply Y):</strong> $|\psi_{11}\rangle = (Y \otimes I)|\Phi^+\rangle = \frac{i}{\sqrt{2}} (-|10\rangle + |01\rangle) \propto |\Psi^-\rangle$</p>
         <p>By acting only on her qubit, Alice deterministically cycles the global entangled state into one of the four orthogonal Bell states.</p>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Qubit Transmission & Decoding</h3>
         <p>Alice transmits her single physical qubit $A$ to Bob. Bob now holds both qubits of the entangled pair. He applies the inverse Bell state generation circuit to decode the state back into the computational basis.</p>
@@ -228,7 +228,7 @@
             \]</p>
         </div>
 
-        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Measurement & Conclusion</h3>
         <p>Measuring the two qubits in the computational basis deterministically yields the classical 2-bit string $m_1 m_2$.</p>
@@ -409,9 +409,9 @@ display(plot_histogram(counts))</code></pre>
         </div>
 
 <div class="output-injection-wrapper">
-            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-                <a href="../../assets/notebooks/superdense-coding.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+                <a href="../../assets/notebooks/superdense-coding.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
                 <pre class="notebook-output-text">Quantum Circuit
@@ -458,7 +458,7 @@ Measurement Histogram
         </ul>
     </section>
     
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 3rem 0 2rem 0;">
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0 2rem 0;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <a href="../../references.html#superdense-coding" class="nav-button" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">View References</a>
     </div>
