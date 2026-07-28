@@ -9,15 +9,43 @@ document.addEventListener('DOMContentLoaded', () => {
             const codeBlock = button.closest('.code-block').querySelector('pre');
             if (codeBlock) {
                 const text = codeBlock.textContent;
-                navigator.clipboard.writeText(text).then(() => {
+                
+                const showCopied = () => {
                     const originalText = button.textContent;
                     button.textContent = 'Copied!';
                     setTimeout(() => {
                         button.textContent = originalText;
                     }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy text: ', err);
-                });
+                };
+
+                const fallbackCopy = () => {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    textArea.style.top = '0';
+                    textArea.style.left = '0';
+                    textArea.style.position = 'fixed';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        const successful = document.execCommand('copy');
+                        if (successful) showCopied();
+                    } catch (err) {
+                        console.error('Fallback copy failed', err);
+                    }
+                    document.body.removeChild(textArea);
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopied();
+                    }).catch(err => {
+                        console.warn('Clipboard API failed, trying fallback...', err);
+                        fallbackCopy();
+                    });
+                } else {
+                    fallbackCopy();
+                }
             }
         });
     });
