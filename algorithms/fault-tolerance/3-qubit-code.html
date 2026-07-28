@@ -154,31 +154,7 @@
                 <div class="complexity-value">2 qubits</div>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Requires 2 additional auxiliary qubits for non-destructive measurement.</p>
             
-<div class="output-injection-wrapper">
-    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-        <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-        <a href="../../assets/notebooks/3-qubit-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
-    </div>
-    <div class="code-output-data" style="display: none;">
-        <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3-Qubit Error Correction Analysis</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">**Target State:** $0.8|0\\rangle + 0.6|1\\rangle$ | **Error Injected on:** Qubit 1</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Initial target Statevector (Qubit 0):
-</pre><div class="notebook-output-math">$$\\frac{4}{5} |0\\rangle+\\frac{3}{5} |1\\rangle$$</div><pre class="notebook-output-text">
-Final restored DensityMatrix (Qubit 0):
-</pre><div class="notebook-output-math">$$
-\\begin{bmatrix}
-\\frac{16}{25} & \\frac{12}{25}  \\\\
- \\frac{12}{25} & \\frac{9}{25}  \\\\
- \\end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p><pre class="notebook-output-text">Initial target state (Bloch Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
-Final restored state (Bloch Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-3.png" alt="Notebook output"><pre class="notebook-output-text">
-Final restored state (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts (c_data syndrome): {&#x27;000 11&#x27;: 640, &#x27;001 11&#x27;: 384}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-5.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: State Fidelity</p><pre class="notebook-output-text">Restoration Fidelity = 1.000000
-Success: The state was perfectly restored despite the injected error.
-</pre>
-    </div>
-</div>
+
 </div>
         </div>
     </section>
@@ -245,7 +221,7 @@ Success: The state was perfectly restored despite the injected error.
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
         <h3 style="margin-top: 1.5rem;">Step 3: Syndrome Extraction (Parity Measurement)</h3>
-        <p>To detect the error without measuring the data qubits (which would irreversibly collapse $\alpha$ and $\beta$), we measure the **parity** between adjacent qubits using two ancilla qubits.</p>
+        <p>To detect the error without measuring the data qubits (which would irreversibly collapse $\alpha$ and $\beta$), we measure the <strong>parity</strong> between adjacent qubits using two ancilla qubits.</p>
 
         <p style="margin-top: 0.5rem;">• <strong>Parity 1 ($S_1 = Z_0 Z_1$):</strong> Compares Qubit 0 and Qubit 1.</p>
 
@@ -262,7 +238,7 @@ Success: The state was perfectly restored despite the injected error.
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
 
         <h3 style="margin-top: 1.5rem;">Step 4: Deterministic Correction & Decoding</h3>
-        <p>Measuring the ancilla qubits yields a 2-bit classical string called the **syndrome**. For our example, we measure `10` with 100% probability.</p>
+        <p>Measuring the ancilla qubits yields a 2-bit classical string called the <strong>syndrome</strong>. For our example, we measure `10` with 100% probability.</p>
         <p>Because the measurement yields no information about $\alpha$ or $\beta$, the quantum superposition remains perfectly intact. The classical syndrome acts as an exact lookup key for the recovery operator:</p>
         <p>* `00` $\to$ No Error ($I$)</p>
         <p>* `10` $\to$ Error on Qubit 0 ($X_0$)</p>
@@ -433,7 +409,32 @@ else:
         </div>
 
 
-    </section>
+    
+<div class="output-injection-wrapper">
+    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+        <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+        <a href="../../assets/notebooks/3-qubit-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+    </div>
+    <div class="code-output-data" style="display: none;">
+        <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3-Qubit Error Correction Analysis</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">**Target State:** $0.8|0\\rangle + 0.6|1\\rangle$ | **Error Injected on:** Qubit 1</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Initial target Statevector (Qubit 0):
+</pre><div class="notebook-output-math">$$\\frac{4}{5} |0\\rangle+\\frac{3}{5} |1\\rangle$$</div><pre class="notebook-output-text">
+Final restored DensityMatrix (Qubit 0):
+</pre><div class="notebook-output-math">$$
+\\begin{bmatrix}
+\\frac{16}{25} & \\frac{12}{25}  \\\\
+ \\frac{12}{25} & \\frac{9}{25}  \\\\
+ \\end{bmatrix}
+$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p><pre class="notebook-output-text">Initial target state (Bloch Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+Final restored state (Bloch Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-3.png" alt="Notebook output"><pre class="notebook-output-text">
+Final restored state (Q-Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts (c_data syndrome): {&#x27;000 11&#x27;: 640, &#x27;001 11&#x27;: 384}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/3-qubit-code-out-5.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: State Fidelity</p><pre class="notebook-output-text">Restoration Fidelity = 1.000000
+Success: The state was perfectly restored despite the injected error.
+</pre>
+    </div>
+</div></section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>

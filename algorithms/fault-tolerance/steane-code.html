@@ -150,17 +150,7 @@
                 <div class="complexity-value">Arbitrary Single Error</div>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Corrects any single-qubit \(X\), \(Y\), or \(Z\) error (Distance \(d=3\)).</p>
             
-<div class="output-injection-wrapper">
-    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-        <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-        <a href="../../assets/notebooks/steane-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
-    </div>
-    <div class="code-output-data" style="display: none;">
-        <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Steane 7-Qubit Error Correction (Ultra-Fast Version)</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Compact Layout)</p><img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Measurement Analysis</p><pre class="notebook-output-text">Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-2.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Verification</p><pre class="notebook-output-text">Success: 100% of measurements collapsed into valid |0_L&gt; Hamming codewords despite the errors.
-</pre>
-    </div>
-</div>
+
 </div>
         </div>
     </section>
@@ -365,7 +355,18 @@ else:
         </div>
 
 
-    </section>
+    
+<div class="output-injection-wrapper">
+    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+        <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+        <a href="../../assets/notebooks/steane-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+    </div>
+    <div class="code-output-data" style="display: none;">
+        <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Steane 7-Qubit Error Correction (Ultra-Fast Version)</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Compact Layout)</p><img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Measurement Analysis</p><pre class="notebook-output-text">Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-2.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Verification</p><pre class="notebook-output-text">Success: 100% of measurements collapsed into valid |0_L&gt; Hamming codewords despite the errors.
+</pre>
+    </div>
+</div></section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>

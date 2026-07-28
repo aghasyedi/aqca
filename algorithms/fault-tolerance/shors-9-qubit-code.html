@@ -150,29 +150,7 @@
                 <div class="complexity-value">Arbitrary Single Error</div>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Corrects any single qubit bit-flip, phase-flip, or both simultaneously.</p>
             
-<div class="output-injection-wrapper">
-    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-        <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
-        <a href="../../assets/notebooks/shors-9-qubit-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
-    </div>
-    <div class="code-output-data" style="display: none;">
-        <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor&#x27;s 9-Qubit Error Correction Analysis</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">**Target State:** $0.8|0\\rangle + 0.6|1\\rangle$ | **Error:** Y on Qubit 4</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Initial target Statevector (Qubit 0):
-</pre><div class="notebook-output-math">$$\\frac{4}{5} |0\\rangle+\\frac{3}{5} |1\\rangle$$</div><pre class="notebook-output-text">
-Final restored DensityMatrix (Qubit 0):
-</pre><div class="notebook-output-math">$$
-\\begin{bmatrix}
-\\frac{16}{25} & \\frac{12}{25}  \\\\
- \\frac{12}{25} & \\frac{9}{25}  \\\\
- \\end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p><pre class="notebook-output-text">Initial target state (Bloch Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
-Final restored state (Bloch Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts (Restored Qubit 0): {&#x27;1&#x27;: 367, &#x27;0&#x27;: 657}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: State Fidelity</p><pre class="notebook-output-text">Restoration Fidelity = 1.000000
-Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
-</pre>
-    </div>
-</div>
+
 </div>
         </div>
     </section>
@@ -208,7 +186,7 @@ Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
         <h2>4. Mathematical Proof & State Evolution</h2>
 
         <h3 style="margin-top: 1.5rem;">Step 1: The Logical Basis States & Redundant Encoding</h3>
-        <p>Shor's 9-Qubit Code protects an arbitrary single-qubit state $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$ against the full spectrum of arbitrary quantum errors (both bit-flips and phase-flips). It concatenates a 3-qubit phase-flip code *outside* a 3-qubit bit-flip code.</p>
+        <p>Shor's 9-Qubit Code protects an arbitrary single-qubit state $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$ against the full spectrum of arbitrary quantum errors (both bit-flips and phase-flips). It concatenates a 3-qubit phase-flip code <strong>outside</strong> a 3-qubit bit-flip code.</p>
         <p>The encoding maps the basis states to highly entangled, 9-qubit GHZ-like logical states. A logical $|0_L\rangle$ is encoded as a positive superposition of three 3-qubit blocks, while $|1_L\rangle$ uses negative superpositions:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
@@ -242,9 +220,9 @@ Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
         <h3 style="margin-top: 1.5rem;">Step 3: Syndrome Measurement & Wavefunction Collapse</h3>
         <p>To diagnose the error, we introduce a register of auxiliary non-destructive ancilla qubits to measure the error syndromes via parity checks:</p>
 
-        <p style="margin-top: 0.5rem;">• <strong>Bit-Flip Detection:</strong> Uses $Z$-parity measurements to compare adjacent qubits *within* each 3-qubit block (detecting $X$ errors).</p>
+        <p style="margin-top: 0.5rem;">• <strong>Bit-Flip Detection:</strong> Uses $Z$-parity measurements to compare adjacent qubits <strong>within</strong> each 3-qubit block (detecting $X$ errors).</p>
 
-        <p style="margin-top: 0.5rem;">• <strong>Phase-Flip Detection:</strong> Uses $X$-parity measurements to compare the overall phase *across* the three distinct blocks (detecting $Z$ errors).</p>
+        <p style="margin-top: 0.5rem;">• <strong>Phase-Flip Detection:</strong> Uses $X$-parity measurements to compare the overall phase <strong>across</strong> the three distinct blocks (detecting $Z$ errors).</p>
         <p>According to quantum mechanics, measuring these discrete syndromes forces the continuous error superposition $|\Psi_{corrupted}\rangle$ to collapse deterministically into exactly one of the four orthogonal Pauli error branches ($I, X, Y,$ or $Z$). The classical continuous information of the error is destroyed, effectively "digitizing" the arbitrary quantum error.</p>
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
@@ -409,7 +387,30 @@ else:
         </div>
 
 
-    </section>
+    
+<div class="output-injection-wrapper">
+    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+        <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
+        <a href="../../assets/notebooks/shors-9-qubit-code.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
+    </div>
+    <div class="code-output-data" style="display: none;">
+        <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor&#x27;s 9-Qubit Error Correction Analysis</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">**Target State:** $0.8|0\\rangle + 0.6|1\\rangle$ | **Error:** Y on Qubit 4</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Initial target Statevector (Qubit 0):
+</pre><div class="notebook-output-math">$$\\frac{4}{5} |0\\rangle+\\frac{3}{5} |1\\rangle$$</div><pre class="notebook-output-text">
+Final restored DensityMatrix (Qubit 0):
+</pre><div class="notebook-output-math">$$
+\\begin{bmatrix}
+\\frac{16}{25} & \\frac{12}{25}  \\\\
+ \\frac{12}{25} & \\frac{9}{25}  \\\\
+ \\end{bmatrix}
+$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p><pre class="notebook-output-text">Initial target state (Bloch Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+Final restored state (Bloch Sphere):
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts (Restored Qubit 0): {&#x27;1&#x27;: 367, &#x27;0&#x27;: 657}
+</pre><img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: State Fidelity</p><pre class="notebook-output-text">Restoration Fidelity = 1.000000
+Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
+</pre>
+    </div>
+</div></section>
 
     <section class="content-section">
         <h2>7. Caveats & Real-World Limits</h2>
