@@ -398,7 +398,7 @@ display(qc.draw(&#x27;mpl&#x27;))
 
 display(Markdown(&quot;2. Unitary Evolution&quot;))
 if n &lt;= 3:
-    print(f&quot;The {2**n}x{2**n} unitary matrix describing the full circuit:&quot;)
+    print(f&quot;The {2n}x{2n} unitary matrix describing the full circuit:&quot;)
     display(array_to_latex(unitary.data, prefix=&quot;U_{GAA} = &quot;, max_size=16))
 else:
     print(f&quot;Unitary matrix omitted: {n} qubits results in a matrix too large for clean display.&quot;)

@@ -309,7 +309,7 @@ from IPython.display import display, Markdown
 target_string = &quot;101&quot;
 n = len(target_string)
 # Calculate optimal number of Grover iterations: (pi/4) * sqrt(N)
-optimal_iterations = int(np.round((np.pi / 4) * np.sqrt(2**n)))
+optimal_iterations = int(np.round((np.pi / 4) * np.sqrt(2n)))
 
 # 1. Set up Registers &amp; Circuit
 qr = QuantumRegister(n, name=&quot;q&quot;)
@@ -386,7 +386,84 @@ display(qc.draw(&#x27;mpl&#x27;))
 display(Markdown(&quot;2. Unitary Evolution&quot;))
 # Guardrail: Suppress matrix printout for n &gt; 3 to prevent Jupyter crashes
 if n &lt;= 3:
-    print(f&quot;The {2**n}x{2**n} unitary matrix describing the full circuit:&quot;)
+    print(f&quot;The {2
+
+# 1. Set up Registers &amp; Circuit
+qr = QuantumRegister(n, name=&quot;q&quot;)
+cr = ClassicalRegister(n, name=&quot;c&quot;)
+qc = QuantumCircuit(qr, cr)
+
+# 2. Initialisation (Equal Superposition)
+qc.h(qr)
+qc.barrier(label=&quot;Init&quot;)
+
+# ==========================================
+# GROVER ITERATIONS
+# ==========================================
+for step in range(optimal_iterations):
+    # --- ORACLE ---
+    # Reverse string to match Qiskit&#x27;s little-endian ordering (q_0 is rightmost)
+    reversed_target = target_string[::-1]
+    
+    # Flip qubits where target bit is &#x27;0&#x27;
+    for i in range(n):
+        if reversed_target[i] == &#x27;0&#x27;:
+            qc.x(qr[i])
+            
+    # Multi-controlled Z (MCZ) via H - MCX - H
+    qc.h(qr[n-1])
+    qc.mcx(list(range(n-1)), qr[n-1])
+    qc.h(qr[n-1])
+    
+    # Undo X gates
+    for i in range(n):
+        if reversed_target[i] == &#x27;0&#x27;:
+            qc.x(qr[i])
+    qc.barrier(label=f&quot;Oracle {step+1}&quot;)
+    
+    # --- DIFFUSER (Inversion about Mean) ---
+    qc.h(qr)
+    qc.x(qr)
+    
+    # MCZ via H - MCX - H
+    qc.h(qr[n-1])
+    qc.mcx(list(range(n-1)), qr[n-1])
+    qc.h(qr[n-1])
+    
+    qc.x(qr)
+    qc.h(qr)
+    qc.barrier(label=f&quot;Diffuser {step+1}&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+unitary = Operator(qc)
+final_state = Statevector(qc)
+final_density = DensityMatrix(qc)
+
+# 3. Measurement
+qc.measure(qr, cr)
+
+# 4. Execute on AerSimulator
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+job = simulator.run(tqc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;Grover&#x27;s Algorithm Analysis: Target = $|{target_string}\\rangle$&quot;))
+print(f&quot;Optimal iterations applied: {optimal_iterations}&quot;)
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Unitary Evolution&quot;))
+# Guardrail: Suppress matrix printout for n &gt; 3 to prevent Jupyter crashes
+if n &lt;= 3:
+    print(f&quot;The {2n}x{2n} unitary matrix describing the full circuit:&quot;)
     display(array_to_latex(unitary.data, prefix=&quot;U_{Grover} = &quot;, max_size=16))
 else:
     print(f&quot;Unitary matrix omitted: {n} qubits results in a matrix too large for clean display.&quot;)

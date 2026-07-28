@@ -328,7 +328,80 @@ qc.barrier(label=&quot;Init&quot;)
 # ==========================================================
 
 for q in range(n_count):
-    qc.append(c_amod15(a, 2 ** q), [qr_count[q]] + list(qr_target))
+    qc.append(c_amod15(a, 2  q), [qr_count[q]] + list(qr_target))
+
+qc.barrier(label=&quot;Oracle&quot;)
+
+# ==========================================================
+# Inverse QFT
+# ==========================================================
+
+iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
+iqft.name = &quot;IQFT&quot;
+
+qc.append(iqft, qr_count)
+qc.barrier(label=&quot;IQFT&quot;)
+
+# ==========================================================
+# Statevector
+# ==========================================================
+
+print(&quot;Calculating Statevector...&quot;)
+state = Statevector.from_instruction(qc)
+print(&quot;Statevector computed successfully.&quot;)
+
+# ==========================================================
+# Measurement
+# ==========================================================
+
+qc.measure(qr_count, cr)
+
+# ==========================================================
+# Simulation
+# ==========================================================
+
+print(&quot;Running Aer Simulator...&quot;)
+
+simulator = AerSimulator()
+tqc = transpile(qc, simulator)
+
+result = simulator.run(tqc, shots=1024).result()
+counts = result.get_counts()
+
+print(&quot;Simulation Complete.&quot;)
+
+# ==========================================================
+# Outputs
+# ==========================================================
+
+display(Markdown(f&quot;# Shor&#x27;s Algorithm (N={N}, a={a})&quot;))
+
+display(Markdown(&quot;## 1. Circuit&quot;))
+display(qc.draw(&quot;mpl&quot;))
+
+display(Markdown(&quot;## 2. Quantum State&quot;))
+
+print(&quot;Statevector successfully calculated.&quot;)
+print(&quot;\nTotal amplitudes:&quot;, len(state))
+
+print(&quot;\nFirst 16 amplitudes:\n&quot;)
+for i, amp in enumerate(state.data[:16]):
+    print(f&quot;|{i:012b}&gt; : {amp}&quot;)
+
+display(Markdown(&quot;## 3. Measurement Histogram&quot;))
+display(plot_histogram(counts))
+
+display(Markdown(&quot;## 4. Raw Counts&quot;))
+print(counts)
+
+display(Markdown(&quot;## 5. Classical Post-Processing&quot;))
+
+success = False
+
+for measured_binary in sorted(counts, key=counts.get, reverse=True):
+
+    measured_decimal = int(measured_binary, 2)
+    phase = measured_decimal / (2 
 
 qc.barrier(label=&quot;Oracle&quot;)
 
@@ -417,7 +490,8 @@ for measured_binary in sorted(counts, key=counts.get, reverse=True):
         print(&quot;Order invalid.\n&quot;)
         continue
 
-    guess1 = math.gcd(a ** (r // 2) - 1, N)
+    guess1 = math.gcd(a ` (r // 2) - 1, N)
+    guess2 = math.gcd(a `
     guess2 = math.gcd(a ** (r // 2) + 1, N)
 
     print(f&quot;gcd(a^(r/2)-1,N) = {guess1}&quot;)

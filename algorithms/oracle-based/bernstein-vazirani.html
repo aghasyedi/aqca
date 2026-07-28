@@ -355,7 +355,7 @@ display(qc.draw(&#x27;mpl&#x27;))
 display(Markdown(&quot;2. Unitary Evolution&quot;))
 # Guardrail to prevent Jupyter output crashes on large matrices
 if n &lt;= 2: 
-    print(f&quot;The {2**(n+1)}x{2**(n+1)} unitary matrix describing the full circuit:&quot;)
+    print(f&quot;The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:&quot;)
     display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;, max_size=16))
 else:
     print(f&quot;Unitary matrix omitted: {n} input qubits ({n+1} total) results in a matrix too large for clean display.&quot;)
@@ -396,7 +396,15 @@ else:
                 <a href="../../assets/notebooks/bernstein-vazirani.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Bernstein-Vazirani Analysis: Secret = &#x27;1011&#x27;</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
+                <pre class="notebook-output-text">&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
+&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
+&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
+&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
+</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Bernstein-Vazirani Analysis: Secret = &#x27;1011&#x27;</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
+</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/3814462174.py:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
+  print(f&quot;The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:&quot;)
+/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/3814462174.py:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
+  print(f&quot;The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:&quot;)
 </pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div><pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:

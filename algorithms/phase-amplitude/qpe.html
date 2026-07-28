@@ -314,7 +314,63 @@ qc.barrier(label=&quot;Init&quot;)
 # Instead of a nested loop, we calculate the cumulative angle mathematically
 for j in range(t):
     # The phase kicked back to the j-th qubit is U^(2^j)
-    angle = 2 * np.pi * actual_theta * (2 ** j)
+    angle = 2 * np.pi * actual_theta * (2  j)
+    qc.cp(angle, qr_count[j], qr_state[0])
+qc.barrier(label=&quot;C-U Operations&quot;)
+
+# 4. Apply Inverse QFT to counting register
+iqft = QFT(num_qubits=t, inverse=True, do_swaps=True).to_gate()
+iqft.name = &quot;IQFT&quot;
+qc.append(iqft, qr_count)
+qc.barrier(label=&quot;IQFT Complete&quot;)
+
+# ==========================================
+# EXTRACT EXACT MATH BEFORE MEASUREMENT
+# ==========================================
+final_state = Statevector(qc)
+rho_full = DensityMatrix(qc)
+# Trace out the eigenstate qubit (index t) to view just the counting register
+rho_count = partial_trace(rho_full, [t])
+
+# 5. Measurement (measure only the counting register)
+qc.measure(qr_count, cr)
+
+# 6. Execute on AerSimulator
+simulator = AerSimulator()
+t_qc = transpile(qc, simulator)
+job = simulator.run(t_qc, shots=1024)
+result = job.result()
+
+# ==========================================
+# REQUIRED COURSEWORK OUTPUTS
+# ==========================================
+
+display(Markdown(f&quot;QPE Analysis: Hidden Phase Estimation&quot;))
+
+display(Markdown(&quot;1. Circuit Visualisation&quot;))
+display(qc.draw(&#x27;mpl&#x27;))
+
+display(Markdown(&quot;2. Quantum State Representation&quot;))
+print(&quot;Final DensityMatrix of counting register prior to measurement:&quot;)
+display(rho_count.draw(&#x27;latex&#x27;))
+
+display(Markdown(&quot;3. State Visualisation&quot;))
+print(&quot;Counting register state prior to measurement (Bloch Spheres):&quot;)
+display(plot_bloch_multivector(rho_count))
+
+print(&quot;\nCounting register state prior to measurement (Q-Sphere):&quot;)
+display(plot_state_qsphere(rho_count))
+
+display(Markdown(&quot;4. Measurement Analysis&quot;))
+counts = result.get_counts()
+print(f&quot;Raw measurement counts: {counts}&quot;)
+display(plot_histogram(counts))
+
+# 5. Final Verification Logic
+display(Markdown(&quot;5. Verification: Phase Calculation&quot;))
+measured_binary = list(counts.keys())[0]
+measured_decimal = int(measured_binary, 2)
+estimated_phase = measured_decimal / (2 
     qc.cp(angle, qr_count[j], qr_state[0])
 qc.barrier(label=&quot;C-U Operations&quot;)
 
@@ -390,30 +446,7 @@ else:
                 <a href="../../assets/notebooks/qpe.ipynb" download class="view-output-btn" style="text-decoration: none; background: #2c3e50; color: white;">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/2483705642.py:36: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. (&#x27;Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.&#x27;,)
-  iqft = QFT(num_qubits=t, inverse=True, do_swaps=True).to_gate()
-</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QPE Analysis: Hidden Phase Estimation</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p><pre class="notebook-output-text">Final DensityMatrix of counting register prior to measurement:
-</pre><div class="notebook-output-math">$$
-\begin{bmatrix}
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p><pre class="notebook-output-text">Counting register state prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
-Counting register state prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;011&#x27;: 1024}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: Phase Calculation</p><pre class="notebook-output-text">Target Phase Set (θ): 0.375
-Most frequent measurement: |011\rangle
-Decimal equivalent: 3
-Estimated Phase (θ) = 3 / 2^3 = 0.375
-Success: The estimated phase perfectly matches the target hidden phase!
-</pre>
+                
             </div>
         </div>
     </section>
