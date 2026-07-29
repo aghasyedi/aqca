@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bernstein-Vazirani Visualiser | AQCA</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary);
+            --dqa-accent: var(--primary-hover);
+            --dqa-bg: var(--background);
+            --dqa-card: var(--surface);
+            --dqa-text: var(--text);
+            --dqa-text-muted: var(--muted-text);
+            --dqa-border: var(--border);
+            --dqa-success: #059669;
+            --dqa-error: #dc2626;
+            --dqa-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            height: calc(100vh - var(--header-height) - 4rem);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .config-sidebar {
+            padding: 0 10px 20px 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card {
+            background: var(--dqa-card);
+            border: 1px solid var(--dqa-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--dqa-shadow);
+        }
+
+        .pert-card h2 {
+            margin: 0 0 16px 0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--dqa-primary);
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--dqa-border);
+        }
+
+        .visualizer-main {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-right: 10px;
+            padding-bottom: 20px;
+        }
+
+        .modern-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--dqa-border);
+            border-radius: 8px;
+            background: var(--background);
+            color: var(--dqa-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            transition: all 0.2s;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .modern-input:focus {
+            outline: none;
+            border-color: var(--dqa-primary);
+            box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
+        }
+
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .circuit-grid {
+            display: grid;
+            grid-template-rows: repeat(7, 40px); /* 6 data + 1 ancilla */
+            grid-template-columns: 80px 60px 120px 60px 80px;
+            gap: 10px;
+            align-items: center;
+            justify-items: center;
+            padding: 30px;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .circuit-cell { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .circuit-wire { position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #a0aabf; transform: translateY(-50%); z-index: 1; }
+        .wire-label { position: absolute; left: 10px; font-size: 0.8rem; font-family: 'JetBrains Mono'; color: var(--primary); font-weight: 700; z-index: 2; }
+        
+        .circuit-gate {
+            width: 34px; height: 34px; background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary);
+            border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono'; font-weight: 800; z-index: 3; transition: all 0.3s;
+        }
+        
+        .oracle-box {
+            position: absolute;
+            background: rgba(180, 83, 9, 0.1);
+            border: 2px dashed #b45309;
+            color: #b45309;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono';
+            font-size: 1.2rem;
+            font-weight: 800;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .oracle-box.active {
+            background: rgba(180, 83, 9, 0.8);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(180, 83, 9, 0.5);
+            border-style: solid;
+        }
+
+        .measure-gate {
+            width: 34px; height: 34px; background: var(--surface); border: 2px solid #b45309; color: #b45309; border-radius: 6px; display: flex; align-items: center; justify-content: center; z-index: 3; transition: all 0.3s;
+        }
+        .measure-gate::after { content: ''; position: absolute; width: 16px; height: 8px; border: 2px solid #b45309; border-bottom: none; border-radius: 16px 16px 0 0; bottom: 10px; }
+        .measure-gate::before { content: ''; position: absolute; width: 2px; height: 12px; background: #b45309; transform: rotate(30deg); bottom: 10px; transform-origin: bottom center; }
+
+        .gate-active { transform: scale(1.15); box-shadow: 0 0 15px var(--primary); background: var(--primary); color: #fff; }
+        .gate-active.measure-gate { box-shadow: 0 0 15px #b45309; background: #b45309; }
+        .gate-active.measure-gate::after { border-color: #fff; }
+        .gate-active.measure-gate::before { background: #fff; }
+
+        .result-panel {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .result-box {
+            text-align: center;
+        }
+        .result-box .label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px; }
+        .result-box .value { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 800; color: #fff; letter-spacing: 4px; }
+        .result-box .value span { display: inline-block; width: 30px; text-align: center; border-bottom: 2px solid #334155; }
+        .result-box .value span.revealed { color: #38bdf8; border-color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+        .result-box .value span.success { color: #34d399; border-color: #34d399; text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
+
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="bernstein-vazirani.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to BV</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Bernstein-Vazirani Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Secret Configuration</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Hidden String (s)</label>
+                            <input type="text" id="inp-string" class="modern-input" value="101101" maxlength="6" pattern="[01]*" oninput="validateInput(this)">
+                            <div style="font-size: 0.7rem; color: var(--dqa-text-muted); margin-top: 4px; text-align: center;">Enter up to 6 bits (0 or 1)</div>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Generate Oracle & Reset</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()">Play Animation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initial State</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">System initialized with |0⟩ on the data qubits and |1⟩ on the ancilla.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    
+                    <div class="pert-card">
+                        <h2 style="border: none;">Quantum Circuit: 1-Shot Execution</h2>
+                        <div class="circuit-grid" id="circuit-box">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <div class="result-panel">
+                        <div class="result-box">
+                            <div class="label">Hidden String</div>
+                            <div class="value" id="disp-hidden">
+                                <span>1</span><span>0</span><span>1</span><span>1</span><span>0</span><span>1</span>
+                            </div>
+                        </div>
+                        
+                        <div style="color: #475569; font-weight: 800; font-size: 2rem;">==</div>
+                        
+                        <div class="result-box">
+                            <div class="label">Recovered String</div>
+                            <div class="value" id="disp-recovered">
+                                <span>?</span><span>?</span><span>?</span><span>?</span><span>?</span><span>?</span>
+                            </div>
+                        </div>
+                        
+                        <div id="success-badge" style="background: rgba(5, 150, 105, 0.2); border: 2px solid #34d399; color: #34d399; padding: 10px 20px; border-radius: 20px; font-weight: 800; display: none; align-items: center; gap: 8px; animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            CORRECT!
+                        </div>
+                    </div>
+                    
+                    <style>
+                        @keyframes scaleIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+                    </style>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { step: 0, timer: null, secret: '101101', n: 6 };
+
+        function validateInput(inp) {
+            inp.value = inp.value.replace(/[^01]/g, '');
+        }
+
+        function drawCircuit() {
+            const box = document.getElementById('circuit-box');
+            box.innerHTML = '';
+            const n = state.n;
+            box.style.gridTemplateRows = `repeat(${n+1}, 40px)`;
+            
+            // Draw wires
+            for(let i=0; i<=n; i++) {
+                // Label
+                let lbl = document.createElement('div');
+                lbl.className = 'circuit-cell';
+                lbl.style.gridRow = i+1; lbl.style.gridColumn = 1;
+                lbl.innerHTML = `<div class="circuit-wire"></div><div class="wire-label">q${i} |${i===n ? '1' : '0'}⟩</div>`;
+                box.appendChild(lbl);
+                
+                // H1
+                let h1 = document.createElement('div');
+                h1.className = 'circuit-cell';
+                h1.style.gridRow = i+1; h1.style.gridColumn = 2;
+                h1.innerHTML = `<div class="circuit-wire"></div><div class="circuit-gate" id="h1-${i}">H</div>`;
+                box.appendChild(h1);
+                
+                // Oracle pass-through wire
+                let ow = document.createElement('div');
+                ow.className = 'circuit-cell';
+                ow.style.gridRow = i+1; ow.style.gridColumn = 3;
+                ow.innerHTML = `<div class="circuit-wire"></div>`;
+                box.appendChild(ow);
+
+                // H2 (only data qubits)
+                let h2 = document.createElement('div');
+                h2.className = 'circuit-cell';
+                h2.style.gridRow = i+1; h2.style.gridColumn = 4;
+                if(i < n) {
+                    h2.innerHTML = `<div class="circuit-wire"></div><div class="circuit-gate" id="h2-${i}">H</div>`;
+                } else {
+                    h2.innerHTML = `<div class="circuit-wire"></div>`;
+                }
+                box.appendChild(h2);
+
+                // Measure (only data qubits)
+                let m = document.createElement('div');
+                m.className = 'circuit-cell';
+                m.style.gridRow = i+1; m.style.gridColumn = 5;
+                if(i < n) {
+                    m.innerHTML = `<div class="circuit-wire"></div><div class="measure-gate" id="m-${i}"></div>`;
+                } else {
+                    m.innerHTML = `<div class="circuit-wire"></div>`;
+                }
+                box.appendChild(m);
+            }
+            
+            // Draw Oracle Box
+            let oracle = document.createElement('div');
+            oracle.className = 'oracle-box';
+            oracle.id = 'oracle-box';
+            oracle.style.gridRow = `1 / span ${n+1}`;
+            oracle.style.gridColumn = `3`;
+            oracle.style.width = '100px';
+            oracle.style.height = `calc(100% - 20px)`;
+            
+            // Add internal dot representation based on secret
+            let dotsHTML = '<div style="display:flex; flex-direction:column; justify-content:space-around; height:100%; width:100%; align-items:center;">';
+            for(let i=0; i<n; i++) {
+                if(state.secret[i] === '1') {
+                    dotsHTML += `<div style="width:8px; height:8px; border-radius:50%; background:#b45309;"></div>`;
+                } else {
+                    dotsHTML += `<div style="width:8px; height:8px; border-radius:50%; background:transparent; border:1px solid rgba(180,83,9,0.3);"></div>`;
+                }
+            }
+            dotsHTML += `<div style="width:16px; height:16px; border-radius:50%; border:2px solid #b45309; display:flex; align-items:center; justify-content:center; margin-top:5px;"><div style="width:8px; height:2px; background:#b45309;"></div><div style="width:2px; height:8px; background:#b45309; position:absolute;"></div></div>`; // target on ancilla
+            dotsHTML += '</div>';
+
+            oracle.innerHTML = dotsHTML + `<div style="position:absolute; background:var(--surface); padding:0 5px; top:-12px; font-size:0.8rem;">$U_f(x)$</div>`;
+            box.appendChild(oracle);
+            MathJax.typesetPromise();
+        }
+
+        function resetSystem() {
+            stopAuto();
+            let inp = document.getElementById('inp-string').value;
+            if(!inp) inp = "101101";
+            state.secret = inp;
+            state.n = inp.length;
+            state.step = 0;
+            
+            // setup result boxes
+            let hidHTML = '', recHTML = '';
+            for(let i=0; i<state.n; i++) {
+                hidHTML += `<span>${state.secret[i]}</span>`;
+                recHTML += `<span id="rec-${i}">?</span>`;
+            }
+            document.getElementById('disp-hidden').innerHTML = hidHTML;
+            document.getElementById('disp-recovered').innerHTML = recHTML;
+            document.getElementById('success-badge').style.display = 'none';
+
+            drawCircuit();
+            updateUI();
+        }
+
+        function updateUI() {
+            // Panels
+            if (state.step === 0) {
+                document.getElementById('panel-title').innerText = "Step 0: Initialisation";
+                document.getElementById('panel-desc').innerText = `System initialized. ${state.n} data qubits in |0⟩, ancilla in |1⟩.`;
+            } else if (state.step === 1) {
+                document.getElementById('panel-title').innerText = "Step 1: Superposition (Phase Kickback Prep)";
+                document.getElementById('panel-desc').innerText = `Hadamard gates create an equal superposition of all inputs. The ancilla becomes |−⟩, setting up phase kickback.`;
+            } else if (state.step === 2) {
+                document.getElementById('panel-title').innerText = "Step 2: The Oracle Query";
+                document.getElementById('panel-desc').innerText = `The Oracle U_f(x) evaluates the hidden string. Instead of flipping the ancilla bit, the |−⟩ state kicks the phase back, flipping the amplitude sign of every state x where x·s=1.`;
+            } else if (state.step === 3) {
+                document.getElementById('panel-title').innerText = "Step 3: Interference";
+                document.getElementById('panel-desc').innerText = `A final layer of Hadamard gates interferes the amplitudes. Amazingly, perfect destructive interference cancels all states EXCEPT the exact hidden string s.`;
+            } else if (state.step === 4) {
+                document.getElementById('panel-title').innerText = "Step 4: Measurement & 1-Shot Success!";
+                document.getElementById('panel-desc').innerText = `Measuring the data qubits yields the hidden string with 100% probability in exactly one query, completely beating classical bounds.`;
+            }
+
+            // Buttons
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 4;
+
+            // Circuit Highlights
+            for(let i=0; i<=state.n; i++) {
+                let h1 = document.getElementById(`h1-${i}`); if(h1) h1.classList.remove('gate-active');
+                let h2 = document.getElementById(`h2-${i}`); if(h2) h2.classList.remove('gate-active');
+                let m = document.getElementById(`m-${i}`); if(m) m.classList.remove('gate-active');
+            }
+            document.getElementById('oracle-box').classList.remove('active');
+
+            if(state.step === 1) {
+                for(let i=0; i<=state.n; i++) {
+                    let h1 = document.getElementById(`h1-${i}`); if(h1) h1.classList.add('gate-active');
+                }
+            } else if (state.step === 2) {
+                document.getElementById('oracle-box').classList.add('active');
+            } else if (state.step === 3) {
+                for(let i=0; i<state.n; i++) {
+                    let h2 = document.getElementById(`h2-${i}`); if(h2) h2.classList.add('gate-active');
+                }
+            } else if (state.step === 4) {
+                for(let i=0; i<state.n; i++) {
+                    let m = document.getElementById(`m-${i}`); if(m) m.classList.add('gate-active');
+                }
+            }
+
+            // Results Update
+            for(let i=0; i<state.n; i++) {
+                let rspan = document.getElementById(`rec-${i}`);
+                if(state.step === 4) {
+                    rspan.innerText = state.secret[i];
+                    rspan.className = 'success';
+                } else if(state.step === 3) {
+                    rspan.innerText = state.secret[i];
+                    rspan.className = 'revealed';
+                } else {
+                    rspan.innerText = '?';
+                    rspan.className = '';
+                }
+            }
+
+            if(state.step === 4) {
+                document.getElementById('success-badge').style.display = 'flex';
+            } else {
+                document.getElementById('success-badge').style.display = 'none';
+            }
+        }
+
+        function nextStep() { if(state.step < 4) { state.step++; updateUI(); } }
+        function prevStep() { if(state.step > 0) { stopAuto(); state.step--; updateUI(); } }
+        
+        function toggleAuto() {
+            if (state.timer) stopAuto();
+            else {
+                if(state.step === 4) resetSystem();
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                state.timer = setInterval(() => {
+                    if (state.step < 4) nextStep();
+                    else stopAuto();
+                }, 1200);
+            }
+        }
+        function stopAuto() { clearInterval(state.timer); state.timer = null; document.getElementById('btn-auto').innerText = "Play Animation"; }
+
+        resetSystem();
+    </script>
+</body>
+</html>

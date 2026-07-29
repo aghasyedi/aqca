@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QAOA Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary); --dqa-card: var(--surface);
+            --dqa-text: var(--text); --dqa-border: var(--border);
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-input { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'Inter'; font-weight: 700; text-align: left; }
+        .modern-input:focus { outline: none; border-color: var(--dqa-primary); }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .hybrid-loop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .loop-box {
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px;
+        }
+        .loop-box h3 { margin: 0; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; }
+        
+        .val-display { font-family: 'JetBrains Mono'; font-size: 1.2rem; font-weight: 800; color: #fff; margin-top: 5px;}
+        .loop-active { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 90, 156, 0.2); }
+        
+        .graph-container {
+            width: 100%; height: 250px; background: var(--background); border: 1px solid var(--border); border-radius: 12px; position: relative; overflow: hidden;
+        }
+        
+        .node {
+            position: absolute; width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-family: 'JetBrains Mono'; border: 2px solid;
+            transition: all 0.3s; z-index: 2; background: #1e293b;
+        }
+        
+        .node-0 { border-color: #f43f5e; color: #f43f5e; } /* Red partition */
+        .node-1 { border-color: #38bdf8; color: #38bdf8; } /* Blue partition */
+        .node-none { border-color: #94a3b8; color: #94a3b8; }
+        
+        .edge {
+            position: absolute; background: #334155; transform-origin: 0 50%; z-index: 1; transition: all 0.3s;
+        }
+        .edge-cut { background: #34d399; height: 3px; box-shadow: 0 0 10px #34d399; } /* Green cut */
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="qaoa.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to QAOA</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">QAOA (MaxCut) Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Configure Problem</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Graph Type</label>
+                            <select id="inp-graph" class="modern-input" onchange="resetSystem()">
+                                <option value="square">4-Node Square</option>
+                                <option value="butterfly">5-Node Butterfly</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">QAOA Layers (p)</label>
+                            <input type="range" id="inp-p" style="width:100%;" min="1" max="5" value="2">
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Initialize</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Optimisation Console</h2>
+                        <button class="btn btn-primary btn-modern" id="btn-run" style="width:100%; padding: 15px;" onclick="toggleOptimization()">Start Optimisation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Ready</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Watch QAOA alternate between the Cost Hamiltonian (γ) and Mixer Hamiltonian (β) to maximize the graph cut size.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    
+                    <div class="pert-card">
+                        <h2 style="border: none; display: flex; justify-content: space-between;">
+                            <span>MaxCut Graph Colouring</span>
+                            <span id="lbl-cutsize">Cut Size: 0</span>
+                        </h2>
+                        <div class="graph-container" id="graph-ui">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="hybrid-loop">
+                        <!-- Quantum Side -->
+                        <div class="loop-box" id="box-quantum">
+                            <h3>1. Quantum Circuit (Ansatz)</h3>
+                            <div style="color: #64748b; font-size: 0.8rem; margin: 10px 0;">Cost (γ) + Mixer (β)</div>
+                            <div style="font-family: 'JetBrains Mono'; font-weight: 800; font-size: 0.9rem; margin-bottom: 10px;">
+                                <span style="color:#b45309;">H<sub>C</sub>(γ)</span> → <span style="color:#8b5cf6;">H<sub>M</sub>(β)</span>
+                            </div>
+                            <div style="margin-top: auto;">Expectation ⟨C⟩ (Cut Size)</div>
+                            <div class="val-display" id="lbl-exp">0.00</div>
+                        </div>
+
+                        <!-- Classical Side -->
+                        <div class="loop-box" id="box-classical">
+                            <h3>2. Classical Optimiser</h3>
+                            <div style="color: #64748b; font-size: 0.8rem; margin: 10px 0;">Update γ and β</div>
+                            <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                                <div>
+                                    <div style="font-size: 0.7rem; color: #94a3b8;">γ (Cost)</div>
+                                    <div class="val-display" id="lbl-gamma" style="font-size: 1rem; color: #b45309;">[0.00]</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; color: #94a3b8;">β (Mixer)</div>
+                                    <div class="val-display" id="lbl-beta" style="font-size: 1rem; color: #8b5cf6;">[0.00]</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: auto;">Iteration</div>
+                            <div class="val-display" id="lbl-iter">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { running: false, timer: null, iter: 0, p: 2, cut: 0, gamma: [], beta: [], nodes: [], edges: [], maxPossibleCut: 0 };
+
+        const graphs = {
+            'square': {
+                nodes: [{id: 0, x: 20, y: 20}, {id: 1, x: 80, y: 20}, {id: 2, x: 80, y: 80}, {id: 3, x: 20, y: 80}],
+                edges: [[0,1], [1,2], [2,3], [3,0]],
+                maxCut: 4
+            },
+            'butterfly': {
+                nodes: [{id: 0, x: 20, y: 20}, {id: 1, x: 20, y: 80}, {id: 2, x: 50, y: 50}, {id: 3, x: 80, y: 20}, {id: 4, x: 80, y: 80}],
+                edges: [[0,1], [0,2], [1,2], [2,3], [2,4], [3,4]],
+                maxCut: 4 // Note: triangle max cut is 2 (e.g. one node different). 2 triangles joined at center. Center=0, lefts=1, rights=1. Total cut = 4.
+            }
+        };
+
+        function drawGraph() {
+            let container = document.getElementById('graph-ui');
+            container.innerHTML = '';
+            
+            // Draw edges
+            state.edges.forEach((edge, i) => {
+                let n1 = state.nodes[edge[0]];
+                let n2 = state.nodes[edge[1]];
+                
+                // Convert % to px (approximate)
+                let w = container.clientWidth;
+                let h = container.clientHeight;
+                let x1 = (n1.x / 100) * w; let y1 = (n1.y / 100) * h;
+                let x2 = (n2.x / 100) * w; let y2 = (n2.y / 100) * h;
+                
+                let length = Math.hypot(x2-x1, y2-y1);
+                let angle = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
+                
+                let isCut = (n1.color !== 'none' && n2.color !== 'none' && n1.color !== n2.color);
+                
+                let div = document.createElement('div');
+                div.className = 'edge' + (isCut ? ' edge-cut' : '');
+                div.style.width = length + 'px';
+                div.style.height = isCut ? '4px' : '2px';
+                div.style.left = x1 + 'px';
+                div.style.top = y1 + 'px';
+                div.style.transform = `rotate(${angle}deg)`;
+                container.appendChild(div);
+            });
+            
+            // Draw nodes
+            state.nodes.forEach(n => {
+                let div = document.createElement('div');
+                div.className = `node node-${n.color}`;
+                div.style.left = `calc(${n.x}% - 20px)`;
+                div.style.top = `calc(${n.y}% - 20px)`;
+                div.innerText = n.id;
+                container.appendChild(div);
+            });
+        }
+
+        function calculateCut() {
+            let cut = 0;
+            state.edges.forEach(edge => {
+                let n1 = state.nodes[edge[0]];
+                let n2 = state.nodes[edge[1]];
+                if (n1.color !== 'none' && n2.color !== 'none' && n1.color !== n2.color) cut++;
+            });
+            return cut;
+        }
+
+        function resetSystem() {
+            stopOptimization();
+            let type = document.getElementById('inp-graph').value;
+            state.p = parseInt(document.getElementById('inp-p').value);
+            
+            state.nodes = JSON.parse(JSON.stringify(graphs[type].nodes));
+            state.nodes.forEach(n => n.color = 'none'); // 0 or 1
+            state.edges = graphs[type].edges;
+            state.maxPossibleCut = graphs[type].maxCut;
+            
+            state.gamma = Array(state.p).fill(0).map(()=> (Math.random()*Math.PI).toFixed(2));
+            state.beta = Array(state.p).fill(0).map(()=> (Math.random()*Math.PI).toFixed(2));
+            
+            state.iter = 0;
+            state.cut = 0;
+            
+            document.getElementById('lbl-iter').innerText = '0';
+            document.getElementById('lbl-exp').innerText = '0.00';
+            document.getElementById('lbl-gamma').innerText = '[' + state.gamma.join(', ') + ']';
+            document.getElementById('lbl-beta').innerText = '[' + state.beta.join(', ') + ']';
+            document.getElementById('lbl-cutsize').innerText = `Cut Size: 0`;
+            
+            drawGraph();
+            document.getElementById('btn-run').innerText = "Start Optimisation";
+            document.getElementById('btn-run').disabled = false;
+        }
+
+        function toggleOptimization() {
+            if(state.running) stopOptimization();
+            else { state.running = true; document.getElementById('btn-run').innerText = "Pause Optimisation"; runLoop(); }
+        }
+        function stopOptimization() { state.running = false; clearTimeout(state.timer); }
+
+        function runLoop() {
+            if(!state.running) return;
+
+            // Quantum Step
+            document.getElementById('box-quantum').classList.add('loop-active');
+            document.getElementById('box-classical').classList.remove('loop-active');
+            
+            // Randomly flip nodes to simulate quantum measurement distribution tightening
+            // As iter goes up, probability of perfect cut increases
+            let probOptimal = Math.min(1.0, state.iter / 15); 
+            
+            if (Math.random() < probOptimal) {
+                // Approximate optimal
+                if (state.maxPossibleCut === 4 && state.nodes.length === 4) {
+                    state.nodes[0].color = 0; state.nodes[1].color = 1; state.nodes[2].color = 0; state.nodes[3].color = 1;
+                } else if (state.nodes.length === 5) {
+                    state.nodes[0].color = 0; state.nodes[1].color = 0; state.nodes[2].color = 1; state.nodes[3].color = 0; state.nodes[4].color = 0;
+                }
+            } else {
+                // Random
+                state.nodes.forEach(n => n.color = Math.random() > 0.5 ? 0 : 1);
+            }
+            
+            let cut = calculateCut();
+            // Smooth expectation value for visual
+            let rawExp = parseFloat(document.getElementById('lbl-exp').innerText);
+            let newExp = rawExp + 0.3 * (cut - rawExp);
+            
+            document.getElementById('lbl-exp').innerText = newExp.toFixed(2);
+            document.getElementById('lbl-cutsize').innerText = `Cut Size: ${cut}`;
+            drawGraph();
+
+            state.timer = setTimeout(() => {
+                if(!state.running) return;
+                
+                // Classical Step
+                document.getElementById('box-quantum').classList.remove('loop-active');
+                document.getElementById('box-classical').classList.add('loop-active');
+                
+                state.iter++;
+                document.getElementById('lbl-iter').innerText = state.iter;
+                
+                state.gamma = state.gamma.map(g => (parseFloat(g) + (Math.random()-0.5)*0.2).toFixed(2));
+                state.beta = state.beta.map(b => (parseFloat(b) + (Math.random()-0.5)*0.2).toFixed(2));
+                
+                document.getElementById('lbl-gamma').innerText = '[' + state.gamma.join(', ') + ']';
+                document.getElementById('lbl-beta').innerText = '[' + state.beta.join(', ') + ']';
+                
+                if (state.iter >= 20) {
+                    stopOptimization();
+                    document.getElementById('btn-run').innerText = "Converged";
+                    document.getElementById('btn-run').disabled = true;
+                } else {
+                    state.timer = setTimeout(runLoop, 600);
+                }
+            }, 600);
+        }
+
+        // Delay init to let layout settle
+        setTimeout(resetSystem, 100);
+    </script>
+</body>
+</html>

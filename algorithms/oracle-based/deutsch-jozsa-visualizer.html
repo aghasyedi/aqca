@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch-Jozsa Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary);
+            --dqa-accent: var(--primary-hover);
+            --dqa-bg: var(--background);
+            --dqa-card: var(--surface);
+            --dqa-text: var(--text);
+            --dqa-text-muted: var(--muted-text);
+            --dqa-border: var(--border);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            height: calc(100vh - var(--header-height) - 4rem);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: var(--radius-md); padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-select { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'JetBrains Mono'; font-size: 0.85rem; font-weight: 700; }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .result-panel {
+            background: #0f172a; border-radius: 12px; padding: 24px; display: flex; align-items: center; justify-content: center; margin-top: 20px; flex-direction: column; gap: 15px;
+        }
+
+        .chart-container { width: 100%; height: 250px; position: relative; }
+
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="deutsch-jozsa.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to DJ</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Deutsch-Jozsa Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Oracle Configuration</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Oracle Type</label>
+                            <select id="inp-type" class="modern-select">
+                                <option value="constant">Constant</option>
+                                <option value="balanced">Balanced</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Generate Random Oracle</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()">Play Animation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initial State</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">System initialized with n qubits in |0⟩, ancilla in |1⟩.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    <div class="pert-card">
+                        <h2 style="border: none;">Measurement Probabilities (n=3)</h2>
+                        <div class="chart-container">
+                            <canvas id="probChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="result-panel">
+                        <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">Oracle Judgement</div>
+                        <div id="disp-result" style="font-family: 'JetBrains Mono'; font-size: 3rem; font-weight: 800; color: #fff; letter-spacing: 4px; border-bottom: 2px solid #334155; padding-bottom: 10px;">
+                            ???
+                        </div>
+                        <div id="success-badge" style="background: rgba(5, 150, 105, 0.2); border: 2px solid #34d399; color: #34d399; padding: 10px 20px; border-radius: 20px; font-weight: 800; display: none; align-items: center; gap: 8px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Evaluated in ONE query!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { step: 0, timer: null, type: 'constant' };
+        
+        let chartCtx = document.getElementById('probChart').getContext('2d');
+        const computedStyle = getComputedStyle(document.documentElement);
+        const colorPrimary = computedStyle.getPropertyValue('--dqa-primary').trim() || '#005a9c';
+
+        let probChart = new Chart(chartCtx, {
+            type: 'bar',
+            data: {
+                labels: ['|000⟩', '|001⟩', '|010⟩', '|011⟩', '|100⟩', '|101⟩', '|110⟩', '|111⟩'],
+                datasets: [{
+                    label: 'Probability',
+                    data: [1, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: [colorPrimary, '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc'],
+                    borderWidth: 0,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 1, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        function resetSystem() {
+            stopAuto();
+            state.type = document.getElementById('inp-type').value;
+            state.step = 0;
+            document.getElementById('disp-result').innerText = '???';
+            document.getElementById('disp-result').style.color = '#fff';
+            document.getElementById('success-badge').style.display = 'none';
+            updateUI();
+        }
+
+        function updateUI() {
+            // Panels
+            if (state.step === 0) {
+                document.getElementById('panel-title').innerText = "Step 0: Initialisation";
+                document.getElementById('panel-desc').innerText = `System initialized. 3 data qubits in |0⟩.`;
+                probChart.data.datasets[0].data = [1, 0, 0, 0, 0, 0, 0, 0];
+                probChart.data.datasets[0].backgroundColor = [colorPrimary, '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc'];
+            } else if (state.step === 1) {
+                document.getElementById('panel-title').innerText = "Step 1: Superposition";
+                document.getElementById('panel-desc').innerText = `Hadamard gates create an equal superposition of all 8 possible inputs.`;
+                probChart.data.datasets[0].data = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125];
+                probChart.data.datasets[0].backgroundColor = Array(8).fill(colorPrimary);
+            } else if (state.step === 2) {
+                document.getElementById('panel-title').innerText = "Step 2: The Oracle Query";
+                document.getElementById('panel-desc').innerText = `The ${state.type.toUpperCase()} Oracle applies phase kickback, flipping amplitudes but maintaining the probability distribution exactly equal.`;
+                probChart.data.datasets[0].data = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125];
+                probChart.data.datasets[0].backgroundColor = Array(8).fill('#b45309');
+            } else if (state.step === 3) {
+                document.getElementById('panel-title').innerText = "Step 3: Interference";
+                document.getElementById('panel-desc').innerText = `Final Hadamards interfere amplitudes. If Constant, constructive interference peaks at |000⟩. If Balanced, destructive interference zeroes |000⟩ entirely!`;
+                if(state.type === 'constant') {
+                    probChart.data.datasets[0].data = [1, 0, 0, 0, 0, 0, 0, 0];
+                    probChart.data.datasets[0].backgroundColor = [colorPrimary, '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc', '#e0d8cc'];
+                } else {
+                    // Random balanced distribution
+                    probChart.data.datasets[0].data = [0, 0.1, 0.2, 0.2, 0, 0.3, 0.1, 0.1];
+                    probChart.data.datasets[0].backgroundColor = ['#e0d8cc', colorPrimary, colorPrimary, colorPrimary, '#e0d8cc', colorPrimary, colorPrimary, colorPrimary];
+                }
+            } else if (state.step === 4) {
+                document.getElementById('panel-title').innerText = "Step 4: Measurement";
+                document.getElementById('panel-desc').innerText = `If we measure 000, it's Constant. Anything else means Balanced!`;
+                
+                document.getElementById('disp-result').innerText = state.type.toUpperCase();
+                document.getElementById('disp-result').style.color = state.type === 'constant' ? '#38bdf8' : '#f43f5e';
+                document.getElementById('success-badge').style.display = 'flex';
+            }
+
+            probChart.update();
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 4;
+        }
+
+        function nextStep() { if(state.step < 4) { state.step++; updateUI(); } }
+        function prevStep() { if(state.step > 0) { stopAuto(); state.step--; updateUI(); } }
+        
+        function toggleAuto() {
+            if (state.timer) stopAuto();
+            else {
+                if(state.step === 4) resetSystem();
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                state.timer = setInterval(() => { if (state.step < 4) nextStep(); else stopAuto(); }, 1200);
+            }
+        }
+        function stopAuto() { clearInterval(state.timer); state.timer = null; document.getElementById('btn-auto').innerText = "Play Animation"; }
+
+        resetSystem();
+    </script>
+</body>
+</html>

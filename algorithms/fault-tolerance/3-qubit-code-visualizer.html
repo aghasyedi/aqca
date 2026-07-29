@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Qubit Bit Flip Code Visualiser | AQCA</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary); --dqa-card: var(--surface);
+            --dqa-text: var(--text); --dqa-border: var(--border);
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-select { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'Inter'; font-weight: 700; text-align: left; }
+        
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .flow-container { display: flex; justify-content: space-between; align-items: flex-start; position: relative; margin-top: 20px; padding: 0 20px; }
+        
+        .flow-step { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 120px; z-index: 2; opacity: 0.3; transition: 0.3s; }
+        .flow-step.active { opacity: 1; transform: scale(1.05); }
+        
+        .flow-icon { width: 60px; height: 60px; border-radius: 12px; background: #0f172a; border: 2px solid #334155; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono'; font-weight: 800; font-size: 1.2rem; color: #fff; transition: 0.3s; }
+        .flow-step.active .flow-icon { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 90, 156, 0.4); background: rgba(0, 90, 156, 0.1); }
+        
+        .flow-text { font-size: 0.8rem; text-transform: uppercase; font-weight: 800; color: #94a3b8; text-align: center; }
+        
+        .flow-line { position: absolute; top: 30px; left: 50px; right: 50px; height: 2px; background: #334155; z-index: 1; }
+
+        .qubit-state { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 800; padding: 4px 8px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+        .qubit-error { color: #f43f5e; border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.1); }
+        .qubit-fixed { color: #34d399; border-color: rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1); }
+        
+        .diagnostic-panel { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; font-family: 'JetBrains Mono'; margin-top: 20px; }
+        .diag-row { display: flex; align-items: center; justify-content: space-between; padding-bottom: 15px; border-bottom: 1px dashed #334155; }
+        .diag-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .diag-label { color: #94a3b8; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+        .diag-value { font-size: 1.1rem; font-weight: 800; color: #fff; }
+
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="3-qubit-code.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to 3-Qubit Code</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">3-Qubit Error Correction Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Configure Noise</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Inject Error (Bit Flip)</label>
+                            <select id="inp-error" class="modern-select" onchange="resetSystem()">
+                                <option value="none">No error</option>
+                                <option value="0">Bit flip q₀ (Top)</option>
+                                <option value="1">Bit flip q₁ (Middle)</option>
+                                <option value="2">Bit flip q₂ (Bottom)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%;" onclick="toggleAuto()">Play Animation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initialisation</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Initial logical state is |ψ⟩ = α|0⟩ + β|1⟩.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    
+                    <div class="pert-card">
+                        <h2 style="border: none;">Quantum Error Correction Pipeline</h2>
+                        
+                        <div class="flow-container">
+                            <div class="flow-line"></div>
+                            
+                            <div class="flow-step" id="step-0">
+                                <div class="flow-icon">|ψ⟩</div>
+                                <div class="flow-text">Logical<br>State</div>
+                                <div id="state-0" class="qubit-state" style="margin-top:10px;">|ψ⟩</div>
+                            </div>
+                            
+                            <div class="flow-step" id="step-1">
+                                <div class="flow-icon">ENC</div>
+                                <div class="flow-text">Encode</div>
+                                <div id="state-1" class="qubit-state" style="margin-top:10px;">|ψ⟩|00⟩</div>
+                            </div>
+
+                            <div class="flow-step" id="step-2">
+                                <div class="flow-icon" style="color: #f43f5e; border-color: rgba(244, 63, 94, 0.3);">NOISE</div>
+                                <div class="flow-text">Channel</div>
+                                <div id="state-2" class="qubit-state" style="margin-top:10px;">?</div>
+                            </div>
+
+                            <div class="flow-step" id="step-3">
+                                <div class="flow-icon">SYN</div>
+                                <div class="flow-text">Syndrome</div>
+                                <div id="state-3" class="qubit-state" style="margin-top:10px;">?</div>
+                            </div>
+
+                            <div class="flow-step" id="step-4">
+                                <div class="flow-icon" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3);">COR</div>
+                                <div class="flow-text">Correction</div>
+                                <div id="state-4" class="qubit-state" style="margin-top:10px;">?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pert-card" style="flex-grow: 1;">
+                        <h2 style="border: none;">Diagnostic Log</h2>
+                        <div class="diagnostic-panel">
+                            <div class="diag-row">
+                                <div class="diag-label">Data Qubits (q₀q₁q₂)</div>
+                                <div class="diag-value" id="diag-data">α|000⟩ + β|111⟩</div>
+                            </div>
+                            <div class="diag-row">
+                                <div class="diag-label">Ancilla Measurement (Syndrome)</div>
+                                <div class="diag-value" id="diag-syn">N/A</div>
+                            </div>
+                            <div class="diag-row">
+                                <div class="diag-label">Action Taken</div>
+                                <div class="diag-value" id="diag-act" style="color: #94a3b8;">None</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { step: 0, timer: null, err: 'none' };
+
+        function resetSystem() {
+            stopAuto();
+            state.err = document.getElementById('inp-error').value;
+            state.step = 0;
+            
+            for(let i=0; i<=4; i++) {
+                document.getElementById(`step-${i}`).classList.remove('active');
+            }
+            
+            document.getElementById('state-1').innerText = '|ψ⟩|00⟩'; document.getElementById('state-1').className = 'qubit-state';
+            document.getElementById('state-2').innerText = '?'; document.getElementById('state-2').className = 'qubit-state';
+            document.getElementById('state-3').innerText = '?'; document.getElementById('state-3').className = 'qubit-state';
+            document.getElementById('state-4').innerText = '?'; document.getElementById('state-4').className = 'qubit-state';
+            
+            document.getElementById('diag-data').innerText = 'α|0⟩ + β|1⟩';
+            document.getElementById('diag-data').style.color = '#fff';
+            document.getElementById('diag-syn').innerText = 'N/A';
+            document.getElementById('diag-act').innerText = 'None';
+            document.getElementById('diag-act').style.color = '#94a3b8';
+            
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 4;
+
+            for(let i=0; i<=4; i++) document.getElementById(`step-${i}`).classList.remove('active');
+            document.getElementById(`step-${state.step}`).classList.add('active');
+
+            if(state.step === 0) {
+                document.getElementById('panel-title').innerText = "Step 0: Logical State";
+                document.getElementById('panel-desc').innerText = "We begin with a single physical qubit representing our logical state |ψ⟩ = α|0⟩ + β|1⟩.";
+                document.getElementById('diag-data').innerText = 'α|0⟩ + β|1⟩';
+                document.getElementById('diag-data').style.color = '#fff';
+            }
+            else if(state.step === 1) {
+                document.getElementById('panel-title').innerText = "Step 1: Encoding";
+                document.getElementById('panel-desc').innerText = "Two ancilla qubits are added. Using CNOT gates, we entangle them to create the logical repetition code: α|000⟩ + β|111⟩.";
+                document.getElementById('state-1').innerText = 'α|000⟩ + β|111⟩';
+                document.getElementById('diag-data').innerText = 'α|000⟩ + β|111⟩';
+                document.getElementById('diag-data').style.color = '#fff';
+            }
+            else if(state.step === 2) {
+                document.getElementById('panel-title').innerText = "Step 2: Noise Channel";
+                
+                let s = 'α|000⟩ + β|111⟩';
+                let c = '#fff';
+                
+                if(state.err === '0') { s = 'α|100⟩ + β|011⟩'; c = '#f43f5e'; }
+                if(state.err === '1') { s = 'α|010⟩ + β|101⟩'; c = '#f43f5e'; }
+                if(state.err === '2') { s = 'α|001⟩ + β|110⟩'; c = '#f43f5e'; }
+                
+                document.getElementById('panel-desc').innerText = state.err === 'none' ? "The qubits pass through the environment unharmed." : `An X error (bit flip) strikes qubit ${state.err}! The state is now corrupted.`;
+                
+                let el = document.getElementById('state-2');
+                el.innerText = s;
+                el.className = state.err === 'none' ? 'qubit-state' : 'qubit-state qubit-error';
+                
+                document.getElementById('diag-data').innerText = s;
+                document.getElementById('diag-data').style.color = c;
+            }
+            else if(state.step === 3) {
+                document.getElementById('panel-title').innerText = "Step 3: Syndrome Measurement";
+                
+                let syn = '00';
+                if(state.err === '0') syn = '11';
+                if(state.err === '1') syn = '10';
+                if(state.err === '2') syn = '01';
+                
+                document.getElementById('panel-desc').innerText = `We extract parity checks Z₀Z₁ and Z₁Z₂ using ancillas. The syndrome is ${syn}.`;
+                
+                document.getElementById('state-3').innerText = syn;
+                document.getElementById('diag-syn').innerText = syn;
+            }
+            else if(state.step === 4) {
+                document.getElementById('panel-title').innerText = "Step 4: Recovery";
+                
+                let act = 'Identity (Do nothing)';
+                let actC = '#94a3b8';
+                
+                if(state.err === '0') { act = 'Apply X to q₀'; actC = '#34d399'; }
+                if(state.err === '1') { act = 'Apply X to q₁'; actC = '#34d399'; }
+                if(state.err === '2') { act = 'Apply X to q₂'; actC = '#34d399'; }
+                
+                document.getElementById('panel-desc').innerText = `Based on the syndrome, we ${act.toLowerCase()} to restore the original state: α|000⟩ + β|111⟩.`;
+                
+                let el = document.getElementById('state-4');
+                el.innerText = 'α|000⟩ + β|111⟩';
+                el.className = state.err === 'none' ? 'qubit-state' : 'qubit-state qubit-fixed';
+                
+                document.getElementById('diag-data').innerText = 'α|000⟩ + β|111⟩';
+                document.getElementById('diag-data').style.color = state.err === 'none' ? '#fff' : '#34d399';
+                
+                document.getElementById('diag-act').innerText = act;
+                document.getElementById('diag-act').style.color = actC;
+            }
+        }
+
+        function nextStep() { if(state.step < 4) { state.step++; updateUI(); } }
+        function prevStep() { if(state.step > 0) { stopAuto(); state.step--; updateUI(); } }
+        
+        function toggleAuto() {
+            if (state.timer) stopAuto();
+            else {
+                if(state.step === 4) resetSystem();
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                state.timer = setInterval(() => { if (state.step < 4) nextStep(); else stopAuto(); }, 1500);
+            }
+        }
+        function stopAuto() { clearInterval(state.timer); state.timer = null; document.getElementById('btn-auto').innerText = "Play Animation"; }
+
+        resetSystem();
+    </script>
+</body>
+</html>

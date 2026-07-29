@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QFT Visualiser | AQCA</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary);
+            --dqa-card: var(--surface);
+            --dqa-text: var(--text);
+            --dqa-border: var(--border);
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-select { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'JetBrains Mono'; font-weight: 700; }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+            background: #0f172a;
+            border-radius: 16px;
+        }
+
+        .phase-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phase-canvas {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .phase-label {
+            font-family: 'JetBrains Mono';
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .circuit-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'JetBrains Mono';
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .gate { width: 40px; height: 40px; background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .gate.cp { background: rgba(5, 150, 105, 0.1); border-color: #059669; color: #059669; font-size: 0.8rem; }
+        .gate.swap { background: rgba(180, 83, 9, 0.1); border-color: #b45309; color: #b45309; font-size: 0.7rem; }
+        
+        .active-gate { transform: scale(1.15); box-shadow: 0 0 15px currentColor; background: currentColor !important; color: #fff !important; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="quantum-fourier-transform.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to QFT</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Quantum Fourier Transform (3-Qubit)</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Initial State</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Input State (Computational Basis)</label>
+                            <select id="inp-state" class="modern-select">
+                                <option value="0">|000⟩ (State 0)</option>
+                                <option value="1">|001⟩ (State 1)</option>
+                                <option value="2">|010⟩ (State 2)</option>
+                                <option value="3">|011⟩ (State 3)</option>
+                                <option value="4">|100⟩ (State 4)</option>
+                                <option value="5">|101⟩ (State 5)</option>
+                                <option value="6">|110⟩ (State 6)</option>
+                                <option value="7">|111⟩ (State 7)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Initialize</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%;" onclick="toggleAuto()">Play Animation</button>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    
+                    <div class="pert-card" style="flex-grow: 1;">
+                        <h2 style="border: none;">Complex Phase Plane (Rotating Amplitudes)</h2>
+                        <div class="phase-grid" id="phase-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2 style="border: none;">Live Circuit Execution</h2>
+                        <div style="display: flex; flex-direction: column; background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <div class="circuit-row" id="row-0">
+                                <span style="width: 50px;">q₀</span>
+                                <div class="gate h-gate" id="g0-0">H</div>
+                                <div class="gate cp-gate" id="g0-1">CP(π/2)</div>
+                                <div class="gate cp-gate" id="g0-2">CP(π/4)</div>
+                                <div class="gate swap-gate" id="g0-3" style="margin-left: auto;">SWAP</div>
+                            </div>
+                            <div class="circuit-row" id="row-1">
+                                <span style="width: 50px;">q₁</span>
+                                <div style="width: 40px; margin-right: 15px;"></div>
+                                <div class="gate cp-gate" id="g1-1">CTRL</div>
+                                <div style="width: 40px; margin-right: 15px;"></div>
+                                <div class="gate h-gate" id="g1-3">H</div>
+                                <div class="gate cp-gate" id="g1-4">CP(π/2)</div>
+                            </div>
+                            <div class="circuit-row" id="row-2">
+                                <span style="width: 50px;">q₂</span>
+                                <div style="width: 40px; margin-right: 15px;"></div>
+                                <div style="width: 40px; margin-right: 15px;"></div>
+                                <div class="gate cp-gate" id="g2-2">CTRL</div>
+                                <div style="width: 40px; margin-right: 15px;"></div>
+                                <div class="gate cp-gate" id="g2-4">CTRL</div>
+                                <div class="gate h-gate" id="g2-5">H</div>
+                                <div class="gate swap-gate" id="g2-6" style="margin-left: auto;">SWAP</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State tracking
+        let state = { step: 0, timer: null, val: 0, phases: Array(8).fill(0), targetPhases: Array(8).fill(0) };
+        const numStates = 8;
+        
+        // Setup canvases
+        const grid = document.getElementById('phase-grid');
+        for(let i=0; i<numStates; i++) {
+            grid.innerHTML += `
+                <div class="phase-cell">
+                    <canvas class="phase-canvas" id="canvas-${i}" width="100" height="100"></canvas>
+                    <div class="phase-label">|${i.toString(2).padStart(3, '0')}⟩</div>
+                </div>
+            `;
+        }
+        
+        const computedStyle = getComputedStyle(document.documentElement);
+        const colorPrimary = computedStyle.getPropertyValue('--dqa-primary').trim() || '#005a9c';
+
+        function drawPhases() {
+            for(let i=0; i<numStates; i++) {
+                const canvas = document.getElementById(`canvas-${i}`);
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, 100, 100);
+                
+                // Draw axes
+                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                ctx.beginPath(); ctx.moveTo(50, 0); ctx.lineTo(50, 100); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, 50); ctx.lineTo(100, 50); ctx.stroke();
+
+                // Draw vector
+                let phase = state.phases[i];
+                let amp = state.step === 0 ? (i === state.val ? 1 : 0) : (1 / Math.sqrt(8));
+                
+                if (amp > 0) {
+                    let r = 40; // max length
+                    let x = 50 + r * Math.cos(phase);
+                    let y = 50 - r * Math.sin(phase);
+                    
+                    ctx.strokeStyle = colorPrimary;
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(50, 50);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2); ctx.fill();
+                }
+            }
+        }
+
+        function computeTargetPhases() {
+            // Compute the true QFT phases for the given input state j
+            // Phase of |k> is 2 * pi * j * k / N
+            let j = state.val;
+            let n = 8;
+            for(let k=0; k<n; k++) {
+                state.targetPhases[k] = (2 * Math.PI * j * k) / n;
+            }
+        }
+
+        function resetSystem() {
+            stopAuto();
+            state.val = parseInt(document.getElementById('inp-state').value);
+            state.step = 0;
+            state.phases.fill(0);
+            computeTargetPhases();
+            drawPhases();
+            updateUI();
+        }
+
+        // Animation loop for smooth phase rotation
+        let lastTime = 0;
+        function animateFrame(time) {
+            let changed = false;
+            for(let i=0; i<numStates; i++) {
+                let diff = state.targetPhases[i] - state.phases[i];
+                // normalize diff to -pi, pi
+                while (diff > Math.PI) diff -= 2*Math.PI;
+                while (diff < -Math.PI) diff += 2*Math.PI;
+                
+                if (Math.abs(diff) > 0.05) {
+                    state.phases[i] += diff * 0.1;
+                    changed = true;
+                } else {
+                    state.phases[i] = state.targetPhases[i];
+                }
+            }
+            if(changed) drawPhases();
+            requestAnimationFrame(animateFrame);
+        }
+        requestAnimationFrame(animateFrame);
+
+        const sequence = [
+            [], // step 0 init
+            ['g0-0'], // step 1 H q0
+            ['g0-1', 'g1-1'], // step 2 CP q0, q1
+            ['g0-2', 'g2-2'], // step 3 CP q0, q2
+            ['g1-3'], // step 4 H q1
+            ['g1-4', 'g2-4'], // step 5 CP q1, q2
+            ['g2-5'], // step 6 H q2
+            ['g0-3', 'g2-6']  // step 7 SWAP
+        ];
+
+        function updateUI() {
+            // Update circuit UI
+            document.querySelectorAll('.active-gate').forEach(e => e.classList.remove('active-gate'));
+            if(state.step > 0 && state.step <= 7) {
+                sequence[state.step].forEach(id => document.getElementById(id).classList.add('active-gate'));
+            }
+
+            // At step 7 (Swap), we just reorder the conceptual bits, but the QFT math finishes at step 6 for the actual phases (in reverse order).
+            // For visualizer simplicity, we'll just snap the phases to the target at step 7.
+            if(state.step > 0) {
+                // Approximate the progressive phase buildup.
+                // Full QFT phase is targetPhases. We just interpolate.
+                let prog = state.step / 7;
+                for(let i=0; i<numStates; i++) {
+                    state.targetPhases[i] = ((2 * Math.PI * state.val * i) / 8) * prog;
+                }
+            } else {
+                state.targetPhases.fill(0);
+            }
+
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 7;
+        }
+
+        function nextStep() { if(state.step < 7) { state.step++; updateUI(); } }
+        function prevStep() { if(state.step > 0) { stopAuto(); state.step--; updateUI(); } }
+        
+        function toggleAuto() {
+            if (state.timer) stopAuto();
+            else {
+                if(state.step === 7) resetSystem();
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                state.timer = setInterval(() => { if (state.step < 7) nextStep(); else stopAuto(); }, 1200);
+            }
+        }
+        function stopAuto() { clearInterval(state.timer); state.timer = null; document.getElementById('btn-auto').innerText = "Play Animation"; }
+
+        resetSystem();
+    </script>
+</body>
+</html>

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Teleportation Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary);
+            --dqa-accent: var(--primary-hover);
+            --dqa-bg: var(--background);
+            --dqa-card: var(--surface);
+            --dqa-text: var(--text);
+            --dqa-text-muted: var(--muted-text);
+            --dqa-border: var(--border);
+            --dqa-success: #059669;
+            --dqa-error: #dc2626;
+            --dqa-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --dqa-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            height: calc(100vh - var(--header-height) - 4rem);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .config-sidebar {
+            background: transparent;
+            border: none;
+            padding: 0 10px 20px 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar {
+            width: 6px;
+        }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb {
+            background-color: var(--dqa-border);
+            border-radius: 10px;
+        }
+
+        .pert-card {
+            background: var(--dqa-card);
+            border: 1px solid var(--dqa-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--dqa-shadow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .pert-card:hover {
+            box-shadow: var(--dqa-shadow-hover);
+            border-color: var(--dqa-primary);
+        }
+
+        .pert-card h2 {
+            margin: 0 0 16px 0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--dqa-primary);
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--dqa-border);
+        }
+
+        .expert-panel {
+            background: var(--background);
+            border: 1px solid var(--dqa-border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: border-color 0.3s;
+        }
+        .expert-panel:hover {
+            border-color: var(--dqa-primary);
+        }
+
+        .visualizer-main {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-right: 10px;
+            padding-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+        }
+
+        .modern-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--dqa-border);
+            border-radius: 8px;
+            background: var(--background);
+            color: var(--dqa-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .modern-input:focus {
+            outline: none;
+            border-color: var(--dqa-primary);
+            box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
+        }
+        .btn-green:hover {
+            background: linear-gradient(135deg, #047857, #064e3b);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.3);
+            color: #fff;
+        }
+        
+        .btn-modern {
+            padding: 10px 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .btn-modern:active {
+            transform: scale(0.96);
+        }
+        .btn-modern:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #ffffff;
+        }
+        .btn-secondary {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--dqa-primary);
+            color: var(--dqa-primary);
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, var(--dqa-card), var(--background));
+            border-radius: 12px;
+        }
+
+        .circuit-grid {
+            display: grid;
+            grid-template-rows: 50px 50px 50px;
+            grid-template-columns: 80px 80px 80px 80px 80px 80px 80px;
+            gap: 0;
+            align-items: center;
+            justify-items: center;
+            padding: 30px 40px;
+            background-color: var(--surface);
+            background-image: radial-gradient(var(--dqa-border) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            position: relative;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.02);
+            justify-content: center;
+        }
+
+        /* Alice / Bob Domains */
+        .domain-label {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted-text);
+            top: 10px;
+        }
+        .domain-alice { left: 160px; }
+        .domain-bob { left: 450px; }
+        
+        .domain-divider {
+            position: absolute;
+            width: 2px;
+            height: 80%;
+            background: repeating-linear-gradient(to bottom, var(--border), var(--border) 10px, transparent 10px, transparent 20px);
+            left: 360px;
+            top: 10%;
+            z-index: 0;
+        }
+
+        .circuit-cell {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circuit-wire {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #a0aabf;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .wire-label {
+            position: absolute;
+            left: 10px;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .circuit-gate {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 800;
+            z-index: 3;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .measure-gate {
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border: 2px solid #b45309;
+            color: #b45309;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            transition: all 0.3s;
+        }
+
+        .measure-gate::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            border: 2px solid #b45309;
+            border-bottom: none;
+            border-radius: 20px 20px 0 0;
+            bottom: 12px;
+        }
+        .measure-gate::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 16px;
+            background: #b45309;
+            transform: rotate(30deg);
+            bottom: 12px;
+            transform-origin: bottom center;
+        }
+        
+        .cnot-control {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            z-index: 3;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .cnot-target {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            background: var(--primary-light);
+            z-index: 3;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .cnot-target::before, .cnot-target::after {
+            content: '';
+            position: absolute;
+            background: var(--primary);
+        }
+        .cnot-target::before { width: 100%; height: 2px; }
+        .cnot-target::after { height: 100%; width: 2px; }
+
+        .cnot-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 50px;
+            background: var(--primary);
+            z-index: 2;
+            transform: translateX(-50%);
+            transition: all 0.3s;
+        }
+        .cnot-line.double {
+            height: 100px;
+        }
+        .cnot-line.double-up {
+            height: 100px;
+            top: -50px;
+        }
+
+        .classical-wire {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: transparent;
+            border-top: 2px dashed #b45309;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .classical-vert {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            background: transparent;
+            border-left: 2px dashed #b45309;
+            z-index: 1;
+            transform: translateX(-50%);
+        }
+
+        .classical-bit {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #b45309;
+            color: white;
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            font-weight: 800;
+            border-radius: 4px;
+            z-index: 4;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        /* Glowing Animation Classes */
+        .gate-active {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+        .gate-active.measure-gate {
+            box-shadow: 0 0 15px #b45309;
+            background: #b45309;
+        }
+        .gate-active.measure-gate::after { border-color: #fff; }
+        .gate-active.measure-gate::before { background: #fff; }
+
+        .cnot-active .cnot-control {
+            transform: scale(1.5);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .cnot-active .cnot-target {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px var(--primary);
+            background: var(--primary);
+        }
+        .cnot-active .cnot-target::before, .cnot-active .cnot-target::after {
+            background: #fff;
+        }
+        .cnot-active .cnot-line {
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+        #blochCanvas {
+            border: none;
+            background: transparent;
+            width: 100%;
+            height: 100%;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../algorithms.html" class="nav-link active">Algorithms</a>
+                </div>
+                <div class="nav-item">
+                    <a href="quantum-teleportation.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to Teleportation</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Quantum Teleportation Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <!-- Sidebar Configuration -->
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Unknown State Config (Q0)</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">State |ψ⟩ to Teleport</label>
+                            <select id="inp-state" class="modern-input" onchange="resetSystem()">
+                                <option value="plus">|+⟩ (Equator, X-axis)</option>
+                                <option value="minus">|-⟩ (Equator, -X-axis)</option>
+                                <option value="i">|+i⟩ (Equator, Y-axis)</option>
+                                <option value="one">|1⟩ (South Pole)</option>
+                                <option value="arb">Arbitrary |ψ⟩ (θ=60°, φ=45°)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Reset System</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()">Play Animation</button>
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
+                            <span>Speed</span>
+                            <input type="range" id="inp-speed" min="500" max="2500" value="1500" style="width:120px;" onchange="if(state.timer){stopAuto();toggleAuto();}">
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Explanation Panel</h2>
+                        <div class="expert-panel">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initial State</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">System initialized. Q0 holds |ψ⟩. Q1 and Q2 are in |0⟩.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Display -->
+                <div class="visualizer-main">
+                    <!-- Live Dashboard -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 10px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
+                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Current Step</div>
+                            <div id="stat-step" style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0 / 5</div>
+                        </div>
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
+                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Alice mz (Q0)</div>
+                            <div id="stat-mz" style="font-size: 1.2rem; font-weight: 800; color: #b45309; margin-top: auto;">--</div>
+                        </div>
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
+                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Alice mx (Q1)</div>
+                            <div id="stat-mx" style="font-size: 1.2rem; font-weight: 800; color: #b45309; margin-top: auto;">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Bloch Spheres Grid -->
+                    <div class="pert-card" style="padding: 10px; margin-bottom: 10px; min-height: 220px; position: relative;">
+                        <canvas id="blochCanvas"></canvas>
+                        <div id="success-overlay" style="display: none; position: absolute; inset: 0; pointer-events: none; align-items: center; justify-content: center;">
+                            <div style="background: rgba(5, 150, 105, 0.9); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 800; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: pulse 2s infinite;">
+                                STATE IS TRANSFERRED, NOT THE PARTICLE
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+                        @keyframes pulse {
+                            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7); }
+                            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(5, 150, 105, 0); }
+                            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+                        }
+                    </style>
+
+                    <!-- Circuit Engine Card -->
+                    <div class="pert-card">
+                        <h2 style="border: none;">Quantum Circuit Protocol</h2>
+                        <div class="circuit-grid" id="circuit-box">
+                            <div class="domain-label domain-alice">Alice's Lab</div>
+                            <div class="domain-divider"></div>
+                            <div class="domain-label domain-bob">Bob's Lab</div>
+
+                            <!-- Q0 Row (Alice) -->
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 1;"><div class="circuit-wire"></div><div class="wire-label">q₀ |ψ⟩</div></div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 2;"><div class="circuit-wire"></div></div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 3;"><div class="circuit-wire"></div><div class="cnot-wrapper" id="gate-cx1"><div class="cnot-control" style="margin-top: 19px;"></div><div class="cnot-line"></div></div></div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 4;"><div class="circuit-wire"></div><div class="circuit-gate" id="gate-h2">H</div></div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 5;"><div class="circuit-wire"></div><div class="measure-gate" id="gate-m1"></div></div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 6;">
+                                <div class="classical-wire"></div>
+                                <div class="classical-bit" id="bit-mz">0</div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 7;">
+                                <div class="classical-wire"></div>
+                                <div class="classical-vert" style="height: 125px; top: 50%;"></div>
+                            </div>
+
+                            <!-- Q1 Row (Alice) -->
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 1;"><div class="circuit-wire"></div><div class="wire-label">q₁ |0⟩</div></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 2;"><div class="circuit-wire"></div><div class="circuit-gate" id="gate-h1">H</div></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 3;"><div class="circuit-wire"></div><div class="cnot-target" id="gate-cx1-tgt"></div></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 4;"><div class="circuit-wire"></div></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 5;"><div class="circuit-wire"></div><div class="measure-gate" id="gate-m2"></div></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 6;">
+                                <div class="classical-wire"></div>
+                                <div class="classical-bit" id="bit-mx">1</div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 7;">
+                                <div class="classical-wire"></div>
+                                <div class="classical-vert" style="height: 75px; top: 50%;"></div>
+                            </div>
+
+                            <!-- Q2 Row (Bob) -->
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 1;"><div class="circuit-wire"></div><div class="wire-label">q₂ |0⟩</div></div>
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 2;"><div class="circuit-wire"></div><div class="cnot-wrapper" id="gate-cx0"><div class="cnot-control" style="margin-top: -31px;"></div><div class="cnot-line double-up"></div></div></div>
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 3;"><div class="circuit-wire"></div></div>
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 4;"><div class="circuit-wire"></div></div>
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 5;"><div class="circuit-wire"></div></div>
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 6;"><div class="circuit-wire"></div></div>
+                            <div class="circuit-cell" style="grid-row: 3; grid-column: 7;">
+                                <div class="circuit-wire"></div>
+                                <div class="circuit-gate" id="gate-x" style="position: absolute; top: 5px; left: -10px; width: 30px; height: 30px; font-size: 0.9rem;">X</div>
+                                <div class="circuit-gate" id="gate-z" style="position: absolute; top: 5px; left: 30px; width: 30px; height: 30px; font-size: 0.9rem;">Z</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+
+    <script>
+        // State Machine
+        const state = {
+            step: 0,
+            timer: null,
+            psi: 'plus',
+            mz: 0,
+            mx: 0
+        };
+        
+        // Define initial vectors for |psi>
+        // Bloch coords (x,y,z)
+        const vecs = {
+            'plus': {x:1, y:0, z:0},
+            'minus': {x:-1, y:0, z:0},
+            'i': {x:0, y:1, z:0},
+            'one': {x:0, y:0, z:-1},
+            'arb': {x:0.707, y:0.707, z:0.5} // roughly theta=60, phi=45
+        };
+
+        const blochCanvas = document.getElementById('blochCanvas');
+        const blochCtx = blochCanvas.getContext('2d');
+        const computedStyle = getComputedStyle(document.documentElement);
+        const colorPrimary = computedStyle.getPropertyValue('--dqa-primary').trim() || '#005a9c';
+
+        function drawBlochSphere(cx, cy, radius, label, vector, isMixed=false) {
+            blochCtx.strokeStyle = '#e0d8cc';
+            blochCtx.lineWidth = 1;
+            
+            // Sphere outline
+            blochCtx.beginPath(); blochCtx.arc(cx, cy, radius, 0, Math.PI * 2); blochCtx.stroke();
+            
+            // Equator
+            blochCtx.beginPath(); blochCtx.ellipse(cx, cy, radius, radius * 0.3, 0, 0, Math.PI * 2); blochCtx.stroke();
+            
+            // Axes
+            blochCtx.setLineDash([3, 3]);
+            blochCtx.beginPath(); blochCtx.moveTo(cx, cy - radius); blochCtx.lineTo(cx, cy + radius); blochCtx.stroke(); // Z
+            blochCtx.beginPath(); blochCtx.moveTo(cx - radius, cy); blochCtx.lineTo(cx + radius, cy); blochCtx.stroke(); // Y
+            blochCtx.beginPath(); blochCtx.moveTo(cx - radius * 0.7, cy + radius * 0.5); blochCtx.lineTo(cx + radius * 0.7, cy - radius * 0.5); blochCtx.stroke(); // X
+            blochCtx.setLineDash([]);
+            
+            blochCtx.fillStyle = '#6b5a51'; blochCtx.font = '10px JetBrains Mono';
+            blochCtx.fillText("|0⟩", cx - 5, cy - radius - 5);
+            blochCtx.fillText("|1⟩", cx - 5, cy + radius + 15);
+            
+            blochCtx.fillStyle = colorPrimary; blochCtx.font = 'bold 12px Inter';
+            blochCtx.fillText(label, cx - 25, cy + radius + 35);
+            
+            // Vector
+            if (isMixed) {
+                blochCtx.fillStyle = '#b45309';
+                blochCtx.beginPath(); blochCtx.arc(cx, cy, 6, 0, Math.PI * 2); blochCtx.fill();
+            } else if (vector) {
+                // Projection isometric
+                const vx = cx + (vector.y * radius) - (vector.x * radius * 0.7);
+                const vy = cy - (vector.z * radius) + (vector.x * radius * 0.5);
+                
+                blochCtx.strokeStyle = colorPrimary;
+                blochCtx.lineWidth = 3;
+                blochCtx.beginPath(); blochCtx.moveTo(cx, cy); blochCtx.lineTo(vx, vy); blochCtx.stroke();
+                
+                blochCtx.fillStyle = colorPrimary;
+                blochCtx.beginPath(); blochCtx.arc(vx, vy, 4, 0, Math.PI * 2); blochCtx.fill();
+            }
+        }
+
+        function renderBloch() {
+            blochCtx.clearRect(0, 0, blochCanvas.width, blochCanvas.height);
+            
+            const rect = blochCanvas.parentElement.getBoundingClientRect();
+            if(blochCanvas.width !== rect.width) blochCanvas.width = rect.width;
+            if(blochCanvas.height !== rect.height) blochCanvas.height = rect.height;
+            
+            const w = blochCanvas.width;
+            const h = blochCanvas.height;
+            const r = Math.min(w/6, h/2) - 30;
+            
+            const psiVec = vecs[state.psi];
+            const zeroVec = {x:0,y:0,z:1};
+            
+            let q0 = {v: zeroVec, m: false};
+            let q1 = {v: zeroVec, m: false};
+            let q2 = {v: zeroVec, m: false};
+
+            if (state.step === 0) {
+                q0.v = psiVec;
+                q1.v = zeroVec;
+                q2.v = zeroVec;
+            } else if (state.step === 1) {
+                q0.v = psiVec;
+                q1.m = true;
+                q2.m = true;
+            } else if (state.step === 2) {
+                q0.m = true;
+                q1.m = true;
+                q2.m = true;
+            } else if (state.step === 3 || state.step === 4) {
+                // measured states
+                q0.v = {x:0, y:0, z: state.mz === 0 ? 1 : -1};
+                q1.v = {x:0, y:0, z: state.mx === 0 ? 1 : -1};
+                // Q2 is entangled with the results but locally looks mixed until correction, actually mathematically it is in a pure state conditionally, but for Alice it's a specific rotated version of psi. Let's just show it as mixed until corrected.
+                q2.m = true;
+            } else if (state.step === 5) {
+                q0.v = {x:0, y:0, z: state.mz === 0 ? 1 : -1};
+                q1.v = {x:0, y:0, z: state.mx === 0 ? 1 : -1};
+                q2.v = psiVec;
+            }
+            
+            drawBlochSphere(w/6, h/2 - 10, r, "Qubit 0 (Alice)", q0.m ? null : q0.v, q0.m);
+            drawBlochSphere(w/2, h/2 - 10, r, "Qubit 1 (Alice)", q1.m ? null : q1.v, q1.m);
+            drawBlochSphere((w*5)/6, h/2 - 10, r, "Qubit 2 (Bob)", q2.m ? null : q2.v, q2.m);
+        }
+
+        function resetSystem() {
+            stopAuto();
+            state.psi = document.getElementById('inp-state').value;
+            // Generate random measurement outcomes for this run
+            state.mz = Math.random() > 0.5 ? 1 : 0;
+            state.mx = Math.random() > 0.5 ? 1 : 0;
+            state.step = 0;
+            updateUI();
+        }
+
+        function nextStep() {
+            if (state.step < 5) {
+                state.step++;
+                updateUI();
+            }
+        }
+
+        function prevStep() {
+            if (state.step > 0) {
+                stopAuto();
+                state.step--;
+                updateUI();
+            }
+        }
+
+        function toggleAuto() {
+            if (state.timer) {
+                stopAuto();
+            } else {
+                if (state.step === 5) resetSystem(); // loop
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                const speed = parseInt(document.getElementById('inp-speed').value);
+                state.timer = setInterval(() => {
+                    if (state.step < 5) nextStep();
+                    else {
+                        stopAuto();
+                    }
+                }, speed);
+            }
+        }
+
+        function stopAuto() {
+            clearInterval(state.timer);
+            state.timer = null;
+            document.getElementById('btn-auto').innerText = "Play Animation";
+        }
+
+        function updateUI() {
+            // 1. Dashboard
+            document.getElementById('stat-step').innerText = `${state.step} / 5`;
+            document.getElementById('stat-mz').innerText = state.step >= 3 ? state.mz : '--';
+            document.getElementById('stat-mx').innerText = state.step >= 3 ? state.mx : '--';
+
+            // 2. Buttons
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 5;
+
+            // 3. Explanation Panel
+            if (state.step === 0) {
+                document.getElementById('panel-title').innerText = "Step 0: Initialisation";
+                document.getElementById('panel-desc').innerText = `System initialized. Q0 holds the unknown state |ψ⟩. Q1 and Q2 are in |0⟩.`;
+            } else if (state.step === 1) {
+                document.getElementById('panel-title').innerText = `Step 1: Entanglement Generation`;
+                document.getElementById('panel-desc').innerText = `A Bell pair is created between Q1 and Q2. Q1 stays with Alice, Q2 goes to Bob. They are now entangled (represented by the mixed state center dot).`;
+            } else if (state.step === 2) {
+                document.getElementById('panel-title').innerText = "Step 2: Alice's Encoding";
+                document.getElementById('panel-desc').innerText = `Alice applies a CNOT and Hadamard to entangle her unknown state Q0 with her half of the Bell pair Q1.`;
+            } else if (state.step === 3) {
+                document.getElementById('panel-title').innerText = "Step 3: Alice Measures";
+                document.getElementById('panel-desc').innerText = `Alice measures Q0 and Q1, collapsing their quantum states into classical bits mz and mx. Because of the entanglement, Q2 instantly collapses into a state related to |ψ⟩.`;
+            } else if (state.step === 4) {
+                document.getElementById('panel-title').innerText = "Step 4: Classical Communication";
+                document.getElementById('panel-desc').innerText = `Alice sends the classical bits mz and mx to Bob over a normal communication channel (like a phone line or internet).`;
+            } else if (state.step === 5) {
+                document.getElementById('panel-title').innerText = "Step 5: Bob's Correction";
+                document.getElementById('panel-desc').innerText = `Bob applies X and/or Z gates to Q2 based on the classical bits. Q2 perfectly becomes |ψ⟩!`;
+            }
+            
+            // 4. Circuit Animation
+            const gH1 = document.getElementById('gate-h1');
+            const gCX0 = document.getElementById('gate-cx0');
+            const gCX1 = document.getElementById('gate-cx1');
+            const gH2 = document.getElementById('gate-h2');
+            const gM1 = document.getElementById('gate-m1');
+            const gM2 = document.getElementById('gate-m2');
+            const bMZ = document.getElementById('bit-mz');
+            const bMX = document.getElementById('bit-mx');
+            const gX = document.getElementById('gate-x');
+            const gZ = document.getElementById('gate-z');
+            
+            gH1.classList.remove('gate-active');
+            gCX0.parentElement.classList.remove('cnot-active');
+            gCX1.parentElement.classList.remove('cnot-active');
+            gH2.classList.remove('gate-active');
+            gM1.classList.remove('gate-active');
+            gM2.classList.remove('gate-active');
+            gX.classList.remove('gate-active');
+            gZ.classList.remove('gate-active');
+
+            if (state.step === 1) {
+                gH1.classList.add('gate-active');
+                gCX0.parentElement.classList.add('cnot-active');
+            }
+            if (state.step === 2) {
+                gCX1.parentElement.classList.add('cnot-active');
+                gH2.classList.add('gate-active');
+            }
+            if (state.step === 3) {
+                gM1.classList.add('gate-active');
+                gM2.classList.add('gate-active');
+            }
+            
+            // Classical bits animation
+            bMZ.innerText = state.mz;
+            bMX.innerText = state.mx;
+            if (state.step >= 3) {
+                bMZ.style.opacity = '1';
+                bMX.style.opacity = '1';
+                if (state.step >= 4) {
+                    bMZ.style.transition = 'left 1s';
+                    bMX.style.transition = 'left 1s';
+                    bMZ.style.left = '100px';
+                    bMX.style.left = '100px';
+                } else {
+                    bMZ.style.transition = 'none';
+                    bMX.style.transition = 'none';
+                    bMZ.style.left = '0';
+                    bMX.style.left = '0';
+                }
+            } else {
+                bMZ.style.opacity = '0';
+                bMX.style.opacity = '0';
+            }
+
+            if (state.step === 5) {
+                if (state.mx === 1) gX.classList.add('gate-active');
+                if (state.mz === 1) gZ.classList.add('gate-active');
+                document.getElementById('success-overlay').style.display = 'flex';
+            } else {
+                document.getElementById('success-overlay').style.display = 'none';
+            }
+
+            // 5. Bloch
+            renderBloch();
+        }
+
+        // Init
+        window.addEventListener('resize', renderBloch);
+        setTimeout(resetSystem, 100);
+
+    </script>
+</body>
+</html>

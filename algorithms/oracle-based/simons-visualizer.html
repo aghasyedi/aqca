@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon's Algorithm Visualiser | AQCA</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary); --dqa-accent: var(--primary-hover);
+            --dqa-card: var(--surface); --dqa-text: var(--text); --dqa-text-muted: var(--muted-text);
+            --dqa-border: var(--border);
+            --radius-md: 12px; --radius-lg: 16px;
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); overflow: hidden; font-family: 'Inter', sans-serif; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: var(--radius-md); padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-input { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'JetBrains Mono'; font-size: 0.95rem; letter-spacing: 2px; font-weight: 700; text-align: center; }
+        .modern-input:focus { outline: none; border-color: var(--dqa-primary); box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1); }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .equation-solver {
+            background: #0f172a;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #38bdf8;
+            font-size: 1rem;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .eq-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #334155;
+            opacity: 0;
+            animation: slideIn 0.3s forwards;
+        }
+        @keyframes slideIn { from { transform: translateX(-10px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .eq-row.resolved {
+            color: #34d399;
+            font-weight: 800;
+            background: rgba(5, 150, 105, 0.1);
+            border-bottom: none;
+            padding: 15px;
+            border-radius: 8px;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-top: 15px;
+        }
+
+        .circuit-mock {
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+        }
+
+        .gate { width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; }
+        .gate.oracle { background: rgba(180, 83, 9, 0.1); border: 2px dashed #b45309; color: #b45309; width: 80px; }
+        .gate.measure { background: var(--surface); border: 2px solid #b45309; color: #b45309; }
+        .gate.measure::after { content: ''; position: absolute; width: 24px; height: 12px; border: 2px solid #b45309; border-bottom: none; border-radius: 24px 24px 0 0; margin-top: 10px; }
+        
+        .anim-active { transform: scale(1.15); box-shadow: 0 0 15px var(--primary); background: var(--primary); color: #fff; transition: 0.3s; }
+        .anim-active.oracle { background: #b45309; color: #fff; box-shadow: 0 0 15px #b45309; border-style: solid; }
+        .anim-active.measure { background: #b45309; color: #fff; box-shadow: 0 0 15px #b45309; }
+        .anim-active.measure::after { border-color: #fff; }
+
+        .wire-arrow { font-weight: 800; color: #94a3b8; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="simon.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to Simon's</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Simon's Algorithm Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Oracle Configuration</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Hidden Period (s)</label>
+                            <input type="text" id="inp-period" class="modern-input" value="1010" maxlength="4" pattern="[01]*" oninput="validateInput(this)">
+                            <div style="font-size: 0.7rem; color: var(--dqa-text-muted); margin-top: 4px; text-align: center;">Enter exactly 4 bits (e.g. 1010)</div>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Lock Target & Reset</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Run Subroutine</h2>
+                        <p style="font-size: 0.8rem; color: var(--dqa-text-muted); margin-bottom: 15px;">Simon's Algorithm requires multiple queries to the quantum circuit to build a system of linear equations.</p>
+                        <button class="btn btn-primary btn-modern" id="btn-query" style="width:100%;" onclick="runQuery()">Run 1 Quantum Query</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Waiting</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Click 'Run Query' to sample a vector x where x·s = 0.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    <div class="pert-card">
+                        <h2 style="border: none;">Quantum Subroutine</h2>
+                        <div class="circuit-mock">
+                            <div style="font-family: 'JetBrains Mono'; font-weight: 800;">|0⟩<sup>⊗n</sup></div>
+                            <div class="wire-arrow">→</div>
+                            <div class="gate" id="g-h1">H<sup>⊗n</sup></div>
+                            <div class="wire-arrow">→</div>
+                            <div class="gate oracle" id="g-oracle">U<sub>f</sub></div>
+                            <div class="wire-arrow">→</div>
+                            <div class="gate" id="g-h2">H<sup>⊗n</sup></div>
+                            <div class="wire-arrow">→</div>
+                            <div class="gate measure" id="g-m"></div>
+                            <div class="wire-arrow">→</div>
+                            <div style="font-family: 'JetBrains Mono'; font-weight: 800; color: #b45309;" id="lbl-result">x</div>
+                        </div>
+                    </div>
+
+                    <div class="pert-card" style="flex-grow: 1;">
+                        <h2 style="border: none; display: flex; justify-content: space-between;">
+                            <span>Equation Solver (Gaussian Elimination)</span>
+                            <span id="rank-counter">Rank: 0 / 3</span>
+                        </h2>
+                        <div class="equation-solver" id="eq-solver">
+                            <div style="opacity: 0.5; text-align: center; margin-top: 50px;">Run quantum queries to populate equations.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { s: '1010', equations: [], rank: 0, querying: false };
+
+        function validateInput(inp) { inp.value = inp.value.replace(/[^01]/g, ''); }
+
+        function dotProduct(a, b) {
+            let sum = 0;
+            for(let i=0; i<a.length; i++) sum += parseInt(a[i]) * parseInt(b[i]);
+            return sum % 2;
+        }
+
+        // Generate a random binary string of length n that is orthogonal to s (mod 2)
+        function getOrthogonalVector(s) {
+            let n = s.length;
+            while(true) {
+                let v = '';
+                for(let i=0; i<n; i++) v += Math.random() > 0.5 ? '1' : '0';
+                if(v !== '0000' && dotProduct(v, s) === 0) {
+                    // Check if it adds rank (simple heuristic for visualizer: if not already in equations)
+                    if(!state.equations.includes(v)) return v;
+                }
+            }
+        }
+
+        function resetSystem() {
+            let inp = document.getElementById('inp-period').value;
+            if(inp.length < 2) { alert('Enter at least 2 bits'); return; }
+            state.s = inp;
+            state.equations = [];
+            state.rank = 0;
+            document.getElementById('eq-solver').innerHTML = '<div style="opacity: 0.5; text-align: center; margin-top: 50px;">Run quantum queries to populate equations.</div>';
+            document.getElementById('rank-counter').innerText = `Rank: 0 / ${state.s.length - 1}`;
+            document.getElementById('btn-query').disabled = false;
+            document.getElementById('lbl-result').innerText = 'x';
+            document.getElementById('panel-title').innerText = "Waiting";
+            document.getElementById('panel-desc').innerText = "Click 'Run Query' to sample a vector x where x·s = 0.";
+        }
+
+        function runQuery() {
+            if(state.querying) return;
+            state.querying = true;
+            document.getElementById('btn-query').disabled = true;
+
+            // Animate Circuit
+            let seq = [
+                { id: 'g-h1', msg: "Applying Hadamard to create superposition." },
+                { id: 'g-oracle', msg: "Oracle encodes the periodic function f(x) = f(x ⊕ s)." },
+                { id: 'g-h2', msg: "Hadamard interferes amplitudes. Only states orthogonal to s survive." },
+                { id: 'g-m', msg: "Measurement collapses the state into a single bitstring x." }
+            ];
+
+            let step = 0;
+            let iv = setInterval(() => {
+                document.querySelectorAll('.anim-active').forEach(e => e.classList.remove('anim-active'));
+                
+                if (step < seq.length) {
+                    document.getElementById(seq[step].id).classList.add('anim-active');
+                    document.getElementById('panel-title').innerText = `Quantum Step ${step+1}`;
+                    document.getElementById('panel-desc').innerText = seq[step].msg;
+                    step++;
+                } else {
+                    clearInterval(iv);
+                    completeQuery();
+                }
+            }, 600);
+        }
+
+        function completeQuery() {
+            let x = getOrthogonalVector(state.s);
+            document.getElementById('lbl-result').innerText = x;
+            
+            // Add to equations
+            state.equations.push(x);
+            state.rank = Math.min(state.equations.length, state.s.length - 1);
+            
+            let solver = document.getElementById('eq-solver');
+            if(state.equations.length === 1) solver.innerHTML = ''; // clear placeholder
+            
+            let div = document.createElement('div');
+            div.className = 'eq-row';
+            
+            let html = `<span>${x} · s = 0</span> <span style="color:#64748b;">⇒</span> <span>`;
+            let terms = [];
+            for(let i=0; i<x.length; i++) {
+                if(x[i] === '1') terms.push(`s<sub>${i}</sub>`);
+            }
+            if(terms.length === 0) html += '0'; else html += terms.join(' ⊕ ');
+            html += ` = 0</span>`;
+            
+            div.innerHTML = html;
+            solver.appendChild(div);
+
+            document.getElementById('rank-counter').innerText = `Rank: ${state.rank} / ${state.s.length - 1}`;
+
+            if(state.rank >= state.s.length - 1) {
+                // Solved
+                document.getElementById('panel-title').innerText = "Classical Post-Processing";
+                document.getElementById('panel-desc').innerText = "We have enough linearly independent equations. Gaussian elimination solves the system to reveal the hidden period s!";
+                
+                setTimeout(() => {
+                    let res = document.createElement('div');
+                    res.className = 'eq-row resolved';
+                    res.innerHTML = `Hidden Period <b>s = ${state.s}</b>`;
+                    solver.appendChild(res);
+                }, 1000);
+            } else {
+                document.getElementById('panel-title').innerText = "Result recorded";
+                document.getElementById('panel-desc').innerText = "We need n-1 linearly independent equations. Run another query.";
+                state.querying = false;
+                document.getElementById('btn-query').disabled = false;
+            }
+        }
+        
+        resetSystem();
+    </script>
+</body>
+</html>

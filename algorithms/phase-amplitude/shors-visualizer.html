@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shor's Algorithm Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary); --dqa-card: var(--surface);
+            --dqa-text: var(--text); --dqa-border: var(--border);
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-input { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'JetBrains Mono'; font-weight: 700; text-align: center; }
+        .modern-input:focus { outline: none; border-color: var(--dqa-primary); }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-box { background: #0f172a; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #1e293b; transition: all 0.3s; }
+        .stat-box .label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
+        .stat-box .value { font-family: 'JetBrains Mono'; font-size: 2rem; font-weight: 800; color: #fff; }
+        .stat-box.highlight { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
+        .stat-box.highlight .value { color: #38bdf8; }
+        .stat-box.success { border-color: #34d399; box-shadow: 0 0 20px rgba(52, 211, 153, 0.1); }
+        .stat-box.success .value { color: #34d399; }
+
+        .chart-container { width: 100%; height: 300px; position: relative; }
+
+        .flow-container { display: flex; flex-direction: column; gap: 10px; padding: 15px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+        .flow-step { display: flex; align-items: center; gap: 15px; opacity: 0.3; transition: 0.3s; }
+        .flow-step.active { opacity: 1; }
+        .flow-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'JetBrains Mono'; }
+        .flow-step.active .flow-icon { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
+        .flow-text { flex-grow: 1; font-size: 0.85rem; font-weight: 600; }
+        .flow-value { font-family: 'JetBrains Mono'; color: #38bdf8; font-weight: 800; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="shor.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to Shor's</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Shor's Algorithm Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Configure Number</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Number to Factor (N)</label>
+                            <input type="number" id="inp-n" class="modern-input" value="15" min="15" max="999">
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Coprime Guess (a)</label>
+                            <select id="inp-a" class="modern-input">
+                                <option value="2">2</option>
+                                <option value="7" selected>7</option>
+                                <option value="11">11</option>
+                                <option value="13">13</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Lock Target</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%;" onclick="toggleAuto()">Play Animation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initialisation</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Setup to factor N using a random coprime guess a.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    <div class="dash-grid">
+                        <div class="stat-box">
+                            <div class="label">Target (N)</div>
+                            <div class="value" id="stat-n">15</div>
+                        </div>
+                        <div class="stat-box highlight">
+                            <div class="label">Quantum Period (r)</div>
+                            <div class="value" id="stat-r">?</div>
+                        </div>
+                        <div class="stat-box success">
+                            <div class="label">Factors (p, q)</div>
+                            <div class="value" id="stat-pq" style="font-size: 1.5rem; margin-top: 10px;">? , ?</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 20px;">
+                        <div class="pert-card">
+                            <h2 style="border: none;">Modular Exponentiation: a<sup>x</sup> mod N</h2>
+                            <div class="chart-container">
+                                <canvas id="modChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="pert-card">
+                            <h2 style="border: none;">Protocol Flow</h2>
+                            <div class="flow-container">
+                                <div class="flow-step" id="flow-1">
+                                    <div class="flow-icon">1</div>
+                                    <div class="flow-text">Pick Coprime <br><span style="font-size:0.7rem; color:var(--muted-text);">GCD(a, N) = 1</span></div>
+                                    <div class="flow-value" id="lbl-a">a=7</div>
+                                </div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
+                                <div class="flow-step" id="flow-2">
+                                    <div class="flow-icon">Q</div>
+                                    <div class="flow-text">Quantum Oracle <br><span style="font-size:0.7rem; color:var(--muted-text);">Superposition of f(x)</span></div>
+                                </div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
+                                <div class="flow-step" id="flow-3">
+                                    <div class="flow-icon">Q</div>
+                                    <div class="flow-text">Period Finding (QFT) <br><span style="font-size:0.7rem; color:var(--muted-text);">Interfering amplitudes</span></div>
+                                </div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
+                                <div class="flow-step" id="flow-4">
+                                    <div class="flow-icon">4</div>
+                                    <div class="flow-text">Extract Period (r)</div>
+                                    <div class="flow-value" id="lbl-r">r=?</div>
+                                </div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
+                                <div class="flow-step" id="flow-5">
+                                    <div class="flow-icon">5</div>
+                                    <div class="flow-text">GCD(a<sup>r/2</sup> ± 1, N)</div>
+                                    <div class="flow-value" id="lbl-pq" style="color: #34d399;">?</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { step: 0, timer: null, n: 15, a: 7, r: 0, p: 0, q: 0, dataPoints: [] };
+        let chartCtx = document.getElementById('modChart').getContext('2d');
+        const colorPrimary = getComputedStyle(document.documentElement).getPropertyValue('--dqa-primary').trim() || '#005a9c';
+
+        let modChart = new Chart(chartCtx, {
+            type: 'bar',
+            data: { labels: [], datasets: [{ label: 'a^x mod N', data: [], backgroundColor: colorPrimary, borderRadius: 4 }] },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, suggestedMax: 15, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } },
+                animation: { duration: 800, easing: 'easeOutQuart' }
+            }
+        });
+
+        // Euclidean Algorithm
+        function gcd(a, b) {
+            if (!b) return a;
+            return gcd(b, a % b);
+        }
+
+        function calculateShor() {
+            state.dataPoints = [];
+            let current = 1;
+            for(let x=0; x<16; x++) { // just show first 16 points
+                state.dataPoints.push(current);
+                if (x > 0 && current === 1 && state.r === 0) {
+                    state.r = x;
+                }
+                current = (current * state.a) % state.n;
+            }
+            if(state.r === 0) state.r = 4; // fallback
+
+            let p1 = Math.pow(state.a, state.r/2) + 1;
+            let p2 = Math.pow(state.a, state.r/2) - 1;
+            state.p = gcd(p1, state.n);
+            state.q = gcd(p2, state.n);
+        }
+
+        function resetSystem() {
+            stopAuto();
+            state.n = parseInt(document.getElementById('inp-n').value);
+            state.a = parseInt(document.getElementById('inp-a').value);
+            state.r = 0; state.p = 0; state.q = 0;
+            state.step = 0;
+            
+            document.getElementById('stat-n').innerText = state.n;
+            document.getElementById('stat-r').innerText = '?';
+            document.getElementById('stat-pq').innerText = '? , ?';
+            
+            document.getElementById('lbl-a').innerText = `a=${state.a}`;
+            document.getElementById('lbl-r').innerText = `r=?`;
+            document.getElementById('lbl-pq').innerText = `?`;
+            
+            calculateShor();
+            modChart.options.scales.y.suggestedMax = state.n;
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 4;
+
+            // Flow highlighting
+            for(let i=1; i<=5; i++) document.getElementById(`flow-${i}`).classList.remove('active');
+
+            if(state.step === 0) {
+                document.getElementById('panel-title').innerText = "Step 1: Classical Prep";
+                document.getElementById('panel-desc').innerText = `We want to factor N=${state.n}. We randomly select a coprime guess a=${state.a}.`;
+                document.getElementById('flow-1').classList.add('active');
+                
+                modChart.data.labels = [];
+                modChart.data.datasets[0].data = [];
+                modChart.update();
+            }
+            else if(state.step === 1) {
+                document.getElementById('panel-title').innerText = "Step 2: Quantum Oracle (Superposition)";
+                document.getElementById('panel-desc').innerText = `We apply H gates to create a superposition of inputs x, then compute f(x) = a^x mod N for all x simultaneously in a quantum register.`;
+                document.getElementById('flow-2').classList.add('active');
+                
+                let labels = [];
+                for(let i=0; i<state.dataPoints.length; i++) labels.push(i);
+                modChart.data.labels = labels;
+                modChart.data.datasets[0].data = state.dataPoints;
+                
+                let colors = [];
+                for(let i=0; i<state.dataPoints.length; i++) colors.push('#334155'); // grayed out
+                modChart.data.datasets[0].backgroundColor = colors;
+                modChart.update();
+            }
+            else if(state.step === 2) {
+                document.getElementById('panel-title').innerText = "Step 3: Quantum Fourier Transform";
+                document.getElementById('panel-desc').innerText = `We apply QFT to the input register. This causes destructive interference for most states, but constructive interference exactly at multiples of the inverse period 1/r.`;
+                document.getElementById('flow-3').classList.add('active');
+                
+                let colors = [];
+                for(let i=0; i<state.dataPoints.length; i++) {
+                    if(i % state.r === 0) colors.push('#38bdf8'); // highlight period start
+                    else colors.push(colorPrimary);
+                }
+                modChart.data.datasets[0].backgroundColor = colors;
+                modChart.update();
+            }
+            else if(state.step === 3) {
+                document.getElementById('panel-title').innerText = "Step 4: Measurement & Period Extraction";
+                document.getElementById('panel-desc').innerText = `We measure the register and use continued fractions to extract the true period r = ${state.r}. Notice the graph repeats exactly every ${state.r} steps!`;
+                document.getElementById('flow-4').classList.add('active');
+                
+                document.getElementById('stat-r').innerText = state.r;
+                document.getElementById('lbl-r').innerText = `r=${state.r}`;
+            }
+            else if(state.step === 4) {
+                document.getElementById('panel-title').innerText = "Step 5: Classical Factors";
+                document.getElementById('panel-desc').innerText = `Because r is even, we can compute the factors using the greatest common divisor: p = GCD(a^(r/2) + 1, N) = ${state.p} and q = GCD(a^(r/2) - 1, N) = ${state.q}.`;
+                document.getElementById('flow-5').classList.add('active');
+                
+                document.getElementById('stat-pq').innerText = `${state.p} , ${state.q}`;
+                document.getElementById('lbl-pq').innerText = `${state.p}, ${state.q}`;
+            }
+        }
+
+        function nextStep() { if(state.step < 4) { state.step++; updateUI(); } }
+        function prevStep() { if(state.step > 0) { stopAuto(); state.step--; updateUI(); } }
+        
+        function toggleAuto() {
+            if (state.timer) stopAuto();
+            else {
+                if(state.step === 4) resetSystem();
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                state.timer = setInterval(() => { if (state.step < 4) nextStep(); else stopAuto(); }, 1800);
+            }
+        }
+        function stopAuto() { clearInterval(state.timer); state.timer = null; document.getElementById('btn-auto').innerText = "Play Animation"; }
+
+        resetSystem();
+    </script>
+</body>
+</html>

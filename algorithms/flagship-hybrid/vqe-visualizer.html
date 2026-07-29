@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VQE Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary); --dqa-card: var(--surface);
+            --dqa-text: var(--text); --dqa-border: var(--border);
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-input { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'Inter'; font-weight: 700; text-align: left; }
+        .modern-input:focus { outline: none; border-color: var(--dqa-primary); }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
+        .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .chart-container { width: 100%; height: 350px; position: relative; }
+
+        .hybrid-loop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .loop-box {
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; position: relative;
+        }
+        .loop-box h3 { margin: 0; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; }
+        
+        .val-display { font-family: 'JetBrains Mono'; font-size: 1.5rem; font-weight: 800; color: #fff; }
+        
+        .loop-active { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 90, 156, 0.2); }
+        .loop-active .val-display { color: #38bdf8; }
+
+        .q-circuit {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-family: 'JetBrains Mono'; font-weight: 800; font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        .q-gate { padding: 8px 12px; background: rgba(5, 150, 105, 0.1); border: 1px solid #059669; color: #059669; border-radius: 6px; }
+        
+        .arrow-down { margin: 10px auto; color: var(--border); font-size: 2rem; font-weight: 800; height: 30px; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="vqe.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to VQE</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Variational Quantum Eigensolver (VQE)</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Configure Subsystem</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Hamiltonian</label>
+                            <select id="inp-ham" class="modern-input">
+                                <option value="-1.137">H₂ Molecule (Ground: -1.137 Ha)</option>
+                                <option value="-7.882">LiH Molecule (Ground: -7.882 Ha)</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Ansatz Depth</label>
+                            <input type="range" id="inp-depth" style="width:100%;" min="1" max="5" value="2">
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Learning Rate</label>
+                            <select id="inp-lr" class="modern-input">
+                                <option value="0.1">0.1 (Fast, bouncy)</option>
+                                <option value="0.05" selected>0.05 (Stable)</option>
+                                <option value="0.01">0.01 (Slow, precise)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Initialize Optimiser</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Optimisation Console</h2>
+                        <button class="btn btn-primary btn-modern" id="btn-run" style="width:100%; padding: 15px;" onclick="toggleOptimization()">Start Optimisation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Ready</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">VQE is a hybrid algorithm. The quantum computer evaluates the energy of a parametrized state, and a classical optimizer updates the parameters to minimize that energy.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    <div class="hybrid-loop">
+                        <!-- Quantum Side -->
+                        <div style="display: flex; flex-direction: column;">
+                            <div class="loop-box" id="box-quantum">
+                                <h3>1. Quantum State Prep & Measurement</h3>
+                                <div class="q-circuit">
+                                    |0⟩ → <div class="q-gate" id="lbl-theta">U(θ)</div> → Measure H
+                                </div>
+                                <div style="margin-top: 10px;">Expectation Value ⟨E⟩</div>
+                                <div class="val-display" id="lbl-energy">0.00000</div>
+                            </div>
+                        </div>
+
+                        <!-- Classical Side -->
+                        <div style="display: flex; flex-direction: column;">
+                            <div class="loop-box" id="box-classical">
+                                <h3>2. Classical Optimiser Update</h3>
+                                <div style="margin-top: 5px; font-size: 0.85rem; color: var(--muted-text);">Gradient Descent</div>
+                                <div style="margin-top: 5px;">New Parameters θ</div>
+                                <div class="val-display" id="lbl-params" style="font-size: 1rem;">[0.00, 0.00, ...]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pert-card" style="flex-grow: 1;">
+                        <h2 style="border: none; display: flex; justify-content: space-between;">
+                            <span>Energy Landscape</span>
+                            <span id="lbl-iter">Iteration: 0</span>
+                        </h2>
+                        <div class="chart-container">
+                            <canvas id="energyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { running: false, timer: null, iter: 0, energy: 0, target: -1.137, theta: [0,0,0,0], history: [] };
+        
+        let chartCtx = document.getElementById('energyChart').getContext('2d');
+        const colorPrimary = getComputedStyle(document.documentElement).getPropertyValue('--dqa-primary').trim() || '#005a9c';
+
+        let energyChart = new Chart(chartCtx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ label: 'Energy ⟨H⟩', data: [], borderColor: colorPrimary, backgroundColor: 'rgba(0, 90, 156, 0.1)', fill: true, tension: 0.4, pointRadius: 2 }] },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { title: { display: true, text: 'Optimizer Iterations', color: '#94a3b8' }, grid: { display: false } }
+                },
+                animation: { duration: 0 } // instant update
+            }
+        });
+
+        function resetSystem() {
+            stopOptimization();
+            state.target = parseFloat(document.getElementById('inp-ham').value);
+            // Random high energy start
+            state.energy = Math.abs(state.target) * 0.5; 
+            state.theta = [Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI];
+            state.iter = 0;
+            state.history = [state.energy];
+            
+            document.getElementById('lbl-energy').innerText = state.energy.toFixed(5);
+            document.getElementById('lbl-params').innerText = '[' + state.theta.map(t=>t.toFixed(2)).join(', ') + ']';
+            document.getElementById('lbl-iter').innerText = 'Iteration: 0';
+            
+            // Set chart bounds
+            energyChart.options.scales.y.suggestedMin = state.target - 0.2;
+            energyChart.options.scales.y.suggestedMax = state.energy + 0.5;
+            
+            energyChart.data.labels = [0];
+            energyChart.data.datasets[0].data = state.history;
+            energyChart.update();
+            
+            document.getElementById('box-quantum').classList.remove('loop-active');
+            document.getElementById('box-classical').classList.remove('loop-active');
+            document.getElementById('btn-run').innerText = "Start Optimisation";
+        }
+
+        function toggleOptimization() {
+            if(state.running) {
+                stopOptimization();
+                document.getElementById('btn-run').innerText = "Resume Optimisation";
+            } else {
+                state.running = true;
+                document.getElementById('btn-run').innerText = "Pause Optimisation";
+                runLoop();
+            }
+        }
+
+        function stopOptimization() {
+            state.running = false;
+            clearTimeout(state.timer);
+        }
+
+        function runLoop() {
+            if(!state.running) return;
+
+            // Step 1: Quantum (Evaluate)
+            document.getElementById('box-quantum').classList.add('loop-active');
+            document.getElementById('box-classical').classList.remove('loop-active');
+            document.getElementById('panel-title').innerText = "Quantum Phase";
+            document.getElementById('panel-desc').innerText = "The quantum circuit is executed multiple times (shots) to measure the expectation value of the Hamiltonian for the current parameters θ.";
+            
+            // Simulate evaluation (Energy drops asymptotically towards target)
+            let lr = parseFloat(document.getElementById('inp-lr').value);
+            // Add some noise
+            let noise = (Math.random() - 0.5) * 0.05 * Math.exp(-state.iter * 0.05);
+            let grad = (state.energy - state.target);
+            state.energy = state.energy - lr * grad + noise;
+            
+            if(state.energy < state.target) state.energy = state.target + Math.abs(noise); // prevent overshooting target infinitely
+
+            document.getElementById('lbl-energy').innerText = state.energy.toFixed(5);
+            
+            state.history.push(state.energy);
+            energyChart.data.labels.push(state.iter);
+            energyChart.update();
+
+            state.timer = setTimeout(() => {
+                if(!state.running) return;
+                
+                // Step 2: Classical (Update)
+                document.getElementById('box-quantum').classList.remove('loop-active');
+                document.getElementById('box-classical').classList.add('loop-active');
+                document.getElementById('panel-title').innerText = "Classical Phase";
+                document.getElementById('panel-desc').innerText = "The classical optimizer uses the measured energy to compute gradients and updates the parameters θ to find a lower energy state.";
+                
+                // Update params randomly for visual effect
+                state.theta = state.theta.map(t => t - lr * (Math.random()-0.5));
+                document.getElementById('lbl-params').innerText = '[' + state.theta.map(t=>t.toFixed(2)).join(', ') + ']';
+                
+                state.iter++;
+                document.getElementById('lbl-iter').innerText = `Iteration: ${state.iter}`;
+                
+                if (state.energy - state.target < 0.001) {
+                    stopOptimization();
+                    document.getElementById('btn-run').innerText = "Minimum Reached";
+                    document.getElementById('btn-run').disabled = true;
+                    document.getElementById('panel-title').innerText = "Converged";
+                    document.getElementById('panel-desc').innerText = `VQE has successfully found the ground state energy approximation: ${state.energy.toFixed(5)} Ha!`;
+                } else {
+                    state.timer = setTimeout(runLoop, 400); // 400ms per classical step
+                }
+            }, 600); // 600ms per quantum step
+        }
+
+        resetSystem();
+    </script>
+</body>
+</html>

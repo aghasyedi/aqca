@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QPE Visualiser | AQCA</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary); --dqa-card: var(--surface);
+            --dqa-text: var(--text); --dqa-border: var(--border);
+        }
+
+        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar { width: 6px; }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
+
+        .pert-card { background: var(--dqa-card); border: 1px solid var(--dqa-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .pert-card h2 { margin: 0 0 16px 0; font-size: 0.75rem; text-transform: uppercase; color: var(--dqa-primary); font-weight: 800; letter-spacing: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--dqa-border); }
+
+        .visualizer-main { overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding-right: 10px; padding-bottom: 20px; }
+
+        .modern-input { width: 100%; padding: 10px 12px; border: 1px solid var(--dqa-border); border-radius: 8px; background: var(--background); color: var(--dqa-text); font-family: 'JetBrains Mono'; font-weight: 700; text-align: center; }
+        .modern-input:focus { outline: none; border-color: var(--dqa-primary); }
+        
+        .btn-green { background: linear-gradient(135deg, #059669, #047857); color: #fff; border: none; }
+        .btn-modern { padding: 10px 16px; font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); color: var(--text); }
+        
+        .dash-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #1e293b;
+        }
+
+        .stat-box .label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
+        .stat-box .value { font-family: 'JetBrains Mono'; font-size: 2rem; font-weight: 800; color: #fff; }
+        .stat-box.highlight { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
+        .stat-box.highlight .value { color: #38bdf8; }
+
+        .circuit-mock {
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            padding: 40px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            font-family: 'JetBrains Mono'; font-weight: 800;
+        }
+
+        .gate { width: 80px; height: 60px; background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .gate.cu { background: rgba(5, 150, 105, 0.1); border-color: #059669; color: #059669; }
+        .gate.iqft { background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6; color: #8b5cf6; }
+        .gate.measure { background: var(--surface); border: 2px solid #b45309; color: #b45309; width: 60px; }
+        .gate.measure::after { content: ''; position: absolute; width: 24px; height: 12px; border: 2px solid #b45309; border-bottom: none; border-radius: 24px 24px 0 0; margin-top: 10px; }
+        
+        .anim-active { transform: scale(1.1); box-shadow: 0 0 20px currentColor; background: currentColor !important; color: #fff !important; transition: 0.3s; }
+        .anim-active.measure::after { border-color: #fff; }
+
+        .wire-arrow { color: #94a3b8; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
+                <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
+                <div class="nav-item"><a href="qpe.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to QPE</a></div>
+            </nav>
+        </aside>
+
+        <main class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Quantum Phase Estimation</h1>
+            </div>
+
+            <div class="portal-grid">
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Configure Subroutine</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">True Phase θ (0 to 1)</label>
+                            <input type="number" id="inp-theta" class="modern-input" value="0.15" step="0.01" min="0" max="0.99">
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Ancilla Qubits (t)</label>
+                            <select id="inp-ancilla" class="modern-input" style="text-align-last: center;">
+                                <option value="2">2 qubits</option>
+                                <option value="3">3 qubits</option>
+                                <option value="4" selected>4 qubits</option>
+                                <option value="5">5 qubits</option>
+                                <option value="6">6 qubits</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Lock Parameters</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Run QPE</h2>
+                        <button class="btn btn-primary btn-modern" id="btn-run" style="width:100%; padding: 15px;" onclick="runAnimation()">Execute Algorithm</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Ready</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Click Execute to begin the estimation.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="visualizer-main">
+                    
+                    <div class="dash-grid">
+                        <div class="stat-box">
+                            <div class="label">Actual θ</div>
+                            <div class="value" id="disp-actual">--</div>
+                        </div>
+                        <div class="stat-box highlight">
+                            <div class="label">Estimated θ</div>
+                            <div class="value" id="disp-est">--</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="label">Absolute Error</div>
+                            <div class="value" id="disp-error" style="color: #f43f5e;">--</div>
+                        </div>
+                    </div>
+
+                    <div class="pert-card" style="flex-grow: 1;">
+                        <h2 style="border: none;">Quantum Circuit Animation</h2>
+                        <div class="circuit-mock">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <div id="lbl-q">|0⟩<sup>⊗4</sup></div>
+                                <div style="color: var(--primary);">|ψ⟩</div>
+                            </div>
+                            <div class="wire-arrow">→</div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div class="gate" id="g-h">H<sup>⊗t</sup></div>
+                                <div style="height: 60px;"></div>
+                            </div>
+                            
+                            <div class="wire-arrow">→</div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div class="gate cu" id="g-cu">CTRL-U</div>
+                                <div class="gate cu" id="g-cu-tgt">U<sup>2^j</sup></div>
+                            </div>
+                            
+                            <div class="wire-arrow">→</div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div class="gate iqft" id="g-iqft">IQFT</div>
+                                <div style="height: 60px;"></div>
+                            </div>
+
+                            <div class="wire-arrow">→</div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div class="gate measure" id="g-m"></div>
+                                <div style="height: 60px;"></div>
+                            </div>
+
+                            <div class="wire-arrow">→</div>
+                            
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <div style="color: #b45309;" id="lbl-result">x</div>
+                                <div style="height: 25px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let state = { running: false };
+
+        function resetSystem() {
+            if(state.running) return;
+            let theta = parseFloat(document.getElementById('inp-theta').value);
+            let t = parseInt(document.getElementById('inp-ancilla').value);
+            
+            document.getElementById('disp-actual').innerText = theta.toFixed(4);
+            document.getElementById('disp-est').innerText = '--';
+            document.getElementById('disp-error').innerText = '--';
+            document.getElementById('lbl-result').innerText = 'x';
+            
+            document.getElementById('lbl-q').innerHTML = `|0⟩<sup>⊗${t}</sup>`;
+            document.getElementById('g-h').innerHTML = `H<sup>⊗${t}</sup>`;
+
+            document.getElementById('panel-title').innerText = "Ready";
+            document.getElementById('panel-desc').innerText = "Click Execute to begin the estimation.";
+        }
+
+        function runAnimation() {
+            if(state.running) return;
+            state.running = true;
+            document.getElementById('btn-run').disabled = true;
+
+            let seq = [
+                { id: ['g-h'], title: "Superposition", desc: "Hadamards create an equal superposition of all t ancilla qubits." },
+                { id: ['g-cu', 'g-cu-tgt'], title: "Phase Kickback", desc: "Controlled-U operations kick back the phase e^(2πiθ) into the ancilla register, encoded in the Fourier basis." },
+                { id: ['g-iqft'], title: "Inverse QFT", desc: "The IQFT transforms the phase-encoded state from the Fourier basis back to the computational basis." },
+                { id: ['g-m'], title: "Measurement", desc: "Measuring the ancilla yields an integer x, which represents our best approximation of 2^t * θ." }
+            ];
+
+            let step = 0;
+            let iv = setInterval(() => {
+                document.querySelectorAll('.anim-active').forEach(e => e.classList.remove('anim-active'));
+                
+                if(step < seq.length) {
+                    seq[step].id.forEach(id => document.getElementById(id).classList.add('anim-active'));
+                    document.getElementById('panel-title').innerText = seq[step].title;
+                    document.getElementById('panel-desc').innerText = seq[step].desc;
+                    step++;
+                } else {
+                    clearInterval(iv);
+                    completeRun();
+                }
+            }, 1000);
+        }
+
+        function completeRun() {
+            let theta = parseFloat(document.getElementById('inp-theta').value);
+            let t = parseInt(document.getElementById('inp-ancilla').value);
+            
+            let numStates = Math.pow(2, t);
+            
+            // QPE yields an integer x close to theta * 2^t
+            let idealX = theta * numStates;
+            let measuredX = Math.round(idealX) % numStates; // highest probability
+            
+            // In a real quantum computer it's probabilistic, but it peaks strongly at round(idealX).
+            let estimatedTheta = measuredX / numStates;
+            let error = Math.abs(theta - estimatedTheta);
+
+            document.getElementById('lbl-result').innerText = measuredX;
+            document.getElementById('disp-est').innerText = estimatedTheta.toFixed(5);
+            document.getElementById('disp-error').innerText = error.toFixed(5);
+
+            document.getElementById('panel-title').innerText = "Complete";
+            document.getElementById('panel-desc').innerText = `Algorithm finished. Estimated θ = ${measuredX} / 2^${t} = ${estimatedTheta}. The error is bounded by the number of ancilla qubits.`;
+            
+            state.running = false;
+            document.getElementById('btn-run').disabled = false;
+        }
+
+        resetSystem();
+    </script>
+</body>
+</html>
