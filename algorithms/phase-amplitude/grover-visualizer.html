@@ -517,14 +517,20 @@
             phase: (a) => Math.atan2(a.im, a.re)
         };
 
+        const computedStyle = getComputedStyle(document.documentElement);
+        const colorPrimary = computedStyle.getPropertyValue('--dqa-primary').trim() || '#005a9c';
+        const colorAccent = computedStyle.getPropertyValue('--dqa-accent').trim() || '#003366';
+        const colorMuted = computedStyle.getPropertyValue('--dqa-text-muted').trim() || '#6b5a51';
+        const colorBorder = computedStyle.getPropertyValue('--dqa-border').trim() || '#e0d8cc';
+
         const ctx = document.getElementById('mainChart').getContext('2d');
         let chart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: [],
                 datasets: [
-                    { type: 'line', label: 'Mean', data: [], borderColor: '#005a9c', borderDash: [5, 5], pointRadius: 0 },
-                    { type: 'bar', label: 'Amplitude', data: [], backgroundColor: '#003366' }
+                    { type: 'line', label: 'Mean', data: [], borderColor: colorPrimary, borderDash: [5, 5], pointRadius: 0 },
+                    { type: 'bar', label: 'Amplitude', data: [], backgroundColor: colorAccent }
                 ]
             },
             options: {
@@ -533,7 +539,7 @@
                     y: {
                         min: -1.1, max: 1.1,
                         grid: { color: 'rgba(0,0,0,0.05)' },
-                        ticks: { color: '#6b5a51', font: { family: 'JetBrains Mono', size: 10 } }
+                        ticks: { color: colorMuted, font: { family: 'JetBrains Mono', size: 10 } }
                     },
                     x: { display: false }
                 },
@@ -657,14 +663,14 @@
 
             // Background Circle (Disk)
             geoCtx.beginPath(); geoCtx.arc(cx, cy, r, 0, Math.PI * 2);
-            geoCtx.strokeStyle = '#e0d8cc'; geoCtx.setLineDash([5, 5]); geoCtx.stroke(); geoCtx.setLineDash([]);
+            geoCtx.strokeStyle = colorBorder; geoCtx.setLineDash([5, 5]); geoCtx.stroke(); geoCtx.setLineDash([]);
 
             // Axes
-            geoCtx.strokeStyle = '#6b5a51'; geoCtx.lineWidth = 1;
+            geoCtx.strokeStyle = colorMuted; geoCtx.lineWidth = 1;
             geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.lineTo(cx + r + 20, cy); geoCtx.stroke(); // |s'> axis
             geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.lineTo(cx, cy - r - 20); geoCtx.stroke(); // |w> axis
 
-            geoCtx.fillStyle = '#6b5a51'; geoCtx.font = '10px JetBrains Mono';
+            geoCtx.fillStyle = colorMuted; geoCtx.font = '10px JetBrains Mono';
             geoCtx.fillText("|s'〉", cx + r + 5, cy + 15);
             geoCtx.fillText("|ω〉", cx - 25, cy - r - 5);
 
@@ -679,14 +685,15 @@
 
             // Ideal Optimal Sector
             geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.arc(cx, cy, r, -theta / 2, 0);
-            geoCtx.fillStyle = 'rgba(197, 160, 89, 0.1)'; geoCtx.fill();
+            geoCtx.fillStyle = 'rgba(128, 90, 213, 0.15)'; // purple tint
+            geoCtx.fill();
 
             // Vector
-            geoCtx.strokeStyle = '#7a3a00'; geoCtx.lineWidth = 3;
+            geoCtx.strokeStyle = colorPrimary; geoCtx.lineWidth = 3;
             geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.lineTo(cx + x, cy - y); geoCtx.stroke();
 
             // Vector Head
-            geoCtx.fillStyle = '#7a3a00';
+            geoCtx.fillStyle = colorPrimary;
             geoCtx.beginPath(); geoCtx.arc(cx + x, cy - y, 4, 0, Math.PI * 2); geoCtx.fill();
             geoCtx.fillText("|ψ〉", cx + x + 8, cy - y - 8);
         }
