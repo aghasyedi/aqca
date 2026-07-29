@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Analysis & Comparison Centre | AQCA</title>
+    <meta name="description" content="Compare quantum algorithms, performance complexity, and hardware compatibility.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/icons/icon.png">
+
+    <style>
+        .analysis-section {
+            margin-bottom: 3rem;
+        }
+
+        .analysis-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        
+        .analysis-header h2 {
+            margin: 0;
+            background: linear-gradient(90deg, var(--primary), #805ad5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .comparison-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .algo-select {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            flex: 1;
+            max-width: 300px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            outline: none;
+            cursor: pointer;
+        }
+        .algo-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .compare-table th, .compare-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compare-table th {
+            background: var(--background);
+            font-weight: 700;
+            color: var(--primary);
+            width: 25%;
+        }
+
+        .compare-table tr:last-child td, .compare-table tr:last-child th {
+            border-bottom: none;
+        }
+
+        .compare-table td {
+            width: 37.5%;
+            vertical-align: top;
+        }
+        
+        .compare-table td span.tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin: 2px;
+        }
+        .compare-table td span.tag.red {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .compare-table td span.tag.green {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .dash-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .hw-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .hw-card {
+            background: linear-gradient(145deg, var(--surface), var(--background));
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .hw-card h3 {
+            margin: 0 0 1rem 0;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .hw-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .hw-row strong {
+            color: var(--muted-text);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="algorithms.html" class="nav-link">Algorithms</a>
+                </div>
+                <div class="nav-item">
+                    <a href="analysis.html" class="nav-link active"><span class="step-num"
+                        style="background: var(--primary); color:#ffffff;">✦</span>Analysis Centre</a>
+                </div>
+                <div class="nav-item">
+                    <a href="resources.html" class="nav-link">Resources</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header">
+                <h1>Algorithm Analysis & Comparison Centre</h1>
+                <p style="color: var(--muted-text);">Compare structural, mathematical, and hardware performance metrics across algorithms.</p>
+            </div>
+
+            <!-- SECTION 1: Comparison -->
+            <section class="analysis-section" id="compare-section">
+                <div class="analysis-header">
+                    <h2>📊 Algorithm Comparison Centre</h2>
+                </div>
+                
+                <div class="comparison-controls">
+                    <select id="algo1-select" class="algo-select" onchange="renderComparison()"></select>
+                    <span style="font-weight: 800; color: var(--muted-text);">VS</span>
+                    <select id="algo2-select" class="algo-select" onchange="renderComparison()"></select>
+                </div>
+
+                <table class="compare-table" id="compare-table">
+                    <!-- Populated by JS -->
+                </table>
+            </section>
+
+            <!-- SECTION 2: Dashboard -->
+            <section class="analysis-section" id="dashboard-section">
+                <div class="analysis-header">
+                    <h2>📈 Complexity & Performance Dashboard</h2>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dash-card">
+                        <h3 style="margin: 0; color: var(--text);">Complexity Scaling (Big-O)</h3>
+                        <p style="font-size: 0.8rem; color: var(--muted-text); margin: 5px 0 0 0;">Comparing scaling requirements for <span id="chart-a1-name" style="font-weight:bold;">Algo 1</span> vs <span id="chart-a2-name" style="font-weight:bold;">Algo 2</span></p>
+                        <div class="chart-wrapper">
+                            <canvas id="complexityChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="dash-card">
+                        <h3 style="margin: 0; color: var(--text);">Performance Profile</h3>
+                        <table class="compare-table" style="margin-top: 1rem; box-shadow: none; border: none; border-radius: 0;">
+                            <tbody id="profile-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Hardware -->
+            <section class="analysis-section" id="hardware-section">
+                <div class="analysis-header">
+                    <h2>⚛️ Quantum Hardware Compatibility</h2>
+                </div>
+                <div class="comparison-controls" style="margin-bottom: 1rem;">
+                    <span style="font-size: 0.9rem; font-weight: 600;">Showing compatibility for:</span>
+                    <select id="hw-select" class="algo-select" onchange="renderHardware()"></select>
+                </div>
+
+                <div class="hw-grid" id="hw-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Data & Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/algorithm-data.js"></script>
+    
+    <script>
+        const algorithms = window.AQCA_ALGORITHMS;
+        const algoKeys = Object.keys(algorithms);
+        
+        let complexityChart;
+
+        function init() {
+            const select1 = document.getElementById('algo1-select');
+            const select2 = document.getElementById('algo2-select');
+            const hwSelect = document.getElementById('hw-select');
+
+            algoKeys.forEach((key, index) => {
+                const algo = algorithms[key];
+                select1.add(new Option(algo.name, key));
+                select2.add(new Option(algo.name, key));
+                hwSelect.add(new Option(algo.name, key));
+            });
+
+            // Set default selections
+            select1.selectedIndex = 0; // Shor
+            select2.selectedIndex = 1; // Grover
+            hwSelect.selectedIndex = 0;
+
+            initChart();
+            renderComparison();
+            renderHardware();
+        }
+
+        function renderComparison() {
+            const id1 = document.getElementById('algo1-select').value;
+            const id2 = document.getElementById('algo2-select').value;
+            
+            const a1 = algorithms[id1];
+            const a2 = algorithms[id2];
+
+            const tbody = document.getElementById('compare-table');
+            
+            const formatBool = (val) => val ? `<span class="tag green">Yes</span>` : `<span class="tag red">No</span>`;
+            const formatList = (arr) => arr.map(i => `• ${i}`).join('<br>');
+
+            tbody.innerHTML = `
+                <tr><th>Problem Solved</th><td>${a1.problem}</td><td>${a2.problem}</td></tr>
+                <tr><th>Math Foundation</th><td>${a1.math}</td><td>${a2.math}</td></tr>
+                <tr><th>Time Complexity (Quantum)</th><td style="font-family:'JetBrains Mono'; color:var(--primary); font-weight:700;">${a1.timeQuantum}</td><td style="font-family:'JetBrains Mono'; color:var(--primary); font-weight:700;">${a2.timeQuantum}</td></tr>
+                <tr><th>Time Complexity (Classical)</th><td style="font-family:'JetBrains Mono'; color:#b45309;">${a1.timeClassical}</td><td style="font-family:'JetBrains Mono'; color:#b45309;">${a2.timeClassical}</td></tr>
+                <tr><th>Space Complexity (Q)</th><td>${a1.spaceQuantum}</td><td>${a2.spaceQuantum}</td></tr>
+                <tr><th>Classical Equivalent</th><td>${a1.classicalEq}</td><td>${a2.classicalEq}</td></tr>
+                <tr><th>Circuit Depth</th><td>${a1.depth}</td><td>${a2.depth}</td></tr>
+                <tr><th>Required Qubits</th><td>${a1.qubitsReq}</td><td>${a2.qubitsReq}</td></tr>
+                <tr><th>Uses Oracle?</th><td>${formatBool(a1.oracle)}</td><td>${formatBool(a2.oracle)}</td></tr>
+                <tr><th>Uses QFT?</th><td>${formatBool(a1.qft)}</td><td>${formatBool(a2.qft)}</td></tr>
+                <tr><th>Uses QPE?</th><td>${formatBool(a1.qpe)}</td><td>${formatBool(a2.qpe)}</td></tr>
+                <tr><th>Advantages</th><td>${formatList(a1.advantages)}</td><td>${formatList(a2.advantages)}</td></tr>
+                <tr><th>Limitations</th><td>${formatList(a1.limitations)}</td><td>${formatList(a2.limitations)}</td></tr>
+            `;
+
+            updateDashboard(a1, a2);
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('complexityChart').getContext('2d');
+            const style = getComputedStyle(document.documentElement);
+            const colorA1 = style.getPropertyValue('--primary').trim() || '#005a9c';
+            const colorA2 = '#805ad5';
+
+            complexityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [2, 4, 8, 16, 32, 64, 128], // N size parameter proxy
+                    datasets: []
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { type: 'logarithmic', title: { display: true, text: 'Operations (Log Scale)' } },
+                        x: { title: { display: true, text: 'Input Size Parameter (N)' } }
+                    }
+                }
+            });
+        }
+
+        function updateDashboard(a1, a2) {
+            document.getElementById('chart-a1-name').innerText = a1.name;
+            document.getElementById('chart-a2-name').innerText = a2.name;
+
+            const nVals = [2, 4, 8, 16, 32, 64, 128];
+            const style = getComputedStyle(document.documentElement);
+            const colorA1 = style.getPropertyValue('--primary').trim() || '#005a9c';
+            const colorA2 = '#805ad5';
+
+            complexityChart.data.datasets = [
+                {
+                    label: a1.name + ' (Q)',
+                    data: nVals.map(n => Math.max(1, a1.scalingFnQ(n))),
+                    borderColor: colorA1,
+                    backgroundColor: colorA1,
+                    tension: 0.4
+                },
+                {
+                    label: a2.name + ' (Q)',
+                    data: nVals.map(n => Math.max(1, a2.scalingFnQ(n))),
+                    borderColor: colorA2,
+                    backgroundColor: colorA2,
+                    tension: 0.4
+                }
+            ];
+            complexityChart.update();
+
+            const pBody = document.getElementById('profile-table-body');
+            pBody.innerHTML = `
+                <tr><th style="width:30%; border:none; padding: 10px;">Metric</th><th style="border:none; padding: 10px; color:${colorA1}">${a1.name}</th><th style="border:none; padding: 10px; color:${colorA2}">${a2.name}</th></tr>
+                <tr><td style="padding: 10px;"><strong>Speed-up Type</strong></td><td style="padding: 10px;">${a1.speedupType}</td><td style="padding: 10px;">${a2.speedupType}</td></tr>
+                <tr><td style="padding: 10px;"><strong>Gate Count</strong></td><td style="padding: 10px;">${a1.gateCount}</td><td style="padding: 10px;">${a2.gateCount}</td></tr>
+                <tr><td style="padding: 10px;"><strong>Qubit Req.</strong></td><td style="padding: 10px;">${a1.qubitsReq}</td><td style="padding: 10px;">${a2.qubitsReq}</td></tr>
+            `;
+        }
+
+        function renderHardware() {
+            const id = document.getElementById('hw-select').value;
+            const a = algorithms[id];
+            
+            const grid = document.getElementById('hw-grid');
+            grid.innerHTML = `
+                <div class="hw-card">
+                    <h3>Platform Viability</h3>
+                    <div class="hw-row"><strong>IBM Quantum:</strong> <span>${a.ibm}</span></div>
+                    <div class="hw-row"><strong>IonQ:</strong> <span>${a.ionq}</span></div>
+                    <div class="hw-row"><strong>Quantinuum:</strong> <span>${a.quantinuum}</span></div>
+                    <div class="hw-row"><strong>Rigetti:</strong> <span>${a.rigetti}</span></div>
+                </div>
+                <div class="hw-card" style="border-top-color: #805ad5;">
+                    <h3>Requirements</h3>
+                    <div class="hw-row"><strong>Native Gates:</strong> <span style="font-family:'JetBrains Mono'; font-size:0.8rem;">${a.nativeGates}</span></div>
+                    <div class="hw-row"><strong>Min Logical Qubits:</strong> <span>${a.minLogical}</span></div>
+                    <div class="hw-row"><strong>Est Physical Qubits:</strong> <span>${a.estPhysical}</span></div>
+                </div>
+                <div class="hw-card" style="border-top-color: #059669;">
+                    <h3>Readiness</h3>
+                    <div class="hw-row"><strong>NISQ Feasibility:</strong> <span>${a.nisq}</span></div>
+                    <div class="hw-row"><strong>Fault-Tolerant:</strong> <span>${a.faultTolerant}</span></div>
+                </div>
+            `;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -277,7 +277,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
         .gate-span:hover {
-            transform: translateY(-2px);
+            transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
         .gate-span.oracle {
@@ -414,7 +414,7 @@
                         <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Steps Taken</div>
+                                Iterations</div>
                             <div id="stat-step"
                                 style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0
                             </div>
@@ -704,7 +704,7 @@
             const prob = state.targetIndices.reduce((acc, idx) => acc + Complex.magSq(state.amplitudes[idx]), 0);
 
             document.getElementById('stat-prob').innerText = (prob * 100).toFixed(1) + "%";
-            document.getElementById('stat-step').innerText = state.stepIdx;
+            document.getElementById('stat-step').innerText = Math.floor(state.stepIdx / 2);
             document.getElementById('btn-prev').disabled = state.history.length <= 1;
 
             const angleRad = Math.asin(Math.sqrt(prob));
