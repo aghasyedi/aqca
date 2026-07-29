@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superdense Coding Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary);
+            --dqa-accent: var(--primary-hover);
+            --dqa-bg: var(--background);
+            --dqa-card: var(--surface);
+            --dqa-text: var(--text);
+            --dqa-text-muted: var(--muted-text);
+            --dqa-border: var(--border);
+            --dqa-success: #059669;
+            --dqa-error: #dc2626;
+            --dqa-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --dqa-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            height: calc(100vh - var(--header-height) - 4rem);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .config-sidebar {
+            background: transparent;
+            border: none;
+            padding: 0 10px 20px 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar {
+            width: 6px;
+        }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb {
+            background-color: var(--dqa-border);
+            border-radius: 10px;
+        }
+
+        .pert-card {
+            background: var(--dqa-card);
+            border: 1px solid var(--dqa-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--dqa-shadow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .pert-card:hover {
+            box-shadow: var(--dqa-shadow-hover);
+            border-color: var(--dqa-primary);
+        }
+
+        .pert-card h2 {
+            margin: 0 0 16px 0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--dqa-primary);
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--dqa-border);
+        }
+
+        .expert-panel {
+            background: var(--background);
+            border: 1px solid var(--dqa-border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: border-color 0.3s;
+        }
+        .expert-panel:hover {
+            border-color: var(--dqa-primary);
+        }
+
+        .visualizer-main {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-right: 10px;
+            padding-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+        }
+
+        .modern-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--dqa-border);
+            border-radius: 8px;
+            background: var(--background);
+            color: var(--dqa-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .modern-input:focus {
+            outline: none;
+            border-color: var(--dqa-primary);
+            box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
+        }
+        .btn-green:hover {
+            background: linear-gradient(135deg, #047857, #064e3b);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.3);
+            color: #fff;
+        }
+        
+        .btn-modern {
+            padding: 10px 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .btn-modern:active {
+            transform: scale(0.96);
+        }
+        .btn-modern:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #ffffff;
+        }
+        .btn-secondary {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--dqa-primary);
+            color: var(--dqa-primary);
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, var(--dqa-card), var(--background));
+            border-radius: 12px;
+        }
+
+        .circuit-grid {
+            display: grid;
+            grid-template-rows: 50px 50px;
+            grid-template-columns: 80px 100px 120px 80px 80px 80px;
+            gap: 0;
+            align-items: center;
+            justify-items: center;
+            padding: 30px 40px;
+            background-color: var(--surface);
+            background-image: radial-gradient(var(--dqa-border) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            position: relative;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.02);
+            justify-content: center;
+        }
+
+        /* Alice / Bob Domains */
+        .domain-label {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted-text);
+            top: 10px;
+        }
+        .domain-alice { left: 130px; }
+        .domain-bob { left: 350px; }
+        
+        .domain-divider {
+            position: absolute;
+            width: 2px;
+            height: 80%;
+            background: repeating-linear-gradient(to bottom, var(--border), var(--border) 10px, transparent 10px, transparent 20px);
+            left: 310px;
+            top: 10%;
+            z-index: 0;
+        }
+
+        .circuit-cell {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circuit-wire {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #a0aabf;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .wire-label {
+            position: absolute;
+            left: 10px;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .circuit-gate {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 800;
+            z-index: 3;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .measure-gate {
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border: 2px solid #b45309;
+            color: #b45309;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            transition: all 0.3s;
+        }
+
+        .measure-gate::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            border: 2px solid #b45309;
+            border-bottom: none;
+            border-radius: 20px 20px 0 0;
+            bottom: 12px;
+        }
+        .measure-gate::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 16px;
+            background: #b45309;
+            transform: rotate(30deg);
+            bottom: 12px;
+            transform-origin: bottom center;
+        }
+        
+        .cnot-control {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            z-index: 3;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .cnot-target {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            background: var(--primary-light);
+            z-index: 3;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .cnot-target::before, .cnot-target::after {
+            content: '';
+            position: absolute;
+            background: var(--primary);
+        }
+        .cnot-target::before { width: 100%; height: 2px; }
+        .cnot-target::after { height: 100%; width: 2px; }
+
+        .cnot-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 50px;
+            background: var(--primary);
+            z-index: 2;
+            transform: translateX(-50%);
+            transition: all 0.3s;
+        }
+
+        /* Qubit Packet Animation */
+        .qubit-packet {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #805ad5, #4c1d95);
+            border-radius: 50%;
+            z-index: 4;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 50px;
+            opacity: 0;
+            box-shadow: 0 0 10px #805ad5, 0 0 20px #805ad5;
+            transition: left 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+        }
+
+        /* Glowing Animation Classes */
+        .gate-active {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+        .gate-active.measure-gate {
+            box-shadow: 0 0 15px #b45309;
+            background: #b45309;
+        }
+        .gate-active.measure-gate::after { border-color: #fff; }
+        .gate-active.measure-gate::before { background: #fff; }
+
+        .cnot-active .cnot-control {
+            transform: scale(1.5);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        .cnot-active .cnot-target {
+            transform: scale(1.15);
+            box-shadow: 0 0 15px var(--primary);
+            background: var(--primary);
+        }
+        .cnot-active .cnot-target::before, .cnot-active .cnot-target::after {
+            background: #fff;
+        }
+        .cnot-active .cnot-line {
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link">Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../algorithms.html" class="nav-link active">Algorithms</a>
+                </div>
+                <div class="nav-item">
+                    <a href="superdense-coding.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to Superdense</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Superdense Coding Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <!-- Sidebar Configuration -->
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Message Config (Alice)</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Classical Message to Send</label>
+                            <select id="inp-msg" class="modern-input" onchange="resetSystem()">
+                                <option value="00">00 (Applies I)</option>
+                                <option value="01">01 (Applies X)</option>
+                                <option value="10">10 (Applies Z)</option>
+                                <option value="11">11 (Applies ZX)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Reset System</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()">Play Animation</button>
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
+                            <span>Speed</span>
+                            <input type="range" id="inp-speed" min="500" max="2500" value="1200" style="width:120px;" onchange="if(state.timer){stopAuto();toggleAuto();}">
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Explanation Panel</h2>
+                        <div class="expert-panel">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initial State</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Alice and Bob share a pre-entangled Bell pair. Alice holds Q0, Bob holds Q1.</div>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--muted-text); display: block; margin-bottom: 5px;">State Vector Equation</span>
+                                <div id="panel-math" style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #6d28d9; font-weight: 600;">|Φ⁺⟩</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Display -->
+                <div class="visualizer-main">
+                    <!-- Live Dashboard -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 10px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
+                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Current Step</div>
+                            <div id="stat-step" style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0 / 5</div>
+                        </div>
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px; grid-column: span 2;">
+                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">System State |ψ⟩</div>
+                            <div id="stat-vector" style="font-size: 1.1rem; font-family: 'JetBrains Mono'; font-weight: 700; color: #b45309; margin-top: auto;">0.707 |00⟩ + 0.707 |11⟩</div>
+                        </div>
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
+                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Message Received</div>
+                            <div id="stat-msg" style="font-size: 1.2rem; font-weight: 800; color: var(--dqa-error); margin-top: auto;">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Grid -->
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 10px; height: 260px;">
+                        <div class="pert-card chart-container" style="min-height: 0; display: flex; flex-direction: column;">
+                            <h2 style="margin-bottom: 12px; border: none;">Measurement Probability Distribution (Bob's Lab)</h2>
+                            <div style="flex: 1; min-height: 0;">
+                                <canvas id="probChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Circuit Engine Card -->
+                    <div class="pert-card">
+                        <h2 style="border: none;">Quantum Circuit Protocol</h2>
+                        <div class="circuit-grid" id="circuit-box">
+                            <div class="domain-label domain-alice">Alice's Lab</div>
+                            <div class="domain-divider"></div>
+                            <div class="domain-label domain-bob">Bob's Lab</div>
+
+                            <!-- Q0 Row (Alice -> Bob) -->
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 1;">
+                                <div class="circuit-wire"></div>
+                                <div class="wire-label">q₀ (A)</div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 2;">
+                                <div class="circuit-wire"></div>
+                                <div class="circuit-gate" id="gate-encode">I</div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 3;">
+                                <div class="circuit-wire"></div>
+                                <div class="qubit-packet" id="qubit-packet"></div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 4;">
+                                <div class="circuit-wire"></div>
+                                <div class="cnot-wrapper" id="gate-cx" style="position: absolute; width: 100%; height: 50px; display: flex; justify-content: center; top: 0;">
+                                    <div class="cnot-control" style="margin-top: 19px;"></div>
+                                    <div class="cnot-line"></div>
+                                </div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 5;">
+                                <div class="circuit-wire"></div>
+                                <div class="circuit-gate" id="gate-h">H</div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 6;">
+                                <div class="circuit-wire"></div>
+                                <div class="measure-gate" id="gate-m1"></div>
+                            </div>
+
+                            <!-- Q1 Row (Bob) -->
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 1;">
+                                <div class="circuit-wire"></div>
+                                <div class="wire-label">q₁ (B)</div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 2;">
+                                <div class="circuit-wire"></div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 3;">
+                                <div class="circuit-wire"></div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 4;">
+                                <div class="circuit-wire"></div>
+                                <div class="cnot-target" id="gate-cx-target"></div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 5;">
+                                <div class="circuit-wire"></div>
+                            </div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 6;">
+                                <div class="circuit-wire"></div>
+                                <div class="measure-gate" id="gate-m2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+
+    <script>
+        // State Machine
+        // Step 0: Initial |Phi+>
+        // Step 1: Alice Encodes (I, X, Z, ZX)
+        // Step 2: Transmission
+        // Step 3: Bob CX
+        // Step 4: Bob H
+        // Step 5: Measurement
+        const state = {
+            step: 0,
+            timer: null,
+            msg: '00'
+        };
+        
+        const ISQRT2 = 1 / Math.sqrt(2);
+        
+        // physicsEngine[msg][step]
+        const physicsEngine = {
+            '00': [ // I
+                { text: "0.707 |00⟩ + 0.707 |11⟩", eq: "|\\Phi^+\\rangle = \\frac{|00\\rangle + |11\\rangle}{\\sqrt{2}}", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |00⟩ + 0.707 |11⟩", eq: "|\\Phi^+\\rangle = \\frac{|00\\rangle + |11\\rangle}{\\sqrt{2}}", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |00⟩ + 0.707 |11⟩", eq: "|\\Phi^+\\rangle", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |00⟩ + 0.707 |10⟩", eq: "\\frac{|00\\rangle + |10\\rangle}{\\sqrt{2}} = \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}} \\otimes |0\\rangle", prob: [0.5, 0, 0.5, 0] },
+                { text: "1.000 |00⟩", eq: "|00\\rangle", prob: [1, 0, 0, 0] },
+                { text: "1.000 |00⟩", eq: "|00\\rangle", prob: [1, 0, 0, 0] }
+            ],
+            '01': [ // X
+                { text: "0.707 |00⟩ + 0.707 |11⟩", eq: "|\\Phi^+\\rangle = \\frac{|00\\rangle + |11\\rangle}{\\sqrt{2}}", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |10⟩ + 0.707 |01⟩", eq: "|\\Psi^+\\rangle = \\frac{|10\\rangle + |01\\rangle}{\\sqrt{2}}", prob: [0, 0.5, 0.5, 0] },
+                { text: "0.707 |10⟩ + 0.707 |01⟩", eq: "|\\Psi^+\\rangle", prob: [0, 0.5, 0.5, 0] },
+                { text: "0.707 |11⟩ + 0.707 |01⟩", eq: "\\frac{|11\\rangle + |01\\rangle}{\\sqrt{2}} = \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}} \\otimes |1\\rangle", prob: [0, 0.5, 0, 0.5] },
+                { text: "1.000 |01⟩", eq: "|01\\rangle", prob: [0, 1, 0, 0] },
+                { text: "1.000 |01⟩", eq: "|01\\rangle", prob: [0, 1, 0, 0] }
+            ],
+            '10': [ // Z
+                { text: "0.707 |00⟩ + 0.707 |11⟩", eq: "|\\Phi^+\\rangle = \\frac{|00\\rangle + |11\\rangle}{\\sqrt{2}}", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |00⟩ - 0.707 |11⟩", eq: "|\\Phi^-\\rangle = \\frac{|00\\rangle - |11\\rangle}{\\sqrt{2}}", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |00⟩ - 0.707 |11⟩", eq: "|\\Phi^-\\rangle", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |00⟩ - 0.707 |10⟩", eq: "\\frac{|00\\rangle - |10\\rangle}{\\sqrt{2}} = \\frac{|0\\rangle - |1\\rangle}{\\sqrt{2}} \\otimes |0\\rangle", prob: [0.5, 0, 0.5, 0] },
+                { text: "1.000 |10⟩", eq: "|10\\rangle", prob: [0, 0, 1, 0] },
+                { text: "1.000 |10⟩", eq: "|10\\rangle", prob: [0, 0, 1, 0] }
+            ],
+            '11': [ // ZX
+                { text: "0.707 |00⟩ + 0.707 |11⟩", eq: "|\\Phi^+\\rangle = \\frac{|00\\rangle + |11\\rangle}{\\sqrt{2}}", prob: [0.5, 0, 0, 0.5] },
+                { text: "0.707 |10⟩ - 0.707 |01⟩", eq: "-|\\Psi^-\\rangle = \\frac{|10\\rangle - |01\\rangle}{\\sqrt{2}}", prob: [0, 0.5, 0.5, 0] },
+                { text: "0.707 |10⟩ - 0.707 |01⟩", eq: "-|\\Psi^-\\rangle", prob: [0, 0.5, 0.5, 0] },
+                { text: "0.707 |11⟩ - 0.707 |01⟩", eq: "\\frac{|11\\rangle - |01\\rangle}{\\sqrt{2}} = -\\frac{|0\\rangle - |1\\rangle}{\\sqrt{2}} \\otimes |1\\rangle", prob: [0, 0.5, 0, 0.5] },
+                { text: "-1.000 |11⟩", eq: "-|11\\rangle", prob: [0, 0, 0, 1] },
+                { text: "-1.000 |11⟩", eq: "-|11\\rangle", prob: [0, 0, 0, 1] }
+            ]
+        };
+
+        const encGates = { '00': 'I', '01': 'X', '10': 'Z', '11': 'ZX' };
+
+        // Chart setup
+        const computedStyle = getComputedStyle(document.documentElement);
+        const colorPrimary = computedStyle.getPropertyValue('--dqa-primary').trim() || '#005a9c';
+        
+        const ctx = document.getElementById('probChart').getContext('2d');
+        const probChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['00', '01', '10', '11'],
+                datasets: [{
+                    label: 'Measurement Probability',
+                    data: [0.25, 0.25, 0.25, 0.25],
+                    backgroundColor: ['#e0d8cc','#e0d8cc','#e0d8cc','#e0d8cc'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    y: { min: 0, max: 1.05, ticks: { font: { family: 'JetBrains Mono', size: 10 } } },
+                    x: { ticks: { font: { family: 'JetBrains Mono', size: 12, weight: 'bold' } } }
+                },
+                plugins: { legend: { display: false } },
+                animation: { duration: 400 }
+            }
+        });
+
+        function resetSystem() {
+            stopAuto();
+            state.msg = document.getElementById('inp-msg').value;
+            state.step = 0;
+            document.getElementById('gate-encode').innerText = encGates[state.msg];
+            updateUI();
+        }
+
+        function nextStep() {
+            if (state.step < 5) {
+                state.step++;
+                updateUI();
+            }
+        }
+
+        function prevStep() {
+            if (state.step > 0) {
+                stopAuto();
+                state.step--;
+                updateUI();
+            }
+        }
+
+        function toggleAuto() {
+            if (state.timer) {
+                stopAuto();
+            } else {
+                if (state.step === 5) resetSystem(); // loop
+                document.getElementById('btn-auto').innerText = "Stop Animation";
+                const speed = parseInt(document.getElementById('inp-speed').value);
+                state.timer = setInterval(() => {
+                    if (state.step < 5) nextStep();
+                    else {
+                        stopAuto();
+                    }
+                }, speed);
+            }
+        }
+
+        function stopAuto() {
+            clearInterval(state.timer);
+            state.timer = null;
+            document.getElementById('btn-auto').innerText = "Play Animation";
+        }
+
+        function updateUI() {
+            const currentPhysics = physicsEngine[state.msg][state.step];
+            
+            // 1. Dashboard
+            document.getElementById('stat-step').innerText = `${state.step} / 5`;
+            document.getElementById('stat-vector').innerText = currentPhysics.text;
+            
+            if (state.step === 5) {
+                document.getElementById('stat-msg').innerText = state.msg;
+                document.getElementById('stat-msg').style.color = "var(--dqa-success)";
+            } else {
+                document.getElementById('stat-msg').innerText = "--";
+                document.getElementById('stat-msg').style.color = "var(--dqa-error)";
+            }
+
+            // 2. Buttons
+            document.getElementById('btn-prev').disabled = state.step === 0;
+            document.getElementById('btn-next').disabled = state.step === 5;
+
+            // 3. Explanation Panel
+            if (state.step === 0) {
+                document.getElementById('panel-title').innerText = "Step 0: Initialisation";
+                document.getElementById('panel-desc').innerText = `Alice and Bob share a pre-entangled Bell pair. Alice holds Q0, Bob holds Q1.`;
+            } else if (state.step === 1) {
+                document.getElementById('panel-title').innerText = `Step 1: Alice Encodes '${state.msg}'`;
+                document.getElementById('panel-desc').innerText = `Alice applies the ${encGates[state.msg]} gate to her qubit, cycling the global state into a new orthogonal Bell State.`;
+            } else if (state.step === 2) {
+                document.getElementById('panel-title').innerText = "Step 2: Transmission";
+                document.getElementById('panel-desc').innerText = `Alice sends her single physical qubit to Bob across a quantum channel.`;
+            } else if (state.step === 3) {
+                document.getElementById('panel-title').innerText = "Step 3: Bob's CNOT Decoding";
+                document.getElementById('panel-desc').innerText = `Bob receives Q0. He applies a CNOT gate to untangle the Bell state back into a separable state.`;
+            } else if (state.step === 4) {
+                document.getElementById('panel-title').innerText = "Step 4: Bob's Hadamard Decoding";
+                document.getElementById('panel-desc').innerText = `Bob applies a Hadamard to Q0, fully restoring the state vector into computational basis states.`;
+            } else if (state.step === 5) {
+                document.getElementById('panel-title').innerText = "Step 5: Measurement";
+                document.getElementById('panel-desc').innerText = `Bob measures both qubits. Because of Alice's earlier encoding on a single qubit, the system collapses to yield the 2-bit message '${state.msg}'.`;
+            }
+            
+            // Typeset MathJax
+            document.getElementById('panel-math').innerHTML = `\\[ ${currentPhysics.eq} \\]`;
+            if (window.MathJax) {
+                MathJax.typesetPromise([document.getElementById('panel-math')]);
+            }
+
+            // 4. Circuit Animation
+            const gEncode = document.getElementById('gate-encode');
+            const gPacket = document.getElementById('qubit-packet');
+            const gCX = document.getElementById('gate-cx');
+            const gCXTgt = document.getElementById('gate-cx-target');
+            const gH = document.getElementById('gate-h');
+            const gM1 = document.getElementById('gate-m1');
+            const gM2 = document.getElementById('gate-m2');
+            
+            gEncode.classList.remove('gate-active');
+            gCX.parentElement.classList.remove('cnot-active');
+            gCXTgt.parentElement.classList.remove('cnot-active');
+            gH.classList.remove('gate-active');
+            gM1.classList.remove('gate-active');
+            gM2.classList.remove('gate-active');
+
+            if (state.step === 1) gEncode.classList.add('gate-active');
+            
+            if (state.step === 2) {
+                gPacket.style.opacity = '1';
+                gPacket.style.left = '70px'; // Move visually from Alice to Bob area
+            } else if (state.step > 2) {
+                gPacket.style.opacity = '0';
+                gPacket.style.transition = 'none';
+                gPacket.style.left = '70px';
+                setTimeout(() => { gPacket.style.transition = 'left 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s'; }, 50);
+            } else {
+                gPacket.style.opacity = '0';
+                gPacket.style.transition = 'none';
+                gPacket.style.left = '-30px';
+                setTimeout(() => { gPacket.style.transition = 'left 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s'; }, 50);
+            }
+            
+            if (state.step === 3) {
+                gCX.parentElement.classList.add('cnot-active');
+                gCXTgt.parentElement.classList.add('cnot-active');
+            }
+            if (state.step === 4) gH.classList.add('gate-active');
+            if (state.step === 5) {
+                gM1.classList.add('gate-active');
+                gM2.classList.add('gate-active');
+            }
+
+            // 5. Chart
+            const p = currentPhysics.prob;
+            probChart.data.datasets[0].data = p;
+            probChart.data.datasets[0].backgroundColor = p.map(val => val > 0.1 ? colorPrimary : '#e0d8cc');
+            probChart.update();
+        }
+
+        // Init
+        setTimeout(resetSystem, 100);
+
+    </script>
+</body>
+</html>
