@@ -24,69 +24,86 @@
             --dqa-border: var(--border);
             --dqa-success: #059669;
             --dqa-error: #dc2626;
-            --dqa-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --dqa-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --dqa-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
+            --radius-md: 12px;
+            --radius-lg: 16px;
         }
 
-        /* Override some body styles to fit within main-content */
         .portal-grid {
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 20px;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
             height: calc(100vh - var(--header-height) - 4rem);
             overflow: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
         .config-sidebar {
-            background: var(--surface-hover);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
+            background: transparent;
+            border: none;
+            padding: 0 10px 20px 0;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
+        }
+
+        .config-sidebar::-webkit-scrollbar, .visualizer-main::-webkit-scrollbar {
+            width: 6px;
+        }
+        .config-sidebar::-webkit-scrollbar-thumb, .visualizer-main::-webkit-scrollbar-thumb {
+            background-color: var(--dqa-border);
+            border-radius: 10px;
         }
 
         .pert-card {
             background: var(--dqa-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
+            border: 1px solid var(--dqa-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
             box-shadow: var(--dqa-shadow);
             position: relative;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .pert-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
+            box-shadow: var(--dqa-shadow-hover);
+            border-color: var(--dqa-primary);
         }
 
         .pert-card h2 {
-            margin: 0 0 8px 0;
-            font-size: 0.85rem;
+            margin: 0 0 16px 0;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            color: var(--dqa-text-muted);
-            letter-spacing: 0.5px;
-            padding-bottom: 4px;
-            border-bottom: none;
+            color: var(--dqa-primary);
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--dqa-border);
         }
 
         .expert-panel {
             background: var(--background);
-            border: 1px inset var(--dqa-border);
-            padding: 10px;
-            border-radius: 4px;
+            border: 1px solid var(--dqa-border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: border-color 0.3s;
+        }
+        .expert-panel:hover {
+            border-color: var(--dqa-primary);
         }
 
         .visualizer-main {
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            background: transparent;
+            gap: 24px;
+            padding-right: 10px;
+            padding-bottom: 20px;
         }
 
         .chart-container {
@@ -95,12 +112,12 @@
             height: 100%;
             min-height: 0;
             overflow: hidden;
+            border-radius: var(--radius-lg);
         }
 
         #geoCanvas {
-            border: 1px solid var(--dqa-border);
-            background: #ffffff;
-            border-radius: 4px;
+            border: none;
+            background: transparent;
             width: 100%;
             height: 100%;
             aspect-ratio: 1;
@@ -108,21 +125,70 @@
 
         .status-badge {
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* Controls */
+        .modern-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--dqa-border);
+            border-radius: 8px;
+            background: var(--background);
+            color: var(--dqa-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .modern-input:focus {
+            outline: none;
+            border-color: var(--dqa-primary);
+            box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
+        }
+
         .btn-green {
-            background: var(--dqa-success);
+            background: linear-gradient(135deg, #059669, #047857);
             color: #fff;
+            border: none;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
         }
         .btn-green:hover {
-            background: #047857;
+            background: linear-gradient(135deg, #047857, #064e3b);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.3);
             color: #fff;
+        }
+        
+        .btn-modern {
+            padding: 10px 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        .btn-modern:active {
+            transform: scale(0.96);
+        }
+        .btn-secondary.btn-modern {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-secondary.btn-modern:hover {
+            border-color: var(--dqa-primary);
+            color: var(--dqa-primary);
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, var(--dqa-card), var(--background));
+            border-radius: 12px;
         }
 
         .circuit-grid {
@@ -134,11 +200,14 @@
             align-items: center;
             justify-items: center;
             padding: 30px 40px;
-            background: var(--surface);
+            background-color: var(--surface);
+            background-image: radial-gradient(var(--dqa-border) 1px, transparent 1px);
+            background-size: 20px 20px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius-lg);
             overflow-x: auto;
             position: relative;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.02);
         }
 
         .circuit-cell {
@@ -164,10 +233,10 @@
         .wire-label {
             position: absolute;
             left: -35px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-family: var(--font-mono);
             color: var(--primary);
-            font-weight: 600;
+            font-weight: 700;
             z-index: 2;
         }
 
@@ -177,7 +246,7 @@
             background: var(--primary-light);
             color: var(--primary);
             border: 2px solid var(--primary);
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -185,32 +254,50 @@
             font-size: 1rem;
             font-weight: 700;
             z-index: 2;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        .circuit-gate:hover {
+            transform: scale(1.1);
         }
 
         .gate-span {
             width: 44px;
             height: calc(100% - 14px);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 1.1rem;
             z-index: 3;
             font-family: var(--font-mono);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
             margin: 7px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .gate-span:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
         .gate-span.oracle {
-            background: #ffebee;
-            color: #c62828;
-            border: 2px solid #c62828;
+            background: linear-gradient(135deg, #ef5350, #c62828);
+            color: #fff;
+            border: 1px solid #b71c1c;
         }
         .gate-span.diffuser {
-            background: #e3f2fd;
-            color: #1565c0;
-            border: 2px solid #1565c0;
+            background: linear-gradient(135deg, #42a5f5, #1565c0);
+            color: #fff;
+            border: 1px solid #0d47a1;
+        }
+
+        .gradient-title {
+            background: linear-gradient(90deg, var(--dqa-primary), #805ad5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            margin-bottom: 0;
+            display: inline-block;
         }
     </style>
 </head>
@@ -247,7 +334,7 @@
 
         <main id="main-content" class="main-content" style="padding-top: 1rem;">
             <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
-                <h1 style="margin-bottom: 0;">Grover's Search Algorithm Visualiser</h1>
+                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Grover's Search Algorithm Visualiser</h1>
             </div>
 
             <div class="portal-grid">
@@ -257,38 +344,36 @@
                         <h2>1. Register Config</h2>
                         <div style="margin-bottom: 12px;">
                             <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Qubit Capacity (n)</label>
-                            <input type="number" id="inp-qubits" value="4" min="2" max="10"
-                                style="width:100%; padding:8px; border:1px solid var(--dqa-border); border-radius:4px;">
+                            <input type="number" id="inp-qubits" value="4" min="2" max="10" class="modern-input">
                         </div>
                         <div>
                             <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Search Targets
                                 (Binary/Regex)</label>
-                            <input type="text" id="inp-target" value="1010" placeholder="e.g. 1010, 1*1*"
-                                style="width:100%; padding:8px; border:1px solid var(--dqa-border); border-radius:4px;">
-                            <button class="btn btn-secondary" style="width:100%; margin-top:10px; font-size:0.7rem; padding: 8px;"
+                            <input type="text" id="inp-target" value="1010" placeholder="e.g. 1010, 1*1*" class="modern-input">
+                            <button class="btn btn-secondary btn-modern" style="width:100%; margin-top:10px;"
                                 onclick="randomiseTarget()">Generate Random Target</button>
                             <div id="error-box"
                                 style="color: var(--dqa-error); font-size: 0.7rem; margin-top: 5px; font-weight: 700;"></div>
                         </div>
-                        <button class="btn btn-green" style="width:100%; margin-top:15px;" onclick="initialise()">Initialise
+                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:15px;" onclick="initialise()">Initialise
                             System</button>
                     </div>
 
                     <div class="pert-card">
                         <h2>2. Operation Console</h2>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                            <button class="btn btn-secondary" id="btn-prev" onclick="undoStep()" disabled style="padding: 8px;">Previous</button>
-                            <button class="btn btn-primary" id="btn-next" onclick="nextStep()" disabled style="padding: 8px;">Next Step</button>
+                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="undoStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()" disabled>Next Step</button>
                         </div>
-                        <button class="btn btn-secondary" id="btn-auto" style="width:100%; margin-bottom:10px;"
+                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;"
                             onclick="toggleAuto()" disabled>Auto-Run Sequence</button>
                         <div
                             style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
                             <span>Operational Speed</span>
                             <input type="range" id="inp-speed" min="100" max="2000" value="800" style="width:120px;" onchange="if(state.timer){stopAuto();toggleAuto();}">
                         </div>
-                        <button class="btn btn-primary"
-                            style="width:100%; margin-top:15px; font-size:0.75rem; background: #2c2420; border-color: #2c2420;"
+                        <button class="btn btn-primary btn-modern"
+                            style="width:100%; margin-top:15px; background: #2c2420; border-color: #2c2420;"
                             onclick="jumpToOptimal()">Jump to Optimal</button>
                     </div>
 
@@ -318,7 +403,7 @@
                     <!-- Live Dashboard -->
                     <div
                         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 10px;">
-                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
                                 Success Prob</div>
@@ -326,7 +411,7 @@
                                 style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0.0%
                             </div>
                         </div>
-                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
                                 Steps Taken</div>
@@ -334,7 +419,7 @@
                                 style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0
                             </div>
                         </div>
-                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
                                 Active Targets</div>
@@ -342,7 +427,7 @@
                                 style="font-size: 0.8rem; font-family: 'JetBrains Mono'; font-weight: 700; margin-top: 5px; word-break: break-all; overflow-y: auto; max-height: 35px; color: var(--dqa-accent);">
                                 --</div>
                         </div>
-                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
                                 Resonance Limit</div>
@@ -350,14 +435,14 @@
                                 style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">--
                             </div>
                         </div>
-                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
                                 Speedup</div>
                             <div id="stat-speedup"
                                 style="font-size: 1.5rem; font-weight: 800; color: #b45309; margin-top: auto;">--</div>
                         </div>
-                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
                             <div
                                 style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
                                 Stage</div>
