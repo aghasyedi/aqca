@@ -125,59 +125,92 @@
             color: #fff;
         }
 
-        .circuit-strip {
-            display: flex;
+        .circuit-grid {
+            display: grid;
+            grid-template-rows: repeat(var(--qubit-count, 3), 50px);
+            grid-auto-columns: 50px;
+            grid-auto-flow: column;
             gap: 0;
+            align-items: center;
+            justify-items: center;
+            padding: 30px 40px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
             overflow-x: auto;
-            padding: 20px 0;
-            background: #ffffff;
-            border: 1px solid var(--dqa-border);
-            border-radius: 4px;
-        }
-
-        .wire-group {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
             position: relative;
-            padding: 0 10px;
-            min-width: 40px;
         }
 
-        .wire {
-            height: 2px;
-            background: #ccc;
+        .circuit-cell {
+            position: relative;
             width: 100%;
-            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circuit-wire {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #a0aabf;
+            transform: translateY(-50%);
+            z-index: 1;
         }
 
         .wire-label {
             position: absolute;
-            left: -25px;
-            top: -8px;
-            font-size: 0.7rem;
-            font-family: 'JetBrains Mono';
+            left: -35px;
+            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            color: var(--primary);
+            font-weight: 600;
+            z-index: 2;
         }
 
-        .gate {
-            width: 32px;
-            height: 32px;
-            background: var(--dqa-primary);
-            color: #fff;
-            border: 2px solid var(--dqa-accent);
+        .circuit-gate {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .gate-span {
+            width: 44px;
+            height: calc(100% - 14px);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.8rem;
-            z-index: 2;
-            border-radius: 3px;
+            font-size: 1.1rem;
+            z-index: 3;
+            font-family: var(--font-mono);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            margin: 7px 0;
         }
-
-        .gate-mq {
-            width: 40px;
-            background: #2c2420;
-            border-color: #5c4430;
+        .gate-span.oracle {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #c62828;
+        }
+        .gate-span.diffuser {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #1565c0;
         }
     </style>
 </head>
@@ -368,7 +401,7 @@
                     <!-- Circuit Engine Card -->
                     <div class="pert-card">
                         <h2 style="border: none;">Quantum Circuit Protocol</h2>
-                        <div class="circuit-strip" id="circuit-box" style="margin-top: 5px; min-height: 100px;">
+                        <div class="circuit-grid" id="circuit-box" style="margin-top: 5px; min-height: 120px;">
                         </div>
                     </div>
                 </div>
@@ -666,42 +699,83 @@
         function drawCircuit() {
             const box = document.getElementById('circuit-box');
             box.innerHTML = '';
+            box.style.setProperty('--qubit-count', state.n);
+            box.className = 'circuit-grid';
 
-            const createWireGroup = () => {
-                const g = document.createElement('div');
-                g.className = 'wire-group';
-                for (let i = 0; i < state.n; i++) {
-                    const w = document.createElement('div');
-                    w.className = 'wire';
-                    if (box.children.length === 0) w.innerHTML = `<span class="wire-label">q${i}</span>`;
-                    g.appendChild(w);
-                }
-                return g;
-            };
+            let currentCol = 1;
 
-            box.appendChild(createWireGroup());
-
-            const hGroup = document.createElement('div');
-            hGroup.className = 'wire-group';
-            for (let i = 0; i < state.n; i++) {
-                const g = document.createElement('div');
-                g.className = 'gate gate-sq'; g.innerText = 'H';
-                hGroup.appendChild(g);
+            // Col 1: Labels and initial wire
+            for(let i = 0; i < state.n; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'circuit-cell';
+                cell.style.gridColumn = currentCol;
+                cell.style.gridRow = i + 1;
+                cell.innerHTML = `
+                    <div class="circuit-wire"></div>
+                    <span class="wire-label">|0〉</span>
+                `;
+                box.appendChild(cell);
             }
-            box.appendChild(hGroup);
+            currentCol++;
+
+            // Col 2: H gates
+            for(let i = 0; i < state.n; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'circuit-cell';
+                cell.style.gridColumn = currentCol;
+                cell.style.gridRow = i + 1;
+                cell.innerHTML = `
+                    <div class="circuit-wire"></div>
+                    <div class="circuit-gate">H</div>
+                `;
+                box.appendChild(cell);
+            }
+            currentCol++;
 
             for (let i = 1; i < state.history.length; i++) {
-                box.appendChild(createWireGroup());
-                const opGroup = document.createElement('div');
-                opGroup.className = 'wire-group';
+                const op = state.history[i].op;
+                
+                // Spacer
+                for(let q = 0; q < state.n; q++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'circuit-cell';
+                    cell.style.gridColumn = currentCol;
+                    cell.style.gridRow = q + 1;
+                    cell.innerHTML = `<div class="circuit-wire"></div>`;
+                    box.appendChild(cell);
+                }
+                currentCol++;
+
+                // Gate column
+                for(let q = 0; q < state.n; q++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'circuit-cell';
+                    cell.style.gridColumn = currentCol;
+                    cell.style.gridRow = q + 1;
+                    cell.innerHTML = `<div class="circuit-wire"></div>`;
+                    box.appendChild(cell);
+                }
+                
                 const gate = document.createElement('div');
-                gate.className = 'gate gate-mq';
-                gate.style.height = (44 * state.n - 12) + "px";
-                gate.innerText = state.history[i].op === "ORACLE" ? "Uf" : "Us";
-                if (state.history[i].op === "ORACLE") gate.style.background = "#8b0000";
-                opGroup.appendChild(gate);
-                box.appendChild(opGroup);
+                gate.className = `gate-span ${op === 'ORACLE' ? 'oracle' : 'diffuser'}`;
+                gate.style.gridColumn = currentCol;
+                gate.style.gridRow = `1 / span ${state.n}`;
+                gate.innerText = op === "ORACLE" ? "Uf" : "Us";
+                box.appendChild(gate);
+                
+                currentCol++;
             }
+
+            // Final spacer
+            for(let q = 0; q < state.n; q++) {
+                const cell = document.createElement('div');
+                cell.className = 'circuit-cell';
+                cell.style.gridColumn = currentCol;
+                cell.style.gridRow = q + 1;
+                cell.innerHTML = `<div class="circuit-wire"></div>`;
+                box.appendChild(cell);
+            }
+            
             setTimeout(() => box.scrollLeft = box.scrollWidth, 50);
         }
 
