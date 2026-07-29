@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grover's Search Algorithm Visualiser | AQCA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/icons/icon.png">
+
+    <style>
+        :root {
+            --dqa-primary: var(--primary);
+            --dqa-accent: var(--primary-hover);
+            --dqa-bg: var(--background);
+            --dqa-card: var(--surface);
+            --dqa-text: var(--text);
+            --dqa-text-muted: var(--muted-text);
+            --dqa-border: var(--border);
+            --dqa-success: #059669;
+            --dqa-error: #dc2626;
+            --dqa-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Override some body styles to fit within main-content */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+            height: calc(100vh - var(--header-height) - 4rem);
+            overflow: hidden;
+        }
+
+        .config-sidebar {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .pert-card {
+            background: var(--dqa-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: var(--dqa-shadow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pert-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .pert-card h2 {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--dqa-text-muted);
+            letter-spacing: 0.5px;
+            padding-bottom: 4px;
+            border-bottom: none;
+        }
+
+        .expert-panel {
+            background: var(--background);
+            border: 1px inset var(--dqa-border);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .visualizer-main {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: transparent;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        #geoCanvas {
+            border: 1px solid var(--dqa-border);
+            background: #ffffff;
+            border-radius: 4px;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Controls */
+        .btn-green {
+            background: var(--dqa-success);
+            color: #fff;
+        }
+        .btn-green:hover {
+            background: #047857;
+            color: #fff;
+        }
+
+        .circuit-strip {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            padding: 20px 0;
+            background: #ffffff;
+            border: 1px solid var(--dqa-border);
+            border-radius: 4px;
+        }
+
+        .wire-group {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+            padding: 0 10px;
+            min-width: 40px;
+        }
+
+        .wire {
+            height: 2px;
+            background: #ccc;
+            width: 100%;
+            position: relative;
+        }
+
+        .wire-label {
+            position: absolute;
+            left: -25px;
+            top: -8px;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono';
+        }
+
+        .gate {
+            width: 32px;
+            height: 32px;
+            background: var(--dqa-primary);
+            color: #fff;
+            border: 2px solid var(--dqa-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            z-index: 2;
+            border-radius: 3px;
+        }
+
+        .gate-mq {
+            width: 40px;
+            background: #2c2420;
+            border-color: #5c4430;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <img src="assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="algorithms.html" class="nav-link active">Algorithms</a>
+                </div>
+                <div class="nav-item">
+                    <a href="algorithms/phase-amplitude/grover.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to Grover's</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content" style="padding-top: 1rem;">
+            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                <h1 style="margin-bottom: 0;">Grover's Search Algorithm Visualiser</h1>
+            </div>
+
+            <div class="portal-grid">
+                <!-- Sidebar Configuration -->
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Register Config</h2>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Qubit Capacity (n)</label>
+                            <input type="number" id="inp-qubits" value="4" min="2" max="10"
+                                style="width:100%; padding:8px; border:1px solid var(--dqa-border); border-radius:4px;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Search Targets
+                                (Binary/Regex)</label>
+                            <input type="text" id="inp-target" value="1010" placeholder="e.g. 1010, 1*1*"
+                                style="width:100%; padding:8px; border:1px solid var(--dqa-border); border-radius:4px;">
+                            <button class="btn btn-secondary" style="width:100%; margin-top:10px; font-size:0.7rem; padding: 8px;"
+                                onclick="randomiseTarget()">Generate Random Target</button>
+                            <div id="error-box"
+                                style="color: var(--dqa-error); font-size: 0.7rem; margin-top: 5px; font-weight: 700;"></div>
+                        </div>
+                        <button class="btn btn-green" style="width:100%; margin-top:15px;" onclick="initialise()">Initialise
+                            System</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <button class="btn btn-secondary" id="btn-prev" onclick="undoStep()" disabled style="padding: 8px;">Previous</button>
+                            <button class="btn btn-primary" id="btn-next" onclick="nextStep()" disabled style="padding: 8px;">Next Step</button>
+                        </div>
+                        <button class="btn btn-secondary" id="btn-auto" style="width:100%; margin-bottom:10px;"
+                            onclick="toggleAuto()" disabled>Auto-Run Sequence</button>
+                        <div
+                            style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
+                            <span>Operational Speed</span>
+                            <input type="range" id="inp-speed" min="100" max="2000" value="800" style="width:120px;" onchange="if(state.timer){stopAuto();toggleAuto();}">
+                        </div>
+                        <button class="btn btn-primary"
+                            style="width:100%; margin-top:15px; font-size:0.75rem; background: #2c2420; border-color: #2c2420;"
+                            onclick="jumpToOptimal()">Jump to Optimal</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Research Metrics</h2>
+                        <div class="expert-panel">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem;">Angle Tracking</div>
+                            <div id="val-theta"
+                                style="font-family: 'JetBrains Mono'; font-size: 1.1rem; color: var(--dqa-primary);">θ = 0.00°
+                            </div>
+                        </div>
+                        <div class="expert-panel" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>Classical (O(N))</span>
+                                <span id="label-classical" style="color: var(--dqa-error);">--</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top: 4px;">
+                                <span>Quantum (O(√N))</span>
+                                <span id="label-quantum" style="color: var(--dqa-success);">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Display -->
+                <div class="visualizer-main">
+                    <!-- Live Dashboard -->
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 10px;">
+                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                            <div
+                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
+                                Success Prob</div>
+                            <div id="stat-prob"
+                                style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0.0%
+                            </div>
+                        </div>
+                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                            <div
+                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
+                                Steps Taken</div>
+                            <div id="stat-step"
+                                style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0
+                            </div>
+                        </div>
+                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                            <div
+                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
+                                Active Targets</div>
+                            <div id="stat-targets"
+                                style="font-size: 0.8rem; font-family: 'JetBrains Mono'; font-weight: 700; margin-top: 5px; word-break: break-all; overflow-y: auto; max-height: 35px; color: var(--dqa-accent);">
+                                --</div>
+                        </div>
+                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                            <div
+                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
+                                Resonance Limit</div>
+                            <div id="stat-limit"
+                                style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">--
+                            </div>
+                        </div>
+                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                            <div
+                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
+                                Speedup</div>
+                            <div id="stat-speedup"
+                                style="font-size: 1.5rem; font-weight: 800; color: #b45309; margin-top: auto;">--</div>
+                        </div>
+                        <div class="pert-card" style="min-height: 80px; padding: 12px;">
+                            <div
+                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
+                                Stage</div>
+                            <div id="stat-stage" style="font-size: 0.9rem; font-weight: 800; color: #6d28d9; margin-top: auto;">
+                                READY</div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Grid -->
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 250px; gap: 15px; margin-bottom: 10px; height: 300px;">
+                        <div class="pert-card chart-container"
+                            style="min-height: 0; display: flex; flex-direction: column;">
+                            <div
+                                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <h2 style="margin: 0; border: none;">Distribution Matrix</h2>
+                                    <div id="warning-box" class="status-badge"
+                                        style="font-size:0.6rem; display:none; background: var(--dqa-error); color: #fff;">
+                                        Over-Rotation</div>
+                                </div>
+                                <div style="display:flex; gap:12px; align-items:center; font-size:0.75rem;">
+                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600;">
+                                        <input type="checkbox" id="chk-prob-view" onchange="updateUI()"> Probability View
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="flex: 1; min-height: 0;">
+                                <canvas id="mainChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="pert-card chart-container"
+                            style="min-height: 0; display: flex; flex-direction: column;">
+                            <h2 style="margin-bottom: 12px; border: none;">State Evolution</h2>
+                            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="geoCanvas" style="max-height: 100%; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Circuit Engine Card -->
+                    <div class="pert-card">
+                        <h2 style="border: none;">Quantum Circuit Protocol</h2>
+                        <div class="circuit-strip" id="circuit-box" style="margin-top: 5px; min-height: 100px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JS -->
+    <script src="js/main.js"></script>
+    <script src="js/navigation.js"></script>
+
+    <script>
+        const state = {
+            n: 3, N: 8, targetIndices: [],
+            amplitudes: [], history: [],
+            stepIdx: 0, timer: null, isCollapsed: false
+        };
+
+        const Complex = {
+            add: (a, b) => ({ re: a.re + b.re, im: a.im + b.im }),
+            sub: (a, b) => ({ re: a.re - b.re, im: a.im - b.im }),
+            mul: (a, b) => ({
+                re: a.re * b.re - a.im * b.im,
+                im: a.re * b.im + a.im * b.re
+            }),
+            mulScalar: (a, s) => ({ re: a.re * s, im: a.im * s }),
+            magSq: (a) => a.re * a.re + a.im * a.im,
+            phase: (a) => Math.atan2(a.im, a.re)
+        };
+
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [
+                    { type: 'line', label: 'Mean', data: [], borderColor: '#005a9c', borderDash: [5, 5], pointRadius: 0 },
+                    { type: 'bar', label: 'Amplitude', data: [], backgroundColor: '#003366' }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        min: -1.1, max: 1.1,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { color: '#6b5a51', font: { family: 'JetBrains Mono', size: 10 } }
+                    },
+                    x: { display: false }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const geoCanvas = document.getElementById('geoCanvas');
+        const geoCtx = geoCanvas.getContext('2d');
+
+        function randomiseTarget() {
+            const n = parseInt(document.getElementById('inp-qubits').value);
+            let bin = "";
+            for (let i = 0; i < n; i++) bin += Math.random() > 0.5 ? "1" : "0";
+            document.getElementById('inp-target').value = bin;
+        }
+
+        function initialise() {
+            stopAuto();
+            const n = parseInt(document.getElementById('inp-qubits').value);
+            const targetStr = document.getElementById('inp-target').value;
+
+            // Flexible target parsing (comma separated patterns or binary)
+            const targets = targetStr.split(',').map(s => s.trim());
+            const targetIndices = [];
+
+            for (let i = 0; i < Math.pow(2, n); i++) {
+                const bin = i.toString(2).padStart(n, '0');
+                const match = targets.some(t => {
+                    const regex = new RegExp('^' + t.replace(/\*/g, '.') + '$');
+                    return regex.test(bin);
+                });
+                if (match) targetIndices.push(i);
+            }
+
+            if (targetIndices.length === 0) {
+                document.getElementById('error-box').innerText = "Discovery Error: No basis states match the target pattern.";
+                return;
+            }
+            document.getElementById('error-box').innerText = "";
+
+            state.n = n;
+            state.N = Math.pow(2, n);
+            state.targetIndices = targetIndices;
+            state.stepIdx = 0;
+            state.isCollapsed = false;
+            state.history = [];
+
+            const initAmp = 1 / Math.sqrt(state.N);
+            state.amplitudes = new Array(state.N).fill(null).map(() => ({ re: initAmp, im: 0 }));
+
+            const M = state.targetIndices.length;
+            const limit = Math.max(1, Math.round((Math.PI / 4) * Math.sqrt(state.N / M)));
+            document.getElementById('stat-limit').innerText = limit;
+
+            saveStep("INITIALISE", `Superposition established. ${M} targets identified.`);
+
+            updateUI();
+
+            const targetStrings = state.targetIndices.map(idx => idx.toString(2).padStart(state.n, '0')).join(', ');
+            document.getElementById('stat-targets').innerText = targetStrings;
+            document.getElementById('btn-next').disabled = false;
+            document.getElementById('btn-auto').disabled = false;
+        }
+
+        function saveStep(op, log) {
+            state.history.push({
+                amps: [...state.amplitudes],
+                op: op,
+                log: log
+            });
+            updateUI();
+        }
+
+        function nextStep() {
+            if (state.isCollapsed) return;
+            const isOracle = (state.stepIdx % 2 === 0);
+
+            if (isOracle) {
+                state.targetIndices.forEach(idx => {
+                    state.amplitudes[idx].re *= -1;
+                    state.amplitudes[idx].im *= -1;
+                });
+                state.stepIdx++;
+                saveStep("ORACLE", "Phase relative inversion applied.");
+            } else {
+                const sum = state.amplitudes.reduce((acc, val) => Complex.add(acc, val), { re: 0, im: 0 });
+                const mean = Complex.mulScalar(sum, 1 / state.N);
+
+                for (let i = 0; i < state.N; i++) {
+                    // Reflection about mean: 2*mean - amp
+                    state.amplitudes[i] = Complex.sub(Complex.mulScalar(mean, 2), state.amplitudes[i]);
+                }
+                state.stepIdx++;
+                saveStep("DIFFUSION", "Inversion about the mean completed.");
+            }
+
+            updateUI();
+
+            // Auto-stop condition: Optimal iterations reached
+            const M = state.targetIndices.length;
+            const optimalLimit = Math.round((Math.PI / 4) * Math.sqrt(state.N / M));
+            if (state.stepIdx >= optimalLimit * 2) {
+                if (state.timer) {
+                    stopAuto();
+                }
+            }
+        }
+
+        function drawGeometric() {
+            geoCtx.clearRect(0, 0, geoCanvas.width, geoCanvas.height);
+            // Adjust coordinates based on actual canvas size
+            const rect = geoCanvas.getBoundingClientRect();
+            // We set the canvas internal resolution to match its display size for crisp rendering
+            if(geoCanvas.width !== rect.width) geoCanvas.width = rect.width;
+            if(geoCanvas.height !== rect.height) geoCanvas.height = rect.height;
+            
+            const cx = geoCanvas.width / 2;
+            const cy = geoCanvas.height / 2;
+            const r = Math.min(cx, cy) - 30;
+
+            // Background Circle (Disk)
+            geoCtx.beginPath(); geoCtx.arc(cx, cy, r, 0, Math.PI * 2);
+            geoCtx.strokeStyle = '#e0d8cc'; geoCtx.setLineDash([5, 5]); geoCtx.stroke(); geoCtx.setLineDash([]);
+
+            // Axes
+            geoCtx.strokeStyle = '#6b5a51'; geoCtx.lineWidth = 1;
+            geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.lineTo(cx + r + 20, cy); geoCtx.stroke(); // |s'> axis
+            geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.lineTo(cx, cy - r - 20); geoCtx.stroke(); // |w> axis
+
+            geoCtx.fillStyle = '#6b5a51'; geoCtx.font = '10px JetBrains Mono';
+            geoCtx.fillText("|s'〉", cx + r + 5, cy + 15);
+            geoCtx.fillText("|ω〉", cx - 25, cy - r - 5);
+
+            if(state.targetIndices.length === 0) return;
+
+            const M = state.targetIndices.length;
+            const prob = state.targetIndices.reduce((acc, idx) => acc + Complex.magSq(state.amplitudes[idx]), 0);
+            const theta = 2 * Math.asin(Math.sqrt(prob));
+
+            const x = Math.cos(theta / 2) * r;
+            const y = Math.sin(theta / 2) * r;
+
+            // Ideal Optimal Sector
+            geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.arc(cx, cy, r, -theta / 2, 0);
+            geoCtx.fillStyle = 'rgba(197, 160, 89, 0.1)'; geoCtx.fill();
+
+            // Vector
+            geoCtx.strokeStyle = '#7a3a00'; geoCtx.lineWidth = 3;
+            geoCtx.beginPath(); geoCtx.moveTo(cx, cy); geoCtx.lineTo(cx + x, cy - y); geoCtx.stroke();
+
+            // Vector Head
+            geoCtx.fillStyle = '#7a3a00';
+            geoCtx.beginPath(); geoCtx.arc(cx + x, cy - y, 4, 0, Math.PI * 2); geoCtx.fill();
+            geoCtx.fillText("|ψ〉", cx + x + 8, cy - y - 8);
+        }
+
+        function updateUI() {
+            if(state.targetIndices.length === 0) return;
+            const M = state.targetIndices.length;
+            const prob = state.targetIndices.reduce((acc, idx) => acc + Complex.magSq(state.amplitudes[idx]), 0);
+
+            document.getElementById('stat-prob').innerText = (prob * 100).toFixed(1) + "%";
+            document.getElementById('stat-step').innerText = state.stepIdx;
+            document.getElementById('btn-prev').disabled = state.history.length <= 1;
+
+            const angleRad = Math.asin(Math.sqrt(prob));
+            document.getElementById('val-theta').innerText = `θ = ${(angleRad * 180 / Math.PI).toFixed(2)}°`;
+
+            document.getElementById('label-classical').innerText = `O(${state.N})`;
+            document.getElementById('label-quantum').innerText = `O(${Math.sqrt(state.N / M).toFixed(1)})`;
+
+            const speedup = (state.N / Math.sqrt(state.N / M)).toFixed(1);
+            document.getElementById('stat-speedup').innerText = speedup + "x";
+
+            const optimalLimit = Math.round((Math.PI / 4) * Math.sqrt(state.N / M));
+            if (state.stepIdx > optimalLimit * 2) {
+                document.getElementById('warning-box').style.display = 'block';
+            } else {
+                document.getElementById('warning-box').style.display = 'none';
+            }
+
+            // Optimise mainChart for readability
+            chart.options.scales.x.display = state.N <= 16;
+
+            const useProb = document.getElementById('chk-prob-view').checked;
+            chart.data.labels = Array.from({ length: state.N }, (_, i) => i.toString(2).padStart(state.n, '0'));
+            chart.data.datasets[1].data = state.amplitudes.map(a => useProb ? Complex.magSq(a) : a.re);
+
+            const sum = state.amplitudes.reduce((acc, val) => Complex.add(acc, val), { re: 0, im: 0 });
+            const mean = Complex.mulScalar(sum, 1 / state.N);
+            chart.data.datasets[0].data = new Array(state.N).fill(useProb ? Complex.magSq(mean) : mean.re);
+
+            chart.options.scales.y.min = useProb ? 0 : -1.1;
+            chart.options.scales.y.max = useProb ? 1.0 : 1.1;
+
+            chart.data.datasets[1].backgroundColor = state.amplitudes.map((a, idx) => {
+                const phase = Complex.phase(a) * 180 / Math.PI;
+                return state.targetIndices.includes(idx) ? `hsl(${phase}, 80%, 35%)` : `hsl(${phase}, 15%, 85%)`;
+            });
+
+            chart.update('none');
+            drawGeometric();
+            drawCircuit();
+
+            const isOracle = (state.stepIdx % 2 === 0);
+            let stageText = state.stepIdx === 0 ? "INITIALIZED" : (isOracle ? "ORACLE" : "DIFFUSION");
+            if (state.stepIdx >= optimalLimit * 2) {
+                stageText = "RESONANCE ACHIEVED";
+                document.getElementById('stat-stage').style.color = "var(--dqa-success)";
+            } else {
+                document.getElementById('stat-stage').style.color = "#805ad5";
+            }
+            document.getElementById('stat-stage').innerText = stageText;
+        }
+
+        function undoStep() {
+            if (state.history.length > 1) {
+                stopAuto();
+                state.history.pop();
+                state.stepIdx--;
+                state.amplitudes = [...state.history[state.history.length - 1].amps];
+                updateUI();
+            }
+        }
+
+        function toggleAuto() {
+            if (state.timer) stopAuto();
+            else {
+                document.getElementById('btn-auto').innerText = "Stop Sequence";
+                const speed = parseInt(document.getElementById('inp-speed').value);
+                state.timer = setInterval(nextStep, speed);
+            }
+        }
+
+        function stopAuto() {
+            clearInterval(state.timer);
+            state.timer = null;
+            document.getElementById('btn-auto').innerText = "Auto-Run Sequence";
+        }
+
+        function jumpToOptimal() {
+            const M = state.targetIndices.length;
+            const optimal = Math.round((Math.PI / 4) * Math.sqrt(state.N / M));
+            while (state.stepIdx < optimal * 2) nextStep();
+        }
+
+        function drawCircuit() {
+            const box = document.getElementById('circuit-box');
+            box.innerHTML = '';
+
+            const createWireGroup = () => {
+                const g = document.createElement('div');
+                g.className = 'wire-group';
+                for (let i = 0; i < state.n; i++) {
+                    const w = document.createElement('div');
+                    w.className = 'wire';
+                    if (box.children.length === 0) w.innerHTML = `<span class="wire-label">q${i}</span>`;
+                    g.appendChild(w);
+                }
+                return g;
+            };
+
+            box.appendChild(createWireGroup());
+
+            const hGroup = document.createElement('div');
+            hGroup.className = 'wire-group';
+            for (let i = 0; i < state.n; i++) {
+                const g = document.createElement('div');
+                g.className = 'gate gate-sq'; g.innerText = 'H';
+                hGroup.appendChild(g);
+            }
+            box.appendChild(hGroup);
+
+            for (let i = 1; i < state.history.length; i++) {
+                box.appendChild(createWireGroup());
+                const opGroup = document.createElement('div');
+                opGroup.className = 'wire-group';
+                const gate = document.createElement('div');
+                gate.className = 'gate gate-mq';
+                gate.style.height = (44 * state.n - 12) + "px";
+                gate.innerText = state.history[i].op === "ORACLE" ? "Uf" : "Us";
+                if (state.history[i].op === "ORACLE") gate.style.background = "#8b0000";
+                opGroup.appendChild(gate);
+                box.appendChild(opGroup);
+            }
+            setTimeout(() => box.scrollLeft = box.scrollWidth, 50);
+        }
+
+        // Initialize empty state to avoid errors before first init
+        window.addEventListener('resize', () => { if(state.history.length > 0) drawGeometric(); });
+        
+        // Initial setup for the canvas
+        setTimeout(() => {
+            const rect = geoCanvas.getBoundingClientRect();
+            geoCanvas.width = rect.width;
+            geoCanvas.height = rect.height;
+            drawGeometric();
+        }, 100);
+
+    </script>
+</body>
+</html>
