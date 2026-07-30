@@ -187,7 +187,7 @@
             \langle H \rangle = \langle \psi | H | \psi \rangle \ge E_0
             \]</p>
         </div>
-        <p>By framing this as an optimization problem, we can find the ground state by varying the parameters of the trial state $|\psi\rangle$ to minimize the expectation value $\langle H \rangle$.</p>
+        <p>By framing this as an optimisation problem, we can find the ground state by varying the parameters of the trial state $|\psi\rangle$ to minimize the expectation value $\langle H \rangle$.</p>
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
@@ -199,7 +199,7 @@
             H = \sum_{i=1}^{K} c_i P_i
             \]</p>
         </div>
-        <p>The quantum computer prepares a parameterized trial state, known as the ansatz, using a variational circuit $U(\vec{\theta})$ applied to the ground state:</p>
+        <p>The quantum computer prepares a parameterised trial state, known as the ansatz, using a variational circuit $U(\vec{\theta})$ applied to the ground state:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
             <p>\[
@@ -222,7 +222,7 @@
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Classical Optimization & Convergence</h3>
+        <h3 style="margin-top: 1.5rem;">Step 4: Classical Optimisation & Convergence</h3>
         <p>Once the total energy $E(\vec{\theta})$ is calculated, a classical optimizer updates the parameters $\vec{\theta}$ to navigate the energy landscape downwards (often using gradient descent and the quantum parameter-shift rule):</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
@@ -240,13 +240,13 @@
         <h2>5. Interactive Visualisation</h2>
         <ul style="line-height: 1.6;">
             <li><strong>Energy Convergence Graph:</strong> A live 2D line graph tracking the energy \(E(\vec{\theta})\) over each iteration step. The user can watch the curve drop sharply and then slowly level out as it asymptotes toward a dashed line representing the true, classical simulated ground state.</li>
-            <li><strong>Parameter Optimization Landscape:</strong> A 3D topographical map representing the cost function surface. A marker representing the current parameters \(\vec{\theta}\) visually "rolls" down the hills into the lowest valley as the classical optimiser iterates.</li>
+            <li><strong>Parameter Optimisation Landscape:</strong> A 3D topographical map representing the cost function surface. A marker representing the current parameters \(\vec{\theta}\) visually "rolls" down the hills into the lowest valley as the classical optimiser iterates.</li>
         </ul>
         <div class="simulation-placeholder" style="margin-top: 1.5rem;">
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
             <h3>Dynamic State Tracking</h3>
             <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-            <a href="vqe-visualizer.html" class="btn" style="margin-top: 1rem;" target="_blank">Launch Interactive Visualiser</a>
+            <a href="vqe-visualiser.html" class="btn" style="margin-top: 1rem;" target="_blank">Launch Interactive Visualiser</a>
         </div>
     </section>
 
@@ -266,7 +266,7 @@ from qiskit.quantum_info import SparsePauliOp, Statevector, DensityMatrix, Opera
 from qiskit_algorithms.optimizers import COBYLA
 from qiskit.primitives import StatevectorEstimator
 from qiskit_aer import AerSimulator
-from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
@@ -418,7 +418,7 @@ State prior to measurement (Q-Sphere):
         <h2>8. Applications</h2>
         <ul style="line-height: 1.6;">
             <li><strong>Quantum Chemistry:</strong> Used to simulate molecular structures (like \(H_2\), \(LiH\), or \(BeH_2\)) to find their ground state binding energies, which is critical for drug discovery and material design.</li>
-            <li><strong>Combinatorial Optimisation:</strong> A variant of VQE known as the Quantum Approximate Optimization Algorithm (QAOA) maps logistical problems (like the Travelling Salesperson or Max-Cut) to a Hamiltonian and uses the exact same variational loop to find the optimal classical solution.</li>
+            <li><strong>Combinatorial Optimisation:</strong> A variant of VQE known as the Quantum Approximate Optimisation Algorithm (QAOA) maps logistical problems (like the Travelling Salesperson or Max-Cut) to a Hamiltonian and uses the exact same variational loop to find the optimal classical solution.</li>
             <li><strong>Condensed Matter Physics:</strong> Simulating strongly correlated electron systems and lattice models (like the Fermi-Hubbard model) to study high-temperature superconductivity.</li>
         </ul>
     </section>

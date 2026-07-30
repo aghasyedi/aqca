@@ -270,14 +270,14 @@
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
         <ul style="line-height: 1.6;">
-            <li><strong>Entanglement View:</strong> After the oracle, the visualizer should show the input and output registers bound together. If the user simulates measuring the output register (collapsing it to a specific \(y\)), the input register will instantly collapse into a visually clear two-state superposition: \(\frac{1}{\sqrt{2}}(|x\rangle + |x \oplus s\rangle)\).</li>
+            <li><strong>Entanglement View:</strong> After the oracle, the visualiser should show the input and output registers bound together. If the user simulates measuring the output register (collapsing it to a specific \(y\)), the input register will instantly collapse into a visually clear two-state superposition: \(\frac{1}{\sqrt{2}}(|x\rangle + |x \oplus s\rangle)\).</li>
             <li><strong>Amplitude Histogram:</strong> After the final Hadamard gates, the histogram will show non-zero probabilities only for the bitstrings \(z\) that satisfy the dot product condition. Exactly half of the states in the Hilbert space will drop to zero.</li>
         </ul>
         <div class="simulation-placeholder" style="margin-top: 1.5rem;">
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
             <h3>Dynamic State Tracking</h3>
             <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-            <a href="simons-visualizer.html" class="btn" style="margin-top: 1rem;" target="_blank">Launch Interactive Visualiser</a>
+            <a href="simons-visualiser.html" class="btn" style="margin-top: 1rem;" target="_blank">Launch Interactive Visualiser</a>
         </div>
     </section>
 
@@ -294,7 +294,7 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================

@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 2. Future Interactive Simulation Hooks
-    // Placeholders for initialization logic of circuits, visualizers, etc.
+    // Placeholders for initialization logic of circuits, visualisers, etc.
     const simPlaceholders = document.querySelectorAll('.simulation-placeholder');
     if (simPlaceholders.length > 0) {
         console.log('Algorithm specific simulations ready for initialization.');

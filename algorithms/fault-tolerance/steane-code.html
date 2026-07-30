@@ -235,8 +235,8 @@
     <section class="content-section">
         <h2>5. Interactive Visualisation</h2>
         <ul style="line-height: 1.6;">
-            <li><strong>Venn Diagram Syndrome Tracker:</strong> A visual representation of three overlapping circles. If a user injects an error into a specific qubit (e.g., Qubit 3, which sits in the intersection of Circle A and Circle B), the visualizer highlights circles A and B, instantly yielding the binary syndrome <code>110</code>.</li>
-            <li><strong>The Fano Plane / Colour Code:</strong> The Steane code is mathematically equivalent to the smallest possible <strong>Topological Colour Code</strong>. The visualizer can map the 7 qubits onto the vertices of a 2D triangular grid, showing how local triangular faces map directly to the stabiliser parity checks.</li>
+            <li><strong>Venn Diagram Syndrome Tracker:</strong> A visual representation of three overlapping circles. If a user injects an error into a specific qubit (e.g., Qubit 3, which sits in the intersection of Circle A and Circle B), the visualiser highlights circles A and B, instantly yielding the binary syndrome <code>110</code>.</li>
+            <li><strong>The Fano Plane / Colour Code:</strong> The Steane code is mathematically equivalent to the smallest possible <strong>Topological Colour Code</strong>. The visualiser can map the 7 qubits onto the vertices of a 2D triangular grid, showing how local triangular faces map directly to the stabiliser parity checks.</li>
         </ul>
     </section>
 
@@ -252,7 +252,7 @@
 <pre><code>import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
-from qiskit.visualization import plot_histogram
+from qiskit.visualisation import plot_histogram
 from IPython.display import display, Markdown
 
 # ==========================================

@@ -181,7 +181,7 @@
         <h2>4. Mathematical Proof & State Evolution</h2>
 
         <h3 style="margin-top: 1.5rem;">Step 1: Initialisation & Hamiltonians</h3>
-        <p>The Quantum Approximate Optimization Algorithm (QAOA) alternates two operators to find approximate solutions to combinatorial problems (like Max-Cut).</p>
+        <p>The Quantum Approximate Optimisation Algorithm (QAOA) alternates two operators to find approximate solutions to combinatorial problems (like Max-Cut).</p>
         <p>First, the objective function is encoded into a diagonal <strong>Cost Hamiltonian</strong> $H_C$. We also define a <strong>Mixer Hamiltonian</strong> $H_M = \sum_i X_i$ to drive transitions between basis states.</p>
         <p>The system is initialised in the absolute ground state of the mixer Hamiltonian, which is an equal superposition of all possible $2^n$ candidates:</p>
 
@@ -227,7 +227,7 @@
 
         <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
 
-        <h3 style="margin-top: 1.5rem;">Step 4: Classical Optimization & Convergence</h3>
+        <h3 style="margin-top: 1.5rem;">Step 4: Classical Optimisation & Convergence</h3>
         <p>The evaluated scalar $F_p(\vec{\gamma}, \vec{\beta})$ is passed to a classical numerical optimizer. The optimizer updates the continuous parameters $\vec{\gamma}$ and $\vec{\beta}$ to find the global maximum:</p>
 
         <div class="math-container" style="margin: 0.5rem 0;">
@@ -251,7 +251,7 @@
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
             <h3>Dynamic State Tracking</h3>
             <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-            <a href="qaoa-visualizer.html" class="btn" style="margin-top: 1rem;" target="_blank">Launch Interactive Visualiser</a>
+            <a href="qaoa-visualiser.html" class="btn" style="margin-top: 1rem;" target="_blank">Launch Interactive Visualiser</a>
         </div>
     </section>
 
@@ -268,7 +268,7 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================

@@ -5,7 +5,7 @@ const AQCA_ALGORITHMS = {
         category: "Flagship & Hybrid",
         
         // 1. Comparison Metrics
-        problem: "Integer factorization & discrete logarithms",
+        problem: "Integer factorisation & discrete logarithms",
         math: "Modular exponentiation & Quantum Fourier Transform",
         timeQuantum: "\\(\\mathcal{O}((\\log N)^3)\\)",
         timeClassical: "\\(\\mathcal{O}\\left(e^{1.9 (\\log N)^{1/3} (\\log \\log N)^{2/3}}\\right)\\)",
@@ -80,7 +80,7 @@ const AQCA_ALGORITHMS = {
         category: "Flagship & Hybrid",
         
         problem: "Finding the ground state energy of a Hamiltonian",
-        math: "Ritz Variational Principle & Parameterized Ansatz",
+        math: "Ritz Variational Principle & Parameterised Ansatz",
         timeQuantum: "\\(\\mathcal{O}(\\text{Poly}(N))\\) * classical loop",
         timeClassical: "\\(\\mathcal{O}(2^N)\\) (Exact Diagonalization)",
         spaceQuantum: "\\(\\mathcal{O}(N)\\)",

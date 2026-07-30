@@ -1,13 +1,13 @@
 # AQCA: All Quantum Computing Algorithms
 
-AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grade educational atlas and interactive simulation platform for quantum computing. Developed as a comprehensive reference portal, AQCA provides deep mathematical derivations, physical state evolutions, circuit schematics, interactive visualizers, and verified Python/Qiskit implementations for 19 foundational and advanced quantum algorithms, communication protocols, and error-correcting codes.
+AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grade educational atlas and interactive simulation platform for quantum computing. Developed as a comprehensive reference portal, AQCA provides deep mathematical derivations, physical state evolutions, circuit schematics, interactive visualisers, and verified Python/Qiskit implementations for 19 foundational and advanced quantum algorithms, communication protocols, and error-correcting codes.
 
 ---
 
 ## Key Features
 
 - **19 Complete Algorithm Profiles:** Comprehensive documentation spanning quantum communication, oracle query models, phase/amplitude manipulation, hybrid variational models, and fault-tolerant stabilizer codes.
-- **Interactive Visualizers:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyze measurement statistics in real-time.
+- **Interactive Visualisers:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyse measurement statistics in real-time.
 - **Deep Mathematical Rigor:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
 - **Analysis Centre & Comparison Matrix:** An interactive benchmarking dashboard powered by Chart.js that dynamically plots classical vs. quantum scaling curves and generates side-by-side feature comparisons with real-time MathJax rendering.
 - **Curated Scholarly References:** Every algorithm section in the reference library includes 3 to 4 authoritative citations including peer-reviewed papers (Physical Review Letters, Nature, FOCS/STOC), Wikipedia articles, and IBM Qiskit documentation.
@@ -33,7 +33,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 | Algorithm | Problem Solved | Quantum vs. Classical Complexity |
 |---|---|---|
 | **Deutsch's Algorithm** | Test if 1-bit boolean function $f(x)$ is constant or balanced | $O(1)$ query vs. $2$ classical queries |
-| **Deutsch–Jozsa Algorithm** | Generalization to $n$-bit boolean functions | $O(1)$ query vs. $O(2^{n-1}+1)$ deterministic |
+| **Deutsch–Jozsa Algorithm** | Generalisation to $n$-bit boolean functions | $O(1)$ query vs. $O(2^{n-1}+1)$ deterministic |
 | **Bernstein–Vazirani Algorithm** | Extract secret bitstring $s \in \{0,1\}^n$ from oracle $f(x)=s\cdot x$ | $1$ query vs. $n$ classical queries |
 | **Simon's Algorithm** | Find period $s$ for 2-to-1 function $f(x)=f(x \oplus s)$ | $O(n)$ queries vs. $O(2^{n/2})$ classical |
 
@@ -50,9 +50,9 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 
 | Model | Domain / Problem | Key Operational Mechanism |
 |---|---|---|
-| **Shor's Algorithm** | Integer factorization & RSA breaking | Period finding via IQFT in $O((\log N)^3)$ operations |
+| **Shor's Algorithm** | Integer factorisation & RSA breaking | Period finding via IQFT in $O((\log N)^3)$ operations |
 | **Variational Quantum Eigensolver (VQE)** | Ground state energy of molecular Hamiltonians | Ritz variational principle on NISQ hardware |
-| **Quantum Approximate Optimization (QAOA)** | Combinatorial optimization (e.g. Max-Cut) | Alternating problem & mixer Hamiltonians |
+| **Quantum Approximate Optimisation (QAOA)** | Combinatorial optimisation (e.g. Max-Cut) | Alternating problem & mixer Hamiltonians |
 | **HHL Algorithm** | Solving linear systems $A\vec{x} = \vec{b}$ | Quantum phase estimation & inversion in $O(\log N)$ |
 
 ### 5. Fault Tolerance & Error Correction `[In-Progress / Beta]`
@@ -70,7 +70,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 AQCA is built with a modular, responsive architecture comprising dedicated modules:
 
 - **Home Portal (`index.html`):** Platform entry point featuring an interactive vector Bloch Sphere diagram, overview of algorithm categories, feature breakdowns, and quick navigation.
-- **Algorithms Catalogue (`algorithms.html`):** Searchable atlas listing all 19 algorithms with filter controls and direct links to visualizers and theoretical profiles.
+- **Algorithms Catalogue (`algorithms.html`):** Searchable atlas listing all 19 algorithms with filter controls and direct links to visualisers and theoretical profiles.
 - **Analysis Centre (`analysis.html`):** Benchmarking dashboard allowing side-by-side metric comparison, interactive time/space complexity chart plotting via Chart.js, and dynamic MathJax math typesetting.
 - **Quantum Basics (`basics.html`):** Foundational tutorial covering Hilbert space geometry, Bloch Sphere coordinates $(\theta, \phi)$, Pauli matrices ($\sigma_x, \sigma_y, \sigma_z$), Hadamard ($H$), CNOT, phase kickback, and Dirac bra-ket formalism.
 - **Literature & Reference Library (`references.html`):** Complete bibliography providing 3 to 4 verified scholarly links (Physical Review, Nature, IEEE, Wikipedia, Qiskit Textbook) for every single algorithm section.
@@ -83,7 +83,7 @@ AQCA is built with a modular, responsive architecture comprising dedicated modul
 
 - **Frontend Interface:** Semantic HTML5, Vanilla CSS3 (Custom design system, glassmorphism, responsive grid), Vanilla JavaScript (ES6+).
 - **Mathematical Engine:** MathJax v3 (`tex-mml-chtml.js`) for LaTeX mathematical notation and Dirac equation rendering.
-- **Data Visualization:** Chart.js for complexity scaling curves, SVG graphics for state representations and Bloch sphere diagrams.
+- **Data Visualisation:** Chart.js for complexity scaling curves, SVG graphics for state representations and Bloch sphere diagrams.
 - **Quantum Backend:** Python 3, Qiskit, Qiskit-Aer simulator framework, Matplotlib for histogram and circuit plot rendering.
 - **Source of Truth:** Master Jupyter Notebook (`AQAC.ipynb`).
 
