@@ -1,74 +1,87 @@
 # AQCA: All Quantum Computing Algorithms
 
-AQCA is a comprehensive, academic-style information portal serving as an educational atlas for quantum computing. It provides deep theoretical insights, mathematical proofs, circuit visualizations, and executable Python/Qiskit implementations for 19 fundamental and advanced quantum algorithms.
+AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grade educational atlas and interactive simulation platform for quantum computing. Developed as a comprehensive reference portal, AQCA provides deep mathematical derivations, physical state evolutions, circuit schematics, interactive visualizers, and verified Python/Qiskit implementations for 19 foundational and advanced quantum algorithms, communication protocols, and error-correcting codes.
 
-## Features
+---
 
-- **19 Complete Algorithm Profiles:** Ranging from foundational states to advanced error correction protocols.
-- **Deep Theoretical Explanations:** Every algorithm page breaks down the intuition, required gates, and mathematical state evolution step-by-step.
-- **Executable Code:** Fully tested Qiskit code implementations for every algorithm, dynamically synced from a master Jupyter Notebook.
-- **Visual Aids:** Automatically generated circuit schematics, Bloch spheres, Q-Spheres, and histogram visualizations for state evolution and measurement analysis.
-- **Downloadable Notebooks:** Users can download a single master catalogue (`.ipynb`) containing all algorithms, or download specific notebooks for individual algorithms directly from their respective pages.
+## 🌟 Key Features
 
-## Algorithm Catalogue
+- **19 Complete Algorithm Profiles:** Comprehensive documentation spanning quantum communication, oracle query models, phase/amplitude manipulation, hybrid variational models, and fault-tolerant stabilizer codes.
+- **Interactive Visualizers:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyze measurement statistics in real-time.
+- **Deep Mathematical Rigor:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
+- **Analysis Centre & Comparison Matrix:** An interactive benchmarking dashboard powered by Chart.js that dynamically plots classical vs. quantum scaling curves and generates side-by-side feature comparisons with real-time MathJax rendering.
+- **Curated Scholarly References:** Every algorithm section in the reference library includes 3 to 4 authoritative citations including peer-reviewed papers (Physical Review Letters, Nature, FOCS/STOC), Wikipedia articles, and IBM Qiskit documentation.
+- **Single Source of Truth (`AQAC.ipynb`):** All Python code blocks, circuit schematics, and measurement output plots are dynamically maintained and tested within a master Jupyter Notebook (`AQAC.ipynb`).
 
-The algorithms are categorized into five primary educational pillars:
+---
 
-1. **Foundations & Protocols**
-   - Bell State Generator
-   - Superdense Coding
-   - Quantum Teleportation
-   - Entanglement Swapping
-2. **Oracle-Based Algorithms**
-   - Deutsch's Algorithm
-   - Deutsch–Jozsa Algorithm
-   - Bernstein–Vazirani Algorithm
-   - Simon's Algorithm
-3. **Phase & Amplitude Algorithms**
-   - Quantum Fourier Transform (QFT)
-   - Quantum Phase Estimation (QPE)
-   - Grover's Search Algorithm
-   - Generalized Amplitude Amplification
-4. **Flagship & Hybrid Algorithms**
-   - Shor's Algorithm
-   - Variational Quantum Eigensolver (VQE)
-   - Quantum Approximate Optimization Algorithm (QAOA)
-   - HHL Algorithm
-5. **Fault Tolerance & Error Correction**
-   - 3-Qubit Bit-Flip / Phase-Flip Codes
-   - Shor's 9-Qubit Code
-   - Steane 7-Qubit Code
+## 📚 Complete Algorithm & Protocol Catalogue
 
-## Repository Structure
+The portal organizes 19 quantum computing algorithms into five core educational pillars:
 
-The project uses a hybrid architecture. The frontend is built strictly with HTML5, Vanilla CSS3, and Vanilla JS, while the backend relies on a master Jupyter Notebook (`AQAC.ipynb`) as the source of truth for all quantum code and output data.
+### 1. Quantum Communication & Protocols
+- **Bell State Generator:** Creation of maximal two-qubit entanglement ($|\Phi^+\rangle$, $|\Phi^-\rangle$, $|\Psi^+\rangle$, $|\Psi^-\rangle$).
+- **Superdense Coding:** Transmission of two classical bits using a single physical qubit and pre-shared entanglement.
+- **Quantum Teleportation:** Exact transmission of an arbitrary unknown quantum state $|\psi\rangle$ across classical channels using Bell measurement.
+- **Entanglement Swapping:** Entangling two independent qubits that have never interacted directly via joint Bell measurement.
 
-- `AQAC.ipynb`: The master Jupyter notebook containing all algorithm implementations, text outputs, LaTeX equations, and generated plot images.
-- `update_master.py`: A synchronization script that parses `AQAC.ipynb`, extracts the code and cell outputs, generates individual `.ipynb` files for each algorithm, and injects the updated HTML into the frontend pages.
-- `algorithms/`: Contains individual algorithm HTML pages.
-- `assets/`: Contains generated output images (`assets/images/outputs`), generated circuit schematics (`assets/images/circuits`), and downloadable notebooks (`assets/notebooks`).
-- `css/`: Stylesheets (`style.css` for globals, `responsive.css` for layouts).
-- `js/`: Vanilla JS for UI interactions (navigation, layout, and output modal rendering).
+### 2. Early Oracle Algorithms
+- **Deutsch's Algorithm:** Determining whether a 1-bit boolean function $f: \{0,1\} \to \{0,1\}$ is constant or balanced in $O(1)$ query.
+- **Deutsch–Jozsa Algorithm:** Generalization of Deutsch's problem to $n$-bit boolean functions with guaranteed exponential quantum speedup over classical deterministic algorithms.
+- **Bernstein–Vazirani Algorithm:** Reconstructing a hidden secret bitstring $s \in \{0,1\}^n$ from an oracle $f(x) = s \cdot x \pmod 2$ in a single query vs. $n$ classical queries.
+- **Simon's Algorithm:** Finding a hidden bitstring $s$ for a 2-to-1 function $f(x) = f(x \oplus s)$ in $O(n)$ queries, providing the historical blueprint for Shor's algorithm.
 
-## How to Run & Update
+### 3. Phase & Amplitude Core Algorithms
+- **Quantum Fourier Transform (QFT):** Quantum linear transformation mapping computational basis states to Fourier basis states in $O(n^2)$ gate complexity vs. classical FFT $O(n 2^n)$.
+- **Quantum Phase Estimation (QPE):** Estimating the unknown phase $\theta$ of an eigenvector $|u\rangle$ for a unitary operator $U|u\rangle = e^{2\pi i \theta}|u\rangle$.
+- **Grover's Search Algorithm:** Quadratic speedup $O(\sqrt{N})$ for unstructured database search using phase inversion and amplitude amplification about the mean.
+- **Generalized Amplitude Amplification:** Framework extending Grover's search to arbitrary initial states and non-uniform target subspaces.
 
-### Viewing the Site
-This is a fully static frontend. Simply clone the repository and open `index.html` in any modern web browser to navigate the portal. No local server is strictly required.
+### 4. Flagship & Hybrid Models `[In-Progress / Beta]`
+- **Shor's Algorithm:** Exponential speedup for integer factorization and discrete logarithms in $O((\log N)^3)$ operations using modular exponentiation and inverse QFT.
+- **Variational Quantum Eigensolver (VQE):** Hybrid classical-quantum algorithm utilizing the Ritz variational principle to find ground state energies of molecular Hamiltonians on NISQ devices.
+- **Quantum Approximate Optimization Algorithm (QAOA):** Variational algorithm solving combinatorial optimization problems (e.g., Max-Cut) using alternating problem and mixer Hamiltonians.
+- **HHL Algorithm:** Quantum algorithm for solving sparse linear systems $A\vec{x} = \vec{b}$ in logarithmic time $O(\log N)$ relative to system dimension.
 
-### Updating Algorithm Code
-If you want to modify the quantum circuits, tweak the Python code, or change the algorithm outputs:
+### 5. Fault Tolerance & Error Correction `[In-Progress / Beta]`
+- **3-Qubit Bit-Flip / Phase-Flip Codes:** Repetition codes protecting single physical qubits against single $X$ (bit-flip) or $Z$ (phase-flip) errors using syndrome measurement.
+- **Shor's 9-Qubit Code:** The first quantum error-correcting code capable of protecting a logical qubit against arbitrary single-qubit errors ($X$, $Z$, or $Y = iXZ$).
+- **Steane 7-Qubit Code:** CSS code encoding 1 logical qubit into 7 physical qubits using 6 stabilizer generators, enabling fault-tolerant transversal $H$, $S$, and $CNOT$ operations.
 
-1. Open `AQAC.ipynb` using Jupyter Notebook or JupyterLab.
-2. Edit the Python code block for the desired algorithm and run the cell to generate the new output.
-3. Save the notebook.
-4. Run the master sync script from the root of the project to inject your changes into the website:
-   ```bash
-   python3 update_master.py
-   ```
-5. Refresh the HTML page in your browser. The code block, the "View Code Output" modal, the circuit images, and the downloadable `.ipynb` file will all be automatically updated.
+---
 
-## Technologies Used
+## 🏛️ Platform Architecture & Portal Modules
 
-- **Frontend:** HTML5, CSS3, Vanilla JS
-- **Quantum Backend:** Python 3, Qiskit, Qiskit-Aer
-- **Notebook Processing:** Jupyter format parsing, Regex, Base64 decoding
+AQCA is built with a modular, responsive architecture comprising dedicated modules:
+
+- **Home Portal (`index.html`):** Platform entry point featuring an interactive vector Bloch Sphere diagram, overview of algorithm categories, feature breakdowns, and quick navigation.
+- **Algorithms Catalogue (`algorithms.html`):** Searchable atlas listing all 19 algorithms with filter controls and direct links to visualizers and theoretical profiles.
+- **Analysis Centre (`analysis.html`):** Benchmarking dashboard allowing side-by-side metric comparison, interactive time/space complexity chart plotting via Chart.js, and dynamic MathJax math typesetting.
+- **Quantum Basics (`basics.html`):** Foundational tutorial covering Hilbert space geometry, Bloch Sphere coordinates $(\theta, \phi)$, Pauli matrices ($\sigma_x, \sigma_y, \sigma_z$), Hadamard ($H$), CNOT, phase kickback, and Dirac bra-ket formalism.
+- **Literature & Reference Library (`references.html`):** Complete bibliography providing 3 to 4 verified scholarly links (Physical Review, Nature, IEEE, Wikipedia, Qiskit Textbook) for every single algorithm section.
+- **Developer Information (`developer.html`):** Author background, subject matter specialization (Quantum Communication), and contact information.
+- **Preface (`preface.html`) & Resources (`resources.html`):** User guidance, pedagogical roadmaps, and curated external learning materials.
+
+---
+
+## 💻 Tech Stack & Infrastructure
+
+- **Frontend Interface:** Semantic HTML5, Vanilla CSS3 (Custom design system, glassmorphism, responsive grid), Vanilla JavaScript (ES6+).
+- **Mathematical Engine:** MathJax v3 (`tex-mml-chtml.js`) for LaTeX mathematical notation and Dirac equation rendering.
+- **Data Visualization:** Chart.js for complexity scaling curves, SVG graphics for state representations and Bloch sphere diagrams.
+- **Quantum Backend:** Python 3, Qiskit, Qiskit-Aer simulator framework, Matplotlib for histogram and circuit plot rendering.
+- **Source of Truth:** Master Jupyter Notebook (`AQAC.ipynb`).
+
+---
+
+## 👨‍💻 Developer & Attribution
+
+- **Developer:** Agha Tasheer Syedi
+- **Degree:** MTech in Quantum Computing
+- **Specialization:** Quantum Communication & Quantum Algorithms
+- **Contact Email:** [cs.aghasyedi@gmail.com](mailto:cs.aghasyedi@gmail.com)
+- **Repository:** [aghasyedi/aqca](https://github.com/aghasyedi/aqca)
+
+---
+
+&copy; 2026 AQCA - All Quantum Computing Algorithms. Educational and Research Platform.
