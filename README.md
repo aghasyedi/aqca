@@ -1,5 +1,7 @@
 # AQCA: All Quantum Computing Algorithms
 
+**Live Website:** [https://aqca.netlify.app/](https://aqca.netlify.app/)
+
 AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grade educational atlas and interactive simulation platform for quantum computing. Developed as a comprehensive reference portal, AQCA provides deep mathematical derivations, physical state evolutions, circuit schematics, interactive visualisers, and verified Python/Qiskit implementations for 19 foundational and advanced quantum algorithms, communication protocols, and error-correcting codes.
 
 ---
@@ -93,7 +95,8 @@ AQCA is built with a modular, responsive architecture comprising dedicated modul
 
 - **Developer:** Agha Tasheer Syedi
 - **Degree:** MTech in Quantum Computing
-- **Specialization:** Quantum Communication & Quantum Algorithms
+- **Specialisation:** Quantum Communication & Quantum Algorithms
+- **Live Website:** [https://aqca.netlify.app/](https://aqca.netlify.app/)
 - **Contact Email:** [cs.aghasyedi@gmail.com](mailto:cs.aghasyedi@gmail.com)
 - **Repository:** [aghasyedi/aqca](https://github.com/aghasyedi/aqca)
 
