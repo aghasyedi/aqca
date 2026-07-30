@@ -43,6 +43,21 @@
   color: var(--primary);
   border-color: #b3d1ff;
 }
+.badge-beta {
+  background-color: rgba(234, 88, 12, 0.12);
+  color: #c2410c;
+  border: 1px solid rgba(234, 88, 12, 0.35);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 6px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 .content-section {
   margin-bottom: 3rem;

@@ -89,13 +89,13 @@
                         <li><a href="algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
                         <li><a href="algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
                         
-                        <li class="nav-category-label">4. Top-End Algorithms</li>
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
                         <li><a href="algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
                         <li><a href="algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
                         <li><a href="algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
                         <li><a href="algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
                         
-                        <li class="nav-category-label">5. Quantum Error Correction</li>
+                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
                         <li><a href="algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
@@ -112,7 +112,7 @@
                     <a href="references.html" class="nav-link">References</a>
                 </div>
                 <div class="nav-item">
-                    <a href="developer.html" class="nav-link">Developer / Contact</a>
+                    <a href="developer.html" class="nav-link">Developer</a>
                 </div>
                 <div class="nav-item">
                     <a href="about.html" class="nav-link">About AQCA</a>
@@ -134,8 +134,24 @@
                 <a href="preface.html" class="btn btn-outline"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> How to Use AQCA</a>
             </div>
         </div>
-        <div class="hero-diagram">
-            <span>[ Bloch Sphere / Circuit Image Placeholder ]</span>
+        <div class="hero-diagram" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem;">
+            <svg width="220" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer Sphere outline -->
+                <circle cx="100" cy="100" r="75" stroke="var(--primary)" stroke-width="2.5" stroke-dasharray="4 2" opacity="0.6"/>
+                <ellipse cx="100" cy="100" rx="75" ry="25" stroke="var(--primary)" stroke-width="1.5" opacity="0.4"/>
+                <line x1="100" y1="20" x2="100" y2="180" stroke="var(--primary)" stroke-width="1.5" opacity="0.5"/>
+                <line x1="20" y1="100" x2="180" y2="100" stroke="var(--primary)" stroke-width="1.5" opacity="0.5"/>
+                
+                <!-- Pole Labels -->
+                <text x="100" y="15" text-anchor="middle" fill="var(--primary)" font-size="12" font-weight="700">|0⟩</text>
+                <text x="100" y="195" text-anchor="middle" fill="var(--primary)" font-size="12" font-weight="700">|1⟩</text>
+                
+                <!-- State Vector Arrow -->
+                <line x1="100" y1="100" x2="145" y2="45" stroke="#c2410c" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="145" cy="45" r="5" fill="#c2410c"/>
+                <text x="155" y="40" fill="#c2410c" font-size="13" font-weight="800">|ψ⟩</text>
+            </svg>
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-top: 0.5rem; letter-spacing: 0.5px;">Bloch Sphere State Representation</div>
         </div>
     </div>
     
@@ -165,14 +181,14 @@
         
         <div class="category-card">
             <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
-            <h4 class="category-title">4. Top-End Algorithms</h4>
+            <h4 class="category-title">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></h4>
             <div class="category-count">4 Algorithms</div>
             <p class="category-desc">Advanced algorithms for factoring, optimization, and solving real-world quantum problems.</p>
         </div>
         
         <div class="category-card">
             <div class="category-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-            <h4 class="category-title">5. Quantum Error Correction</h4>
+            <h4 class="category-title">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></h4>
             <div class="category-count">3 Codes</div>
             <p class="category-desc">Protect quantum information against noise and errors using quantum error correction codes.</p>
         </div>
