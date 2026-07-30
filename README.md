@@ -25,7 +25,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 
 | Protocol | Key Operation / Concept | Primary Application |
 |---|---|---|
-| **Bell State Generator** | Creates maximal 2-qubit entanglement ($|\Phi^\pm\rangle, |\Psi^\pm\rangle$) | Entanglement resource & channel setup |
+| **Bell State Generator** | Creates maximal 2-qubit entanglement ($/\Phi^\pm\rangle, /\Psi^\pm\rangle$) | Entanglement resource & channel setup |
 | **Superdense Coding** | Transmits 2 classical bits using 1 qubit + pre-shared Bell pair | Quantum bandwidth multiplication |
 | **Quantum Teleportation** | Transfers unknown state $|\psi\rangle$ via Bell measurement & classical bits | Quantum networking & state transfer |
 | **Entanglement Swapping** | Entangles independent qubits without direct interaction | Quantum repeaters & long-distance QKD |
@@ -44,11 +44,11 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 | Algorithm | Core Mechanism / Operation | Speedup & Complexity |
 |---|---|---|
 | **Quantum Fourier Transform (QFT)** | Linear transformation mapping state to Fourier basis | $O(n^2)$ gates vs. classical FFT $O(n 2^n)$ |
-| **Quantum Phase Estimation (QPE)** | Estimate eigenvalue phase $\theta$ for $U|u\rangle = e^{2\pi i \theta}|u\rangle$ | Fundamental subroutine for Shor & HHL |
+| **Quantum Phase Estimation (QPE)** | Estimate eigenvalue phase $\theta$ for $U /u\rangle = e^{2\pi i \theta} /u\rangle$ | Fundamental subroutine for Shor & HHL |
 | **Grover's Search Algorithm** | Phase inversion & amplitude amplification about mean | Quadratic speedup $O(\sqrt{N})$ for search |
 | **Generalized Amplitude Amplification** | Arbitrary initial state & target subspace amplification | Generalized quantum search framework |
 
-### 4. Flagship & Hybrid Models `[In-Progress / Beta]`
+### 4. Flagship & Hybrid Models `[In-Progress]`
 
 | Model | Domain / Problem | Key Operational Mechanism |
 |---|---|---|
@@ -57,7 +57,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 | **Quantum Approximate Optimisation (QAOA)** | Combinatorial optimisation (e.g. Max-Cut) | Alternating problem & mixer Hamiltonians |
 | **HHL Algorithm** | Solving linear systems $A\vec{x} = \vec{b}$ | Quantum phase estimation & inversion in $O(\log N)$ |
 
-### 5. Fault Tolerance & Error Correction `[In-Progress / Beta]`
+### 5. Fault Tolerance & Error Correction `[In-Progress]`
 
 | Code | Protection Target | Code Parameters & Structure |
 |---|---|---|
