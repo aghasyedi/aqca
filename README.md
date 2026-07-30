@@ -4,7 +4,7 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 - **19 Complete Algorithm Profiles:** Comprehensive documentation spanning quantum communication, oracle query models, phase/amplitude manipulation, hybrid variational models, and fault-tolerant stabilizer codes.
 - **Interactive Visualizers:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyze measurement statistics in real-time.
@@ -15,7 +15,7 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 
 ---
 
-## 📚 Complete Algorithm & Protocol Catalogue
+## Complete Algorithm & Protocol Catalogue
 
 The portal organizes 19 quantum computing algorithms into five core educational pillars:
 
@@ -50,7 +50,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 
 ---
 
-## 🏛️ Platform Architecture & Portal Modules
+## Platform Architecture & Portal Modules
 
 AQCA is built with a modular, responsive architecture comprising dedicated modules:
 
@@ -64,7 +64,7 @@ AQCA is built with a modular, responsive architecture comprising dedicated modul
 
 ---
 
-## 💻 Tech Stack & Infrastructure
+## Tech Stack & Infrastructure
 
 - **Frontend Interface:** Semantic HTML5, Vanilla CSS3 (Custom design system, glassmorphism, responsive grid), Vanilla JavaScript (ES6+).
 - **Mathematical Engine:** MathJax v3 (`tex-mml-chtml.js`) for LaTeX mathematical notation and Dirac equation rendering.
@@ -74,7 +74,7 @@ AQCA is built with a modular, responsive architecture comprising dedicated modul
 
 ---
 
-## 👨‍💻 Developer & Attribution
+## Developer & Attribution
 
 - **Developer:** Agha Tasheer Syedi
 - **Degree:** MTech in Quantum Computing
