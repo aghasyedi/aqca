@@ -20,33 +20,48 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 The portal organizes 19 quantum computing algorithms into five core educational pillars:
 
 ### 1. Quantum Communication & Protocols
-- **Bell State Generator:** Creation of maximal two-qubit entanglement ($|\Phi^+\rangle$, $|\Phi^-\rangle$, $|\Psi^+\rangle$, $|\Psi^-\rangle$).
-- **Superdense Coding:** Transmission of two classical bits using a single physical qubit and pre-shared entanglement.
-- **Quantum Teleportation:** Exact transmission of an arbitrary unknown quantum state $|\psi\rangle$ across classical channels using Bell measurement.
-- **Entanglement Swapping:** Entangling two independent qubits that have never interacted directly via joint Bell measurement.
+
+| Protocol | Key Operation / Concept | Primary Application |
+|---|---|---|
+| **Bell State Generator** | Creates maximal 2-qubit entanglement ($|\Phi^\pm\rangle, |\Psi^\pm\rangle$) | Entanglement resource & channel setup |
+| **Superdense Coding** | Transmits 2 classical bits using 1 qubit + pre-shared Bell pair | Quantum bandwidth multiplication |
+| **Quantum Teleportation** | Transfers unknown state $|\psi\rangle$ via Bell measurement & classical bits | Quantum networking & state transfer |
+| **Entanglement Swapping** | Entangles independent qubits without direct interaction | Quantum repeaters & long-distance QKD |
 
 ### 2. Early Oracle Algorithms
-- **Deutsch's Algorithm:** Determining whether a 1-bit boolean function $f: \{0,1\} \to \{0,1\}$ is constant or balanced in $O(1)$ query.
-- **Deutsch–Jozsa Algorithm:** Generalization of Deutsch's problem to $n$-bit boolean functions with guaranteed exponential quantum speedup over classical deterministic algorithms.
-- **Bernstein–Vazirani Algorithm:** Reconstructing a hidden secret bitstring $s \in \{0,1\}^n$ from an oracle $f(x) = s \cdot x \pmod 2$ in a single query vs. $n$ classical queries.
-- **Simon's Algorithm:** Finding a hidden bitstring $s$ for a 2-to-1 function $f(x) = f(x \oplus s)$ in $O(n)$ queries, providing the historical blueprint for Shor's algorithm.
+
+| Algorithm | Problem Solved | Quantum vs. Classical Complexity |
+|---|---|---|
+| **Deutsch's Algorithm** | Test if 1-bit boolean function $f(x)$ is constant or balanced | $O(1)$ query vs. $2$ classical queries |
+| **Deutsch–Jozsa Algorithm** | Generalization to $n$-bit boolean functions | $O(1)$ query vs. $O(2^{n-1}+1)$ deterministic |
+| **Bernstein–Vazirani Algorithm** | Extract secret bitstring $s \in \{0,1\}^n$ from oracle $f(x)=s\cdot x$ | $1$ query vs. $n$ classical queries |
+| **Simon's Algorithm** | Find period $s$ for 2-to-1 function $f(x)=f(x \oplus s)$ | $O(n)$ queries vs. $O(2^{n/2})$ classical |
 
 ### 3. Phase & Amplitude Core Algorithms
-- **Quantum Fourier Transform (QFT):** Quantum linear transformation mapping computational basis states to Fourier basis states in $O(n^2)$ gate complexity vs. classical FFT $O(n 2^n)$.
-- **Quantum Phase Estimation (QPE):** Estimating the unknown phase $\theta$ of an eigenvector $|u\rangle$ for a unitary operator $U|u\rangle = e^{2\pi i \theta}|u\rangle$.
-- **Grover's Search Algorithm:** Quadratic speedup $O(\sqrt{N})$ for unstructured database search using phase inversion and amplitude amplification about the mean.
-- **Generalized Amplitude Amplification:** Framework extending Grover's search to arbitrary initial states and non-uniform target subspaces.
+
+| Algorithm | Core Mechanism / Operation | Speedup & Complexity |
+|---|---|---|
+| **Quantum Fourier Transform (QFT)** | Linear transformation mapping state to Fourier basis | $O(n^2)$ gates vs. classical FFT $O(n 2^n)$ |
+| **Quantum Phase Estimation (QPE)** | Estimate eigenvalue phase $\theta$ for $U|u\rangle = e^{2\pi i \theta}|u\rangle$ | Fundamental subroutine for Shor & HHL |
+| **Grover's Search Algorithm** | Phase inversion & amplitude amplification about mean | Quadratic speedup $O(\sqrt{N})$ for search |
+| **Generalized Amplitude Amplification** | Arbitrary initial state & target subspace amplification | Generalized quantum search framework |
 
 ### 4. Flagship & Hybrid Models `[In-Progress / Beta]`
-- **Shor's Algorithm:** Exponential speedup for integer factorization and discrete logarithms in $O((\log N)^3)$ operations using modular exponentiation and inverse QFT.
-- **Variational Quantum Eigensolver (VQE):** Hybrid classical-quantum algorithm utilizing the Ritz variational principle to find ground state energies of molecular Hamiltonians on NISQ devices.
-- **Quantum Approximate Optimization Algorithm (QAOA):** Variational algorithm solving combinatorial optimization problems (e.g., Max-Cut) using alternating problem and mixer Hamiltonians.
-- **HHL Algorithm:** Quantum algorithm for solving sparse linear systems $A\vec{x} = \vec{b}$ in logarithmic time $O(\log N)$ relative to system dimension.
+
+| Model | Domain / Problem | Key Operational Mechanism |
+|---|---|---|
+| **Shor's Algorithm** | Integer factorization & RSA breaking | Period finding via IQFT in $O((\log N)^3)$ operations |
+| **Variational Quantum Eigensolver (VQE)** | Ground state energy of molecular Hamiltonians | Ritz variational principle on NISQ hardware |
+| **Quantum Approximate Optimization (QAOA)** | Combinatorial optimization (e.g. Max-Cut) | Alternating problem & mixer Hamiltonians |
+| **HHL Algorithm** | Solving linear systems $A\vec{x} = \vec{b}$ | Quantum phase estimation & inversion in $O(\log N)$ |
 
 ### 5. Fault Tolerance & Error Correction `[In-Progress / Beta]`
-- **3-Qubit Bit-Flip / Phase-Flip Codes:** Repetition codes protecting single physical qubits against single $X$ (bit-flip) or $Z$ (phase-flip) errors using syndrome measurement.
-- **Shor's 9-Qubit Code:** The first quantum error-correcting code capable of protecting a logical qubit against arbitrary single-qubit errors ($X$, $Z$, or $Y = iXZ$).
-- **Steane 7-Qubit Code:** CSS code encoding 1 logical qubit into 7 physical qubits using 6 stabilizer generators, enabling fault-tolerant transversal $H$, $S$, and $CNOT$ operations.
+
+| Code | Protection Target | Code Parameters & Structure |
+|---|---|---|
+| **3-Qubit Codes** | Protects single qubit against single $X$ or $Z$ error | $[[3, 1, 1]]$ bit/phase repetition code |
+| **Shor's 9-Qubit Code** | Protects single qubit against arbitrary single error ($X, Z, Y$) | $[[9, 1, 3]]$ concatenated code |
+| **Steane 7-Qubit Code** | Protects arbitrary single-qubit error with transversal gates | $[[7, 1, 3]]$ CSS stabilizer code |
 
 ---
 
