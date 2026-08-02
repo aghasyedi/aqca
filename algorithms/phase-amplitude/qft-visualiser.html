@@ -73,19 +73,30 @@
             font-weight: 800;
         }
 
-        .circuit-row {
-            display: flex;
+        .circuit-grid {
+            display: grid;
+            grid-template-columns: 30px repeat(6, minmax(40px, max-content)) 1fr;
+            grid-template-rows: repeat(3, 40px);
+            gap: 15px 15px;
             align-items: center;
-            gap: 15px;
             font-family: 'JetBrains Mono';
             font-weight: 800;
-            margin-bottom: 15px;
         }
-        .gate { width: 40px; height: 40px; background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .gate.cp { background: rgba(5, 150, 105, 0.1); border-color: #059669; color: #059669; font-size: 0.8rem; }
-        .gate.swap { background: rgba(180, 83, 9, 0.1); border-color: #b45309; color: #b45309; font-size: 0.7rem; }
+        .gate { position: relative; z-index: 1; min-width: 40px; padding: 0 8px; box-sizing: border-box; height: 40px; background: var(--background); color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+        .gate::before { content: ''; position: absolute; inset: 0; border-radius: 6px; background: var(--primary-light); z-index: -1; }
         
-        .active-gate { transform: scale(1.15); box-shadow: 0 0 15px currentColor; background: currentColor !important; color: #fff !important; }
+        .cp-gate { border-color: #059669; color: #059669; font-size: 0.8rem; }
+        .cp-gate::before { background: rgba(5, 150, 105, 0.1); }
+        
+        .swap-gate { border-color: #b45309; color: #b45309; font-size: 0.7rem; }
+        .swap-gate::before { background: rgba(180, 83, 9, 0.1); }
+        
+        .active-gate { transform: scale(1.15); box-shadow: 0 0 15px var(--primary); background: var(--primary) !important; color: #fff !important; }
+        .active-gate::before { display: none; }
+        .cp-gate.active-gate { box-shadow: 0 0 15px #059669; background: #059669 !important; }
+        .swap-gate.active-gate { box-shadow: 0 0 15px #b45309; background: #b45309 !important; }
+        
+        .wire { grid-column: 2 / -1; height: 2px; background: var(--border); z-index: 0; }
     </style>
 </head>
 <body>
@@ -104,7 +115,7 @@
             <nav class="nav-menu">
                 <div class="nav-item"><a href="../../index.html" class="nav-link">Home</a></div>
                 <div class="nav-item"><a href="../../algorithms.html" class="nav-link active">Algorithms</a></div>
-                <div class="nav-item"><a href="quantum-fourier-transform.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to QFT</a></div>
+                <div class="nav-item"><a href="qft.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;">← Back to QFT</a></div>
             </nav>
         </aside>
 
@@ -154,32 +165,27 @@
 
                     <div class="pert-card">
                         <h2 style="border: none;">Live Circuit Execution</h2>
-                        <div style="display: flex; flex-direction: column; background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-                            <div class="circuit-row" id="row-0">
-                                <span style="width: 50px;">q₀</span>
-                                <div class="gate h-gate" id="g0-0">H</div>
-                                <div class="gate cp-gate" id="g0-1">CP(π/2)</div>
-                                <div class="gate cp-gate" id="g0-2">CP(π/4)</div>
-                                <div class="gate swap-gate" id="g0-3" style="margin-left: auto;">SWAP</div>
-                            </div>
-                            <div class="circuit-row" id="row-1">
-                                <span style="width: 50px;">q₁</span>
-                                <div style="width: 40px; margin-right: 15px;"></div>
-                                <div class="gate cp-gate" id="g1-1">CTRL</div>
-                                <div style="width: 40px; margin-right: 15px;"></div>
-                                <div class="gate h-gate" id="g1-3">H</div>
-                                <div class="gate cp-gate" id="g1-4">CP(π/2)</div>
-                            </div>
-                            <div class="circuit-row" id="row-2">
-                                <span style="width: 50px;">q₂</span>
-                                <div style="width: 40px; margin-right: 15px;"></div>
-                                <div style="width: 40px; margin-right: 15px;"></div>
-                                <div class="gate cp-gate" id="g2-2">CTRL</div>
-                                <div style="width: 40px; margin-right: 15px;"></div>
-                                <div class="gate cp-gate" id="g2-4">CTRL</div>
-                                <div class="gate h-gate" id="g2-5">H</div>
-                                <div class="gate swap-gate" id="g2-6" style="margin-left: auto;">SWAP</div>
-                            </div>
+                        <div class="circuit-grid" style="background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+                            <div class="wire" style="grid-row: 1;"></div>
+                            <div class="wire" style="grid-row: 2;"></div>
+                            <div class="wire" style="grid-row: 3;"></div>
+                            
+                            <div style="grid-row: 1; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 10px;">q₀</div>
+                            <div class="gate h-gate" id="g0-0" style="grid-row: 1; grid-column: 2; margin: 0 auto;">H</div>
+                            <div class="gate cp-gate" id="g0-1" style="grid-row: 1; grid-column: 3; margin: 0 auto;">CP(π/2)</div>
+                            <div class="gate cp-gate" id="g0-2" style="grid-row: 1; grid-column: 4; margin: 0 auto;">CP(π/4)</div>
+                            <div class="gate swap-gate" id="g0-3" style="grid-row: 1; grid-column: 8; margin-left: auto;">SWAP</div>
+                            
+                            <div style="grid-row: 2; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 10px;">q₁</div>
+                            <div class="gate cp-gate" id="g1-1" style="grid-row: 2; grid-column: 3; margin: 0 auto;">CTRL</div>
+                            <div class="gate h-gate" id="g1-3" style="grid-row: 2; grid-column: 5; margin: 0 auto;">H</div>
+                            <div class="gate cp-gate" id="g1-4" style="grid-row: 2; grid-column: 6; margin: 0 auto;">CP(π/2)</div>
+                            
+                            <div style="grid-row: 3; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 10px;">q₂</div>
+                            <div class="gate cp-gate" id="g2-2" style="grid-row: 3; grid-column: 4; margin: 0 auto;">CTRL</div>
+                            <div class="gate cp-gate" id="g2-4" style="grid-row: 3; grid-column: 6; margin: 0 auto;">CTRL</div>
+                            <div class="gate h-gate" id="g2-5" style="grid-row: 3; grid-column: 7; margin: 0 auto;">H</div>
+                            <div class="gate swap-gate" id="g2-6" style="grid-row: 3; grid-column: 8; margin-left: auto;">SWAP</div>
                         </div>
                     </div>
                 </div>
