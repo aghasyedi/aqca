@@ -62,8 +62,8 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
         }
 
         .phase-label {
@@ -151,6 +151,15 @@
                             <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
                         </div>
                         <button class="btn btn-green btn-modern" id="btn-auto" style="width:100%;" onclick="toggleAuto()">Play Animation</button>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Theoretical Output</h2>
+                        <div style="background: var(--background); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px;">
+                            <div style="font-size: 0.85rem; line-height: 1.5; color: var(--text);" id="theoretical-output">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
                     </div>
                 </aside>
 
@@ -320,6 +329,38 @@
 
             document.getElementById('btn-prev').disabled = state.step === 0;
             document.getElementById('btn-next').disabled = state.step === 7;
+
+            const j = state.val;
+            let increment = "";
+            if (j === 0) increment = "0";
+            else if (j === 1) increment = "π/4";
+            else if (j === 2) increment = "π/2";
+            else if (j === 3) increment = "3π/4";
+            else if (j === 4) increment = "π";
+            else if (j === 5) increment = "5π/4";
+            else if (j === 6) increment = "3π/2";
+            else if (j === 7) increment = "7π/4";
+            
+            let stepText = "";
+            if (state.step === 0) {
+                stepText = `Initial state: computational basis state |${j}⟩. All phases are currently 0.`;
+            } else if (state.step === 1) {
+                stepText = `Step 1: Hadamard gate on q₀ creates a superposition.`;
+            } else if (state.step === 2) {
+                stepText = `Step 2: Controlled-Phase gate adds a phase rotation to q₀ depending on q₁'s value.`;
+            } else if (state.step === 3) {
+                stepText = `Step 3: Controlled-Phase gate adds a smaller phase rotation to q₀ depending on q₂'s value.`;
+            } else if (state.step === 4) {
+                stepText = `Step 4: Hadamard gate on q₁ creates a superposition.`;
+            } else if (state.step === 5) {
+                stepText = `Step 5: Controlled-Phase gate adds a phase rotation to q₁ depending on q₂'s value.`;
+            } else if (state.step === 6) {
+                stepText = `Step 6: Hadamard gate on q₂ creates a superposition.`;
+            } else if (state.step === 7) {
+                stepText = `Step 7: SWAP gates reverse the qubit order. Final state reached!`;
+            }
+
+            document.getElementById('theoretical-output').innerHTML = `<b>Input state: |${j}⟩</b><br><br>${stepText}<br><br><span style="color:var(--primary); font-weight: 600;">Overall Phase Increment: ${increment}</span>`;
         }
 
         function nextStep() { if(state.step < 7) { state.step++; updateUI(); } }
