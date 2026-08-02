@@ -357,7 +357,30 @@
             } else if (state.step === 6) {
                 stepText = `Step 6: Hadamard gate on q₂ creates a superposition.`;
             } else if (state.step === 7) {
-                stepText = `Step 7: SWAP gates reverse the qubit order. Final state reached!`;
+                let terms = [];
+                for (let k = 0; k < 8; k++) {
+                    let binaryStr = k.toString(2).padStart(3, '0');
+                    let phaseNumerator = j * k;
+                    let phaseStr = "";
+                    if (phaseNumerator > 0) {
+                        let num = phaseNumerator;
+                        let den = 4;
+                        let a = num, b = den;
+                        while(b) { let t = b; b = a % b; a = t; }
+                        let gcd = a;
+                        num /= gcd;
+                        den /= gcd;
+                        if (den === 1) {
+                            phaseStr = `e<sup>i${num === 1 ? '' : num}π</sup>`;
+                        } else {
+                            phaseStr = `e<sup>i${num === 1 ? '' : num}π/${den}</sup>`;
+                        }
+                    }
+                    terms.push(`${phaseStr}|${binaryStr}⟩`);
+                }
+                let finalStateHtml = `<div style="margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: var(--background); padding: 10px; border-radius: 6px; border: 1px solid var(--border); line-height: 2;">`;
+                finalStateHtml += `|ψ<sub>final</sub>⟩ = <br> 1/√8 ( ${terms.join(' + ')} )</div>`;
+                stepText = `Step 7: SWAP gates reverse the qubit order. Final state reached!${finalStateHtml}`;
             }
 
             document.getElementById('theoretical-output').innerHTML = `<b>Input state: |${j}⟩</b><br><br>${stepText}<br><br><span style="color:var(--primary); font-weight: 600;">Overall Phase Increment: ${increment}</span>`;
