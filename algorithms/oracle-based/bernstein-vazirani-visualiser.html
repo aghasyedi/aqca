@@ -123,8 +123,8 @@
         }
 
         .circuit-cell { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .circuit-wire { position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #a0aabf; transform: translateY(-50%); z-index: 1; }
         .wire-label { background-color: var(--dqa-card, var(--surface, #ffffff)); padding: 0 4px; border-radius: 4px;  position: absolute; left: 10px; font-size: 0.8rem; font-family: 'JetBrains Mono'; color: var(--primary); font-weight: 700; z-index: 2; }
+        .wire { grid-column: 1 / -1; height: 2px; background: #a0aabf; z-index: 0; width: 100%; align-self: center; }
         
         .circuit-gate {
             width: 34px; height: 34px; background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary);
@@ -132,7 +132,7 @@
         }
         
         .oracle-box {
-            position: absolute;
+            position: relative;
             background: rgba(180, 83, 9, 0.1);
             border: 2px dashed #b45309;
             color: #b45309;
@@ -152,6 +152,19 @@
             color: #fff;
             box-shadow: 0 0 20px rgba(180, 83, 9, 0.5);
             border-style: solid;
+        }
+
+        .oracle-label {
+            position: absolute;
+            background: var(--surface);
+            color: #b45309;
+            padding: 0 5px;
+            top: -10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            z-index: 5;
         }
 
         .measure-gate {
@@ -233,6 +246,7 @@
                             <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
                         </div>
                         <button class="btn btn-green btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()">Play Animation</button>
+                        <button class="btn btn-secondary btn-modern" style="width:100%; border: 1px solid var(--border);" onclick="resetSystem()">↻ Restart Animation</button>
                     </div>
 
                     <div class="pert-card">
@@ -299,25 +313,30 @@
             
             // Draw wires
             for(let i=0; i<=n; i++) {
+                let w = document.createElement('div');
+                w.className = 'wire';
+                w.style.gridRow = i+1;
+                box.appendChild(w);
+
                 // Label
                 let lbl = document.createElement('div');
                 lbl.className = 'circuit-cell';
                 lbl.style.gridRow = i+1; lbl.style.gridColumn = 1;
-                lbl.innerHTML = `<div class="circuit-wire"></div><div class="wire-label">q${i} |${i===n ? '1' : '0'}⟩</div>`;
+                lbl.innerHTML = `<div class="wire-label">q${i} |${i===n ? '1' : '0'}⟩</div>`;
                 box.appendChild(lbl);
                 
                 // H1
                 let h1 = document.createElement('div');
                 h1.className = 'circuit-cell';
                 h1.style.gridRow = i+1; h1.style.gridColumn = 2;
-                h1.innerHTML = `<div class="circuit-wire"></div><div class="circuit-gate" id="h1-${i}">H</div>`;
+                h1.innerHTML = `<div class="circuit-gate" id="h1-${i}">H</div>`;
                 box.appendChild(h1);
                 
                 // Oracle pass-through wire
                 let ow = document.createElement('div');
                 ow.className = 'circuit-cell';
                 ow.style.gridRow = i+1; ow.style.gridColumn = 3;
-                ow.innerHTML = `<div class="circuit-wire"></div>`;
+                ow.innerHTML = ``;
                 box.appendChild(ow);
 
                 // H2 (only data qubits)
@@ -325,9 +344,9 @@
                 h2.className = 'circuit-cell';
                 h2.style.gridRow = i+1; h2.style.gridColumn = 4;
                 if(i < n) {
-                    h2.innerHTML = `<div class="circuit-wire"></div><div class="circuit-gate" id="h2-${i}">H</div>`;
+                    h2.innerHTML = `<div class="circuit-gate" id="h2-${i}">H</div>`;
                 } else {
-                    h2.innerHTML = `<div class="circuit-wire"></div>`;
+                    h2.innerHTML = ``;
                 }
                 box.appendChild(h2);
 
@@ -336,9 +355,9 @@
                 m.className = 'circuit-cell';
                 m.style.gridRow = i+1; m.style.gridColumn = 5;
                 if(i < n) {
-                    m.innerHTML = `<div class="circuit-wire"></div><div class="measure-gate" id="m-${i}"></div>`;
+                    m.innerHTML = `<div class="measure-gate" id="m-${i}"></div>`;
                 } else {
-                    m.innerHTML = `<div class="circuit-wire"></div>`;
+                    m.innerHTML = ``;
                 }
                 box.appendChild(m);
             }
@@ -364,9 +383,8 @@
             dotsHTML += `<div style="width:16px; height:16px; border-radius:50%; border:2px solid #b45309; display:flex; align-items:center; justify-content:center; margin-top:5px;"><div style="width:8px; height:2px; background:#b45309;"></div><div style="width:2px; height:8px; background:#b45309; position:absolute;"></div></div>`; // target on ancilla
             dotsHTML += '</div>';
 
-            oracle.innerHTML = dotsHTML + `<div style="position:absolute; background:var(--surface); padding:0 5px; top:-12px; font-size:0.8rem;">$U_f(x)$</div>`;
+            oracle.innerHTML = dotsHTML + `<div class="oracle-label">U<sub>f</sub>(x)</div>`;
             box.appendChild(oracle);
-            MathJax.typesetPromise();
         }
 
         function resetSystem() {
