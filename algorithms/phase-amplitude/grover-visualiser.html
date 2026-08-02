@@ -350,7 +350,7 @@
                             <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Search Targets
                                 (Binary/Regex)</label>
                             <input type="text" id="inp-target" value="1010" placeholder="e.g. 1010, 1*1*" class="modern-input">
-                            <button class="btn btn-secondary btn-modern" style="width:100%; margin-top:10px;"
+                            <button class="btn btn-primary btn-modern" style="width:100%; margin-top:10px;"
                                 onclick="randomiseTarget()">Generate Random Target</button>
                             <div id="error-box"
                                 style="color: var(--dqa-error); font-size: 0.7rem; margin-top: 5px; font-weight: 700;"></div>
@@ -362,10 +362,10 @@
                     <div class="pert-card">
                         <h2>2. Operation Console</h2>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                            <button class="btn btn-secondary btn-modern" id="btn-prev" onclick="undoStep()" disabled>Previous</button>
+                            <button class="btn btn-primary btn-modern" id="btn-prev" onclick="undoStep()" disabled>Previous</button>
                             <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()" disabled>Next Step</button>
                         </div>
-                        <button class="btn btn-secondary btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;"
+                        <button class="btn btn-green btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;"
                             onclick="toggleAuto()" disabled>Auto-Run Sequence</button>
                         <div
                             style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">

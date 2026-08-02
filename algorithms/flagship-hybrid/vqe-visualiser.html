@@ -51,7 +51,7 @@
         }
 
         .loop-box {
-            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; position: relative;
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; position: relative; color: #e2e8f0;
         }
         .loop-box h3 { margin: 0; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; }
         
@@ -250,7 +250,7 @@
             // Add some noise
             let noise = (Math.random() - 0.5) * 0.05 * Math.exp(-state.iter * 0.05);
             let grad = (state.energy - state.target);
-            state.energy = state.energy - lr * grad + noise;
+            state.energy = state.energy - lr * grad * 4 + noise;
             
             if(state.energy < state.target) state.energy = state.target + Math.abs(noise); // prevent overshooting target infinitely
 
