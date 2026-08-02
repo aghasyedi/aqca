@@ -14,8 +14,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+
     <!-- MathJax for LaTeX rendering -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script>
@@ -43,7 +45,7 @@
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
         }
-        
+
 
 
         .comparison-controls {
@@ -63,10 +65,11 @@
             font-weight: 600;
             flex: 1;
             max-width: 300px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
             outline: none;
             cursor: pointer;
         }
+
         .algo-select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
@@ -78,11 +81,12 @@
             background: var(--surface);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
         }
 
-        .compare-table th, .compare-table td {
+        .compare-table th,
+        .compare-table td {
             padding: 16px 20px;
             text-align: left;
             border-bottom: 1px solid var(--border);
@@ -95,7 +99,8 @@
             width: 25%;
         }
 
-        .compare-table tr:last-child td, .compare-table tr:last-child th {
+        .compare-table tr:last-child td,
+        .compare-table tr:last-child th {
             border-bottom: none;
         }
 
@@ -103,7 +108,7 @@
             width: 37.5%;
             vertical-align: top;
         }
-        
+
         .compare-table td span.tag {
             display: inline-block;
             background: var(--primary-light);
@@ -114,10 +119,12 @@
             font-weight: 700;
             margin: 2px;
         }
+
         .compare-table td span.tag.red {
             background: #ffebee;
             color: #c62828;
         }
+
         .compare-table td span.tag.green {
             background: #e8f5e9;
             color: #2e7d32;
@@ -134,7 +141,7 @@
             border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             display: flex;
             flex-direction: column;
         }
@@ -158,7 +165,7 @@
             padding: 20px;
             border: 1px solid var(--border);
             border-top: 3px solid var(--primary);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
 
         .hw-card h3 {
@@ -174,6 +181,7 @@
             margin-bottom: 0.5rem;
             font-size: 0.85rem;
         }
+
         .hw-row strong {
             color: var(--muted-text);
         }
@@ -248,14 +256,16 @@
                         <li><a href="algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">•
                                 Amplitude Amplification</a></li>
 
-                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span
+                                class="badge-beta">In-Progress</span></li>
                         <li><a href="algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
                         <li><a href="algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum
                                 Eigensolver</a></li>
                         <li><a href="algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
                         <li><a href="algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
 
-                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
+                        <li class="nav-category-label">5. Quantum Error Correction <span
+                                class="badge-beta">In-Progress</span></li>
                         <li><a href="algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a>
                         </li>
                         <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's
@@ -289,7 +299,8 @@
         <main id="main-content" class="main-content">
             <div class="page-header">
                 <h1>Algorithm Analysis & Comparison Centre</h1>
-                <p style="color: var(--muted-text);">Compare structural, mathematical, and hardware performance metrics across algorithms.</p>
+                <p style="color: var(--muted-text);">Compare structural, mathematical, and hardware performance metrics
+                    across algorithms.</p>
             </div>
 
             <!-- SECTION 1: Comparison -->
@@ -297,7 +308,7 @@
                 <div class="analysis-header">
                     <h2>Algorithm Comparison Centre</h2>
                 </div>
-                
+
                 <div class="comparison-controls">
                     <select id="algo1-select" class="algo-select" onchange="renderComparison()"></select>
                     <span style="font-weight: 800; color: var(--muted-text);">VS</span>
@@ -314,19 +325,22 @@
                 <div class="analysis-header">
                     <h2>Complexity & Performance Dashboard</h2>
                 </div>
-                
+
                 <div class="dashboard-grid">
                     <div class="dash-card">
                         <h3 style="margin: 0; color: var(--text);">Complexity Scaling (Big-O)</h3>
-                        <p style="font-size: 0.8rem; color: var(--muted-text); margin: 5px 0 0 0;">Comparing scaling requirements for <span id="chart-a1-name" style="font-weight:bold;">Algo 1</span> vs <span id="chart-a2-name" style="font-weight:bold;">Algo 2</span></p>
+                        <p style="font-size: 0.8rem; color: var(--muted-text); margin: 5px 0 0 0;">Comparing scaling
+                            requirements for <span id="chart-a1-name" style="font-weight:bold;">Algo 1</span> vs <span
+                                id="chart-a2-name" style="font-weight:bold;">Algo 2</span></p>
                         <div class="chart-wrapper">
                             <canvas id="complexityChart"></canvas>
                         </div>
                     </div>
-                    
+
                     <div class="dash-card">
                         <h3 style="margin: 0; color: var(--text);">Performance Profile</h3>
-                        <table class="compare-table" style="margin-top: 1rem; box-shadow: none; border: none; border-radius: 0;">
+                        <table class="compare-table"
+                            style="margin-top: 1rem; box-shadow: none; border: none; border-radius: 0;">
                             <tbody id="profile-table-body">
                                 <!-- Populated by JS -->
                             </tbody>
@@ -365,11 +379,11 @@
     <script src="js/main.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/algorithm-data.js"></script>
-    
+
     <script>
         const algorithms = window.AQCA_ALGORITHMS;
         const algoKeys = Object.keys(algorithms);
-        
+
         let complexityChart;
 
         function init() {
@@ -397,12 +411,12 @@
         function renderComparison() {
             const id1 = document.getElementById('algo1-select').value;
             const id2 = document.getElementById('algo2-select').value;
-            
+
             const a1 = algorithms[id1];
             const a2 = algorithms[id2];
 
             const tbody = document.getElementById('compare-table');
-            
+
             const formatBool = (val) => val ? `<span class="tag green">Yes</span>` : `<span class="tag red">No</span>`;
             const formatList = (arr) => arr.map(i => `• ${i}`).join('<br>');
 
@@ -490,7 +504,7 @@
         function renderHardware() {
             const id = document.getElementById('hw-select').value;
             const a = algorithms[id];
-            
+
             const grid = document.getElementById('hw-grid');
             grid.innerHTML = `
                 <div class="hw-card">
@@ -517,4 +531,5 @@
         window.onload = init;
     </script>
 </body>
+
 </html>
