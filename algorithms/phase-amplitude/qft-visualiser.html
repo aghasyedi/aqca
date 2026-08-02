@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
     
     <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
     <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
@@ -371,16 +373,23 @@
                         num /= gcd;
                         den /= gcd;
                         if (den === 1) {
-                            phaseStr = `e<sup>i${num === 1 ? '' : num}π</sup>`;
+                            phaseStr = `e^{i${num === 1 ? '' : num}\\pi}`;
                         } else {
-                            phaseStr = `e<sup>i${num === 1 ? '' : num}π/${den}</sup>`;
+                            phaseStr = `e^{i\\frac{${num === 1 ? '' : num}\\pi}{${den}}}`;
                         }
                     }
-                    terms.push(`${phaseStr}|${binaryStr}⟩`);
+                    terms.push(`${phaseStr}|${binaryStr}\\rangle`);
                 }
-                let finalStateHtml = `<div style="margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: var(--background); padding: 10px; border-radius: 6px; border: 1px solid var(--border); line-height: 2;">`;
-                finalStateHtml += `|ψ<sub>final</sub>⟩ = <br> 1/√8 ( ${terms.join(' + ')} )</div>`;
+                
+                let mathStr = `|\\psi_{final}\\rangle = \\frac{1}{\\sqrt{8}} \\left( ${terms.join(' + ')} \\right)`;
+                let finalStateHtml = `<div style="margin-top: 10px; background: var(--background); padding: 10px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; color: var(--text);" id="katex-output"></div>`;
                 stepText = `Step 7: SWAP gates reverse the qubit order. Final state reached!${finalStateHtml}`;
+                
+                setTimeout(() => {
+                    if (window.katex && document.getElementById('katex-output')) {
+                        katex.render(mathStr, document.getElementById('katex-output'), { throwOnError: false, displayMode: true });
+                    }
+                }, 50);
             }
 
             document.getElementById('theoretical-output').innerHTML = `<b>Input state: |${j}⟩</b><br><br>${stepText}<br><br><span style="color:var(--primary); font-weight: 600;">Overall Phase Increment: ${increment}</span>`;
