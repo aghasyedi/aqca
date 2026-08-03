@@ -13,7 +13,7 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 - **Deep Mathematical Rigor:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
 - **Analysis Centre & Comparison Matrix:** An interactive benchmarking dashboard powered by Chart.js that dynamically plots classical vs. quantum scaling curves and generates side-by-side feature comparisons with real-time MathJax rendering.
 - **Curated Scholarly References:** Every algorithm section in the reference library includes 3 to 4 authoritative citations including peer-reviewed papers (Physical Review Letters, Nature, FOCS/STOC), Wikipedia articles, and IBM Qiskit documentation.
-- **Single Source of Truth (`AQAC.ipynb`):** All Python code blocks, circuit schematics, and measurement output plots are dynamically maintained and tested within a master Jupyter Notebook (`AQAC.ipynb`).
+- **Single Source of Truth (`AQCA.ipynb`):** All Python code blocks, circuit schematics, and measurement output plots are dynamically maintained and tested within a master Jupyter Notebook (`AQCA.ipynb`).
 
 ---
 
@@ -25,7 +25,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 
 | Protocol | Key Operation / Concept | Primary Application |
 |---|---|---|
-| **Bell State Generator** | Creates maximal 2-qubit entanglement ($/\Phi^\pm\rangle, /\Psi^\pm\rangle$) | Entanglement resource & channel setup |
+| **Bell State Generator** | Creates maximal 2-qubit entanglement ($|\Phi^\pm\rangle, |\Psi^\pm\rangle$) | Entanglement resource & channel setup |
 | **Superdense Coding** | Transmits 2 classical bits using 1 qubit + pre-shared Bell pair | Quantum bandwidth multiplication |
 | **Quantum Teleportation** | Transfers unknown state $|\psi\rangle$ via Bell measurement & classical bits | Quantum networking & state transfer |
 | **Entanglement Swapping** | Entangles independent qubits without direct interaction | Quantum repeaters & long-distance QKD |
@@ -44,7 +44,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 | Algorithm | Core Mechanism / Operation | Speedup & Complexity |
 |---|---|---|
 | **Quantum Fourier Transform (QFT)** | Linear transformation mapping state to Fourier basis | $O(n^2)$ gates vs. classical FFT $O(n 2^n)$ |
-| **Quantum Phase Estimation (QPE)** | Estimate eigenvalue phase $\theta$ for $U /u\rangle = e^{2\pi i \theta} /u\rangle$ | Fundamental subroutine for Shor & HHL |
+| **Quantum Phase Estimation (QPE)** | Estimate eigenvalue phase $\theta$ for $U |u\rangle = e^{2\pi i \theta} |u\rangle$ | Fundamental subroutine for Shor & HHL |
 | **Grover's Search Algorithm** | Phase inversion & amplitude amplification about mean | Quadratic speedup $O(\sqrt{N})$ for search |
 | **Generalized Amplitude Amplification** | Arbitrary initial state & target subspace amplification | Generalized quantum search framework |
 
@@ -69,15 +69,19 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 
 ## Platform Architecture & Portal Modules
 
-AQCA is built with a modular, responsive architecture comprising dedicated modules:
+AQCA is built with a modular, responsive architecture comprising the following dedicated sections in sequence:
 
 - **Home Portal (`index.html`):** Platform entry point featuring an interactive vector Bloch Sphere diagram, overview of algorithm categories, feature breakdowns, and quick navigation.
-- **Algorithms Catalogue (`algorithms.html`):** Searchable atlas listing all 19 algorithms with filter controls and direct links to visualisers and theoretical profiles.
-- **Analysis Centre (`analysis.html`):** Benchmarking dashboard allowing side-by-side metric comparison, interactive time/space complexity chart plotting via Chart.js, and dynamic MathJax math typesetting.
-- **Quantum Basics (`basics.html`):** Foundational tutorial covering Hilbert space geometry, Bloch Sphere coordinates $(\theta, \phi)$, Pauli matrices ($\sigma_x, \sigma_y, \sigma_z$), Hadamard ($H$), CNOT, phase kickback, and Dirac bra-ket formalism.
+- **About AQCA (`about.html`):** Information regarding the mission, philosophy, and overarching goals of the platform.
+- **Preface (`preface.html`):** Guidance on navigating the atlas, educational roadmap, and prerequisites.
+- **Quantum Computing Basics (`basics.html`):** Foundational tutorial covering Hilbert space geometry, Bloch Sphere coordinates, Pauli matrices, phase kickback, and Dirac bra-ket formalism.
+- **Algorithms Catalogue (`algorithms.html`):** Searchable atlas listing all 19 algorithms with filter controls and direct links to theoretical profiles and code implementations.
+- **Visualise (`visualise.html`):** The central hub for interactive, web-based simulation interfaces allowing users to execute circuits step-by-step and observe real-time state changes.
+- **Analysis Centre (`analysis.html`):** Benchmarking dashboard allowing side-by-side metric comparison, interactive time/space complexity chart plotting via Chart.js, and dynamic math typesetting.
+- **Resources (`resources.html`):** Curated external learning materials, including textbooks, courses, and documentation.
 - **Literature & Reference Library (`references.html`):** Complete bibliography providing 3 to 4 verified scholarly links (Physical Review, Nature, IEEE, Wikipedia, Qiskit Textbook) for every single algorithm section.
+- **Appendix (`appendix.html`):** Detailed glossary and deep-dive explanations of specific quantum phenomena (e.g. No-Cloning Theorem, Trace Distance, Mutually Unbiased Bases, Decoherence).
 - **Developer Information (`developer.html`):** Author background, subject matter specialization (Quantum Communication), and contact information.
-- **Preface (`preface.html`) & Resources (`resources.html`):** User guidance, pedagogical roadmaps, and curated external learning materials.
 
 ---
 
@@ -87,7 +91,7 @@ AQCA is built with a modular, responsive architecture comprising dedicated modul
 - **Mathematical Engine:** MathJax v3 (`tex-mml-chtml.js`) for LaTeX mathematical notation and Dirac equation rendering.
 - **Data Visualisation:** Chart.js for complexity scaling curves, SVG graphics for state representations and Bloch sphere diagrams.
 - **Quantum Backend:** Python 3, Qiskit, Qiskit-Aer simulator framework, Matplotlib for histogram and circuit plot rendering.
-- **Source of Truth:** Master Jupyter Notebook (`AQAC.ipynb`).
+- **Source of Truth:** Master Jupyter Notebook (`AQCA.ipynb`).
 
 ---
 
