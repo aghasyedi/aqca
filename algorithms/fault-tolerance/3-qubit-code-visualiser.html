@@ -41,20 +41,24 @@
 
         .flow-container { display: flex; justify-content: space-between; align-items: flex-start; position: relative; margin-top: 20px; padding: 0 20px; }
         
-        .flow-step { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 120px; z-index: 2; opacity: 0.4; transition: 0.3s; }
-        .flow-step.active { opacity: 1; transform: scale(1.05); }
+        .flow-step { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 120px; z-index: 2; transition: 0.3s; }
+        .flow-step.active { transform: scale(1.05); }
         
-        .flow-icon { width: 60px; height: 60px; border-radius: 16px; background: #94a3b8; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono'; font-weight: 800; font-size: 1.2rem; color: #fff; transition: 0.3s; box-sizing: border-box; }
-        .flow-step.active .flow-icon { background: rgba(0, 90, 156, 0.05); border: 2px solid var(--primary) !important; color: var(--primary) !important; box-shadow: 0 0 20px rgba(0, 90, 156, 0.2); }
-        #step-2.active .flow-icon { background: rgba(244, 63, 94, 0.05); border-color: rgba(244, 63, 94, 0.4) !important; color: #f43f5e !important; box-shadow: 0 0 20px rgba(244, 63, 94, 0.2); }
-        #step-4.active .flow-icon { background: rgba(52, 211, 153, 0.1); border-color: rgba(52, 211, 153, 0.4) !important; color: #10b981 !important; box-shadow: 0 0 20px rgba(52, 211, 153, 0.3); }
+        .flow-icon { width: 60px; height: 60px; border-radius: 16px; background: #cbd5e1; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono'; font-weight: 800; font-size: 1.2rem; color: #fff; transition: 0.3s; box-sizing: border-box; }
+        
+        #step-2 .flow-icon { color: #fca5a5; }
+        #step-4 .flow-icon { color: #a7f3d0; }
+        
+        .flow-step.active .flow-icon { background: #fff; border: 2px solid var(--primary) !important; color: var(--primary) !important; box-shadow: 0 0 20px rgba(0, 90, 156, 0.2); }
+        #step-2.active .flow-icon { background: #fff; border: 2px solid #f43f5e !important; color: #f43f5e !important; box-shadow: 0 0 20px rgba(244, 63, 94, 0.2); }
+        #step-4.active .flow-icon { background: #fff; border: 2px solid #34d399 !important; color: #34d399 !important; box-shadow: 0 0 20px rgba(52, 211, 153, 0.3); }
         
         .flow-text { font-size: 0.8rem; text-transform: uppercase; font-weight: 800; color: #cbd5e1; text-align: center; }
         .flow-step.active .flow-text { color: #94a3b8; }
         
         .flow-line { position: absolute; top: 30px; left: 50px; right: 50px; height: 2px; background: #1e293b; z-index: 1; }
 
-        .qubit-state { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 800; padding: 4px 8px; border-radius: 4px; background: transparent; border: none; color: #94a3b8; text-align: center; }
+        .qubit-state { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 800; padding: 4px 8px; border-radius: 4px; background: transparent; border: none; color: #cbd5e1; text-align: center; }
         .flow-step.active .qubit-state { color: var(--text); }
         .flow-step.active .qubit-error { color: #f43f5e; }
         .flow-step.active .qubit-fixed { color: #10b981; }
@@ -147,7 +151,7 @@
                             </div>
 
                             <div class="flow-step" id="step-2">
-                                <div class="flow-icon" style="color: #f43f5e; border-color: rgba(244, 63, 94, 0.3);">NOISE</div>
+                                <div class="flow-icon">NOISE</div>
                                 <div class="flow-text">Channel</div>
                                 <div id="state-2" class="qubit-state" style="margin-top:10px;">?</div>
                             </div>
@@ -159,7 +163,7 @@
                             </div>
 
                             <div class="flow-step" id="step-4">
-                                <div class="flow-icon" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3);">COR</div>
+                                <div class="flow-icon">COR</div>
                                 <div class="flow-text">Correction</div>
                                 <div id="state-4" class="qubit-state" style="margin-top:10px;">?</div>
                             </div>
