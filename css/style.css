@@ -365,6 +365,24 @@ tr:last-child td {
   color: #ffffff;
 }
 
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-yellow {
+  background: linear-gradient(135deg, #b45309, #92400e);
+  color: #ffffff !important;
+  border: none;
+  box-shadow: 0 4px 10px rgba(180, 83, 9, 0.2);
+}
+
+.btn-yellow:hover:not(:disabled) {
+  background: linear-gradient(135deg, #92400e, #78350f);
+  box-shadow: 0 6px 15px rgba(180, 83, 9, 0.3);
+  color: #ffffff !important;
+}
+
 .search-input {
   width: 100%;
   max-width: 400px;

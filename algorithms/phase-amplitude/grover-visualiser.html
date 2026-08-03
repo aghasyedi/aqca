@@ -151,6 +151,8 @@
             box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.1);
         }
 
+        .btn-primary { color: #ffffff !important;  background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; }
+        
         .btn-green {
             background: linear-gradient(135deg, #059669, #047857);
             color: #ffffff !important;
@@ -164,30 +166,18 @@
         }
         
         .btn-modern {
-            padding: 8px 12px;
+            padding: 10px 16px;
             font-weight: 700;
-            border-radius: 6px;
+            border-radius: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
             border: 1px solid transparent;
-            justify-content: center;
         }
         .btn-modern:active {
             transform: scale(0.96);
-        }
-        .btn-yellow {
-            background: linear-gradient(135deg, #b45309, #92400e);
-            color: #ffffff !important;
-            border: none;
-            box-shadow: 0 4px 10px rgba(180, 83, 9, 0.2);
-        }
-        .btn-yellow:hover {
-            background: linear-gradient(135deg, #92400e, #78350f);
-            box-shadow: 0 6px 15px rgba(180, 83, 9, 0.3);
-            color: #fff;
-        }
+
 
         .stat-card {
             background: linear-gradient(145deg, var(--dqa-card), var(--background));
@@ -354,7 +344,7 @@
                                 (Binary/Regex)</label>
                             <input type="text" id="inp-target" value="1010" placeholder="e.g. 1010, 1*1*" class="modern-input">
                             <button class="btn btn-primary btn-modern" style="width:100%; margin-top:10px;"
-                                onclick="randomiseTarget()">Generate Random Target</button>
+                                onclick="randomiseTarget()">Random Target</button>
                             <div id="error-box"
                                 style="color: var(--dqa-error); font-size: 0.7rem; margin-top: 5px; font-weight: 700;"></div>
                         </div>
