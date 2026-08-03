@@ -164,26 +164,29 @@
         }
         
         .btn-modern {
-            padding: 10px 16px;
+            padding: 8px 12px;
             font-weight: 700;
-            border-radius: 8px;
+            border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
             border: 1px solid transparent;
+            justify-content: center;
         }
         .btn-modern:active {
             transform: scale(0.96);
         }
-        .btn-secondary.btn-modern {
-            background: var(--surface-hover);
-            border: 1px solid var(--border);
-            color: var(--text);
+        .btn-yellow {
+            background: linear-gradient(135deg, #b45309, #92400e);
+            color: #ffffff !important;
+            border: none;
+            box-shadow: 0 4px 10px rgba(180, 83, 9, 0.2);
         }
-        .btn-secondary.btn-modern:hover {
-            border-color: var(--dqa-primary);
-            color: var(--dqa-primary);
+        .btn-yellow:hover {
+            background: linear-gradient(135deg, #92400e, #78350f);
+            box-shadow: 0 6px 15px rgba(180, 83, 9, 0.3);
+            color: #fff;
         }
 
         .stat-card {
@@ -367,7 +370,7 @@
                         </div>
                         <button class="btn btn-green btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;"
                             onclick="toggleAuto()" disabled>Auto-Run Sequence</button>
-                        <button class="btn btn-secondary btn-modern" style="width:100%; border: 1px solid var(--border);" onclick="resetSystem()">↻ Restart Animation</button>
+                        <button class="btn btn-yellow btn-modern" style="width:100%; margin-bottom: 5px;" onclick="initialise()">↻ Restart Animation</button>
                         <div
                             style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
                             <span>Operational Speed</span>

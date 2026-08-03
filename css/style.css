@@ -348,7 +348,7 @@ tr:last-child td {
   gap: 0.5rem;
   padding: 0.7rem 1.5rem;
   background-color: var(--primary);
-  color: #ffffff !important;
+  color: #ffffff;
   border: 1px solid var(--primary);
   border-radius: 4px;
   cursor: pointer;
@@ -362,7 +362,7 @@ tr:last-child td {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
   text-decoration: none;
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .search-input {
