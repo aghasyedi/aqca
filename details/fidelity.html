@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fidelity | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Fidelity">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Fidelity</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. What is Fidelity?</h2>
+        <p>In classical statistics, if you have two probability distributions, you can calculate their overlap using metrics like the Bhattacharyya distance. In quantum information theory, we need a way to measure the "closeness" or "overlap" of two quantum states, described by density matrices \(\rho\) and \(\sigma\).</p>
+        <p>This metric is called <strong>Fidelity</strong>. It is heavily utilized by experimentalists during <a href="quantum-state-tomography.html" style="color: var(--primary); font-weight: 500;">Quantum State Tomography</a> to report how well their noisy hardware actually executed the ideal mathematical circuit.</p>
+
+        <h2 style="margin-top: 2rem;">2. The Generalized Uhlmann-Jozsa Definition</h2>
+        <p>For two arbitrary mixed states (density matrices \(\rho\) and \(\sigma\)), the fidelity is defined by a somewhat intimidating matrix equation:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(F(\rho, \sigma) = \left( \text{Tr} \sqrt{\sqrt{\rho}\sigma\sqrt{\rho}} \right)^2\)
+            </p>
+        </div>
+        <p style="color: var(--muted-text); font-size: 0.9rem;"><em>Note: In some textbooks (like Nielsen & Chuang), fidelity is defined without the square. We use the squared version here as it represents probabilities more intuitively.</em></p>
+        <p>This equation is complex because matrices generally do not commute (\(\rho\sigma \neq \sigma\rho\)). Taking the square root of a matrix involves finding its eigenvectors, taking the square root of its eigenvalues, and reconstructing it.</p>
+
+        <h2 style="margin-top: 2rem;">3. Crucial Simplifications</h2>
+        <p>Thankfully, in almost all practical laboratory applications, we are comparing a messy, experimental mixed state (\(\rho\)) against a mathematically perfect, ideal pure state (\(\sigma = |\psi\rangle\langle\psi|\)).</p>
+        <p>When at least one of the states is pure, the square roots completely collapse, and the fidelity simplifies to the expectation value of the density matrix in the ideal state:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(F(|\psi\rangle\langle\psi|, \rho) = \langle \psi | \rho | \psi \rangle\)
+            </p>
+        </div>
+
+        <p>If <em>both</em> states are pure (\(|\psi\rangle\) and \(|\phi\rangle\)), the formula simplifies even further to just the squared magnitude of their inner product—the exact same equation as the Born Rule for <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Measurement</a>!</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(F(|\psi\rangle, |\phi\rangle) = |\langle \psi | \phi \rangle|^2\)
+        </p>
+
+        <h2 style="margin-top: 2rem;">4. Fundamental Properties</h2>
+        <p>Fidelity satisfies several intuitive mathematical properties:</p>
+        <ul style="line-height: 1.8;">
+            <li><strong>Boundedness:</strong> \(0 \le F(\rho, \sigma) \le 1\). It is a probability-like measure.</li>
+            <li><strong>Identity (Maximum):</strong> \(F(\rho, \sigma) = 1\) if and only if \(\rho = \sigma\). The states are perfectly identical.</li>
+            <li><strong>Orthogonality (Minimum):</strong> \(F(\rho, \sigma) = 0\) if the states have absolutely zero overlap (they exist in orthogonal subspaces).</li>
+            <li><strong>Symmetry:</strong> \(F(\rho, \sigma) = F(\sigma, \rho)\). The closeness of A to B is the same as B to A.</li>
+            <li><strong>Unitary Invariance:</strong> \(F(U\rho U^\dagger, U\sigma U^\dagger) = F(\rho, \sigma)\). Rotating both states by the same quantum gate does not change the distance between them.</li>
+        </ul>
+        <p>While Fidelity measures "closeness", its dual metric, <a href="trace-distance.html" style="color: var(--primary); font-weight: 500;">Trace Distance</a>, measures "distinguishability."</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

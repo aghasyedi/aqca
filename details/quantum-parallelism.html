@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Parallelism | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Parallelism">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Quantum Parallelism</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Concept of Quantum Parallelism</h2>
+        <p>Quantum parallelism is a fundamental feature of many quantum algorithms. It refers to the ability of a quantum computer to evaluate a function \(f(x)\) for many different values of \(x\) simultaneously by exploiting the principle of quantum superposition.</p>
+        <p>While classical computers must evaluate a function sequentially (or use multiple processors to evaluate it in parallel), a quantum computer uses a single processing unit (the quantum circuit) to act on all possible inputs at once.</p>
+
+        <h2 style="margin-top: 2rem;">2. Creating the Superposition</h2>
+        <p>To evaluate a function on all possible \(n\)-bit inputs, we must first create a state containing all those inputs. We start with an \(n\)-qubit register initialized to the all-zero state, \(|0\rangle^{\otimes n}\).</p>
+        <p>We then apply a Hadamard gate (\(H\)) to every single qubit. The Hadamard gate creates an equal superposition of \(|0\rangle\) and \(|1\rangle\) for each qubit. Because the tensor product distributes over addition, the result is an equal superposition of all \(2^n\) possible computational basis states:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(|\psi_{\text{in}}\rangle = H^{\otimes n} |0\rangle^{\otimes n} = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle\)
+            </p>
+        </div>
+
+        <h2 style="margin-top: 2rem;">3. Evaluating the Oracle</h2>
+        <p>With our input register prepared in this massive superposition, we introduce an ancillary target qubit \(|y\rangle\), initialized to \(|0\rangle\). We then apply a <a href="quantum-oracles.html" style="color: var(--primary); font-weight: 500;">Boolean Oracle</a> \(U_f\) to the joint system.</p>
+        <p>Because quantum mechanics is strictly linear, the oracle operator distributes across the sum, evaluating the function for every single term in the superposition simultaneously in a single physical step:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(U_f \left( \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle \right) |0\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle |f(x)\rangle\)
+            </p>
+        </div>
+        
+        <h3>The Exponential Explosion</h3>
+        <p>The scale of this parallelism is difficult to comprehend. For \(n = 10\), we evaluate 1,024 inputs at once. For \(n = 50\), we evaluate 1.1 million trillion inputs. For \(n = 300\), we are evaluating more inputs simultaneously than there are estimated atoms in the observable universe. A classical computer would require the age of the universe to loop through this many inputs; the quantum computer does it in a fraction of a millisecond.</p>
+
+        <h2 style="margin-top: 2rem;">4. The Big Caveat: Wavefunction Collapse</h2>
+        <p>If quantum parallelism is so powerful, why don't quantum computers instantly solve every problem? The issue arises when we try to extract the answers. To read the output, we must perform a measurement.</p>
+        <p>According to the laws of <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Wavefunction Collapse</a>, measuring the state \(\sum |x\rangle |f(x)\rangle\) will instantly collapse the massive superposition into exactly one random basis state \(|x\rangle|f(x)\rangle\). All other \(2^n - 1\) evaluations are permanently destroyed.</p>
+        <p>You performed \(2^n\) calculations, but you are only allowed to read exactly <strong>one</strong> of them. This is no better than taking a classical computer, choosing a random input \(x\), and evaluating it once.</p>
+
+        <h2 style="margin-top: 2rem;">5. The Solution: Quantum Interference</h2>
+        <p>To extract useful global information about the function (such as finding a specific target, or determining a period), quantum algorithms combine parallelism with <strong>Interference</strong>.</p>
+        <p>By using the <a href="the-kickback-mechanism.html" style="color: var(--primary); font-weight: 500;">Phase Kickback Mechanism</a>, algorithms apply negative phases to certain states. When subsequent Hadamard gates (or other operators) are applied, the probability amplitudes of incorrect answers cancel each other out (destructive interference), while the probability amplitudes of the correct answers reinforce each other (constructive interference).</p>
+        <p>When the final measurement is taken, the system does not output a random answer, but rather outputs the desired solution with near 100% probability. Quantum parallelism generates the data, but interference is what makes it accessible.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

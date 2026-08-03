@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measurement & Wavefunction Collapse | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Measurement & Wavefunction Collapse">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Measurement & Wavefunction Collapse</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Measurement Postulate</h2>
+        <p>In quantum mechanics, measurement is not merely a passive observation of an existing property; it is an active physical process that fundamentally alters the system being observed. This is governed by the Measurement Postulate, which bridges the continuous, deterministic evolution of quantum states (via the Schrödinger equation) and the discrete, probabilistic outcomes we observe in the classical world.</p>
+
+        <h2 style="margin-top: 2rem;">2. Formal Description: Observables</h2>
+        <p>A physical quantity that can be measured (like position, momentum, or spin) is called an <strong>observable</strong>. In the mathematical formalism of quantum mechanics, an observable is represented by a <strong>Hermitian operator</strong> \(M\) (\(M = M^\dagger\)).</p>
+        <p>Because \(M\) is Hermitian, its eigenvalues are strictly real numbers. These eigenvalues, \(\{\lambda_m\}\), represent the <em>only</em> possible classical values you can obtain when you measure the system.</p>
+
+        <h2 style="margin-top: 2rem;">3. Projective Measurements (PVMs)</h2>
+        <p>The simplest and most common type of measurement is the Projective Measurement. A Hermitian observable \(M\) can be decomposed into its spectral form:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(M = \sum_m \lambda_m P_m\)
+        </p>
+        <p>where \(P_m\) is the orthogonal projector onto the eigenspace of \(M\) with eigenvalue \(\lambda_m\). These projectors satisfy two key properties:</p>
+        <ul>
+            <li><strong>Orthogonality:</strong> \(P_m P_n = \delta_{mn} P_m\) (they don't overlap).</li>
+            <li><strong>Completeness:</strong> \(\sum_m P_m = I\) (the probabilities must sum to 1).</li>
+        </ul>
+
+        <h2 style="margin-top: 2rem;">4. The Born Rule</h2>
+        <p>If a quantum system is in a state \(|\psi\rangle\), the probability of obtaining the specific measurement outcome \(\lambda_m\) is given by the Born Rule:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(P(m) = \langle \psi | P_m | \psi \rangle\)
+            </p>
+        </div>
+        <p>For a standard computational basis measurement on a single qubit, the projectors are \(P_0 = |0\rangle\langle0|\) and \(P_1 = |1\rangle\langle1|\). If \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\), then \(P(0) = |\alpha|^2\) and \(P(1) = |\beta|^2\).</p>
+
+        <h2 style="margin-top: 2rem;">5. Wavefunction Collapse (The Post-Measurement State)</h2>
+        <p>The most shocking aspect of quantum measurement is what happens to the state <em>after</em> the outcome \(\lambda_m\) is recorded. The system instantly and irreversibly "collapses" into the exact eigenstate corresponding to the measured value.</p>
+        <p>The mathematical state immediately after measurement is:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(|\psi'\rangle = \frac{P_m |\psi\rangle}{\sqrt{P(m)}}\)
+            </p>
+        </div>
+        <p>The denominator \(\sqrt{P(m)}\) is simply a normalization factor to ensure the new state vector still has a length of 1.</p>
+        <p>Because the new state is an eigenstate of the observable, repeating the exact same measurement immediately afterward will yield the exact same result \(\lambda_m\) with 100% certainty. All superposition regarding that basis has been destroyed.</p>
+
+        <h2 style="margin-top: 2rem;">6. Consequences and Philosophical Interpretations</h2>
+        <p>Wavefunction collapse fundamentally restricts how much information we can extract from a quantum system. It is the reason why <a href="quantum-parallelism.html" style="color: var(--primary); font-weight: 500;">Quantum Parallelism</a> requires interference, and it is the physical mechanism behind the <a href="the-no-cloning-theorem.html" style="color: var(--primary); font-weight: 500;">No-Cloning Theorem</a> and the <a href="heisenberg-uncertainty-principle.html" style="color: var(--primary); font-weight: 500;">Heisenberg Uncertainty Principle</a>.</p>
+        <p>The sudden, non-unitary nature of collapse has troubled physicists for a century (the "Measurement Problem"). Various interpretations exist:</p>
+        <ul>
+            <li><strong>Copenhagen Interpretation:</strong> Collapse is a real, physical event triggered by macroscopic observation.</li>
+            <li><strong>Many-Worlds Interpretation:</strong> Collapse does not happen; instead, the universe splits, and the observer becomes entangled with the outcome, experiencing only one branch of the wave function.</li>
+        </ul>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

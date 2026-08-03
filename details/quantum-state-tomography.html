@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum State Tomography | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Quantum State Tomography">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Quantum State Tomography</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Problem of State Reconstruction</h2>
+        <p>When you build a quantum circuit, you want to know if the hardware actually generated the state you asked for. But due to <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Wavefunction Collapse</a>, you cannot look at a single qubit to see its full density matrix.</p>
+        <p><strong>Quantum State Tomography</strong> (QST) is the procedure of reconstructing the complete, unknown density matrix \(\rho\) of a quantum system by performing measurements on a large ensemble of identical copies of that state.</p>
+
+        <h2 style="margin-top: 2rem;">2. Tomography of a Single Qubit</h2>
+        <p>Any 1-qubit density matrix can be completely parameterized by a 3-dimensional vector \(\vec{r} = (r_x, r_y, r_z)\) called the Bloch vector. The length of this vector is \(|\vec{r}| \le 1\).</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\rho = \frac{1}{2} (I + r_x X + r_y Y + r_z Z)\)
+        </p>
+        <p>To determine \(\rho\), the experimentalist must determine \(r_x, r_y, r_z\). It turns out these components are exactly the expectation values of the Pauli observables!</p>
+        <ul style="line-height: 1.8; background: var(--surface-hover); padding: 1.5rem 1.5rem 1.5rem 3rem; border-radius: 8px;">
+            <li>Prepare 10,000 copies, measure them in the X-basis. The average outcome (number of +1s minus number of -1s divided by total) is \(r_x = \langle X \rangle\).</li>
+            <li>Prepare another 10,000 copies, measure them in the Y-basis. The average is \(r_y = \langle Y \rangle\).</li>
+            <li>Prepare another 10,000 copies, measure them in the Z-basis. The average is \(r_z = \langle Z \rangle\).</li>
+        </ul>
+        <p>Because X, Y, and Z are <a href="mutually-unbiased-bases.html" style="color: var(--primary); font-weight: 500;">Mutually Unbiased Bases</a>, measuring one yields no information about the others, which is why we must prepare fresh copies for each basis.</p>
+
+        <h2 style="margin-top: 2rem;">3. The Trouble with Statistics: Maximum Likelihood Estimation</h2>
+        <p>In theory, the linear inversion above works perfectly. In practice, experimental measurements suffer from shot noise (finite statistics) and <a href="quantum-noise-channels.html" style="color: var(--primary); font-weight: 500;">Quantum Noise</a>.</p>
+        <p>Because of this noise, if you just plug the raw averages \(r_x, r_y, r_z\) into the formula, the resulting vector length \(|\vec{r}|\) might be greater than 1! This produces a mathematically invalid density matrix with negative probabilities (negative eigenvalues).</p>
+        <p>To fix this, modern QST uses <strong>Maximum Likelihood Estimation (MLE)</strong>. Instead of directly solving the equation, a computer runs an optimization algorithm to search through all <em>valid</em>, physical density matrices to find the one that most likely produced the observed experimental data.</p>
+        
+        <h2 style="margin-top: 2rem;">4. The Scalability Bottleneck</h2>
+        <p>While QST is essential, it does not scale. To fully characterize an \(n\)-qubit state, you must measure the expectation values of \(4^n - 1\) different Pauli operators. For just 10 qubits, that requires over a million different measurement settings, each requiring thousands of circuit executions. This exponential scaling forces researchers to rely on partial techniques (like Shadow Tomography) for larger systems.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

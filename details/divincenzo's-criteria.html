@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiVincenzo's Criteria | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - DiVincenzo's Criteria">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">DiVincenzo's Criteria</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. Introduction</h2>
+        <p>In 2000, theoretical physicist David P. DiVincenzo published a landmark paper establishing the exact physical requirements needed to construct a functional quantum computer. These criteria remain the gold standard against which all modern quantum hardware (superconducting, trapped ions, photonics, etc.) is evaluated.</p>
+
+        <h2 style="margin-top: 2rem;">2. The Five Criteria for Quantum Computation</h2>
+        
+        <ol style="line-height: 1.8; background: var(--surface-hover); padding: 2rem 2rem 2rem 3rem; border-radius: 8px; margin: 1.5rem 0;">
+            <li style="margin-bottom: 1.5rem;">
+                <strong>A scalable physical system with well characterized qubits:</strong> 
+                <br>The system must act strictly as a two-level system. If you are using energy levels of an atom, you must ensure that microwave pulses transition the atom from \(|0\rangle \rightarrow |1\rangle\) without accidentally exciting it to \(|2\rangle\) or \(|3\rangle\). Furthermore, you must be able to add more qubits (scalability) without the system falling apart due to crosstalk.
+            </li>
+            <li style="margin-bottom: 1.5rem;">
+                <strong>The ability to initialize the state of the qubits to a simple fiducial state:</strong> 
+                <br>Computation requires a blank slate. Before a circuit begins, the system must be cooled and reset to the \(|00...0\rangle\) state with extremely high <a href="fidelity.html" style="color: var(--primary); font-weight: 500;">Fidelity</a>.
+            </li>
+            <li style="margin-bottom: 1.5rem;">
+                <strong>Long relevant decoherence times, much longer than the gate operation time:</strong> 
+                <br>Quantum information decays due to <a href="quantum-noise-channels.html" style="color: var(--primary); font-weight: 500;">Quantum Noise</a>. The ratio of the <a href="decoherence-times.html" style="color: var(--primary); font-weight: 500;">Decoherence Times</a> (\(T_1\), \(T_2\)) to the gate time must be roughly \(10^4\) or \(10^5\) to allow error correction algorithms (see the <a href="threshold-theorem.html" style="color: var(--primary); font-weight: 500;">Threshold Theorem</a>) to fix errors faster than they occur.
+            </li>
+            <li style="margin-bottom: 1.5rem;">
+                <strong>A "universal" set of quantum gates:</strong> 
+                <br>The hardware must be able to execute a small set of fundamental gates that can approximate <em>any</em> \(n\)-qubit unitary matrix to arbitrary precision. A standard universal set is arbitrary single-qubit rotations combined with the two-qubit CNOT gate.
+            </li>
+            <li>
+                <strong>A qubit-specific measurement capability:</strong> 
+                <br>We must be able to perform a projective <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Measurement</a> on a single specific qubit, forcing it into a classical 0 or 1, without destroying the quantum coherence of the other \(n-1\) qubits in the processor.
+            </li>
+        </ol>
+
+        <h2 style="margin-top: 2rem;">3. The Two Criteria for Quantum Communication</h2>
+        <p>To network quantum computers together to form a "Quantum Internet" (enabling distributed quantum computing and quantum cryptography), DiVincenzo added two network criteria:</p>
+        
+        <ol start="6" style="line-height: 1.8; background: var(--surface-hover); padding: 2rem 2rem 2rem 3rem; border-radius: 8px; margin: 1.5rem 0;">
+            <li style="margin-bottom: 1.5rem;">
+                <strong>The ability to interconvert stationary and flying qubits:</strong> 
+                <br>A stationary qubit (like a superconducting transmon fixed in a dilution refrigerator) must be able to securely transfer its quantum state to a flying qubit (like a photon) to travel long distances.
+            </li>
+            <li>
+                <strong>The ability to faithfully transmit flying qubits between specified locations:</strong> 
+                <br>The flying qubits must be transmitted via fiber optic cables or free-space satellite links with minimal photon loss and without destroying their delicate entanglement.
+            </li>
+        </ol>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

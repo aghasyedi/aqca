@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Oracles | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Oracles">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Quantum Oracles</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. Introduction to Quantum Oracles</h2>
+        <p>In classical computer science, an oracle is a "black box" that computes a function \(f: \{0, 1\}^n \rightarrow \{0, 1\}^m\) in a single step, without revealing its internal workings. In quantum computing, we use quantum oracles to load classical problems into a quantum state so that algorithms can exploit <a href="quantum-parallelism.html" style="color: var(--primary); font-weight: 500;">Quantum Parallelism</a>.</p>
+        
+        <p>However, quantum mechanics imposes a strict physical constraint: all closed-system quantum operations (except measurement) must be <strong>reversible</strong>. Mathematically, this means they must be represented by Unitary matrices (\(U^\dagger U = I\)). A classical function like \(f(x) = x^2\) or a logical AND gate is inherently irreversible—if you know the output is 0, you cannot determine if the inputs were 00, 01, or 10. Therefore, classical functions cannot be directly applied to quantum states.</p>
+
+        <h2 style="margin-top: 2rem;">2. The Boolean (Bit) Oracle</h2>
+        <p>To evaluate a non-reversible classical function \(f: \{0, 1\}^n \rightarrow \{0, 1\}\) reversibly on a quantum computer, we use an ancillary (extra) register called the target register. The most standard formulation is the <strong>Boolean Oracle</strong> (or Bit Oracle), denoted as \(U_f\).</p>
+        <p>For an \(n\)-qubit input register \(|x\rangle\) and a single-qubit target register \(|y\rangle\), the oracle is defined by its action on the computational basis:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(U_f |x\rangle |y\rangle = |x\rangle |y \oplus f(x)\rangle\)
+            </p>
+        </div>
+        <p>Where \(\oplus\) represents addition modulo 2 (the XOR operation). </p>
+        
+        <h3>Proving Reversibility</h3>
+        <p>We can prove that \(U_f\) is its own inverse (an involution). If we apply \(U_f\) twice to the same state:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \begin{align*}
+            U_f \Big( U_f |x\rangle |y\rangle \Big) &= U_f \Big( |x\rangle |y \oplus f(x)\rangle \Big) \\
+            &= |x\rangle \Big| \big(y \oplus f(x)\big) \oplus f(x) \Big\rangle \\
+            &= |x\rangle |y \oplus \big(f(x) \oplus f(x)\big)\rangle
+            \end{align*}
+        </p>
+        <p>Since any bit XORed with itself is 0 (\(f(x) \oplus f(x) = 0\)), the target register returns to \(y \oplus 0 = y\). Thus, \(U_f^2 = I\), which satisfies the condition that \(U_f\) is unitary and self-adjoint (\(U_f = U_f^\dagger\)).</p>
+
+        <h2 style="margin-top: 2rem;">3. The Phase Oracle</h2>
+        <p>While the Boolean oracle flips the target bit, many quantum algorithms (such as Grover's search) require the oracle to embed the function's output into the <strong>phase</strong> of the quantum state. This is known as a <strong>Phase Oracle</strong>, denoted as \(O_f\).</p>
+        <p>The phase oracle acts only on the input register \(|x\rangle\), flipping its sign if and only if \(f(x) = 1\):</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(O_f |x\rangle = (-1)^{f(x)} |x\rangle\)
+            </p>
+        </div>
+        <p>If \(f(x) = 0\), the state is unchanged (\(1 \cdot |x\rangle\)). If \(f(x) = 1\), the state receives a phase shift of \(-1\).</p>
+        
+        <h3>Matrix Representation of a Phase Oracle</h3>
+        <p>Because the Phase Oracle simply multiplies basis states by \(\pm 1\), its matrix representation is a diagonal matrix. For a 2-qubit system (\(x \in \{00, 01, 10, 11\}\)), suppose \(f(x) = 1\) only for \(x = 10\) (the integer 2). The oracle matrix \(O_f\) would be:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(O_f = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & -1 & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}\)
+        </p>
+
+        <h2 style="margin-top: 2rem;">4. Converting Between Oracle Types</h2>
+        <p>In practice, quantum computers are usually programmed using Boolean oracles (by building a circuit of Toffoli and CNOT gates to evaluate \(f(x)\)). How do we get a Phase Oracle from a Boolean Oracle?</p>
+        <p>This is accomplished using a breathtakingly simple but profound quantum trick: we set the target qubit \(|y\rangle\) to the superposition state \(|-\rangle = \frac{1}{\sqrt{2}}(|0\rangle - |1\rangle)\). This technique is so foundational that it has its own dedicated page.</p>
+
+        <div style="background-color: var(--primary-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary); margin-top: 2.5rem;">
+            <strong>Deep Dive:</strong> To see the full mathematical derivation of how a Boolean oracle becomes a Phase oracle, read about <a href="the-kickback-mechanism.html" style="color: var(--primary); font-weight: bold; text-decoration: underline;">The Kickback Mechanism</a>.
+        </div>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

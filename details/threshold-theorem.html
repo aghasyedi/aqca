@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threshold Theorem | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Threshold Theorem">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Threshold Theorem</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Crisis of Noise</h2>
+        <p>In classical computing, hardware errors are vanishingly rare (on the order of 1 error per \(10^{17}\) operations). In quantum computing, qubits are fragile, and operations typically fail around 1 time in every 100 (\(p = 10^{-2}\)).</p>
+        <p>If we run Shor's algorithm to factor a large number, we might need a billion operations. With a 1% error rate, the probability of the algorithm succeeding without an error is \((0.99)^{1,000,000,000} \approx 0\). The algorithm will fail 100% of the time.</p>
+        <p>How can we ever run useful algorithms? The answer is the <strong>Threshold Theorem</strong>, the theoretical bedrock that proves scalable quantum computing is possible.</p>
+
+        <h2 style="margin-top: 2rem;">2. Statement of the Threshold Theorem</h2>
+        <p>Formulated independently by Shor, Aharonov, Ben-Or, and Kitaev in the late 1990s, the theorem states:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.2rem; margin: 0; font-weight: 500; line-height: 1.8;">
+                "Provided the physical error rate \(p\) of individual quantum gates is strictly below a certain constant threshold \(p_{\text{th}}\), it is possible to construct a fault-tolerant quantum computer capable of executing circuits of arbitrary depth with an arbitrarily small logical error rate."
+            </p>
+        </div>
+        <p>In other words: if your hardware is <em>just good enough</em>, you can use software (Quantum Error Correction) to simulate perfect hardware.</p>
+
+        <h2 style="margin-top: 2rem;">3. The Mechanism: Concatenation</h2>
+        <p>The theorem is proven using a fractal-like encoding strategy called <strong>Concatenation</strong> of <a href="logical-qubits.html" style="color: var(--primary); font-weight: 500;">Logical Qubits</a>.</p>
+        <p>Suppose you have a 7-qubit Steane code that can correct any 1 error. If the physical error rate is \(p\), the code fails only if 2 or more errors occur simultaneously. The probability of 2 errors is roughly \(Cp^2\) (where \(C\) is a combinatorial constant regarding how many ways 2 errors can occur).</p>
+        <p>Now, we take 7 of these logical Steane qubits and use them to build an even bigger Steane code (using 49 physical qubits). This Level-2 encoded qubit has an error rate of \(C(Cp^2)^2 = C^3 p^4\).</p>
+        <p>If we concatenate \(k\) times, the logical error rate drops double-exponentially to \(p_{\text{logical}} \approx (Cp)^{2^k} / C\).</p>
+        
+        <h3>The Threshold</h3>
+        <p>Notice the term \((Cp)\). </p>
+        <ul>
+            <li>If \(p > 1/C\), then \((Cp) > 1\). Raising a number greater than 1 to a power makes it <em>bigger</em>. Adding error correction makes the computer <em>worse</em>!</li>
+            <li>If \(p < 1/C\), then \((Cp) < 1\). Raising a fraction to a power drives it rapidly to 0. Adding error correction suppresses errors exponentially!</li>
+        </ul>
+        <p>The threshold is exactly \(p_{\text{th}} = 1/C\). As long as the hardware engineers achieve \(p < p_{\text{th}}\), the software engineers can handle the rest.</p>
+
+        <h2 style="margin-top: 2rem;">4. Modern Surface Codes</h2>
+        <p>While concatenation proves the theorem, modern designs use Topological Surface Codes. They don't concatenate; they simply tile qubits on a 2D grid. Increasing the grid size \(d\) (the distance of the code) drops the logical error rate exponentially: \(p_L \propto (p/p_{\text{th}})^{(d+1)/2}\).</p>
+        <p>The threshold for the surface code is remarkably high: \(p_{\text{th}} \approx 1\%\). Modern superconducting qubits are currently hovering right at or slightly below this critical 1% threshold boundary.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

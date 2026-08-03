@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Noise Channels | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Noise Channels">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Quantum Noise Channels</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Open Quantum System</h2>
+        <p>In idealized quantum mechanics, systems are perfectly isolated and evolve according to unitary matrices. In reality, qubits interact with their surrounding environment (heat, electromagnetic fluctuations). Because we cannot track the massive environment, the pure state of our qubit becomes entangled with the environment, resulting in a <strong>mixed state</strong>.</p>
+        <p>To mathematically describe mixed states and non-unitary evolution, we must abandon state vectors \(|\psi\rangle\) and use <strong>Density Matrices</strong> \(\rho\).</p>
+
+        <h2 style="margin-top: 2rem;">2. Kraus Operators (CPTP Maps)</h2>
+        <p>The evolution of an open quantum system is described by a Completely Positive Trace-Preserving (CPTP) map, often called a Quantum Channel \(\mathcal{E}\). It is represented using a set of <strong>Kraus operators</strong> \(\{E_k\}\):</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(\mathcal{E}(\rho) = \sum_k E_k \rho E_k^\dagger\)
+            </p>
+        </div>
+        <p>To ensure probability is conserved (the trace of the density matrix remains 1), the operators must satisfy the completeness relation: \(\sum_k E_k^\dagger E_k = I\).</p>
+
+        <h2 style="margin-top: 2rem;">3. Deriving Standard Noise Channels</h2>
+        <p>Let's construct the Kraus operators for the most common sources of error in quantum hardware.</p>
+
+        <h3 style="margin-top: 1.5rem; color: var(--primary);">Bit-Flip Channel</h3>
+        <p>With probability \(p\), the environment applies a Pauli-X gate (flipping 0 to 1 and vice versa). With probability \(1-p\), nothing happens. This destroys <a href="fidelity.html" style="color: var(--primary); font-weight: 500;">Fidelity</a>.</p>
+        <p style="font-family: Menlo, monospace; font-size: 1.1rem; background: var(--surface-hover); padding: 1rem; border-radius: 4px;">\(E_0 = \sqrt{1-p} \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}, \quad E_1 = \sqrt{p} \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}\)</p>
+
+        <h3 style="margin-top: 1.5rem; color: var(--primary);">Phase-Flip Channel</h3>
+        <p>Unique to quantum mechanics! The bit value doesn't change, but with probability \(p\), the relative phase is flipped (Pauli-Z). It transforms \(|+\rangle\) into \(|-\rangle\). This destroys superpositions without affecting classical probabilities.</p>
+        <p style="font-family: Menlo, monospace; font-size: 1.1rem; background: var(--surface-hover); padding: 1rem; border-radius: 4px;">\(E_0 = \sqrt{1-p} \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}, \quad E_1 = \sqrt{p} \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}\)</p>
+
+        <h3 style="margin-top: 1.5rem; color: var(--primary);">Depolarizing Channel</h3>
+        <p>This is the "worst-case scenario" channel. With probability \(p\), the qubit is completely randomized (replaced by the maximally mixed state \(I/2\)). It models symmetric error in all three Pauli axes (X, Y, Z).</p>
+        <p style="font-family: Menlo, monospace; font-size: 1.1rem; background: var(--surface-hover); padding: 1rem; border-radius: 4px;">
+            \(E_0 = \sqrt{1-p} I, \quad E_1 = \sqrt{\frac{p}{3}} X, \quad E_2 = \sqrt{\frac{p}{3}} Y, \quad E_3 = \sqrt{\frac{p}{3}} Z\)
+        </p>
+
+        <h3 style="margin-top: 1.5rem; color: var(--primary);">Amplitude Damping Channel</h3>
+        <p>Unlike the others, this channel is highly asymmetric. It models the loss of energy (relaxation). If a qubit is in the excited \(|1\rangle\) state, it has a probability \(\gamma\) of emitting a photon into the environment and decaying to \(|0\rangle\). If it is already in \(|0\rangle\), it cannot decay further.</p>
+        <p style="font-family: Menlo, monospace; font-size: 1.1rem; background: var(--surface-hover); padding: 1rem; border-radius: 4px;">
+            \(E_0 = \begin{bmatrix} 1 & 0 \\ 0 & \sqrt{1-\gamma} \end{bmatrix}, \quad E_1 = \begin{bmatrix} 0 & \sqrt{\gamma} \\ 0 & 0 \end{bmatrix}\)
+        </p>
+        <p>Notice that \(E_1\) is not a unitary matrix! It physically moves amplitude from \(|1\rangle\) into \(|0\rangle\). This channel is the direct physical cause of the \(T_1\) <a href="decoherence-times.html" style="color: var(--primary); font-weight: 500;">Decoherence Time</a>.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

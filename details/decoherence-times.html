@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decoherence Times | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Decoherence Times">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Decoherence Times</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. Introduction to Quantum Lifetimes</h2>
+        <p>In physical quantum hardware, qubits do not last forever. They are in constant contact with an environment (thermal radiation, magnetic impurities, cosmic rays) that inevitably causes their quantum state to leak away. The time it takes for a qubit to lose its quantum information is characterized by two distinct exponential decay constants: \(T_1\) and \(T_2\).</p>
+
+        <h2 style="margin-top: 2rem;">2. \(T_1\): Longitudinal Relaxation Time</h2>
+        <p>Also known as the "energy decay time" or "spin-lattice relaxation time". This measures how quickly an excited qubit loses energy to the environment and decays to its ground state.</p>
+        <p>If you prepare a qubit perfectly in the excited state \(|1\rangle\), it will spontaneously emit energy (e.g. a microwave photon in superconducting circuits) and drop down to \(|0\rangle\). This process is modeled mathematically by the Amplitude Damping <a href="quantum-noise-channels.html" style="color: var(--primary); font-weight: 500;">Noise Channel</a>.</p>
+        <p>The probability of finding the qubit still in the \(|1\rangle\) state after a time \(t\) decays exponentially:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(P(|1\rangle) = e^{-t / T_1}\)
+            </p>
+        </div>
+        <p>On the Bloch sphere, \(T_1\) decay manifests as the state vector slowly shrinking vertically downward along the Z-axis, eventually resting at the North Pole (\(|0\rangle\)).</p>
+
+        <h2 style="margin-top: 2rem;">3. \(T_2\): Transverse Dephasing Time</h2>
+        <p>Also known as the "coherence time" or "spin-spin relaxation time". This measures how long a qubit can maintain a delicate superposition. While \(T_1\) measures the loss of energy (diagonal elements of the density matrix), \(T_2\) measures the loss of relative phase (the off-diagonal elements).</p>
+        <p>If you prepare a qubit in the superposition state \(|+\rangle = \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)\), it sits on the equator of the Bloch sphere. However, tiny fluctuations in the environment's magnetic or electric fields cause the qubit's frequency to jitter slightly. Over time, we lose track of its exact phase (modeled by the Phase-Flip channel).</p>
+        <p>The magnitude of the off-diagonal density matrix elements \(\rho_{01}\) (which dictate the strength of interference effects) decays as:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(|\rho_{01}(t)| = |\rho_{01}(0)| e^{-t / T_2}\)
+            </p>
+        </div>
+        <p>On the Bloch sphere, \(T_2\) decay manifests as the state vector shrinking horizontally inward toward the Z-axis, destroying any superposition.</p>
+
+        <h2 style="margin-top: 2rem;">4. The Fundamental Limit</h2>
+        <p>There is a strict mathematical relationship between these two numbers. Because a qubit cannot lose its energy (decay from \(|1\rangle\) to \(|0\rangle\)) without <em>also</em> destroying any superposition it was in, \(T_1\) relaxation inherently contributes to \(T_2\) dephasing.</p>
+        <p>The total dephasing rate (\(1/T_2\)) is the sum of the pure dephasing rate (\(1/T_\phi\)) and half the relaxation rate:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\frac{1}{T_2} = \frac{1}{2T_1} + \frac{1}{T_\phi}\)
+        </p>
+        <p>Since the pure dephasing rate must be positive (\(1/T_\phi \ge 0\)), this yields the fundamental physical bound on qubit coherence:</p>
+        <p style="text-align: center; font-size: 1.4rem; font-weight: bold; margin: 1.5rem 0; color: var(--error);">
+            \(T_2 \le 2T_1\)
+        </p>
+        <p>In almost all solid-state quantum computers today, pure dephasing dominates (\(T_\phi\) is very small), meaning \(T_2 \ll T_1\). To satisfy <a href="divincenzo's-criteria.html" style="color: var(--primary); font-weight: 500;">DiVincenzo's Criteria</a>, experimentalists employ dynamical decoupling (like Hahn echoes) to artificially suppress \(T_\phi\) and extend \(T_2\).</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

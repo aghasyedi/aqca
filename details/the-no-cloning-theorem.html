@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The No-Cloning Theorem | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - The No-Cloning Theorem">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">The No-Cloning Theorem</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. Statement of the Theorem</h2>
+        <p>Published in 1982 by Wootters, Zurek, and Dieks, the <strong>No-Cloning Theorem</strong> is a profound no-go theorem in quantum mechanics. It states that it is physically impossible to create an independent and identical copy of an arbitrary, unknown quantum state.</p>
+        <p>Unlike classical data, which can be effortlessly copied from one hard drive to another, quantum information is fundamentally fragile and unique.</p>
+
+        <h2 style="margin-top: 2rem;">2. The Wootters-Zurek Proof</h2>
+        <p>The proof relies on two absolute pillars of quantum mechanics: <strong>Unitary evolution</strong> and <strong>Linearity</strong>. We proceed by contradiction.</p>
+        
+        <p>Assume there exists a "Universal Quantum Copier", described by a unitary matrix \(U\). It takes two inputs: the unknown state \(|\psi\rangle\) that we want to copy, and a blank "scratchpad" qubit initialized to \(|0\rangle\). After applying \(U\), the machine successfully copies the state:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(U(|\psi\rangle \otimes |0\rangle) = |\psi\rangle \otimes |\psi\rangle\)
+        </p>
+        
+        <p>Let's say this machine is capable of copying two distinct, arbitrary orthogonal states, \(|\phi\rangle\) and \(|\varphi\rangle\):</p>
+        <p style="text-align: center; font-size: 1.1rem; margin: 0.5rem 0;">\(U(|\phi\rangle |0\rangle) = |\phi\rangle |\phi\rangle\)</p>
+        <p style="text-align: center; font-size: 1.1rem; margin: 0.5rem 0;">\(U(|\varphi\rangle |0\rangle) = |\varphi\rangle |\varphi\rangle\)</p>
+
+        <p>Now, suppose we input a superposition of these two states, \(|\alpha\rangle = a|\phi\rangle + b|\varphi\rangle\). Because quantum operators must be <strong>linear</strong>, the operation of \(U\) on the superposition must equal the sum of its operations on the individual basis vectors:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+            <p style="font-size: 1.2rem; margin: 0;">
+                \(U(|\alpha\rangle |0\rangle) = U \Big( (a|\phi\rangle + b|\varphi\rangle) \otimes |0\rangle \Big)\)
+            </p>
+            <p style="font-size: 1.2rem; margin: 1rem 0 0 0;">
+                \(= a \, U(|\phi\rangle|0\rangle) + b \, U(|\varphi\rangle|0\rangle)\)
+            </p>
+            <p style="font-size: 1.2rem; margin: 1rem 0 0 0; color: var(--primary); font-weight: bold;">
+                \(= a |\phi\rangle|\phi\rangle + b |\varphi\rangle|\varphi\rangle\)
+            </p>
+        </div>
+
+        <p>However, if the machine actually <em>cloned</em> the state \(|\alpha\rangle\), the output should physically be two independent copies of \(|\alpha\rangle\):</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+            <p style="font-size: 1.2rem; margin: 0;">
+                \(|\alpha\rangle \otimes |\alpha\rangle = (a|\phi\rangle + b|\varphi\rangle) \otimes (a|\phi\rangle + b|\varphi\rangle)\)
+            </p>
+            <p style="font-size: 1.2rem; margin: 1rem 0 0 0; color: var(--error); font-weight: bold;">
+                \(= a^2 |\phi\rangle|\phi\rangle + ab |\phi\rangle|\varphi\rangle + ba |\varphi\rangle|\phi\rangle + b^2 |\varphi\rangle|\varphi\rangle\)
+            </p>
+        </div>
+
+        <h3>The Contradiction</h3>
+        <p>For these two expressions to be equal (i.e., for the copier to actually work), the cross terms \(ab\) must be zero. This is only true if either \(a=0\) or \(b=0\), meaning the state was not a superposition at all! Therefore, a universal cloning machine violates the linearity of quantum mechanics and cannot exist.</p>
+
+        <h2 style="margin-top: 2rem;">3. Implications and the No-Deleting Theorem</h2>
+        <p>Because you cannot copy an unknown quantum state, classical error correction (which relies on backing up data) is impossible. This led to the development of highly complex <a href="logical-qubits.html" style="color: var(--primary); font-weight: 500;">Logical Qubits</a> to protect data using entanglement instead of copying.</p>
+        <p>Furthermore, in 2000, the corollary <strong>No-Deleting Theorem</strong> was proven: it is equally impossible to take two identical unknown quantum states and delete one of them to return the scratchpad to a pristine \(|0\rangle\) state. Quantum information is strictly conserved.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

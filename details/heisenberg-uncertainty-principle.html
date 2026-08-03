@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heisenberg Uncertainty Principle | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Heisenberg Uncertainty Principle">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Heisenberg Uncertainty Principle</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Generalized Robertson-Schrödinger Relation</h2>
+        <p>While often introduced in the context of position (\(x\)) and momentum (\(p\)), the Heisenberg Uncertainty Principle applies to <em>any</em> two non-commuting Hermitian observables \(A\) and \(B\).</p>
+        <p>The standard deviation (or uncertainty) of an observable \(A\) is defined as \(\Delta A = \sqrt{\langle A^2 \rangle - \langle A \rangle^2}\). For any quantum state \(|\psi\rangle\), the product of the uncertainties of two observables is strictly bounded by the generalized Robertson-Schrödinger inequality:</p>
+        
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(\Delta A \cdot \Delta B \ge \frac{1}{2} \sqrt{ |\langle [A, B] \rangle|^2 + |\langle \{A, B\} \rangle - 2\langle A \rangle \langle B \rangle|^2 }\)
+            </p>
+        </div>
+        
+        <p>where \([A, B] = AB - BA\) is the commutator, and \(\{A, B\} = AB + BA\) is the anti-commutator. Because the second term inside the square root is always non-negative, this is often simplified to the more famous Robertson uncertainty relation:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\Delta A \cdot \Delta B \ge \frac{1}{2} |\langle [A, B] \rangle|\)
+        </p>
+
+        <h2 style="margin-top: 2rem;">2. Uncertainty in Qubits (Pauli Matrices)</h2>
+        <p>In quantum computing, our primary observables are the Pauli matrices (\(X\), \(Y\), and \(Z\)). These operators do not commute. Let's examine the commutator between \(X\) and \(Z\):</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \([X, Z] = XZ - ZX = -iY - (iY) = -2iY\)
+        </p>
+        <p>Plugging this into the Robertson relation yields:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.3rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(\Delta X \cdot \Delta Z \ge |\langle Y \rangle|\)
+            </p>
+        </div>
+
+        <h3>A Concrete Example</h3>
+        <p>Suppose our qubit is prepared exactly in the \(|0\rangle\) state. Because \(|0\rangle\) is an eigenstate of the \(Z\) operator, measuring in the Z-basis yields \(+1\) with 100% certainty. The variance \(\Delta Z = 0\).</p>
+        <p>To satisfy the inequality, what must \(\Delta X\) be? The expectation value \(\langle Y \rangle\) for the state \(|0\rangle\) is 0. However, using the Robertson-Schrödinger relation (with the anti-commutator), we find that because \(X\) and \(Z\) are <a href="mutually-unbiased-bases.html" style="color: var(--primary); font-weight: 500;">Mutually Unbiased Bases</a>, preparing a state with zero uncertainty in \(Z\) forces maximum uncertainty in \(X\).</p>
+        <p>If you measure \(|0\rangle\) in the X-basis, you have a 50% chance of getting \(+1\) (\(|+\rangle\)) and a 50% chance of getting \(-1\) (\(|-\rangle\)). The expectation value \(\langle X \rangle = 0\), and \(\langle X^2 \rangle = 1\), giving \(\Delta X = 1\), the maximum possible uncertainty for a Pauli measurement.</p>
+
+        <h2 style="margin-top: 2rem;">3. Physical Interpretation</h2>
+        <p>It is vital to understand that this uncertainty is not due to clumsy experimental equipment or human ignorance. It is an intrinsic mathematical property of waves (Fourier transforms) and Hilbert space. A quantum state <strong>literally cannot possess</strong> a well-defined value for both \(X\) and \(Z\) simultaneously.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

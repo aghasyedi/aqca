@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutually Unbiased Bases | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Mutually Unbiased Bases">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Mutually Unbiased Bases</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. Mathematical Definition in Arbitrary Dimensions</h2>
+        <p>In a \(d\)-dimensional Hilbert space, two orthonormal bases \(\mathcal{B}_1 = \{|\psi_1\rangle, \dots, |\psi_d\rangle\}\) and \(\mathcal{B}_2 = \{|\phi_1\rangle, \dots, |\phi_d\rangle\}\) are said to be <strong>Mutually Unbiased Bases (MUBs)</strong> if the inner product between any state in the first basis and any state in the second basis has a constant magnitude.</p>
+        <p>Mathematically, for all \(i\) and \(j\) in \(\{1, \dots, d\}\):</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(|\langle \psi_i | \phi_j \rangle|^2 = \frac{1}{d}\)
+            </p>
+        </div>
+        <p>This means that if a system is prepared in a state belonging to \(\mathcal{B}_1\), and a measurement is performed in the basis \(\mathcal{B}_2\), all \(d\) possible outcomes are equally likely. The measurement result is completely random, yielding maximum <a href="heisenberg-uncertainty-principle.html" style="color: var(--primary); font-weight: 500;">Heisenberg Uncertainty</a>.</p>
+
+        <h2 style="margin-top: 2rem;">2. MUBs for a Single Qubit (d = 2)</h2>
+        <p>For a single qubit (\(d=2\)), the maximum number of mutually unbiased bases is \(d+1 = 3\). These three bases correspond perfectly to the eigenstates of the three Pauli matrices (X, Y, and Z):</p>
+        <ul style="line-height: 1.8; margin-top: 1rem;">
+            <li><strong>Z-basis (Rectilinear):</strong> The computational basis \(\{|0\rangle, |1\rangle\}\). Eigenstates of the Pauli-Z operator.</li>
+            <li><strong>X-basis (Diagonal):</strong> \(\{|+\rangle, |-\rangle\}\), where \(|\pm\rangle = \frac{1}{\sqrt{2}}(|0\rangle \pm |1\rangle)\). Eigenstates of the Pauli-X operator.</li>
+            <li><strong>Y-basis (Circular):</strong> \(\{|+i\rangle, |-i\rangle\}\), where \(|\pm i\rangle = \frac{1}{\sqrt{2}}(|0\rangle \pm i|1\rangle)\). Eigenstates of the Pauli-Y operator.</li>
+        </ul>
+        <p>Let's verify the unbiased condition between the Z-basis and X-basis:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(|\langle 0 | + \rangle|^2 = \left| \langle 0 | \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \right) \right|^2 = \left| \frac{1}{\sqrt{2}} \right|^2 = \frac{1}{2}\)
+        </p>
+
+        <h2 style="margin-top: 2rem;">3. The BB84 Protocol (Quantum Cryptography)</h2>
+        <p>MUBs are not just mathematical curiosities; they are the physical foundation of quantum cryptography, specifically Quantum Key Distribution (QKD) protocols like BB84 (developed by Bennett and Brassard in 1984).</p>
+        <p>In BB84, Alice wants to send a secret cryptographic key to Bob. She encodes random bits (0 or 1) using randomly chosen bases (either Z or X). She sends these photons to Bob, who measures them using randomly chosen bases (Z or X).</p>
+        
+        <h3>The Eavesdropper's Dilemma</h3>
+        <p>Suppose an eavesdropper, Eve, intercepts a photon. Because of the <a href="the-no-cloning-theorem.html" style="color: var(--primary); font-weight: 500;">No-Cloning Theorem</a>, she cannot copy it. She must measure it to read it. But she doesn't know which basis Alice used!</p>
+        <p>If Alice sent a \(|+\rangle\) state (X-basis, representing a bit 0), and Eve guesses incorrectly and measures in the Z-basis, <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Wavefunction Collapse</a> forces the state to become either \(|0\rangle\) or \(|1\rangle\) with 50% probability.</p>
+        <p>When Bob finally receives the photon and measures it in the correct X-basis, he will no longer get \(|+\rangle\) with 100% certainty; he has a 50% chance of getting \(|-\rangle\). Eve's measurement in an unbiased basis introduced a detectable statistical error rate (ideally 25%) into the transmission, alerting Alice and Bob to the eavesdropping attempt.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

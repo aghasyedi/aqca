@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kickback Mechanism | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - The Kickback Mechanism">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">The Kickback Mechanism</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. Introduction to Phase Kickback</h2>
+        <p>The <strong>Phase Kickback mechanism</strong> (often just called "kickback") is arguably the most important algorithmic building block in quantum computing. It allows a quantum computer to transfer the result of a function evaluation from an ancillary target register directly into the <em>phase</em> of the input register.</p>
+        <p>Without kickback, algorithms like Deutsch-Jozsa, Bernstein-Vazirani, Simon's algorithm, and Grover's search simply could not exist. It is the bridge that converts a <a href="quantum-oracles.html" style="color: var(--primary); font-weight: 500;">Boolean Oracle</a> into a Phase Oracle.</p>
+
+        <h2 style="margin-top: 2rem;">2. The Mathematical Derivation</h2>
+        <p>Suppose we are given a Boolean oracle \(U_f\) for a function \(f(x)\), which operates on an input register \(|x\rangle\) and a target qubit \(|y\rangle\):</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f |x\rangle|y\rangle = |x\rangle|y \oplus f(x)\rangle\)</p>
+        
+        <p>To trigger the kickback mechanism, the experimentalist must initialize the target qubit \(|y\rangle\) into the negative superposition state, known as the \(|-\rangle\) state:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|-\rangle = \frac{1}{\sqrt{2}} (|0\rangle - |1\rangle)\)</p>
+        
+        <p>Now, let us apply the oracle \(U_f\) to the joint system \(|x\rangle \otimes |-\rangle\). Because quantum operators are linear, we can distribute \(U_f\) inside the superposition:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \begin{align*}
+            U_f \Big( |x\rangle \otimes |-\rangle \Big) &= U_f \left( |x\rangle \otimes \frac{|0\rangle - |1\rangle}{\sqrt{2}} \right) \\[1em]
+            &= \frac{1}{\sqrt{2}} \Big( U_f|x\rangle|0\rangle - U_f|x\rangle|1\rangle \Big) \\[1em]
+            &= \frac{1}{\sqrt{2}} \Big( |x\rangle|0 \oplus f(x)\rangle - |x\rangle|1 \oplus f(x)\rangle \Big)
+            \end{align*}
+        </p>
+        
+        <p>To resolve this, we must evaluate the expression for the two possible binary values of the function \(f(x)\).</p>
+        
+        <h3>Case 1: If \(f(x) = 0\)</h3>
+        <p>If the function evaluates to zero, \(0 \oplus 0 = 0\) and \(1 \oplus 0 = 1\). The state becomes:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\frac{1}{\sqrt{2}} \Big( |x\rangle|0\rangle - |x\rangle|1\rangle \Big) = |x\rangle \otimes \frac{|0\rangle - |1\rangle}{\sqrt{2}} = |x\rangle \otimes |-\rangle\)
+        </p>
+        <p>The state remains completely unchanged. This is equivalent to multiplying by \(+1\).</p>
+        
+        <h3>Case 2: If \(f(x) = 1\)</h3>
+        <p>If the function evaluates to one, \(0 \oplus 1 = 1\) and \(1 \oplus 1 = 0\). The state becomes:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\frac{1}{\sqrt{2}} \Big( |x\rangle|1\rangle - |x\rangle|0\rangle \Big)\)
+        </p>
+        <p>Notice that the order of the terms has swapped! We can factor out a \(-1\) to restore the original order:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(- \frac{1}{\sqrt{2}} \Big( |x\rangle|0\rangle - |x\rangle|1\rangle \Big) = - \Big( |x\rangle \otimes |-\rangle \Big)\)
+        </p>
+        <p>The state has gained a global phase of \(-1\).</p>
+        
+        <h2 style="margin-top: 2rem;">3. The Unified Kickback Equation</h2>
+        <p>We can combine Case 1 and Case 2 into a single, elegant mathematical equation using an exponent:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(U_f |x\rangle |-\rangle = (-1)^{f(x)} |x\rangle |-\rangle\)
+            </p>
+        </div>
+        
+        <h3>Why is it called "Kickback"?</h3>
+        <p>Look closely at the equation above. The target qubit \(|-\rangle\) <strong>did not change</strong>. It started as \(|-\rangle\) and it ended as \(|-\rangle\). However, a phase of \((-1)^{f(x)}\) has appeared. </p>
+        <p>Because the target qubit is factored out, this phase factor physically acts upon the input register \(|x\rangle\). The information \(f(x)\) was computed on the target qubit, but it got "kicked back" up into the phase of the control qubit. </p>
+
+        <h2 style="margin-top: 2rem;">4. Eigenvalue Interpretation</h2>
+        <p>An advanced way to understand phase kickback is through linear algebra and eigenvectors.</p>
+        <p>When \(f(x) = 1\), the Boolean oracle acts as a Pauli-X gate (a quantum NOT gate) applied to the target qubit. The Pauli-X gate flips \(|0\rangle\) to \(|1\rangle\) and vice versa.</p>
+        <p>What are the eigenvectors of the Pauli-X matrix? They are the \(|+\rangle\) and \(|-\rangle\) states:</p>
+        <ul>
+            <li>\(X|+\rangle = +1 |+\rangle\) (Eigenvalue of +1)</li>
+            <li>\(X|-\rangle = -1 |-\rangle\) (Eigenvalue of -1)</li>
+        </ul>
+        <p>Because we prepared the target qubit in the \(|-\rangle\) state, applying the oracle is equivalent to applying an operation to its own eigenvector. The target state cannot change, but it emits its eigenvalue (\(-1\)) which factors out to the front of the joint tensor product.</p>
+        
+        <h2 style="margin-top: 2rem;">5. A Simple Example: The CNOT Gate</h2>
+        <p>The CNOT (Controlled-NOT) gate is the simplest example of a boolean oracle, where \(f(x) = x\). It flips the target if the control is \(|1\rangle\).</p>
+        <p>If we prepare the control in \(|+\rangle\) and the target in \(|-\rangle\):</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\text{CNOT} \Big( |+\rangle \otimes |-\rangle \Big) = \text{CNOT} \left( \frac{|0\rangle + |1\rangle}{\sqrt{2}} \otimes |-\rangle \right)\)
+        </p>
+        <p>Distributing this out:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\frac{1}{\sqrt{2}} \Big( \text{CNOT}|0\rangle|-\rangle + \text{CNOT}|1\rangle|-\rangle \Big)\)
+        </p>
+        <p>When the control is \(|0\rangle\), nothing happens. When the control is \(|1\rangle\), the target \(|-\rangle\) emits a \(-1\) phase:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(\frac{1}{\sqrt{2}} \Big( |0\rangle|-\rangle - |1\rangle|-\rangle \Big) = \left( \frac{|0\rangle - |1\rangle}{\sqrt{2}} \right) \otimes |-\rangle = |-\rangle \otimes |-\rangle\)
+        </p>
+        <p>The target qubit stayed \(|-\rangle\), but the control qubit transformed from \(|+\rangle\) into \(|-\rangle\). The phase was kicked back, completely altering the state of the control qubit without ever touching it directly!</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trace Distance | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Trace Distance">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Trace Distance</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. What is Trace Distance?</h2>
+        <p>While <a href="fidelity.html" style="color: var(--primary); font-weight: 500;">Fidelity</a> measures how "close" or "overlapping" two quantum states are, the <strong>Trace Distance</strong> is the ultimate metric for how "distinguishable" they are. It is the quantum generalization of the classical Total Variation Distance between probability distributions.</p>
+
+        <h2 style="margin-top: 2rem;">2. Mathematical Definition</h2>
+        <p>For two density matrices \(\rho\) and \(\sigma\), the trace distance \(D(\rho, \sigma)\) is defined as half of the trace norm of their difference:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center; border-left: 4px solid var(--primary);">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(D(\rho, \sigma) = \frac{1}{2} ||\rho - \sigma||_{\text{tr}} = \frac{1}{2} \text{Tr} \left| \rho - \sigma \right|\)
+            </p>
+        </div>
+        <p>Where the absolute value of a matrix \(A\) is defined as \(|A| = \sqrt{A^\dagger A}\). Because \(\rho - \sigma\) is Hermitian, its eigenvalues are real, and the trace norm is simply the sum of the absolute values of its eigenvalues.</p>
+        <p>Trace distance is bounded between 0 and 1:
+        <ul style="line-height: 1.8;">
+            <li>\(D = 0\) means the states are identical (indistinguishable).</li>
+            <li>\(D = 1\) means the states are perfectly orthogonal (perfectly distinguishable).</li>
+        </ul>
+
+        <h2 style="margin-top: 2rem;">3. The Operational Interpretation</h2>
+        <p>The trace distance is not just a mathematical abstraction; it has a profound, real-world operational meaning.</p>
+        <p><strong>The Distinguishability Game:</strong> Suppose a referee secretly prepares a quantum state. They flip a fair classical coin. If heads, they prepare state \(\rho\). If tails, they prepare state \(\sigma\). They hand this unknown single qubit to you.</p>
+        <p>Your task is to perform a single <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Measurement</a> (using any combination of projectors or POVMs you want) to guess whether you were handed \(\rho\) or \(\sigma\).</p>
+        
+        <p>No matter how clever your measurement strategy is, your maximum possible probability of guessing correctly is strictly bounded by the trace distance:</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+            <p style="font-size: 1.4rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(P_{\text{guess}} \le \frac{1}{2} + \frac{1}{2} D(\rho, \sigma)\)
+            </p>
+        </div>
+        <p>If \(D=1\), you can always guess correctly (\(P=1\)). If \(D=0\), the states are identical, and you are reduced to randomly guessing (\(P = 0.5\)).</p>
+
+        <h2 style="margin-top: 2rem;">4. The Fuchs-van de Graaf Inequalities</h2>
+        <p>Because Fidelity (\(F\)) measures overlap and Trace Distance (\(D\)) measures distinguishability, they are inversely related. This exact relationship was proven by Fuchs and van de Graaf, establishing that if you know one, you can bound the other:</p>
+        <p style="text-align: center; font-size: 1.3rem; margin: 1.5rem 0; font-weight: bold;">
+            \(1 - \sqrt{F(\rho, \sigma)} \le D(\rho, \sigma) \le \sqrt{1 - F(\rho, \sigma)}\)
+        </p>
+        <p>For the special case where at least one of the states is pure, the upper and lower bounds converge perfectly, yielding the exact equality:</p>
+        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">
+            \(D(|\psi\rangle, \rho) = \sqrt{1 - F(|\psi\rangle\langle\psi|, \rho)}\)
+        </p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>

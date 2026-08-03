@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logical Qubits | Detailed Derivations | AQCA</title>
+    <meta name="description" content="AQCA - Logical Qubits">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/icons/icon.png">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item"><a href="../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
+                <div class="nav-item"><a href="../preface.html" class="nav-link">Preface</a></div>
+                <div class="nav-item"><a href="../basics.html" class="nav-link">Quantum Computing Basics</a></div>
+                <div class="nav-item"><a href="../appendix.html" class="nav-link">Appendix</a></div>
+                
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="false">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                    </ul>
+                </div>
+                
+                <div class="nav-item"><a href="../visualise.html" class="nav-link">Visualise</a></div>
+                <div class="nav-item"><a href="../analysis.html" class="nav-link">Analysis Centre</a></div>
+                <div class="nav-item"><a href="../resources.html" class="nav-link">Resources</a></div>
+                <div class="nav-item"><a href="../references.html" class="nav-link">References</a></div>
+                <div class="nav-item"><a href="../developer.html" class="nav-link">Developer</a></div>
+                <div class="nav-item"><a href="../about.html" class="nav-link">About AQCA</a></div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;">
+                <a href="../appendix.html" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; text-decoration: none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to Appendix
+                </a>
+                <h1 style="margin-bottom: 0; font-size: 2.2rem;">Logical Qubits</h1>
+            </div>
+            
+            <div class="content-section" style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.7;">
+
+        <h2 style="margin-top: 0;">1. The Need for Error Correction</h2>
+        <p>In classical computers, memory is protected by redundancy. If you want to protect a bit from flipping, you copy it three times (0 becomes 000). If one bit flips (010), you take a majority vote to correct it back to 000.</p>
+        <p>Quantum mechanics strictly forbids this approach. The <a href="the-no-cloning-theorem.html" style="color: var(--primary); font-weight: 500;">No-Cloning Theorem</a> prevents copying unknown states, and <a href="measurement-and-wavefunction-collapse.html" style="color: var(--primary); font-weight: 500;">Wavefunction Collapse</a> means that taking a "majority vote" by measuring the qubits would instantly destroy any superposition.</p>
+        <p>Quantum Error Correction (QEC) solves this by entangling a single qubit's information across a vast, highly entangled array of noisy <strong>physical qubits</strong> to create one highly reliable <strong>logical qubit</strong>.</p>
+
+        <h2 style="margin-top: 2rem;">2. Peter Shor's 9-Qubit Code</h2>
+        <p>In 1995, Peter Shor introduced the very first quantum error-correcting code capable of protecting against both Bit-Flips (Pauli-X) and Phase-Flips (Pauli-Z) simultaneously.</p>
+        
+        <p>The code takes a single logical state \(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\) and encodes it into 9 physical qubits. The logical basis states are defined as highly entangled "Cat States":</p>
+        <div style="background-color: var(--surface-hover); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; text-align: center;">
+            <p style="font-size: 1.3rem; margin: 0 0 1rem 0; font-weight: bold; color: var(--primary);">
+                \(|0\rangle_L = \frac{1}{2\sqrt{2}} \Big( |000\rangle + |111\rangle \Big) \otimes \Big( |000\rangle + |111\rangle \Big) \otimes \Big( |000\rangle + |111\rangle \Big)\)
+            </p>
+            <p style="font-size: 1.3rem; margin: 0; font-weight: bold; color: var(--primary);">
+                \(|1\rangle_L = \frac{1}{2\sqrt{2}} \Big( |000\rangle - |111\rangle \Big) \otimes \Big( |000\rangle - |111\rangle \Big) \otimes \Big( |000\rangle - |111\rangle \Big)\)
+            </p>
+        </div>
+        
+        <h3>Syndrome Measurement</h3>
+        <p>To detect errors without collapsing the superposition (\(\alpha\) and \(\beta\)), we measure <strong>parities</strong> rather than single qubits. Using <a href="quantum-oracles.html" style="color: var(--primary); font-weight: 500;">ancilla qubits</a>, we can ask questions like: <em>"Are qubits 1 and 2 the same, or different?"</em></p>
+        <p>If an X-error flips qubit 1, the parity check returns "Different". We now have an error signature (a <strong>Syndrome</strong>) telling us exactly which physical qubit flipped, allowing us to apply an X-gate to fix it, all without ever asking "Are you a 0 or a 1?".</p>
+
+        <h2 style="margin-top: 2rem;">3. The Stabilizer Formalism</h2>
+        <p>Modern QEC uses the Stabilizer Formalism, developed by Daniel Gottesman. Instead of writing out massive state vectors (like the 9-qubit code above), a logical state is defined as the joint +1 eigenspace of a set of commuting Pauli operators (called Stabilizers).</p>
+        <p>For example, the Surface Code uses a 2D checkerboard grid of physical qubits. Half the squares measure Z-parity (to detect X errors) and half measure X-parity (to detect Z errors). As long as the physical error rate is below the boundary set by the <a href="threshold-theorem.html" style="color: var(--primary); font-weight: 500;">Threshold Theorem</a>, the surface code can suppress errors exponentially by simply increasing the size of the checkerboard grid.</p>
+
+</div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <p>&copy; 2026 AQCA - All Quantum Computing Algorithms</p>
+        </div>
+    </footer>
+    <script src="../js/main.js"></script>
+</body>
+</html>
