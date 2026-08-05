@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quantum Computing Basics | AQCA</title>
     <meta name="description" content="AQCA - Quantum Computing Basics">
-    
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    
-    
+
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Menlo&display=swap"
+        rel="stylesheet">
+
     <!-- MathJax for LaTeX rendering -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      }
-    };
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/icons/icon.png">
 </head>
+
 <body>
     <header class="site-header">
         <div class="header-left">
@@ -40,7 +44,7 @@
                 <span class="subtitle">All Quantum Computing Algorithms</span>
             </div>
         </div>
-        
+
         <div class="header-right">
             <img src="assets/icons/icon.png" alt="Institute Logo" class="header-logo">
             <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
@@ -51,7 +55,8 @@
         <aside class="sidebar" id="sidebar">
             <nav class="nav-menu">
                 <div class="nav-item">
-                    <a href="index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                    <a href="index.html" class="nav-link"><span class="step-num"
+                            style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
                 </div>
                 <div class="nav-item">
                     <a href="about.html" class="nav-link">About AQCA</a>
@@ -69,35 +74,51 @@
                     </button>
                     <ul class="nav-subgroup">
                         <li><a href="algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
-                        
+
                         <li class="nav-category-label">1. Quantum Communication</li>
-                        <li><a href="algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
-                        <li><a href="algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
-                        <li><a href="algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
-                        <li><a href="algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
-                        
+                        <li><a href="algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a>
+                        </li>
+                        <li><a href="algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense
+                                Coding</a></li>
+                        <li><a href="algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum
+                                Teleportation</a></li>
+                        <li><a href="algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement
+                                Swapping</a></li>
+
                         <li class="nav-category-label">2. Early Oracle Algorithms</li>
-                        <li><a href="algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
-                        <li><a href="algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
-                        <li><a href="algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a>
+                        </li>
+                        <li><a href="algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a>
+                        </li>
+                        <li><a href="algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">•
+                                Bernstein–Vazirani</a></li>
                         <li><a href="algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
-                        
+
                         <li class="nav-category-label">3. Core Algorithms</li>
-                        <li><a href="algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
-                        <li><a href="algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier
+                                Transform</a></li>
+                        <li><a href="algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase
+                                Estimation</a></li>
                         <li><a href="algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
-                        <li><a href="algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
-                        
-                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">•
+                                Amplitude Amplification</a></li>
+
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span
+                                class="badge-beta">In-Progress</span></li>
                         <li><a href="algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
-                        <li><a href="algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum
+                                Eigensolver</a></li>
                         <li><a href="algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
                         <li><a href="algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
-                        
-                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
-                        <li><a href="algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
-                        <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
-                        <li><a href="algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+
+                        <li class="nav-category-label">5. Quantum Error Correction <span
+                                class="badge-beta">In-Progress</span></li>
+                        <li><a href="algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a>
+                        </li>
+                        <li><a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's
+                                9-Qubit Code</a></li>
+                        <li><a href="algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit
+                                Code</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -122,584 +143,804 @@
         </aside>
 
         <main id="main-content" class="main-content">
-            
-    <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start;">
-        <h1 style="margin-bottom: 0.5rem;">Quantum Computing Basics</h1>
-        <p style="color: var(--muted-text); margin-top: 0;">The foundational mathematics and physical principles of quantum information.</p>
-        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem; margin-bottom: 3rem; flex-wrap: wrap; width: 100%;">
-            <a href="#quantum-gates" id="jumpBtn" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; width: fit-content; text-decoration: none; height: fit-content; margin-top: 0;">
-                Jump to Quantum Gates List
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-            </a>
-            <button id="expandAllBtn" class="btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; width: fit-content; text-decoration: none; height: fit-content; margin-top: 0;">
-                Expand All
-            </button>
-            <input type="text" id="basicsSearch" placeholder="Search in page..." class="search-input" style="margin-bottom: 0; max-width: 300px; padding: 0.5rem 1rem; font-size: 0.9rem;">
-        </div>
-    </div>
-    
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>1. Dirac Notation & State Vectors</h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>In quantum mechanics, the state of a system is represented by a vector in a complex Hilbert space. To simplify the mathematics, Paul Dirac introduced the <strong>Bra-Ket</strong> notation.</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>Ket \(|\psi\rangle\)</strong>: Represents a column vector describing a quantum state. For example, the computational basis states are \(|0\rangle = \begin{pmatrix} 1 \\ 0 \end{pmatrix}\) and \(|1\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}\).</li>
-            <li><strong>Bra \(\langle\psi|\)</strong>: Represents a row vector, which is the complex conjugate transpose (Hermitian conjugate) of the ket. \(\langle\psi| = (|\psi\rangle)^\dagger\).</li>
-            <li><strong>Inner Product (Bracket) \(\langle\phi|\psi\rangle\)</strong>: Yields a scalar complex number. It represents the probability amplitude of state \(|\psi\rangle\) collapsing into state \(|\phi\rangle\). Orthogonal states have an inner product of 0 (e.g., \(\langle 0 | 1 \rangle = 0\)).</li>
-            <li><strong>Tensor Product \(|\psi\rangle \otimes |\phi\rangle\) or \(|\psi\phi\rangle\)</strong>: Used to describe multi-qubit systems. Two independent qubits combine their state spaces multiplicatively.</li>
-        </ul>        </div>
-    </details>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>2. Superposition & Entanglement</h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<h3 style="margin-top: 1.5rem;">Superposition</h3>
-        <p>Unlike classical bits that exist strictly as 0 or 1, a quantum bit (qubit) can exist in a linear combination of both states simultaneously until measured. This is expressed as:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\)</p>
-        <p>Here, \(\alpha\) and \(\beta\) are complex numbers known as probability amplitudes. The Born rule states that the probability of measuring \(|0\rangle\) is \(|\alpha|^2\) and measuring \(|1\rangle\) is \(|\beta|^2\). Due to the conservation of probability, they must satisfy the normalization condition: <strong>\(|\alpha|^2 + |\beta|^2 = 1\)</strong>.</p>
-        
-        <h3 style="margin-top: 2rem;">Entanglement</h3>
-        <p>Entanglement is a purely quantum phenomenon where two or more qubits become perfectly correlated such that the state of one qubit cannot be described independently of the state of the others, no matter the physical distance between them. A classic example is the Bell state:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt{2}}\)</p>
-        <p>Measuring the first qubit immediately determines the state of the second qubit. Entanglement is the primary resource for quantum communication (like Superdense Coding and Quantum Teleportation) and exponential computational speedups.</p>        </div>
-    </details>
-
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>3. Density Matrices & Mixed States</h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>While state vectors (\(|\psi\rangle\)) perfectly describe <strong>pure states</strong> (systems fully isolated from their environment), understanding noisy quantum systems, thermal states, partial measurements, and decoherence requires the density matrix framework.</p>
-        
-        <h3 style="margin-top: 1.5rem;">Pure vs. Mixed States</h3>
-        <ul style="line-height: 1.6;">
-            <li><strong>Pure State:</strong> A system whose quantum state is fully known, represented by a single vector \(|\psi\rangle\). Its density matrix is defined as: <br><span style="display:block; text-align:center; font-size: 1.2rem; margin: 1rem 0;">\(\rho = |\psi\rangle\langle\psi|\)</span></li>
-            <li><strong>Mixed State:</strong> A statistical ensemble of pure states \(|\psi_i\rangle\), each occurring with classical probability \(p_i\): <br><span style="display:block; text-align:center; font-size: 1.2rem; margin: 1rem 0;">\(\rho = \sum_i p_i |\psi_i\rangle\langle\psi_i|, \quad \text{where } \sum_i p_i = 1\)</span></li>
-        </ul>
-
-        <h3 style="margin-top: 1.5rem;">Key Properties</h3>
-        <ul style="line-height: 1.6;">
-            <li><strong>Trace Normalisation:</strong> \(\text{Tr}(\rho) = 1\) (preserves total probability).</li>
-            <li><strong>Purity Test:</strong>
-                <ul>
-                    <li>For a pure state: \(\text{Tr}(\rho^2) = 1\)</li>
-                    <li>For a mixed state: \(\text{Tr}(\rho^2) < 1\)</li>
-                </ul>
-            </li>
-            <li><strong>Partial Trace:</strong> Used to extract the reduced density matrix \(\rho_A = \text{Tr}_B(\rho_{AB})\) of a sub-system A that is entangled with sub-system B.</li>
-        </ul>        </div>
-    </details>
-
-    <details class="content-section basics-accordion" id="quantum-gates" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>4. Quantum Gates Reference</h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<h3 style="margin-top: 1.5rem;">A. Single-Qubit Gates</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gate</th>
-                    <th>Symbol / Matrix</th>
-                    <th>Main Purpose</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Identity</td>
-                    <td>\(I = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}\)</td>
-                    <td>Does nothing</td>
-                </tr>
-                <tr>
-                    <td>Pauli-X</td>
-                    <td>\(X = \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\)</td>
-                    <td>Quantum NOT / bit flip</td>
-                </tr>
-                <tr>
-                    <td>Pauli-Y</td>
-                    <td>\(Y = \begin{bmatrix}0 & -i \\ i & 0\end{bmatrix}\)</td>
-                    <td>Bit + phase flip</td>
-                </tr>
-                <tr>
-                    <td>Pauli-Z</td>
-                    <td>\(Z = \begin{bmatrix}1 & 0 \\ 0 & -1\end{bmatrix}\)</td>
-                    <td>Phase flip</td>
-                </tr>
-                <tr>
-                    <td>Hadamard</td>
-                    <td>\(H = \frac{1}{\sqrt{2}\begin{bmatrix}1 & 1 \\ 1 & -1\end{bmatrix}\)</td>
-                    <td>Creates/removes superposition</td>
-                </tr>
-                <tr>
-                    <td>Phase</td>
-                    <td>\(S = \begin{bmatrix}1 & 0 \\ 0 & i\end{bmatrix}\)</td>
-                    <td>\(90^\circ\) phase rotation</td>
-                </tr>
-                <tr>
-                    <td>S-dagger</td>
-                    <td>\(S^\dagger = \begin{bmatrix}1 & 0 \\ 0 & -i\end{bmatrix}\)</td>
-                    <td>Inverse of \(S\)</td>
-                </tr>
-                <tr>
-                    <td>T</td>
-                    <td>\(T = \begin{bmatrix}1 & 0 \\ 0 & e^{i\pi/4}\end{bmatrix}\)</td>
-                    <td>\(45^\circ\) phase rotation</td>
-                </tr>
-                <tr>
-                    <td>T-dagger</td>
-                    <td>\(T^\dagger = \begin{bmatrix}1 & 0 \\ 0 & e^{-i\pi/4}\end{bmatrix}\)</td>
-                    <td>Inverse of \(T\)</td>
-                </tr>
-                <tr>
-                    <td>Phase gate</td>
-                    <td>\(P(\phi) = \begin{bmatrix}1 & 0 \\ 0 & e^{i\phi}\end{bmatrix}\)</td>
-                    <td>Arbitrary phase</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3 style="margin-top: 2rem;">B. Rotation Gates</h3>
-        <p>These are especially important for <strong>variational quantum circuits</strong> and hardware-level circuits.</p>
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-            <div>
-                <p style="text-align: center;">\(R_x(\theta) = \begin{bmatrix}\cos\frac{\theta}{2} & -i\sin\frac{\theta}{2} \\ -i\sin\frac{\theta}{2} & \cos\frac{\theta}{2}\end{bmatrix}\)</p>
-            </div>
-            <div>
-                <p style="text-align: center;">\(R_y(\theta) = \begin{bmatrix}\cos\frac{\theta}{2} & -\sin\frac{\theta}{2} \\ \sin\frac{\theta}{2} & \cos\frac{\theta}{2}\end{bmatrix}\)</p>
-            </div>
-            <div>
-                <p style="text-align: center;">\(R_z(\theta) = \begin{bmatrix}e^{-i\theta/2} & 0 \\ 0 & e^{i\theta/2}\end{bmatrix}\)</p>
-            </div>
-        </div>
-        <p>Also common is the general single-qubit gate:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
-            \(U(\theta, \phi, \lambda) = \begin{bmatrix}\cos(\theta/2) & -e^{i\lambda}\sin(\theta/2) \\ e^{i\phi}\sin(\theta/2) & e^{i(\phi+\lambda)}\cos(\theta/2)\end{bmatrix}\)
-        </p>
-
-        <h3 style="margin-top: 2rem;">C. Two-Qubit Gates</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gate</th>
-                    <th>Common Name</th>
-                    <th>Purpose</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>CX / CNOT</td>
-                    <td>Controlled-X</td>
-                    <td>Flip target if control is \(|1\rangle\)</td>
-                </tr>
-                <tr>
-                    <td>CY</td>
-                    <td>Controlled-Y</td>
-                    <td>Apply \(Y\) conditionally</td>
-                </tr>
-                <tr>
-                    <td>CZ</td>
-                    <td>Controlled-Z</td>
-                    <td>Apply phase flip conditionally</td>
-                </tr>
-                <tr>
-                    <td>CH</td>
-                    <td>Controlled-H</td>
-                    <td>Apply Hadamard conditionally</td>
-                </tr>
-                <tr>
-                    <td>CP</td>
-                    <td>Controlled-Phase</td>
-                    <td>Conditional phase</td>
-                </tr>
-                <tr>
-                    <td>CRX</td>
-                    <td>Controlled-\(R_x\)</td>
-                    <td>Conditional X rotation</td>
-                </tr>
-                <tr>
-                    <td>CRY</td>
-                    <td>Controlled-\(R_y\)</td>
-                    <td>Conditional Y rotation</td>
-                </tr>
-                <tr>
-                    <td>CRZ</td>
-                    <td>Controlled-\(R_z\)</td>
-                    <td>Conditional Z rotation</td>
-                </tr>
-                <tr>
-                    <td>SWAP</td>
-                    <td>Swap</td>
-                    <td>Exchange two qubit states</td>
-                </tr>
-                <tr>
-                    <td>iSWAP</td>
-                    <td>iSwap</td>
-                    <td>Swap with an \(i\) phase</td>
-                </tr>
-                <tr>
-                    <td>\(\sqrt{\text{SWAP}\)</td>
-                    <td>Root-SWAP</td>
-                    <td>Partial swap</td>
-                </tr>
-                <tr>
-                    <td>RXX, RYY, RZZ</td>
-                    <td>XX, YY, ZZ rotation</td>
-                    <td>Two-qubit interaction</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p>The most important ones are <strong>CNOT</strong> and <strong>SWAP</strong>:</p>
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-            <div>
-                <p style="text-align: center;">\(CX = \begin{bmatrix}1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0\end{bmatrix}\)</p>
-            </div>
-            <div>
-                <p style="text-align: center;">\(SWAP = \begin{bmatrix}1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1\end{bmatrix}\)</p>
-            </div>
-        </div>
-
-        <h3 style="margin-top: 2rem;">D. Three-Qubit and Multi-Qubit Gates</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gate</th>
-                    <th>Name</th>
-                    <th>Operation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>CCX</td>
-                    <td>Toffoli</td>
-                    <td>Controlled-controlled-X</td>
-                </tr>
-                <tr>
-                    <td>CCZ</td>
-                    <td>Controlled-controlled-Z</td>
-                    <td>Conditional phase</td>
-                </tr>
-                <tr>
-                    <td>CSWAP</td>
-                    <td>Fredkin</td>
-                    <td>Controlled SWAP</td>
-                </tr>
-                <tr>
-                    <td>MCX</td>
-                    <td>Multi-controlled X</td>
-                    <td>X with several controls</td>
-                </tr>
-                <tr>
-                    <td>MCZ</td>
-                    <td>Multi-controlled Z</td>
-                    <td>Z with several controls</td>
-                </tr>
-            </tbody>
-        </table>
-        <p><strong>Toffoli (CCX)</strong> is particularly important. If the controls are \(a,b\) and target is \(c\),</p>
-        <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">\(|a, b, c\rangle \rightarrow |a, b, c \oplus (a \land b)\rangle\)</p>
-
-        <h3 style="margin-top: 2rem;">E. Important Families to Know</h3>
-        <p>A useful way to organise the gates is:</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>Pauli:</strong> \(I, X, Y, Z\)</li>
-            <li><strong>Clifford:</strong> \(H, S, X, Y, Z, \text{CNOT}\)</li>
-            <li><strong>Phase:</strong> \(Z, S, T, P(\phi)\)</li>
-            <li><strong>Rotation:</strong> \(R_x, R_y, R_z\)</li>
-            <li><strong>Controlled:</strong> \(CX, CY, CZ, CH, CP, CRX, CRY, CRZ\)</li>
-            <li><strong>Exchange / Interaction:</strong> \(SWAP, iSWAP, \sqrt{SWAP}, RXX, RYY, RZZ\)</li>
-            <li><strong>Multi-qubit:</strong> \(CCX, CCZ, CSWAP, MCX, MCZ\)</li>
-        </ul>
-
-        <h3 style="margin-top: 2rem;">The Gates You Should Definitely Memorise</h3>
-        <p>For your quantum-computing work, prioritise:</p>
-        <ol style="line-height: 1.6;">
-            <li>\(\boxed{X, Y, Z, H, S, T}\)</li>
-            <li>\(\boxed{R_x, R_y, R_z, P}\)</li>
-            <li>\(\boxed{CX, CZ, SWAP}\)</li>
-            <li>\(\boxed{CCX, CSWAP}\)</li>
-        </ol>
-        <p>A particularly important result is that <strong>Clifford + T</strong> forms a universal gate set, while arbitrary single-qubit gates together with an entangling two-qubit gate such as <strong>CNOT</strong> can also provide universal quantum computation.</p>
-        
-        <h3 style="margin-top: 2rem;">Reversibility & Uncomputing</h3>
-        <p>Unlike classical computation where logic gates like AND/OR discard information, quantum operations must be strictly unitary and reversible (\(U^\dagger U = I\)).</p>
-        <p>When algorithms use extra workspace qubits (ancilla qubits) to compute intermediate steps, these ancillas often remain entangled with the main register. Measuring or discarding them prematurely destroys the superposition of the primary computation. To prevent this, quantum circuits use a technique called <strong>uncomputing</strong>:</p>
-        <ol style="line-height: 1.6;">
-            <li>Compute the intermediate value onto an ancilla qubit.</li>
-            <li>Copy the final target result into an output qubit using a CNOT gate.</li>
-            <li>Apply the inverse operation (\(U^\dagger\)) to the ancilla qubit to return it to its pristine \(|0\rangle\) state, disentangling it from the system.</li>
-        </ol>        </div>
-    </details>
-
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>5. The Bloch Sphere Representation</h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; margin-top: 1.5rem;">
-            <div style="flex: 1; min-width: 300px;">
-                <p>The <strong>Bloch Sphere</strong> is a geometric representation of the pure state space of a single qubit. Because a qubit's state is normalized and global phase is physically unobservable, the entire state space maps elegantly onto the surface of a 3D sphere of radius 1.</p>
-                <p>A general qubit state is represented by two angles, \(\theta\) (polar) and \(\phi\) (azimuthal):</p>
-                <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\psi\rangle = \cos(\frac{\theta}{2})|0\rangle + e^{i\phi}\sin(\frac{\theta}{2})|1\rangle\)</p>
-                <ul style="line-height: 1.6;">
-                    <li><strong>Z-Axis (Poles)</strong>: The North pole represents \(|0\rangle\) (\(\theta = 0\)) and the South pole represents \(|1\rangle\) (\(\theta = \pi\)).</li>
-                    <li><strong>X-Axis (Equator)</strong>: Represents the \(|+\rangle\) and \(|-\rangle\) states (equal superposition with 0 or \(\pi\) relative phase).</li>
-                    <li><strong>Y-Axis (Equator)</strong>: Represents the \(|i\rangle\) and \(|-i\rangle\) states (imaginary phase).</li>
-                </ul>
-                <p>Quantum gates like \(X, Y, Z\) correspond to \(180^\circ\) rotations around their respective axes on this sphere!</p>
-            </div>
-            <div style="flex: 1; min-width: 300px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                <div style="width: 200px; height: 200px; border-radius: 50%; border: 2px solid var(--primary); position: relative; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
-                    <div style="position: absolute; top: -25px; font-weight: bold; font-family: var(--font-serif);">|0⟩</div>
-                    <div style="position: absolute; bottom: -25px; font-weight: bold; font-family: var(--font-serif);">|1⟩</div>
-                    <div style="position: absolute; right: -25px; font-weight: bold; font-family: var(--font-serif);">|+⟩</div>
-                    <div style="position: absolute; left: -25px; font-weight: bold; font-family: var(--font-serif);">|-⟩</div>
-                    <div style="width: 100%; height: 2px; background: var(--border); position: absolute;"></div>
-                    <div style="width: 2px; height: 100%; background: var(--border); position: absolute;"></div>
-                    <div style="width: 100%; height: 40px; border-radius: 50%; border: 1px dashed var(--primary-hover); position: absolute;"></div>
-                    <svg style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
-                        <line x1="100" y1="100" x2="160" y2="40" stroke="#e25555" stroke-width="3" stroke-linecap="round"></line>
-                        <circle cx="160" cy="40" r="4" fill="#e25555"></circle>
-                    </svg>
+            <div class="page-header" style="display: flex; flex-direction: column; align-items: flex-start;">
+                <h1 style="margin-bottom: 0.5rem;">Quantum Computing Basics</h1>
+                <p style="color: var(--muted-text); margin-top: 0;">The foundational mathematics and physical principles
+                    of quantum information.</p>
+                <div
+                    style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem; margin-bottom: 3rem; flex-wrap: wrap; width: 100%;">
+                    <a href="#quantum-gates" id="jumpBtn" class="btn"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; width: fit-content; text-decoration: none; height: fit-content; margin-top: 0;">
+                        Jump to Quantum Gates List
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                    </a>
+                    <button id="expandAllBtn" class="btn"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.85rem; width: fit-content; text-decoration: none; height: fit-content; margin-top: 0;">
+                        Expand All
+                    </button>
+                    <input type="text" id="basicsSearch" placeholder="Search in page..." class="search-input"
+                        style="margin-bottom: 0; max-width: 300px; padding: 0.5rem 1rem; font-size: 0.9rem;">
                 </div>
-                <span style="color: var(--muted-text); font-size: 0.85rem;">(Bloch Sphere Geometric Representation)</span>
             </div>
-        </div>        </div>
-    </details>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>6. Quantum Oracles & Phase Kickback <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>This is the single most important mathematical mechanism in quantum computing. Virtually every oracle-based algorithm (Deutsch–Jozsa, Bernstein–Vazirani, Simon’s, Grover’s, and Quantum Phase Estimation) relies on phase kickback.</p>
-        
-        <h3 style="margin-top: 1.5rem;">Quantum Oracles</h3>
-        <p>To evaluate a classical function \(f(x)\) deterministically and reversibly on a quantum computer, we encode it as a unitary operator \(U_f\):</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f |x\rangle |y\rangle = |x\rangle |y \oplus f(x)\rangle\)</p>
-        <p>Here, \(|x\rangle\) is the input register and \(|y\rangle\) is a target/ancilla qubit.</p>
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>1. Dirac Notation & State Vectors</h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>In quantum mechanics, the state of a system is represented by a vector in a complex Hilbert
+                        space. To simplify the mathematics, Paul Dirac introduced the <strong>Bra-Ket</strong> notation.
+                    </p>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Ket \(|\psi\rangle\)</strong>: Represents a column vector describing a quantum
+                            state. For example, the computational basis states are \(|0\rangle = \begin{pmatrix} 1 \\ 0
+                            \end{pmatrix}\) and \(|1\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}\).</li>
+                        <li><strong>Bra \(\langle\psi|\)</strong>: Represents a row vector, which is the complex
+                            conjugate transpose (Hermitian conjugate) of the ket. \(\langle\psi| =
+                            (|\psi\rangle)^\dagger\).</li>
+                        <li><strong>Inner Product (Bracket) \(\langle\phi|\psi\rangle\)</strong>: Yields a scalar
+                            complex number. It represents the probability amplitude of state \(|\psi\rangle\) collapsing
+                            into state \(|\phi\rangle\). Orthogonal states have an inner product of 0 (e.g., \(\langle 0
+                            | 1 \rangle = 0\)).</li>
+                        <li><strong>Tensor Product \(|\psi\rangle \otimes |\phi\rangle\) or
+                                \(|\psi\phi\rangle\)</strong>: Used to describe multi-qubit systems. Two independent
+                            qubits combine their state spaces multiplicatively.</li>
+                    </ul>
+                </div>
+            </details>
 
-        <h3 style="margin-top: 1.5rem;">The Kickback Mechanism</h3>
-        <p>If the target qubit is prepared in the orthogonal state \(|-\rangle = \frac{|0\rangle - |1\rangle}{\sqrt{2}}\), applying the oracle does not change the state of the target qubit. Instead, the function's output is "kicked back" as a phase factor onto the control input register:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left( |x\rangle |-\rangle \right) = (-1)^{f(x)} |x\rangle |-\rangle\)</p>        </div>
-    </details>
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>2. Superposition & Entanglement</h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <h3 style="margin-top: 1.5rem;">Superposition</h3>
+                    <p>Unlike classical bits that exist strictly as 0 or 1, a quantum bit (qubit) can exist in a linear
+                        combination of both states simultaneously until measured. This is expressed as:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\psi\rangle = \alpha|0\rangle
+                        + \beta|1\rangle\)</p>
+                    <p>Here, \(\alpha\) and \(\beta\) are complex numbers known as probability amplitudes. The Born rule
+                        states that the probability of measuring \(|0\rangle\) is \(|\alpha|^2\) and measuring
+                        \(|1\rangle\) is \(|\beta|^2\). Due to the conservation of probability, they must satisfy the
+                        normalization condition: <strong>\(|\alpha|^2 + |\beta|^2 = 1\)</strong>.</p>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>7. Quantum Parallelism & Interference <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>Superposition alone is not enough to give a quantum computer an advantage. You need both <strong>parallelism</strong> and <strong>destructive interference</strong> working together.</p>
-        
-        <h3 style="margin-top: 1.5rem;">Quantum Parallelism</h3>
-        <p>By preparing an \(n\)-qubit register in an equal superposition of all \(2^n\) computational basis states, a single execution of a quantum gate or oracle evaluates \(f(x)\) for all inputs simultaneously:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left( \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle |0\rangle \right) = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle |f(x)\rangle\)</p>
+                    <h3 style="margin-top: 2rem;">Entanglement</h3>
+                    <p>Entanglement is a purely quantum phenomenon where two or more qubits become perfectly correlated
+                        such that the state of one qubit cannot be described independently of the state of the others,
+                        no matter the physical distance between them. A classic example is the Bell state:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\Phi^+\rangle =
+                        \frac{|00\rangle + |11\rangle}{\sqrt{2}}\)</p>
+                    <p>Measuring the first qubit immediately determines the state of the second qubit. Entanglement is
+                        the primary resource for quantum communication (like Superdense Coding and Quantum
+                        Teleportation) and exponential computational speedups.</p>
+                </div>
+            </details>
 
-        <h3 style="margin-top: 1.5rem;">Constructive & Destructive Interference</h3>
-        <p>Because measuring a superposition collapses it to a single random value, quantum parallelism alone yields no speed-up. Quantum algorithms use interference to alter probability amplitudes:</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>Constructive Interference:</strong> Amplitudes corresponding to the correct answer reinforce one another.</li>
-            <li><strong>Destructive Interference:</strong> Amplitudes corresponding to incorrect answers cancel each other out to zero.</li>
-        </ul>        </div>
-    </details>
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>3. Density Matrices & Mixed States</h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>While state vectors (\(|\psi\rangle\)) perfectly describe <strong>pure states</strong> (systems
+                        fully isolated from their environment), understanding noisy quantum systems, thermal states,
+                        partial measurements, and decoherence requires the density matrix framework.</p>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>8. Measurement & Physical Limits <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<h3 style="margin-top: 1.5rem;">Measurement & Wavefunction Collapse</h3>
-        <p>Measuring a quantum state irrevocably collapses its superposition. For example, if a qubit is in the state \(|+\rangle = \frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}}|1\rangle\), it has no definite computational value. The moment it is measured in the standard computational basis, the wavefunction collapses to either \(|0\rangle\) or \(|1\rangle\) with equal probability:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(P(\text{measure } 0 \mid \text{state } |+\rangle) = |\langle 0 | + \rangle|^2 = \frac{1}{2}\)</p>
-        <p>This is not a limitation of our measuring instruments—it is a fundamental physical law. There is no way to measure a generic qubit without causing collapse, which means reading quantum information inherently disturbs it.</p>
-        
-        <h3 style="margin-top: 2rem;">Mutually Unbiased Bases</h3>
-        <p>In quantum cryptography (like the BB84 protocol), we often encode information in different bases, such as the Rectilinear (Z) basis (\(|0\rangle, |1\rangle\)) and the Diagonal (X) basis (\(|+\rangle, |-\rangle\)). These bases are <strong>mutually unbiased</strong>. This means that if a state is prepared in one basis but measured in the other, the outcome is completely random (50/50), carrying no information about the original encoded bit.</p>
+                    <h3 style="margin-top: 1.5rem;">Pure vs. Mixed States</h3>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Pure State:</strong> A system whose quantum state is fully known, represented by a
+                            single vector \(|\psi\rangle\). Its density matrix is defined as: <br><span
+                                style="display:block; text-align:center; font-size: 1.2rem; margin: 1rem 0;">\(\rho =
+                                |\psi\rangle\langle\psi|\)</span></li>
+                        <li><strong>Mixed State:</strong> A statistical ensemble of pure states \(|\psi_i\rangle\), each
+                            occurring with classical probability \(p_i\): <br><span
+                                style="display:block; text-align:center; font-size: 1.2rem; margin: 1rem 0;">\(\rho =
+                                \sum_i p_i |\psi_i\rangle\langle\psi_i|, \quad \text{where } \sum_i p_i = 1\)</span>
+                        </li>
+                    </ul>
 
-        <h3 style="margin-top: 2rem;">Heisenberg Uncertainty Principle</h3>
-        <p>In quantum mechanics, certain pairs of physical observables (like position and momentum) cannot both be known to arbitrary precision simultaneously:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(\Delta x \cdot \Delta p \ge \frac{\hbar}{2}\)</p>
-        <p>In quantum information, this generalizes to mutually unbiased observables. Measuring a qubit in the Z-basis gives you maximum information about its Z-state, but destroys all information about its X-state (and vice versa).</p>
+                    <h3 style="margin-top: 1.5rem;">Key Properties</h3>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Trace Normalisation:</strong> \(\text{Tr}(\rho) = 1\) (preserves total probability).
+                        </li>
+                        <li><strong>Purity Test:</strong>
+                            <ul>
+                                <li>For a pure state: \(\text{Tr}(\rho^2) = 1\)</li>
+                                <li>For a mixed state: \(\text{Tr}(\rho^2) < 1\)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Partial Trace:</strong> Used to extract the reduced density matrix \(\rho_A =
+                            \text{Tr}_B(\rho_{AB})\) of a sub-system A that is entangled with sub-system B.</li>
+                    </ul>
+                </div>
+            </details>
 
-        <h3 style="margin-top: 2rem;">The No-Cloning Theorem</h3>
-        <p>The No-Cloning Theorem (Wootters & Zurek, 1982) proves that it is physically impossible to make a perfect copy of an arbitrary unknown quantum state. This is a direct mathematical consequence of the linearity of quantum mechanics:</p>
-        <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(\nexists \, U : U(|\psi\rangle \otimes |0\rangle) = |\psi\rangle \otimes |\psi\rangle \quad \forall |\psi\rangle\)</p>
-        <p>This law is the cornerstone of quantum security. An eavesdropper cannot intercept a transmitting qubit, copy it perfectly, and measure the copy while sending the original onward. Any measurement made will unavoidably disturb the original state, leaving a detectable trace.</p>        </div>
-    </details>
+            <details class="content-section basics-accordion" id="quantum-gates" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>4. Quantum Gates Reference</h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <h3 style="margin-top: 1.5rem;">A. Single-Qubit Gates</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gate</th>
+                                <th>Symbol / Matrix</th>
+                                <th>Main Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Identity</td>
+                                <td>\(I = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}\)</td>
+                                <td>Does nothing</td>
+                            </tr>
+                            <tr>
+                                <td>Pauli-X</td>
+                                <td>\(X = \begin{bmatrix}0 & 1 \\ 1 & 0\end{bmatrix}\)</td>
+                                <td>Quantum NOT / bit flip</td>
+                            </tr>
+                            <tr>
+                                <td>Pauli-Y</td>
+                                <td>\(Y = \begin{bmatrix}0 & -i \\ i & 0\end{bmatrix}\)</td>
+                                <td>Bit + phase flip</td>
+                            </tr>
+                            <tr>
+                                <td>Pauli-Z</td>
+                                <td>\(Z = \begin{bmatrix}1 & 0 \\ 0 & -1\end{bmatrix}\)</td>
+                                <td>Phase flip</td>
+                            </tr>
+                            <tr>
+                                <td>Hadamard</td>
+                                <td>\(H = \frac{1}{\sqrt{2}\begin{bmatrix}1 & 1 \\ 1 & -1\end{bmatrix}\)</td>
+                                <td>Creates/removes superposition</td>
+                            </tr>
+                            <tr>
+                                <td>Phase</td>
+                                <td>\(S = \begin{bmatrix}1 & 0 \\ 0 & i\end{bmatrix}\)</td>
+                                <td>\(90^\circ\) phase rotation</td>
+                            </tr>
+                            <tr>
+                                <td>S-dagger</td>
+                                <td>\(S^\dagger = \begin{bmatrix}1 & 0 \\ 0 & -i\end{bmatrix}\)</td>
+                                <td>Inverse of \(S\)</td>
+                            </tr>
+                            <tr>
+                                <td>T</td>
+                                <td>\(T = \begin{bmatrix}1 & 0 \\ 0 & e^{i\pi/4}\end{bmatrix}\)</td>
+                                <td>\(45^\circ\) phase rotation</td>
+                            </tr>
+                            <tr>
+                                <td>T-dagger</td>
+                                <td>\(T^\dagger = \begin{bmatrix}1 & 0 \\ 0 & e^{-i\pi/4}\end{bmatrix}\)</td>
+                                <td>Inverse of \(T\)</td>
+                            </tr>
+                            <tr>
+                                <td>Phase gate</td>
+                                <td>\(P(\phi) = \begin{bmatrix}1 & 0 \\ 0 & e^{i\phi}\end{bmatrix}\)</td>
+                                <td>Arbitrary phase</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>9. The DiVincenzo Criteria <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>Theoretical physics must eventually map to actual physical hardware. The DiVincenzo criteria outline the fundamental requirements necessary to construct a functional, scalable quantum computer:</p>
-        <ol style="line-height: 1.6;">
-            <li>A scalable physical system with well-characterized qubits.</li>
-            <li>The ability to initialize the state of the qubits to a simple fiducial state, such as \(|00\dots0\rangle\).</li>
-            <li>Long relevant decoherence times, much longer than the gate operation time.</li>
-            <li>A "universal" set of quantum gates.</li>
-            <li>A qubit-specific measurement capability.</li>
-        </ol>
-        <p>Two additional criteria apply for quantum communication (networked systems):</p>
-        <ol start="6" style="line-height: 1.6;">
-            <li>The ability to interconvert stationary and flying qubits.</li>
-            <li>The ability to faithfully transmit flying qubits between specified locations.</li>
-        </ol>        </div>
-    </details>
+                    <h3 style="margin-top: 2rem;">B. Rotation Gates</h3>
+                    <p>These are especially important for <strong>variational quantum circuits</strong> and
+                        hardware-level circuits.</p>
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                        <div>
+                            <p style="text-align: center;">\(R_x(\theta) = \begin{bmatrix}\cos\frac{\theta}{2} &
+                                -i\sin\frac{\theta}{2} \\ -i\sin\frac{\theta}{2} & \cos\frac{\theta}{2}\end{bmatrix}\)
+                            </p>
+                        </div>
+                        <div>
+                            <p style="text-align: center;">\(R_y(\theta) = \begin{bmatrix}\cos\frac{\theta}{2} &
+                                -\sin\frac{\theta}{2} \\ \sin\frac{\theta}{2} & \cos\frac{\theta}{2}\end{bmatrix}\)</p>
+                        </div>
+                        <div>
+                            <p style="text-align: center;">\(R_z(\theta) = \begin{bmatrix}e^{-i\theta/2} & 0 \\ 0 &
+                                e^{i\theta/2}\end{bmatrix}\)</p>
+                        </div>
+                    </div>
+                    <p>Also common is the general single-qubit gate:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
+                        \(U(\theta, \phi, \lambda) = \begin{bmatrix}\cos(\theta/2) & -e^{i\lambda}\sin(\theta/2) \\
+                        e^{i\phi}\sin(\theta/2) & e^{i(\phi+\lambda)}\cos(\theta/2)\end{bmatrix}\)
+                    </p>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>10. Decoherence & Noise Channels <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>In reality, quantum systems are not perfectly isolated; they are coupled to an external environment. Interaction with this environment leads to <strong>decoherence</strong>, where quantum information leaks out and degrades over time.</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>Bit Flip Channel:</strong> Flips the state \(|0\rangle \leftrightarrow |1\rangle\) with a probability \(p\).</li>
-            <li><strong>Phase Flip Channel:</strong> Leaves the basis states unchanged but applies a relative phase flip (e.g., changes \(|+\rangle\) to \(|-\rangle\)).</li>
-            <li><strong>Amplitude Damping:</strong> Models energy loss from a quantum system (like a photon escaping a cavity), causing states to decay to the ground state \(|0\rangle\).</li>
-            <li><strong>Depolarising Channel:</strong> Replaces the qubit's state with a completely mixed state (pure noise) with probability \(p\).</li>
-        </ul>
-        <p>Understanding these channels is a crucial theoretical prerequisite for Fault Tolerance and Quantum Error Correction.</p>        </div>
-    </details>
+                    <h3 style="margin-top: 2rem;">C. Two-Qubit Gates</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gate</th>
+                                <th>Common Name</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CX / CNOT</td>
+                                <td>Controlled-X</td>
+                                <td>Flip target if control is \(|1\rangle\)</td>
+                            </tr>
+                            <tr>
+                                <td>CY</td>
+                                <td>Controlled-Y</td>
+                                <td>Apply \(Y\) conditionally</td>
+                            </tr>
+                            <tr>
+                                <td>CZ</td>
+                                <td>Controlled-Z</td>
+                                <td>Apply phase flip conditionally</td>
+                            </tr>
+                            <tr>
+                                <td>CH</td>
+                                <td>Controlled-H</td>
+                                <td>Apply Hadamard conditionally</td>
+                            </tr>
+                            <tr>
+                                <td>CP</td>
+                                <td>Controlled-Phase</td>
+                                <td>Conditional phase</td>
+                            </tr>
+                            <tr>
+                                <td>CRX</td>
+                                <td>Controlled-\(R_x\)</td>
+                                <td>Conditional X rotation</td>
+                            </tr>
+                            <tr>
+                                <td>CRY</td>
+                                <td>Controlled-\(R_y\)</td>
+                                <td>Conditional Y rotation</td>
+                            </tr>
+                            <tr>
+                                <td>CRZ</td>
+                                <td>Controlled-\(R_z\)</td>
+                                <td>Conditional Z rotation</td>
+                            </tr>
+                            <tr>
+                                <td>SWAP</td>
+                                <td>Swap</td>
+                                <td>Exchange two qubit states</td>
+                            </tr>
+                            <tr>
+                                <td>iSWAP</td>
+                                <td>iSwap</td>
+                                <td>Swap with an \(i\) phase</td>
+                            </tr>
+                            <tr>
+                                <td>\(\sqrt{\text{SWAP}\)</td>
+                                <td>Root-SWAP</td>
+                                <td>Partial swap</td>
+                            </tr>
+                            <tr>
+                                <td>RXX, RYY, RZZ</td>
+                                <td>XX, YY, ZZ rotation</td>
+                                <td>Two-qubit interaction</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-    <details class="content-section basics-accordion" name="basics-accordion">
-        <summary class="basics-summary" style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-            <h2>11. State Verification & Tomography <a href="appendix.html" style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click for more]</a></h2>
-            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </summary>
-        <div class="basics-content">
-<p>How do experimental physicists verify that a quantum state created in the lab actually matches the theoretical math? This requires robust verification techniques.</p>
-        <ul style="line-height: 1.6;">
-            <li><strong>Fidelity (\(\mathcal{F}\)):</strong> A measure of "closeness" between two quantum states. For two pure states, it is simply the squared overlap: \(\mathcal{F} = |\langle \psi | \phi \rangle|^2\). For mixed states, the formula becomes \(\mathcal{F}(\rho, \sigma) = (\text{Tr}\sqrt{\sqrt{\rho}\sigma\sqrt{\rho}})^2\).</li>
-            <li><strong>Trace Distance:</strong> A metric that distinguishes how easily two quantum states can be differentiated by a single measurement.</li>
-            <li><strong>Quantum State Tomography:</strong> The process of reconstructing the complete density matrix of an unknown quantum state by performing identical preparation and varied measurements (in multiple bases) over a large statistical ensemble.</li>
-            <li><strong>Quantum Process Tomography:</strong> Extending state tomography to completely characterize an unknown quantum channel or gate operation.</li>
-        </ul>        </div>
-    </details>
+                    <p>The most important ones are <strong>CNOT</strong> and <strong>SWAP</strong>:</p>
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                        <div>
+                            <p style="text-align: center;">\(CX = \begin{bmatrix}1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0
+                                & 0 & 1 \\ 0 & 0 & 1 & 0\end{bmatrix}\)</p>
+                        </div>
+                        <div>
+                            <p style="text-align: center;">\(SWAP = \begin{bmatrix}1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 &
+                                1 & 0 & 0 \\ 0 & 0 & 0 & 1\end{bmatrix}\)</p>
+                        </div>
+                    </div>
 
-    <style>
-        .basics-accordion > summary::-webkit-details-marker {
-            display: none;
-        }
-        .basics-accordion[open] > summary .accordion-icon {
-            transform: rotate(180deg);
-        }
-        .basics-accordion {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem 2rem;
-            margin-bottom: 1rem;
-            transition: box-shadow 0.2s;
-        }
-        .basics-accordion[open] {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .basics-accordion h2 {
-            margin: 0 !important;
-            border: none !important;
-            padding: 0 !important;
-        }
-        .basics-content {
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-            margin-top: 1rem;
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const details = document.querySelectorAll('details.basics-accordion');
-            
-            // Open first one by default
-            if (details.length > 0) {
-                details[0].setAttribute('open', '');
-            }
+                    <h3 style="margin-top: 2rem;">D. Three-Qubit and Multi-Qubit Gates</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gate</th>
+                                <th>Name</th>
+                                <th>Operation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CCX</td>
+                                <td>Toffoli</td>
+                                <td>Controlled-controlled-X</td>
+                            </tr>
+                            <tr>
+                                <td>CCZ</td>
+                                <td>Controlled-controlled-Z</td>
+                                <td>Conditional phase</td>
+                            </tr>
+                            <tr>
+                                <td>CSWAP</td>
+                                <td>Fredkin</td>
+                                <td>Controlled SWAP</td>
+                            </tr>
+                            <tr>
+                                <td>MCX</td>
+                                <td>Multi-controlled X</td>
+                                <td>X with several controls</td>
+                            </tr>
+                            <tr>
+                                <td>MCZ</td>
+                                <td>Multi-controlled Z</td>
+                                <td>Z with several controls</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><strong>Toffoli (CCX)</strong> is particularly important. If the controls are \(a,b\) and target
+                        is \(c\),</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">\(|a, b, c\rangle \rightarrow
+                        |a, b, c \oplus (a \land b)\rangle\)</p>
 
-            // Accordion polyfill/enhancement
-            details.forEach(targetDetail => {
-                targetDetail.addEventListener('click', (e) => {
-                    // if clicking on a link inside, don't toggle
-                    if(e.target.tagName === 'A') return;
-                    
-                    // We don't prevent default, we just ensure others close.
-                    // The 'name' attribute natively does this in modern browsers, 
-                    // but this is a fallback for older browsers.
-                    details.forEach(detail => {
-                        if (detail !== targetDetail && detail.hasAttribute('open')) {
-                            // Only manually remove if the browser didn't already
-                            setTimeout(() => {
-                                detail.removeAttribute('open');
-                            }, 0);
-                        }
+                    <h3 style="margin-top: 2rem;">E. Important Families to Know</h3>
+                    <p>A useful way to organise the gates is:</p>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Pauli:</strong> \(I, X, Y, Z\)</li>
+                        <li><strong>Clifford:</strong> \(H, S, X, Y, Z, \text{CNOT}\)</li>
+                        <li><strong>Phase:</strong> \(Z, S, T, P(\phi)\)</li>
+                        <li><strong>Rotation:</strong> \(R_x, R_y, R_z\)</li>
+                        <li><strong>Controlled:</strong> \(CX, CY, CZ, CH, CP, CRX, CRY, CRZ\)</li>
+                        <li><strong>Exchange / Interaction:</strong> \(SWAP, iSWAP, \sqrt{SWAP}, RXX, RYY, RZZ\)</li>
+                        <li><strong>Multi-qubit:</strong> \(CCX, CCZ, CSWAP, MCX, MCZ\)</li>
+                    </ul>
+
+                    <h3 style="margin-top: 2rem;">The Gates You Should Definitely Memorise</h3>
+                    <p>For your quantum-computing work, prioritise:</p>
+                    <ol style="line-height: 1.6;">
+                        <li>\(\boxed{X, Y, Z, H, S, T}\)</li>
+                        <li>\(\boxed{R_x, R_y, R_z, P}\)</li>
+                        <li>\(\boxed{CX, CZ, SWAP}\)</li>
+                        <li>\(\boxed{CCX, CSWAP}\)</li>
+                    </ol>
+                    <p>A particularly important result is that <strong>Clifford + T</strong> forms a universal gate set,
+                        while arbitrary single-qubit gates together with an entangling two-qubit gate such as
+                        <strong>CNOT</strong> can also provide universal quantum computation.</p>
+
+                    <h3 style="margin-top: 2rem;">Reversibility & Uncomputing</h3>
+                    <p>Unlike classical computation where logic gates like AND/OR discard information, quantum
+                        operations must be strictly unitary and reversible (\(U^\dagger U = I\)).</p>
+                    <p>When algorithms use extra workspace qubits (ancilla qubits) to compute intermediate steps, these
+                        ancillas often remain entangled with the main register. Measuring or discarding them prematurely
+                        destroys the superposition of the primary computation. To prevent this, quantum circuits use a
+                        technique called <strong>uncomputing</strong>:</p>
+                    <ol style="line-height: 1.6;">
+                        <li>Compute the intermediate value onto an ancilla qubit.</li>
+                        <li>Copy the final target result into an output qubit using a CNOT gate.</li>
+                        <li>Apply the inverse operation (\(U^\dagger\)) to the ancilla qubit to return it to its
+                            pristine \(|0\rangle\) state, disentangling it from the system.</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>5. The Bloch Sphere Representation</h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; margin-top: 1.5rem;">
+                        <div style="flex: 1; min-width: 300px;">
+                            <p>The <strong>Bloch Sphere</strong> is a geometric representation of the pure state space
+                                of a single qubit. Because a qubit's state is normalized and global phase is physically
+                                unobservable, the entire state space maps elegantly onto the surface of a 3D sphere of
+                                radius 1.</p>
+                            <p>A general qubit state is represented by two angles, \(\theta\) (polar) and \(\phi\)
+                                (azimuthal):</p>
+                            <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(|\psi\rangle =
+                                \cos(\frac{\theta}{2})|0\rangle + e^{i\phi}\sin(\frac{\theta}{2})|1\rangle\)</p>
+                            <ul style="line-height: 1.6;">
+                                <li><strong>Z-Axis (Poles)</strong>: The North pole represents \(|0\rangle\) (\(\theta =
+                                    0\)) and the South pole represents \(|1\rangle\) (\(\theta = \pi\)).</li>
+                                <li><strong>X-Axis (Equator)</strong>: Represents the \(|+\rangle\) and \(|-\rangle\)
+                                    states (equal superposition with 0 or \(\pi\) relative phase).</li>
+                                <li><strong>Y-Axis (Equator)</strong>: Represents the \(|i\rangle\) and \(|-i\rangle\)
+                                    states (imaginary phase).</li>
+                            </ul>
+                            <p>Quantum gates like \(X, Y, Z\) correspond to \(180^\circ\) rotations around their
+                                respective axes on this sphere!</p>
+                        </div>
+                        <div
+                            style="flex: 1; min-width: 300px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                            <div
+                                style="width: 200px; height: 200px; border-radius: 50%; border: 2px solid var(--primary); position: relative; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
+                                <div
+                                    style="position: absolute; top: -25px; font-weight: bold; font-family: var(--font-serif);">
+                                    |0⟩</div>
+                                <div
+                                    style="position: absolute; bottom: -25px; font-weight: bold; font-family: var(--font-serif);">
+                                    |1⟩</div>
+                                <div
+                                    style="position: absolute; right: -25px; font-weight: bold; font-family: var(--font-serif);">
+                                    |+⟩</div>
+                                <div
+                                    style="position: absolute; left: -25px; font-weight: bold; font-family: var(--font-serif);">
+                                    |-⟩</div>
+                                <div style="width: 100%; height: 2px; background: var(--border); position: absolute;">
+                                </div>
+                                <div style="width: 2px; height: 100%; background: var(--border); position: absolute;">
+                                </div>
+                                <div
+                                    style="width: 100%; height: 40px; border-radius: 50%; border: 1px dashed var(--primary-hover); position: absolute;">
+                                </div>
+                                <svg style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+                                    <line x1="100" y1="100" x2="160" y2="40" stroke="#e25555" stroke-width="3"
+                                        stroke-linecap="round"></line>
+                                    <circle cx="160" cy="40" r="4" fill="#e25555"></circle>
+                                </svg>
+                            </div>
+                            <span style="color: var(--muted-text); font-size: 0.85rem;">(Bloch Sphere Geometric
+                                Representation)</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>6. Quantum Oracles & Phase Kickback <a href="appendix.html"
+                            style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click
+                            for more]</a></h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>This is the single most important mathematical mechanism in quantum computing. Virtually every
+                        oracle-based algorithm (Deutsch–Jozsa, Bernstein–Vazirani, Simon’s, Grover’s, and Quantum Phase
+                        Estimation) relies on phase kickback.</p>
+
+                    <h3 style="margin-top: 1.5rem;">Quantum Oracles</h3>
+                    <p>To evaluate a classical function \(f(x)\) deterministically and reversibly on a quantum computer,
+                        we encode it as a unitary operator \(U_f\):</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f |x\rangle |y\rangle =
+                        |x\rangle |y \oplus f(x)\rangle\)</p>
+                    <p>Here, \(|x\rangle\) is the input register and \(|y\rangle\) is a target/ancilla qubit.</p>
+
+                    <h3 style="margin-top: 1.5rem;">The Kickback Mechanism</h3>
+                    <p>If the target qubit is prepared in the orthogonal state \(|-\rangle = \frac{|0\rangle -
+                        |1\rangle}{\sqrt{2}}\), applying the oracle does not change the state of the target qubit.
+                        Instead, the function's output is "kicked back" as a phase factor onto the control input
+                        register:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left( |x\rangle |-\rangle
+                        \right) = (-1)^{f(x)} |x\rangle |-\rangle\)</p>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>7. Quantum Parallelism & Interference <a href="appendix.html"
+                            style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click
+                            for more]</a></h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>Superposition alone is not enough to give a quantum computer an advantage. You need both
+                        <strong>parallelism</strong> and <strong>destructive interference</strong> working together.</p>
+
+                    <h3 style="margin-top: 1.5rem;">Quantum Parallelism</h3>
+                    <p>By preparing an \(n\)-qubit register in an equal superposition of all \(2^n\) computational basis
+                        states, a single execution of a quantum gate or oracle evaluates \(f(x)\) for all inputs
+                        simultaneously:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(U_f \left(
+                        \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle |0\rangle \right) = \frac{1}{\sqrt{2^n}}
+                        \sum_{x=0}^{2^n-1} |x\rangle |f(x)\rangle\)</p>
+
+                    <h3 style="margin-top: 1.5rem;">Constructive & Destructive Interference</h3>
+                    <p>Because measuring a superposition collapses it to a single random value, quantum parallelism
+                        alone yields no speed-up. Quantum algorithms use interference to alter probability amplitudes:
+                    </p>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Constructive Interference:</strong> Amplitudes corresponding to the correct answer
+                            reinforce one another.</li>
+                        <li><strong>Destructive Interference:</strong> Amplitudes corresponding to incorrect answers
+                            cancel each other out to zero.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>8. Measurement & Physical Limits <a href="appendix.html"
+                            style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click
+                            for more]</a></h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <h3 style="margin-top: 1.5rem;">Measurement & Wavefunction Collapse</h3>
+                    <p>Measuring a quantum state irrevocably collapses its superposition. For example, if a qubit is in
+                        the state \(|+\rangle = \frac{1}{\sqrt{2}}|0\rangle + \frac{1}{\sqrt{2}}|1\rangle\), it has no
+                        definite computational value. The moment it is measured in the standard computational basis, the
+                        wavefunction collapses to either \(|0\rangle\) or \(|1\rangle\) with equal probability:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(P(\text{measure } 0 \mid
+                        \text{state } |+\rangle) = |\langle 0 | + \rangle|^2 = \frac{1}{2}\)</p>
+                    <p>This is not a limitation of our measuring instruments—it is a fundamental physical law. There is
+                        no way to measure a generic qubit without causing collapse, which means reading quantum
+                        information inherently disturbs it.</p>
+
+                    <h3 style="margin-top: 2rem;">Mutually Unbiased Bases</h3>
+                    <p>In quantum cryptography (like the BB84 protocol), we often encode information in different bases,
+                        such as the Rectilinear (Z) basis (\(|0\rangle, |1\rangle\)) and the Diagonal (X) basis
+                        (\(|+\rangle, |-\rangle\)). These bases are <strong>mutually unbiased</strong>. This means that
+                        if a state is prepared in one basis but measured in the other, the outcome is completely random
+                        (50/50), carrying no information about the original encoded bit.</p>
+
+                    <h3 style="margin-top: 2rem;">Heisenberg Uncertainty Principle</h3>
+                    <p>In quantum mechanics, certain pairs of physical observables (like position and momentum) cannot
+                        both be known to arbitrary precision simultaneously:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(\Delta x \cdot \Delta p \ge
+                        \frac{\hbar}{2}\)</p>
+                    <p>In quantum information, this generalizes to mutually unbiased observables. Measuring a qubit in
+                        the Z-basis gives you maximum information about its Z-state, but destroys all information about
+                        its X-state (and vice versa).</p>
+
+                    <h3 style="margin-top: 2rem;">The No-Cloning Theorem</h3>
+                    <p>The No-Cloning Theorem (Wootters & Zurek, 1982) proves that it is physically impossible to make a
+                        perfect copy of an arbitrary unknown quantum state. This is a direct mathematical consequence of
+                        the linearity of quantum mechanics:</p>
+                    <p style="text-align: center; font-size: 1.2rem; margin: 1.5rem 0;">\(\nexists \, U : U(|\psi\rangle
+                        \otimes |0\rangle) = |\psi\rangle \otimes |\psi\rangle \quad \forall |\psi\rangle\)</p>
+                    <p>This law is the cornerstone of quantum security. An eavesdropper cannot intercept a transmitting
+                        qubit, copy it perfectly, and measure the copy while sending the original onward. Any
+                        measurement made will unavoidably disturb the original state, leaving a detectable trace.</p>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>9. The DiVincenzo Criteria <a href="appendix.html"
+                            style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click
+                            for more]</a></h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>Theoretical physics must eventually map to actual physical hardware. The DiVincenzo criteria
+                        outline the fundamental requirements necessary to construct a functional, scalable quantum
+                        computer:</p>
+                    <ol style="line-height: 1.6;">
+                        <li>A scalable physical system with well-characterized qubits.</li>
+                        <li>The ability to initialize the state of the qubits to a simple fiducial state, such as
+                            \(|00\dots0\rangle\).</li>
+                        <li>Long relevant decoherence times, much longer than the gate operation time.</li>
+                        <li>A "universal" set of quantum gates.</li>
+                        <li>A qubit-specific measurement capability.</li>
+                    </ol>
+                    <p>Two additional criteria apply for quantum communication (networked systems):</p>
+                    <ol start="6" style="line-height: 1.6;">
+                        <li>The ability to interconvert stationary and flying qubits.</li>
+                        <li>The ability to faithfully transmit flying qubits between specified locations.</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>10. Decoherence & Noise Channels <a href="appendix.html"
+                            style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click
+                            for more]</a></h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>In reality, quantum systems are not perfectly isolated; they are coupled to an external
+                        environment. Interaction with this environment leads to <strong>decoherence</strong>, where
+                        quantum information leaks out and degrades over time.</p>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Bit Flip Channel:</strong> Flips the state \(|0\rangle \leftrightarrow |1\rangle\)
+                            with a probability \(p\).</li>
+                        <li><strong>Phase Flip Channel:</strong> Leaves the basis states unchanged but applies a
+                            relative phase flip (e.g., changes \(|+\rangle\) to \(|-\rangle\)).</li>
+                        <li><strong>Amplitude Damping:</strong> Models energy loss from a quantum system (like a photon
+                            escaping a cavity), causing states to decay to the ground state \(|0\rangle\).</li>
+                        <li><strong>Depolarising Channel:</strong> Replaces the qubit's state with a completely mixed
+                            state (pure noise) with probability \(p\).</li>
+                    </ul>
+                    <p>Understanding these channels is a crucial theoretical prerequisite for Fault Tolerance and
+                        Quantum Error Correction.</p>
+                </div>
+            </details>
+
+            <details class="content-section basics-accordion" name="basics-accordion">
+                <summary class="basics-summary"
+                    style="cursor: pointer; list-style: none; outline: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <h2>11. State Verification & Tomography <a href="appendix.html"
+                            style="font-size: 0.8rem; margin-left: 0.8rem; color: var(--primary); font-weight: 500; text-decoration: none; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: var(--primary-light); display: inline-block; vertical-align: middle;">[click
+                            for more]</a></h2>
+                    <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div class="basics-content">
+                    <p>How do experimental physicists verify that a quantum state created in the lab actually matches
+                        the theoretical math? This requires robust verification techniques.</p>
+                    <ul style="line-height: 1.6;">
+                        <li><strong>Fidelity (\(\mathcal{F}\)):</strong> A measure of "closeness" between two quantum
+                            states. For two pure states, it is simply the squared overlap: \(\mathcal{F} = |\langle \psi
+                            | \phi \rangle|^2\). For mixed states, the formula becomes \(\mathcal{F}(\rho, \sigma) =
+                            (\text{Tr}\sqrt{\sqrt{\rho}\sigma\sqrt{\rho}})^2\).</li>
+                        <li><strong>Trace Distance:</strong> A metric that distinguishes how easily two quantum states
+                            can be differentiated by a single measurement.</li>
+                        <li><strong>Quantum State Tomography:</strong> The process of reconstructing the complete
+                            density matrix of an unknown quantum state by performing identical preparation and varied
+                            measurements (in multiple bases) over a large statistical ensemble.</li>
+                        <li><strong>Quantum Process Tomography:</strong> Extending state tomography to completely
+                            characterize an unknown quantum channel or gate operation.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <style>
+                .basics-accordion>summary::-webkit-details-marker {
+                    display: none;
+                }
+
+                .basics-accordion[open]>summary .accordion-icon {
+                    transform: rotate(180deg);
+                }
+
+                .basics-accordion {
+                    background-color: var(--surface);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 1.5rem 2rem;
+                    margin-bottom: 1rem;
+                    transition: box-shadow 0.2s;
+                }
+
+                .basics-accordion[open] {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                }
+
+                .basics-accordion h2 {
+                    margin: 0 !important;
+                    border: none !important;
+                    padding: 0 !important;
+                }
+
+                .basics-content {
+                    padding-top: 1rem;
+                    border-top: 1px solid var(--border);
+                    margin-top: 1rem;
+                }
+            </style>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const details = document.querySelectorAll('details.basics-accordion');
+
+                    // Open first one by default
+                    if (details.length > 0) {
+                        details[0].setAttribute('open', '');
+                    }
+
+                    // Accordion polyfill/enhancement
+                    details.forEach(targetDetail => {
+                        targetDetail.addEventListener('click', (e) => {
+                            // if clicking on a link inside, don't toggle
+                            if (e.target.tagName === 'A') return;
+
+                            // We don't prevent default, we just ensure others close.
+                            // The 'name' attribute natively does this in modern browsers, 
+                            // but this is a fallback for older browsers.
+                            details.forEach(detail => {
+                                if (detail !== targetDetail && detail.hasAttribute('open')) {
+                                    // Only manually remove if the browser didn't already
+                                    setTimeout(() => {
+                                        detail.removeAttribute('open');
+                                    }, 0);
+                                }
+                            });
+                        });
                     });
-                });
-            });
 
-            // Jump Button functionality
-            const jumpBtn = document.getElementById('jumpBtn');
-            if (jumpBtn) {
-                jumpBtn.addEventListener('click', (e) => {
-                    const targetId = jumpBtn.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    
-                    if (targetElement && targetElement.tagName.toLowerCase() === 'details') {
-                        // Close others
-                        details.forEach(detail => {
-                            if (detail !== targetElement) {
-                                detail.removeAttribute('open');
+                    // Jump Button functionality
+                    const jumpBtn = document.getElementById('jumpBtn');
+                    if (jumpBtn) {
+                        jumpBtn.addEventListener('click', (e) => {
+                            const targetId = jumpBtn.getAttribute('href').substring(1);
+                            const targetElement = document.getElementById(targetId);
+
+                            if (targetElement && targetElement.tagName.toLowerCase() === 'details') {
+                                // Close others
+                                details.forEach(detail => {
+                                    if (detail !== targetElement) {
+                                        detail.removeAttribute('open');
+                                    }
+                                });
+                                // Open target
+                                targetElement.setAttribute('open', '');
                             }
                         });
-                        // Open target
-                        targetElement.setAttribute('open', '');
                     }
-                });
-            }
 
-            // Search functionality
-            const searchInput = document.getElementById('basicsSearch');
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase();
-                    let firstVisible = null;
-                    
-                    details.forEach(detail => {
-                        const text = detail.textContent.toLowerCase();
-                        if (text.includes(query)) {
-                            detail.style.display = '';
-                            if (!firstVisible) firstVisible = detail;
-                            
-                            if (query.length > 0) {
-                                detail.setAttribute('open', '');
-                            } else {
-                                detail.removeAttribute('open');
+                    // Search functionality
+                    const searchInput = document.getElementById('basicsSearch');
+                    if (searchInput) {
+                        searchInput.addEventListener('input', (e) => {
+                            const query = e.target.value.toLowerCase();
+                            let firstVisible = null;
+
+                            details.forEach(detail => {
+                                const text = detail.textContent.toLowerCase();
+                                if (text.includes(query)) {
+                                    detail.style.display = '';
+                                    if (!firstVisible) firstVisible = detail;
+
+                                    if (query.length > 0) {
+                                        detail.setAttribute('open', '');
+                                    } else {
+                                        detail.removeAttribute('open');
+                                    }
+                                } else {
+                                    detail.style.display = 'none';
+                                }
+                            });
+
+                            // If search is cleared, open the first visible one
+                            if (query.length === 0 && firstVisible) {
+                                firstVisible.setAttribute('open', '');
                             }
-                        } else {
-                            detail.style.display = 'none';
-                        }
-                    });
-                    
-                    // If search is cleared, open the first visible one
-                    if (query.length === 0 && firstVisible) {
-                        firstVisible.setAttribute('open', '');
+                        });
                     }
                 });
-            }
-        });
-    </script>
+            </script>
 
         </main>
     </div>
@@ -739,4 +980,5 @@
         });
     </script>
 </body>
+
 </html>
