@@ -107,4 +107,12 @@ AQCA is built with a modular, responsive architecture featuring dynamic accordio
 
 ---
 
+## Note on Release v1.0.0
+This marks the **v1.0.0** release of the AQCA platform. Please note that in the upcoming versions (which may take some time to roll out), we plan to:
+- Neatly update, verify, and complete all algorithms currently marked as *[In-Progress]* (e.g., Flagship Hybrid Models and Fault Tolerance).
+- Add detailed instructions on how to connect to and run these circuits on **real IBM Quantum Computers**.
+- Incorporate a few other structural and educational additions to enhance the reference material.
+
+---
+
 &copy; 2026 AQCA - All Quantum Computing Algorithms. Educational and Research Platform.
