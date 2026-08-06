@@ -963,3 +963,108 @@ tr:last-child td {
 .view-output-btn.secondary:hover {
   background-color: #1a252f;
 }
+
+/* ==========================================================================
+   Sidebar Squeeze Mode Styles
+   ========================================================================== */
+body.squeezed {
+  --sidebar-width: 80px;
+}
+
+body.squeezed .sidebar .nav-link span:not(.nav-icon):not(.step-num) {
+  display: none;
+}
+
+body.squeezed .sidebar .nav-group-toggle span:not(.nav-icon) {
+  display: none;
+}
+
+body.squeezed .sidebar .nav-link, 
+body.squeezed .sidebar .nav-group-toggle {
+  justify-content: center;
+  padding: 0.6rem 0;
+}
+
+body.squeezed .sidebar .nav-group-icon {
+  display: none;
+}
+
+body.squeezed .nav-icon {
+  margin-right: 0 !important;
+  font-size: 1.25rem;
+}
+
+/* Squeeze toggle button */
+.sidebar-squeeze-toggle {
+  background: none;
+  border: none;
+  color: #e0e6ff;
+  cursor: pointer;
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-squeeze-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sidebar-squeeze-toggle svg {
+  transition: transform 0.3s;
+}
+
+body.squeezed .sidebar-squeeze-toggle svg {
+  transform: rotate(180deg);
+}
+
+/* Flyout Menu for Algorithms when squeezed */
+body.squeezed .nav-item {
+  position: relative;
+}
+
+body.squeezed .nav-subgroup.flyout {
+  position: fixed;
+  left: 80px;
+  background: var(--primary);
+  box-shadow: 4px 0 15px rgba(0,0,0,0.2);
+  min-width: 250px;
+  border-radius: 0 8px 8px 0;
+  z-index: 2000;
+  padding: 1rem 0;
+  display: block;
+}
+
+body.squeezed .nav-subgroup.flyout .nav-link {
+  color: #cdd6ff;
+  padding: 0.5rem 1.5rem;
+  justify-content: flex-start;
+}
+
+body.squeezed .nav-subgroup.flyout .nav-link:hover {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+
+body.squeezed .nav-subgroup.flyout .nav-category-label {
+  padding: 0.5rem 1.5rem 0.25rem 1.5rem;
+  color: #a0b2ff;
+}
+
+body.squeezed .nav-subgroup.flyout .nav-link span {
+  display: inline; /* restore text in flyout */
+}
+
+/* Icon layout in regular mode */
+.nav-icon {
+  margin-right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
