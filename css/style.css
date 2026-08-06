@@ -925,6 +925,19 @@ tr:last-child td {
   color: var(--text);
   border: 1px solid var(--border);
   margin: 0;
+  flex-shrink: 0;
+}
+.notebook-output-math {
+  background-color: var(--surface-hover);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: var(--text);
+  border: 1px solid var(--border);
+  margin: 0;
+  overflow: auto;
+  display: block;
+  min-height: 3rem;
+  flex-shrink: 0;
 }
 .notebook-output-img {
   max-width: 100%;
@@ -932,6 +945,7 @@ tr:last-child td {
   background-color: white;
   padding: 0.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  flex-shrink: 0;
 }
 .view-output-btn {
   display: inline-flex;

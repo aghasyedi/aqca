@@ -395,20 +395,32 @@ else:
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
                 <a href="../../assets/notebooks/bernstein-vazirani.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
-            <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
-&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
-&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
-&lt;&gt;:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
-</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Bernstein-Vazirani Analysis: Secret = &#x27;1011&#x27;</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
-</pre><pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/3814462174.py:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
-  print(f&quot;The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:&quot;)
-/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_25548/3814462174.py:67: SyntaxWarning: &#x27;int&#x27; object is not callable; perhaps you missed a comma?
-  print(f&quot;The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:&quot;)
-</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div><pre class="notebook-output-text">
+                        <div class="code-output-data" style="display: none;">
+                <pre class="notebook-output-text">&lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+&lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+&lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+&lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+</pre>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Bernstein-Vazirani Analysis: Secret = '1011'</p>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+                <pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
+</pre>
+                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/3814462174.py:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+  print(f"The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:")
+/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/3814462174.py:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+  print(f"The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:")
+</pre>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre>
+                <div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div>
+                <pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
+</pre>
+                <div class="notebook-output-math">$$
+
 \begin{bmatrix}
 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
  0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
@@ -419,11 +431,21 @@ Final DensityMatrix prior to measurement:
  0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
  0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-2.png" alt="Notebook output">
+                <pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;1011&#x27;: 1024}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p><pre class="notebook-output-text">Success: 100% of measurements returned &#x27;1011&#x27;, which perfectly matches the secret string!
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-3.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+                <pre class="notebook-output-text">Raw measurement counts: {'1011': 1024}
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-4.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+                <pre class="notebook-output-text">Success: 100% of measurements returned '1011', which perfectly matches the secret string!
 </pre>
             </div>
         </div>

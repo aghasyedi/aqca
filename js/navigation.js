@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const toggle = subgroup.previousElementSibling;
                 if (toggle && toggle.classList.contains('nav-group-toggle')) {
                     toggle.setAttribute('aria-expanded', 'true');
+                    toggle.classList.add('active-parent');
                 }
             }
         }

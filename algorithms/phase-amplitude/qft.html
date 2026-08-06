@@ -376,9 +376,14 @@ display(plot_histogram(counts))</code></pre>
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
                 <a href="../../assets/notebooks/qft.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
-            <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QFT Analysis for Initial State: $|110\rangle$</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 8x8 unitary matrix describing the full QFT circuit:
-</pre><div class="notebook-output-math">$$
+                        <div class="code-output-data" style="display: none;">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QFT Analysis for Initial State: $|110\rangle$</p>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qft-out-1.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+                <pre class="notebook-output-text">The 8x8 unitary matrix describing the full QFT circuit:
+</pre>
+                <div class="notebook-output-math">$$
 U_{QFT} = 
 \begin{bmatrix}
 \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4} & \frac{\sqrt{2}}{4}  \\
@@ -390,10 +395,16 @@ U_{QFT} =
  \frac{1}{4} + \frac{i}{4} & - \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
  - \frac{1}{4} - \frac{i}{4} & \frac{1}{4} + \frac{i}{4} & \frac{1}{4} - \frac{i}{4} & - \frac{1}{4} + \frac{i}{4} & - \frac{\sqrt{2} i}{4} & \frac{\sqrt{2} i}{4} & \frac{\sqrt{2}}{4} & - \frac{\sqrt{2}}{4}  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$\frac{\sqrt{2}}{4} |000\rangle- \frac{\sqrt{2}}{4} |001\rangle- \frac{\sqrt{2} i}{4} |010\rangle+\frac{\sqrt{2} i}{4} |011\rangle+(- \frac{1}{4} + \frac{i}{4}) |100\rangle+(\frac{1}{4} - \frac{i}{4}) |101\rangle+(\frac{1}{4} + \frac{i}{4}) |110\rangle+(- \frac{1}{4} - \frac{i}{4}) |111\rangle$$</div><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre>
+                <div class="notebook-output-math">$$\frac{\sqrt{2}}{4} |000\rangle- \frac{\sqrt{2}}{4} |001\rangle- \frac{\sqrt{2} i}{4} |010\rangle+\frac{\sqrt{2} i}{4} |011\rangle+(- \frac{1}{4} + \frac{i}{4}) |100\rangle+(\frac{1}{4} - \frac{i}{4}) |101\rangle+(\frac{1}{4} + \frac{i}{4}) |110\rangle+(- \frac{1}{4} - \frac{i}{4}) |111\rangle$$</div>
+                <pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
+</pre>
+                <div class="notebook-output-math">$$
+
 \begin{bmatrix}
 \frac{1}{8} & - \frac{1}{8} & \frac{i}{8} & - \frac{i}{8} & -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i  \\
  - \frac{1}{8} & \frac{1}{8} & - \frac{i}{8} & \frac{i}{8} & 0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i  \\
@@ -404,11 +415,19 @@ Final DensityMatrix prior to measurement:
  0.0883883476 + 0.0883883476 i & -0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & - \frac{i}{8} & \frac{i}{8} & \frac{1}{8} & - \frac{1}{8}  \\
  -0.0883883476 - 0.0883883476 i & 0.0883883476 + 0.0883883476 i & 0.0883883476 - 0.0883883476 i & -0.0883883476 + 0.0883883476 i & \frac{i}{8} & - \frac{i}{8} & - \frac{1}{8} & \frac{1}{8}  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qft-out-2.png" alt="Notebook output">
+                <pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;011&#x27;: 131, &#x27;111&#x27;: 114, &#x27;000&#x27;: 146, &#x27;010&#x27;: 119, &#x27;100&#x27;: 136, &#x27;001&#x27;: 144, &#x27;110&#x27;: 126, &#x27;101&#x27;: 108}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/qft-out-4.png" alt="Notebook output">
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qft-out-3.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+                <pre class="notebook-output-text">Raw measurement counts: {'111': 109, '011': 121, '100': 137, '001': 142, '110': 129, '000': 135, '010': 106, '101': 145}
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qft-out-4.png" alt="Notebook output">
             </div>
         </div>
     </section>

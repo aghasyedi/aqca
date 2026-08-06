@@ -440,34 +440,63 @@ else:
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
                 <a href="../../assets/notebooks/amplitude-amplification.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
-            <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">GAA Analysis: Target = $|11\rangle$</p><pre class="notebook-output-text">Iterations applied: 2
-Initial bias angle (Ry): 1.047 radians
-</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 4x4 unitary matrix describing the full circuit:
-</pre><div class="notebook-output-math">$$
-U_{GAA} = 
+                        <div class="code-output-data" style="display: none;">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Grover's Algorithm Analysis: Target = $|101\rangle$</p>
+                <pre class="notebook-output-text">Optimal iterations applied: 2
+</pre>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-1.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+                <pre class="notebook-output-text">The 8x8 unitary matrix describing the full circuit:
+</pre>
+                <div class="notebook-output-math">$$
+U_{Grover} = 
 \begin{bmatrix}
-0.234375 & -0.6765823467 & -0.6765823467 & -0.171875  \\
- 0.1353164693 & 0.609375 & -0.390625 & -0.6765823467  \\
- 0.1353164693 & -0.390625 & 0.609375 & -0.6765823467  \\
- 0.953125 & 0.1353164693 & 0.1353164693 & 0.234375  \\
+-0.0883883476 & 0.4419417382 & 0.2651650429 & 0.4419417382 & 0.4419417382 & 0.2651650429 & 0.4419417382 & 0.2651650429  \\
+ -0.0883883476 & -0.2651650429 & 0.2651650429 & -0.2651650429 & 0.4419417382 & -0.4419417382 & 0.4419417382 & -0.4419417382  \\
+ -0.0883883476 & 0.4419417382 & -0.4419417382 & -0.2651650429 & 0.4419417382 & 0.2651650429 & -0.2651650429 & -0.4419417382  \\
+ -0.0883883476 & -0.2651650429 & -0.4419417382 & 0.4419417382 & 0.4419417382 & -0.4419417382 & -0.2651650429 & 0.2651650429  \\
+ -0.0883883476 & 0.4419417382 & 0.2651650429 & 0.4419417382 & -0.2651650429 & -0.4419417382 & -0.2651650429 & -0.4419417382  \\
+ 0.9722718241 & 0.0883883476 & -0.0883883476 & 0.0883883476 & 0.0883883476 & -0.0883883476 & 0.0883883476 & -0.0883883476  \\
+ -0.0883883476 & 0.4419417382 & -0.4419417382 & -0.2651650429 & -0.2651650429 & -0.4419417382 & 0.4419417382 & 0.2651650429  \\
+ -0.0883883476 & -0.2651650429 & -0.4419417382 & 0.4419417382 & -0.2651650429 & 0.2651650429 & 0.4419417382 & -0.4419417382  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$0.234375 |00\rangle+0.1353164693 |01\rangle+0.1353164693 |10\rangle+0.953125 |11\rangle$$</div><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre>
+                <div class="notebook-output-math">$$-0.0883883476 |000\rangle-0.0883883476 |001\rangle-0.0883883476 |010\rangle-0.0883883476 |011\rangle-0.0883883476 |100\rangle+0.9722718241 |101\rangle-0.0883883476 |110\rangle-0.0883883476 |111\rangle$$</div>
+                <pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
+</pre>
+                <div class="notebook-output-math">$$
+
 \begin{bmatrix}
-0.0549316406 & 0.0317147975 & 0.0317147975 & 0.2233886719  \\
- 0.0317147975 & 0.0183105469 & 0.0183105469 & 0.1289735098  \\
- 0.0317147975 & 0.0183105469 & 0.0183105469 & 0.1289735098  \\
- 0.2233886719 & 0.1289735098 & 0.1289735098 & 0.9084472656  \\
+0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+ 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+ 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+ 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+ 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+ -0.0859375 & -0.0859375 & -0.0859375 & -0.0859375 & -0.0859375 & 0.9453125 & -0.0859375 & -0.0859375  \\
+ 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+ 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-2.png" alt="Notebook output">
+                <pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;01&#x27;: 24, &#x27;10&#x27;: 17, &#x27;00&#x27;: 62, &#x27;11&#x27;: 921}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p><pre class="notebook-output-text">Success: The algorithm correctly amplified the target state &#x27;11&#x27;.
-Final Success Probability: 89.94%
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-3.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+                <pre class="notebook-output-text">Raw measurement counts: {'001': 8, '110': 6, '100': 11, '011': 6, '111': 11, '000': 3, '010': 6, '101': 973}
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-4.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+                <pre class="notebook-output-text">Success: The algorithm correctly identified the target state '101'.
+Success Probability: 95.02%
 </pre>
             </div>
         </div>

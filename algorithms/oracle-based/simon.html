@@ -417,9 +417,14 @@ else:
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
                 <a href="../../assets/notebooks/simon.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
-            <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Simon&#x27;s Algorithm Analysis: Secret = &#x27;11&#x27;</p><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
-</pre><div class="notebook-output-math">$$
+                        <div class="code-output-data" style="display: none;">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Simon's Algorithm Analysis: Secret = '11'</p>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-1.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+                <pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
+</pre>
+                <div class="notebook-output-math">$$
 U_{circuit} = 
 \begin{bmatrix}
 \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0  \\
@@ -439,10 +444,16 @@ U_{circuit} =
  0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0  \\
  0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$\frac{1}{2} |0000\rangle+\frac{1}{2} |0011\rangle+\frac{1}{2} |1000\rangle- \frac{1}{2} |1011\rangle$$</div><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre>
+                <div class="notebook-output-math">$$\frac{1}{2} |0000\rangle+\frac{1}{2} |0011\rangle+\frac{1}{2} |1000\rangle- \frac{1}{2} |1011\rangle$$</div>
+                <pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
+</pre>
+                <div class="notebook-output-math">$$
+
 \begin{bmatrix}
 \frac{1}{4} & 0 & 0 & \frac{1}{4} & \cdots & 0 & 0 & 0  \\
  0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
@@ -453,16 +464,26 @@ Final DensityMatrix prior to measurement:
  0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
  0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-2.png" alt="Notebook output">
+                <pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;00&#x27;: 486, &#x27;11&#x27;: 538}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/simon-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p><pre class="notebook-output-text">Secret string (s): 11
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-3.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+                <pre class="notebook-output-text">Raw measurement counts: {'11': 511, '00': 513}
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-4.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+                <pre class="notebook-output-text">Secret string (s): 11
 Verifying the dot product of measured strings (z) with secret string (s) modulo 2:
-z = 00 -&gt; s·z mod 2 = 0
 z = 11 -&gt; s·z mod 2 = 0
+z = 00 -&gt; s·z mod 2 = 0
 
-Success: All measured strings are orthogonal to the secret string &#x27;11&#x27;.
+Success: All measured strings are orthogonal to the secret string '11'.
 </pre>
             </div>
         </div>

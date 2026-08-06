@@ -507,10 +507,16 @@ else:
                 <button class="view-output-btn" onclick="openOutputModal(this)">View Code Output</button>
                 <a href="../../assets/notebooks/grover.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
-            <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Grover&#x27;s Algorithm Analysis: Target = $|101\rangle$</p><pre class="notebook-output-text">Optimal iterations applied: 2
-</pre><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p><img class="notebook-output-img" src="../../assets/images/outputs/grover-out-1.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p><pre class="notebook-output-text">The 8x8 unitary matrix describing the full circuit:
-</pre><div class="notebook-output-math">$$
+                        <div class="code-output-data" style="display: none;">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Grover's Algorithm Analysis: Target = $|101\rangle$</p>
+                <pre class="notebook-output-text">Optimal iterations applied: 2
+</pre>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+                <img class="notebook-output-img" src="../../assets/images/outputs/grover-out-1.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+                <pre class="notebook-output-text">The 8x8 unitary matrix describing the full circuit:
+</pre>
+                <div class="notebook-output-math">$$
 U_{Grover} = 
 \begin{bmatrix}
 -0.0883883476 & 0.4419417382 & 0.2651650429 & 0.4419417382 & 0.4419417382 & 0.2651650429 & 0.4419417382 & 0.2651650429  \\
@@ -522,10 +528,16 @@ U_{Grover} =
  -0.0883883476 & 0.4419417382 & -0.4419417382 & -0.2651650429 & -0.2651650429 & -0.4419417382 & 0.4419417382 & 0.2651650429  \\
  -0.0883883476 & -0.2651650429 & -0.4419417382 & 0.4419417382 & -0.2651650429 & 0.2651650429 & 0.4419417382 & -0.4419417382  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p><pre class="notebook-output-text">Exact Statevector prior to measurement:
-</pre><div class="notebook-output-math">$$-0.0883883476 |000\rangle-0.0883883476 |001\rangle-0.0883883476 |010\rangle-0.0883883476 |011\rangle-0.0883883476 |100\rangle+0.9722718241 |101\rangle-0.0883883476 |110\rangle-0.0883883476 |111\rangle$$</div><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+</pre>
+                <div class="notebook-output-math">$$-0.0883883476 |000\rangle-0.0883883476 |001\rangle-0.0883883476 |010\rangle-0.0883883476 |011\rangle-0.0883883476 |100\rangle+0.9722718241 |101\rangle-0.0883883476 |110\rangle-0.0883883476 |111\rangle$$</div>
+                <pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
-</pre><div class="notebook-output-math">$$
+</pre>
+                <div class="notebook-output-math">$$
+
 \begin{bmatrix}
 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
  0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
@@ -536,12 +548,22 @@ Final DensityMatrix prior to measurement:
  0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
  0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
  \end{bmatrix}
-$$</div><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p><pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/grover-out-2.png" alt="Notebook output"><pre class="notebook-output-text">
+$$</div>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/grover-out-2.png" alt="Notebook output">
+                <pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/grover-out-3.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p><pre class="notebook-output-text">Raw measurement counts: {&#x27;011&#x27;: 4, &#x27;111&#x27;: 5, &#x27;001&#x27;: 7, &#x27;110&#x27;: 10, &#x27;100&#x27;: 10, &#x27;000&#x27;: 7, &#x27;010&#x27;: 7, &#x27;101&#x27;: 974}
-</pre><img class="notebook-output-img" src="../../assets/images/outputs/grover-out-4.png" alt="Notebook output"><p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p><pre class="notebook-output-text">Success: The algorithm correctly identified the target state &#x27;101&#x27;.
-Success Probability: 95.12%
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/grover-out-3.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+                <pre class="notebook-output-text">Raw measurement counts: {'001': 7, '100': 8, '110': 9, '000': 8, '010': 14, '101': 968, '011': 4, '111': 6}
+</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/grover-out-4.png" alt="Notebook output">
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+                <pre class="notebook-output-text">Success: The algorithm correctly identified the target state '101'.
+Success Probability: 94.53%
 </pre>
             </div>
         </div>
