@@ -10,7 +10,7 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 
 - **19 Complete Algorithm Profiles:** Comprehensive documentation spanning quantum communication, oracle query models, phase/amplitude manipulation, hybrid variational models, and fault-tolerant stabilizer codes.
 - **Interactive Visualisers:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyse measurement statistics in real-time.
-- **Deep Mathematical Rigor:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
+- **Deep Mathematical Rigour:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
 - **Analysis Centre & Comparison Matrix:** An interactive benchmarking dashboard powered by Chart.js that dynamically plots classical vs. quantum scaling curves and generates side-by-side feature comparisons with real-time MathJax rendering.
 - **Curated Scholarly References:** Every algorithm section in the reference library includes 3 to 4 authoritative citations including peer-reviewed papers (Physical Review Letters, Nature, FOCS/STOC), Wikipedia articles, and IBM Qiskit documentation.
 - **Single Source of Truth (`AQAC.ipynb`):** All Python code blocks, circuit schematics, and measurement output plots are dynamically maintained and tested within a master Jupyter Notebook (`AQAC.ipynb`). An automated extraction pipeline parses and seamlessly embeds these execution results directly into hidden interactive modals within the web interface.
@@ -20,7 +20,7 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 
 ## Complete Algorithm & Protocol Catalogue
 
-The portal organizes 19 quantum computing algorithms into five core educational pillars:
+The portal organises 19 quantum computing algorithms into five core educational pillars:
 
 ### 1. Quantum Communication & Protocols
 
