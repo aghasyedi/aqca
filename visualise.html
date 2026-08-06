@@ -186,6 +186,32 @@
                     border-bottom: 2px solid var(--border);
                     color: var(--text);
                 }
+                
+                /* Tree Map Styles */
+                .tree-map-pre {
+                    font-family: 'Menlo', 'Courier New', monospace;
+                    background: var(--surface);
+                    padding: 2rem;
+                    border-radius: 8px;
+                    color: var(--text);
+                    line-height: 1.4;
+                    overflow-x: auto;
+                    font-size: 0.95rem;
+                    margin: 0;
+                    white-space: pre;
+                }
+                .tree-map-pre .category {
+                    color: var(--primary);
+                    font-weight: 700;
+                }
+                .tree-map-pre a.tree-link {
+                    color: var(--primary);
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+                .tree-map-pre a.tree-link:hover {
+                    text-decoration: underline;
+                }
             </style>
 
             <div class="page-header">
@@ -278,6 +304,13 @@
                 </a>
             </div>
             
+            <hr style="margin-top: 4rem; margin-bottom: 2rem; border: 0; border-top: 1px solid var(--border);">
+            <div style="margin-bottom: 2rem; text-align: center;">
+                <button class="btn btn-primary btn-modern" onclick="openRoadmapModal()">
+                    View Algorithm Dependency Tree
+                </button>
+            </div>
+            
         </main>
     </div>
 
@@ -288,6 +321,146 @@
             </div>
         </div>
     </footer>
+
+    <!-- Roadmap Modal -->
+    <div id="roadmap-modal" class="output-modal-overlay">
+        <div class="output-modal-content" style="max-width: 600px;">
+            <div class="output-modal-header">
+                <h3>Algorithm Dependency Tree</h3>
+                <button class="close-modal-btn" onclick="closeRoadmapModal()">✕</button>
+            </div>
+            <div class="output-modal-body">
+                <pre class="tree-map-pre">
+<span class="category">FOUNDATIONS</span>
+────────────────────────────────────────
+
+Quantum States
+Single Qubit Gates
+Multi-Qubit Gates
+Measurement
+<a href="algorithms/foundations/bell-state.html" class="tree-link">Bell States</a>
+↓
+
+<a href="algorithms/foundations/bell-state.html" class="tree-link">Bell State Generator</a>
+↓
+
+<a href="algorithms/foundations/superdense-coding.html" class="tree-link">Superdense Coding</a>
+↓
+
+<a href="algorithms/foundations/quantum-teleportation.html" class="tree-link">Quantum Teleportation</a>
+↓
+
+<a href="algorithms/foundations/entanglement-swapping.html" class="tree-link">Entanglement Swapping</a>
+
+────────────────────────────────────────
+
+<span class="category">ORACLE-BASED ALGORITHMS</span>
+────────────────────────────────────────
+
+Classical Oracle
+↓
+
+<a href="algorithms/oracle-based/deutsch.html" class="tree-link">Deutsch's Algorithm</a>
+↓
+
+<a href="algorithms/oracle-based/deutsch-jozsa.html" class="tree-link">Deutsch-Jozsa Algorithm</a>
+↓
+
+<a href="algorithms/oracle-based/bernstein-vazirani.html" class="tree-link">Bernstein-Vazirani Algorithm</a>
+↓
+
+<a href="algorithms/oracle-based/simon.html" class="tree-link">Simon's Algorithm</a>
+
+────────────────────────────────────────
+
+<span class="category">PHASE & AMPLITUDE</span>
+────────────────────────────────────────
+
+Hadamard Transform
+↓
+
+<a href="algorithms/phase-amplitude/qft.html" class="tree-link">Quantum Fourier Transform (QFT)</a>
+↓
+
+<a href="algorithms/phase-amplitude/qpe.html" class="tree-link">Quantum Phase Estimation (QPE)</a>
+├───────────────┐
+│               │
+│               ▼
+│        <a href="algorithms/flagship-hybrid/shor.html" class="tree-link">Shor's Algorithm</a>
+│
+└──────────────► <a href="algorithms/flagship-hybrid/hhl.html" class="tree-link">HHL Algorithm</a>
+
+Oracle
+↓
+
+<a href="algorithms/phase-amplitude/grover.html" class="tree-link">Grover's Search</a>
+↓
+
+<a href="algorithms/phase-amplitude/amplitude-amplification.html" class="tree-link">Amplitude Amplification</a>
+
+────────────────────────────────────────
+
+<span class="category">FLAGSHIP & HYBRID MODELS</span>
+────────────────────────────────────────
+
+<a href="algorithms/phase-amplitude/qpe.html" class="tree-link">Quantum Phase Estimation</a>
+        │
+        ▼
+<a href="algorithms/flagship-hybrid/shor.html" class="tree-link">Shor's Algorithm</a>
+
+<a href="algorithms/phase-amplitude/qpe.html" class="tree-link">Quantum Phase Estimation</a>
+        │
+        ▼
+<a href="algorithms/flagship-hybrid/hhl.html" class="tree-link">HHL Algorithm</a>
+
+Parameterized Circuits
+        │
+        ▼
+<a href="algorithms/flagship-hybrid/vqe.html" class="tree-link">Variational Quantum Eigensolver (VQE)</a>
+
+Parameterized Circuits
+        │
+        ▼
+<a href="algorithms/flagship-hybrid/qaoa.html" class="tree-link">Quantum Approximate Optimisation Algorithm (QAOA)</a>
+
+────────────────────────────────────────
+
+<span class="category">FAULT TOLERANCE & ERROR CORRECTION</span>
+────────────────────────────────────────
+
+Bit Flip Code
+        │
+        ▼
+<a href="algorithms/fault-tolerance/3-qubit-code.html" class="tree-link">3-Qubit Code</a>
+        │
+        ▼
+<a href="algorithms/fault-tolerance/shors-9-qubit-code.html" class="tree-link">Shor's 9-Qubit Code</a>
+
+Phase Flip Code
+        │
+        ▼
+<a href="algorithms/fault-tolerance/steane-code.html" class="tree-link">Steane 7-Qubit Code</a>
+</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRoadmapModal() {
+            document.getElementById('roadmap-modal').classList.add('active');
+        }
+
+        function closeRoadmapModal() {
+            document.getElementById('roadmap-modal').classList.remove('active');
+        }
+
+        // Close on outside click
+        document.getElementById('roadmap-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRoadmapModal();
+            }
+        });
+    </script>
 
     <!-- JS -->
     <script src="js/main.js"></script>

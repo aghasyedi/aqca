@@ -9,7 +9,7 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 ## Key Features
 
 - **19 Complete Algorithm Profiles:** Comprehensive documentation spanning quantum communication, oracle query models, phase/amplitude manipulation, hybrid variational models, and fault-tolerant stabilizer codes.
-- **Interactive Visualisers:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyse measurement statistics in real-time.
+- **Interactive Visualisers & Dependency Tree:** Web-based simulation interfaces allowing users to step through quantum circuits, inspect phase kickback, observe amplitude amplification, and analyse measurement statistics in real-time. Features an integrated **Algorithm Dependency Tree** mapping the hierarchical relationships between all algorithms.
 - **Deep Mathematical Rigour:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
 - **Analysis Centre & Comparison Matrix:** An interactive benchmarking dashboard powered by Chart.js that dynamically plots classical vs. quantum scaling curves and generates side-by-side feature comparisons with real-time MathJax rendering.
 - **Curated Scholarly References:** Every algorithm section in the reference library includes 3 to 4 authoritative citations including peer-reviewed papers (Physical Review Letters, Nature, FOCS/STOC), Wikipedia articles, and IBM Qiskit documentation.
@@ -77,7 +77,7 @@ AQCA is built with a modular, responsive architecture featuring dynamic accordio
 - **Preface (`preface.html`):** Guidance on navigating the atlas, educational roadmap, and prerequisites.
 - **Quantum Computing Basics (`basics.html`):** Foundational tutorial covering Hilbert space geometry, Bloch Sphere coordinates, Pauli matrices, phase kickback, and Dirac bra-ket formalism.
 - **Algorithms Catalogue (`algorithms.html`):** Searchable atlas listing all 19 algorithms with filter controls and direct links to theoretical profiles and code implementations.
-- **Visualise (`visualise.html`):** The central hub for interactive, web-based simulation interfaces allowing users to execute circuits step-by-step and observe real-time state changes.
+- **Visualise (`visualise.html`):** The central hub for interactive, web-based simulation interfaces allowing users to execute circuits step-by-step and observe real-time state changes. Includes a dedicated **Algorithm Dependency Tree** modal.
 - **Analysis Centre (`analysis.html`):** Benchmarking dashboard allowing side-by-side metric comparison, interactive time/space complexity chart plotting via Chart.js, and dynamic math typesetting.
 - **Resources (`resources.html`):** Curated external learning materials, including textbooks, courses, and documentation.
 - **Literature & Reference Library (`references.html`):** Complete bibliography providing 3 to 4 verified scholarly links (Physical Review, Nature, IEEE, Wikipedia, Qiskit Textbook) for every single algorithm section.
