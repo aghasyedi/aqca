@@ -63,7 +63,7 @@ a:hover {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1100;
 }
 
 .header-left {
@@ -155,6 +155,7 @@ a:hover {
   padding: 1.5rem 0;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  z-index: 1050;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -1023,9 +1024,98 @@ body.squeezed .sidebar-squeeze-toggle svg {
   transform: rotate(180deg);
 }
 
+/* Nested Accordion styling */
+.nav-group-toggle-nested {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #a0b2ff;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0.6rem 1.5rem 0.6rem 2.5rem;
+    text-transform: uppercase;
+}
+.nav-group-toggle-nested:hover {
+    color: #ffffff;
+}
+.nav-group-icon-nested {
+    font-size: 0.6rem;
+    transition: transform 0.3s;
+}
+.nav-group-toggle-nested[aria-expanded="true"] .nav-group-icon-nested {
+    transform: rotate(180deg);
+}
+
+.nav-subgroup-nested {
+    list-style: none;
+    display: none;
+    padding-left: 0;
+    margin: 0;
+}
+.nav-group-toggle-nested[aria-expanded="true"] + .nav-subgroup-nested {
+    display: block;
+}
+
+.nav-subgroup-nested .nav-link {
+    padding-left: 3.5rem;
+    font-size: 0.85rem;
+}
+
 /* Flyout Menu for Algorithms when squeezed */
 body.squeezed .nav-item {
   position: relative;
+}
+
+body.squeezed .nav-subgroup:not(.flyout) {
+  display: none !important;
+}
+
+body.squeezed .nav-group-toggle.active-parent {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 4px 0 0 0 #ffffff;
+}
+
+/* Custom tooltips in squeezed mode (JS-driven to avoid clipping) */
+.sidebar-tooltip {
+    position: fixed;
+    background-color: #ffffff;
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid var(--border);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) translateX(-10px);
+    transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+}
+
+.sidebar-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.sidebar-tooltip::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #ffffff transparent transparent;
 }
 
 body.squeezed .nav-subgroup.flyout {
@@ -1038,6 +1128,43 @@ body.squeezed .nav-subgroup.flyout {
   z-index: 2000;
   padding: 1rem 0;
   display: block;
+}
+
+/* Cascading Flyout styling */
+body.squeezed .nav-subgroup.flyout .nav-item-nested {
+    position: relative;
+}
+body.squeezed .nav-subgroup.flyout .nav-group-toggle-nested {
+    padding: 0.5rem 1.5rem;
+    color: #cdd6ff;
+    font-weight: 500;
+    text-transform: none;
+}
+body.squeezed .nav-subgroup.flyout .nav-group-toggle-nested:hover {
+    background: rgba(255,255,255,0.1);
+    color: #ffffff;
+}
+body.squeezed .nav-subgroup.flyout .nav-group-icon-nested {
+    transform: rotate(-90deg);
+}
+body.squeezed .nav-subgroup.flyout .nav-subgroup-nested {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: var(--primary);
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.2);
+    min-width: 250px;
+    border-radius: 0 8px 8px 0;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    z-index: 2001;
+    padding: 0.5rem 0;
+    display: none !important; /* Prevent inline display from JS active state */
+}
+body.squeezed .nav-subgroup.flyout .nav-item-nested:hover .nav-subgroup-nested {
+    display: block !important;
+}
+body.squeezed .nav-subgroup.flyout .nav-subgroup-nested .nav-link {
+    padding-left: 1.5rem;
 }
 
 body.squeezed .nav-subgroup.flyout .nav-link {

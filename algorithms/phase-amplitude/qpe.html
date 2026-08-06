@@ -59,7 +59,7 @@
                     <a href="../../preface.html" class="nav-link">Preface</a>
                 </div>
                 <div class="nav-item">
-                    <a href="../../basics.html" class="nav-link">Quantum Computing Basics</a>
+                    <a href="../../basics.html" class="nav-link">QC Basics</a>
                 </div>
                 <div class="nav-item">
                     <button class="nav-group-toggle" aria-expanded="true">
@@ -446,7 +446,41 @@ else:
                 <a href="../../assets/notebooks/qpe.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
             <div class="code-output-data" style="display: none;">
-                
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QPE Analysis: Hidden Phase Estimation</p>
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-1.png" alt="Notebook output">
+
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
+                <pre class="notebook-output-text">Final DensityMatrix of counting register prior to measurement:</pre>
+                <div class="notebook-output-math">$$
+                \begin{bmatrix}
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 1 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+                \end{bmatrix}
+                $$</div>
+
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
+                <pre class="notebook-output-text">Counting register state prior to measurement (Bloch Spheres):</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-2.png" alt="Notebook output">
+                <pre class="notebook-output-text">Counting register state prior to measurement (Q-Sphere):</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-3.png" alt="Notebook output">
+
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
+                <pre class="notebook-output-text">Raw measurement counts: {'011': 1024}</pre>
+                <img class="notebook-output-img" src="../../assets/images/outputs/qpe-out-4.png" alt="Notebook output">
+
+                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: Phase Calculation</p>
+                <pre class="notebook-output-text">Target Phase Set (θ): 0.375
+Most frequent measurement: |011⟩
+Decimal equivalent: 3
+Estimated Phase (θ) = 3 / 2^3 = 0.375
+Success: The estimated phase perfectly matches the target hidden phase!</pre>
             </div>
         </div>
     </section>
