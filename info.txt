@@ -1,0 +1,92 @@
+===============================================================================
+                       AQCA: All Quantum Computing Algorithms
+===============================================================================
+                            PROJECT DOCUMENTATION
+===============================================================================
+
+1. PROJECT OVERVIEW
+-------------------------------------------------------------------------------
+AQCA (All Quantum Computing Algorithms) is a comprehensive, interactive, and beautifully designed educational platform that catalogues and explains the most important algorithms and protocols in quantum computing. 
+
+The project bridges the gap between theoretical quantum mechanics and practical quantum software development by combining rigorous mathematical derivations with actual, executable quantum circuits using Qiskit.
+
+2. PROJECT STRUCTURE & FEATURES
+-------------------------------------------------------------------------------
+The platform is built as a static web application with a rich, modern UI. It features:
+- Algorithm Catalogue: A categorized index of 19 major quantum algorithms.
+- Interactive Outputs: Embedded modal popups showing real Qiskit execution outputs (Statevectors, Density Matrices, Bloch Spheres, Q-Spheres, Unitary Operators, and Measurement Histograms).
+- Mathematical Rigor: Full MathJax/LaTeX integration for rendering complex quantum states and matrix equations.
+- Visual Simulators: Integration with interactive visual tools (e.g., BB84 Protocol Simulator).
+- Comprehensive Appendix: 15 specialized pages detailing the fundamental physics and mathematical derivations (e.g., Wavefunction Collapse, Decoherence Times, No-Cloning Theorem).
+- Master Jupyter Notebook: A single, unified `AQAC.ipynb` file containing the raw Python/Qiskit code for every algorithm, allowing users to run the simulations themselves locally or via Google Colab.
+
+3. CATALOGUE OF ALGORITHMS
+-------------------------------------------------------------------------------
+The core of the project is divided into 5 distinct categories, tracking the evolution of quantum algorithms from basic protocols to advanced hybrid models:
+
+1. Quantum Communication (Protocols & Foundations)
+   - Bell State Generator
+   - Superdense Coding
+   - Quantum Teleportation
+   - Entanglement Swapping
+
+2. Early Oracle Algorithms (Provable Quantum Advantage)
+   - Deutsch's Algorithm
+   - Deutsch-Jozsa Algorithm
+   - Bernstein-Vazirani Algorithm
+   - Simon's Algorithm
+
+3. Core Algorithms (Phase & Amplitude)
+   - Quantum Fourier Transform (QFT)
+   - Quantum Phase Estimation (QPE)
+   - Grover's Search Algorithm
+   - Generalised Amplitude Amplification
+
+4. Flagship & Hybrid Models (NISQ Era & Beyond)
+   - Shor's Algorithm
+   - Variational Quantum Eigensolver (VQE)
+   - Quantum Approximate Optimisation Algorithm (QAOA)
+   - HHL Algorithm (Harrow-Hassidim-Lloyd)
+
+5. Quantum Error Correction (Fault Tolerance)
+   - 3-Qubit Bit-Flip/Phase-Flip Code
+   - Shor's 9-Qubit Code
+   - Steane 7-Qubit Code
+
+4. APPENDIX & DETAILED DERIVATIONS
+-------------------------------------------------------------------------------
+The `/details/` directory houses 15 specialized topics that explain the theoretical underpinnings of the algorithms:
+- Quantum Oracles
+- The Kickback Mechanism
+- Quantum Parallelism
+- Measurement & Wavefunction Collapse
+- Mutually Unbiased Bases
+- Heisenberg Uncertainty Principle
+- The No-Cloning Theorem
+- DiVincenzo's Criteria
+- Quantum Noise Channels
+- Decoherence Times
+- Fidelity
+- Trace Distance
+- Quantum State Tomography
+- Threshold Theorem
+- Logical Qubits
+
+5. TECHNOLOGY STACK
+-------------------------------------------------------------------------------
+- Frontend: HTML5, CSS3 (Custom variables, Flexbox, Responsive Grid), Vanilla JavaScript.
+- Typography & Icons: Google Fonts (Inter, Lora, Menlo), SVG inline icons.
+- Mathematics Rendering: MathJax v3 (LaTeX).
+- Quantum Backend / Notebooks: Python 3, Qiskit (Aer Simulator, Statevector Sampler), Matplotlib (for circuit plotting and Bloch spheres), Jupyter Notebook framework.
+- Automation Scripts: Custom Python extraction scripts (`extract_outputs.py`) engineered to parse Jupyter Notebook outputs and dynamically inject HTML/Base64 image assets seamlessly into the web interface.
+
+6. RECENT UPDATES & MILESTONES
+-------------------------------------------------------------------------------
+- Implemented a specialized, collapsible sidebar for the Appendix/Details section for rapid navigation.
+- Extracted and injected real Qiskit outputs from `AQAC.ipynb` directly into the algorithm web pages.
+- Fixed advanced CSS flexbox layout issues ensuring massive mathematical arrays and density matrices render perfectly without collapsing.
+- Added direct integration with Google Colab and downloadable `.ipynb` resources across the platform.
+
+===============================================================================
+End of Document
+===============================================================================

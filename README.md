@@ -13,7 +13,8 @@ AQCA (**All Quantum Computing Algorithms**) is a state-of-the-art, academic-grad
 - **Deep Mathematical Rigor:** Every algorithm page features complete state vector evolutions in Dirac bra-ket notation ($\langle\psi|$, $|\psi\rangle$), operator matrices, and computational complexity bounds rendered using MathJax v3.
 - **Analysis Centre & Comparison Matrix:** An interactive benchmarking dashboard powered by Chart.js that dynamically plots classical vs. quantum scaling curves and generates side-by-side feature comparisons with real-time MathJax rendering.
 - **Curated Scholarly References:** Every algorithm section in the reference library includes 3 to 4 authoritative citations including peer-reviewed papers (Physical Review Letters, Nature, FOCS/STOC), Wikipedia articles, and IBM Qiskit documentation.
-- **Single Source of Truth (`AQCA.ipynb`):** All Python code blocks, circuit schematics, and measurement output plots are dynamically maintained and tested within a master Jupyter Notebook (`AQCA.ipynb`).
+- **Single Source of Truth (`AQAC.ipynb`):** All Python code blocks, circuit schematics, and measurement output plots are dynamically maintained and tested within a master Jupyter Notebook (`AQAC.ipynb`). An automated extraction pipeline parses and seamlessly embeds these execution results directly into hidden interactive modals within the web interface.
+- **Google Colab Integration:** Direct links allow users to launch the entire master catalog directly in Google Colab, bridging static theoretical learning with interactive cloud-based execution.
 
 ---
 
@@ -69,7 +70,7 @@ The portal organizes 19 quantum computing algorithms into five core educational 
 
 ## Platform Architecture & Portal Modules
 
-AQCA is built with a modular, responsive architecture comprising the following dedicated sections in sequence:
+AQCA is built with a modular, responsive architecture featuring dynamic accordion sidebars and a specialized rapid-navigation menu for detailed derivations. It comprises the following dedicated sections in sequence:
 
 - **Home Portal (`index.html`):** Platform entry point featuring an interactive vector Bloch Sphere diagram, overview of algorithm categories, feature breakdowns, and quick navigation.
 - **About AQCA (`about.html`):** Information regarding the mission, philosophy, and overarching goals of the platform.
@@ -91,7 +92,7 @@ AQCA is built with a modular, responsive architecture comprising the following d
 - **Mathematical Engine:** MathJax v3 (`tex-mml-chtml.js`) for LaTeX mathematical notation and Dirac equation rendering.
 - **Data Visualisation:** Chart.js for complexity scaling curves, SVG graphics for state representations and Bloch sphere diagrams.
 - **Quantum Backend:** Python 3, Qiskit, Qiskit-Aer simulator framework, Matplotlib for histogram and circuit plot rendering.
-- **Source of Truth:** Master Jupyter Notebook (`AQCA.ipynb`).
+- **Source of Truth:** Master Jupyter Notebook (`AQAC.ipynb`) coupled with custom Python extraction scripts to automate HTML/Base64 injection.
 
 ---
 
