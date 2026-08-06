@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "AQCA: All Quantum Computing Algorithms"
+message: "If you use this project, please cite it as below."
+type: software
+authors:
+  - family-names: Syedi
+    given-names: Agha Tasheer
+version: 1.0.0
+date-released: 2026-08-06
+url: https://github.com/aghasyedi/AQCA
