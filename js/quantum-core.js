@@ -436,7 +436,10 @@
             var p = pt(e);
             var dx = p.x - self._px, dy = p.y - self._py;
             self._px = p.x; self._py = p.y;
-            self.az += dx * 0.010;
+            // Horizontal: negate dx so a left→right drag rotates the sphere right→left
+            // (natural "grab and drag"). proj() maps front features with d(sx)/d(az) < 0,
+            // so increasing az would invert the motion. Vertical (el) is already natural.
+            self.az -= dx * 0.010;
             self.el += dy * 0.008;
             if (self.el > 1.45) self.el = 1.45;
             if (self.el < -1.45) self.el = -1.45;
