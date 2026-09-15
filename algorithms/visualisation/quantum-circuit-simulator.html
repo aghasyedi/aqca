@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Circuit Simulator | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Circuit Simulator">
+
+    <!-- Chart.js -->
+    <script src="../../assets/vendor/chartjs/chart.js"></script>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/visualiser.css">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../assets/vendor/mathjax/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body class="viz-page">
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num"
+                            style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../about.html" class="nav-link">About AQCA</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">QC Basics</a>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+
+                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+
+                        <li class="nav-category-label">6. Visualisation & Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item">
+                    <a href="../../visualise.html" class="nav-link">Visualise</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../analysis.html" class="nav-link">Analysis Centre</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="viz-shell">
+                <nav class="viz-crumbs">
+                    <a href="../../index.html">Home</a><span class="sep">›</span>
+                    <a href="../../visualise.html">Visualise</a><span class="sep">›</span>
+                    <span class="current">Quantum Circuit Simulator</span>
+                </nav>
+                <div class="viz-head">
+                    <div class="viz-head__left">
+                        <span class="viz-eyebrow">Interactive Visualiser</span>
+                        <h1 class="viz-title">Quantum Circuit Simulator</h1>
+                        <p class="viz-subtitle">Build a circuit by clicking or dragging gates onto the grid, then execute it one column at a time. The statevector, reduced Bloch spheres, execution log and measurement histogram all follow the step pointer.</p>
+                    </div>
+                    <div class="viz-head__actions">
+                        <a class="viz-btn viz-btn--primary" href="../../basics.html">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            QC Basics
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html">All visualisers</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portal-grid">
+                <!-- ================= SIDEBAR ================= -->
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Register</h2>
+                        <div class="qt-field">
+                            <label class="qt-label">Qubits</label>
+                            <select id="inp-n" class="modern-input">
+                                <option value="2">2</option>
+                                <option value="3" selected>3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="qt-field">
+                            <label class="qt-label">Circuit depth (columns)</label>
+                            <select id="inp-m" class="modern-input">
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6" selected>6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--danger" id="btn-clear">Clear circuit</button>
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Gate Palette <span class="qt-card-note" id="out-armed">none</span></h2>
+                        <div class="qt-gate-grid" id="palette">
+                            <button class="qt-gate" data-family="pauli" data-g="X">X</button>
+                            <button class="qt-gate" data-family="pauli" data-g="Y">Y</button>
+                            <button class="qt-gate" data-family="pauli" data-g="Z">Z</button>
+                            <button class="qt-gate" data-family="had" data-g="H">H</button>
+                            <button class="qt-gate" data-family="phase" data-g="S">S</button>
+                            <button class="qt-gate" data-family="phase" data-g="T">T</button>
+                            <button class="qt-gate" data-family="phase" data-g="SDG">S†</button>
+                            <button class="qt-gate" data-family="phase" data-g="TDG">T†</button>
+                            <button class="qt-gate" data-family="rot" data-g="SX">√X</button>
+                            <button class="qt-gate" data-family="rot" data-g="RX">Rx</button>
+                            <button class="qt-gate" data-family="rot" data-g="RY">Ry</button>
+                            <button class="qt-gate" data-family="rot" data-g="RZ">Rz</button>
+                            <button class="qt-gate" data-family="two" data-g="CNOT">CNOT</button>
+                            <button class="qt-gate" data-family="two" data-g="CZ">CZ</button>
+                            <button class="qt-gate" data-family="two" data-g="SWAP">SWAP</button>
+                            <button class="qt-gate" data-family="two" data-g="CH">CH</button>
+                        </div>
+                        <div class="qt-field qt-mt">
+                            <label class="qt-label">Rotation angle (for Rx / Ry / Rz)</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-angle" min="-360" max="360" step="1" value="90">
+                                <span class="qt-range-val" id="val-angle">90°</span>
+                            </div>
+                        </div>
+                        <div class="qt-note">Click a gate, then click a cell. Two-qubit gates need two clicks:
+                            first the <strong>control</strong> row, then the <strong>target</strong> row. You can
+                            also drag a gate straight onto a cell. Click any placed gate to remove it.</div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Execution</h2>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--primary" id="btn-step">Step ▶</button>
+                            <button class="qt-btn" id="btn-back">◀ Back</button>
+                        </div>
+                        <div class="qt-btn-row qt-mt">
+                            <button class="qt-btn" id="btn-runall">Run all</button>
+                            <button class="qt-btn qt-btn--danger" id="btn-rewind">⟲ Rewind</button>
+                        </div>
+                        <div class="qt-hr"></div>
+                        <div class="qt-field">
+                            <label class="qt-label">Measurement shots</label>
+                            <select id="inp-shots" class="modern-input">
+                                <option value="100">100</option>
+                                <option value="500" selected>500</option>
+                                <option value="2000">2000</option>
+                                <option value="8000">8000</option>
+                            </select>
+                        </div>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--primary" id="btn-measure">Measure final state</button>
+                        </div>
+                        <div class="qt-formula qt-mt" id="out-step">step 0 / 6</div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>4. Presets</h2>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--sm" data-preset="bell">Bell pair</button>
+                            <button class="qt-btn qt-btn--sm" data-preset="ghz">GHZ-3</button>
+                            <button class="qt-btn qt-btn--sm" data-preset="qft">QFT on 3</button>
+                            <button class="qt-btn qt-btn--sm" data-preset="grover">Grover-2 oracle</button>
+                            <button class="qt-btn qt-btn--sm" data-preset="teleport">Teleport (no corr.)</button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- ================= MAIN ================= -->
+                <div class="visualiser-main">
+                    <div class="pert-card">
+                        <h2>Circuit <span class="qt-card-note">click to place · click again to remove</span></h2>
+                        <div class="qt-circuit-wrap">
+                            <div class="qt-circuit" id="circuit"></div>
+                        </div>
+                        <div class="qt-legend">
+                            <span><i class="qt-dot" style="background:rgba(0,15,145,0.15)"></i>executed</span>
+                            <span><i class="qt-dot" style="background:rgba(0,15,145,0.85)"></i>next column</span>
+                        </div>
+                    </div>
+
+                    <div class="qt-2col qt-2col--fixed">
+                        <div class="pert-card">
+                            <h2>State After Step <span class="qt-card-note" id="out-statelab">step 0</span></h2>
+                            <div class="qt-amp-list" id="out-amps"></div>
+                            <div class="qt-formula qt-mt" id="out-ket">|ψ⟩ = 1.000|000⟩</div>
+                        </div>
+
+                        <div class="pert-card">
+                            <h2>Measurement Histogram</h2>
+                            <div class="qt-canvas-box qt-canvas-box--chart-tall">
+                                <canvas id="chart-meas"></canvas>
+                            </div>
+                            <div class="qt-kv qt-mt" id="out-stats"></div>
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>Per-Qubit Reduced State</h2>
+                        <div id="out-blochs" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:14px;"></div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>Execution Log</h2>
+                        <div class="qt-scroll" id="out-log"><span class="qt-empty">Nothing executed yet.</span></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>&copy; 2026 AQCA - All Quantum Computing Algorithms</div>
+        </div>
+    </footer>
+
+    <script src="../../js/quantum-core.js"></script>
+
+<script>
+    (function () {
+        'use strict';
+
+        var n = 3, m = 6;
+        var cells = [];      // cells[r][c] -> null | {g:'H'} | {g:'RX', ang:90}
+        var pairs = [];      // {col, kind, ctrl, targ}
+        var states = [];     // states[k] = state after k columns
+        var stepIndex = 0;
+        var armed = null;    // {g:'H'} or {g:'CNOT'}
+        var pendingCtrl = null;
+        var spheres = [];
+        var runTimer = null;
+
+        var elN = document.getElementById('inp-n');
+        var elM = document.getElementById('inp-m');
+        var elAngle = document.getElementById('inp-angle');
+        var elShots = document.getElementById('inp-shots');
+
+        var LABEL = { 'SDG': 'S†', 'TDG': 'T†', 'SX': '√X', 'RX': 'Rx', 'RY': 'Ry', 'RZ': 'Rz' };
+        var TWO = { 'CNOT': 1, 'CZ': 1, 'SWAP': 1, 'CH': 1 };
+        var SYM = { 'CNOT': '⊕', 'CZ': 'Z', 'SWAP': '×', 'CH': 'H' };
+        var FAM = {
+            'X': 'pauli', 'Y': 'pauli', 'Z': 'pauli', 'H': 'had',
+            'S': 'phase', 'T': 'phase', 'SDG': 'phase', 'TDG': 'phase',
+            'SX': 'rot', 'RX': 'rot', 'RY': 'rot', 'RZ': 'rot',
+            'CNOT': 'two', 'CZ': 'two', 'SWAP': 'two', 'CH': 'two'
+        };
+
+        function emptyGrid() {
+            cells = [];
+            for (var r = 0; r < n; r++) {
+                cells.push([]);
+                for (var c = 0; c < m; c++) cells[r].push(null);
+            }
+            pairs = [];
+        }
+
+        /* ---------------- circuit rendering ---------------- */
+        function renderCircuit() {
+            var host = document.getElementById('circuit');
+            host.innerHTML = '';
+            host.style.gridTemplateColumns = 'auto repeat(' + m + ', 48px)';
+            host.style.gridTemplateRows = 'auto repeat(' + n + ', 44px)';
+
+            var corner = document.createElement('div');
+            corner.className = 'qt-circuit__head';
+            host.appendChild(corner);
+            for (var c = 0; c < m; c++) {
+                var hd = document.createElement('div');
+                hd.className = 'qt-circuit__head';
+                hd.textContent = String(c + 1);
+                host.appendChild(hd);
+            }
+
+            for (var r = 0; r < n; r++) {
+                var lab = document.createElement('div');
+                lab.className = 'qt-circuit__q';
+                lab.textContent = 'q' + r;
+                host.appendChild(lab);
+
+                for (var cc = 0; cc < m; cc++) {
+                    var slot = document.createElement('div');
+                    slot.className = 'qt-slot';
+                    slot.dataset.r = r; slot.dataset.c = cc;
+                    if (cc < stepIndex) slot.classList.add('is-active');
+                    if (cc === stepIndex && stepIndex < m) slot.classList.add('is-target');
+
+                    var g = cells[r][cc];
+                    var pr = pairAt(r, cc);
+                    if (g) {
+                        var box = document.createElement('div');
+                        box.className = 'qt-gbox';
+                        box.dataset.family = FAM[g.g] || 'had';
+                        box.textContent = LABEL[g.g] || g.g;
+                        box.title = (LABEL[g.g] || g.g) + (g.ang !== undefined ? '(' + g.ang + '°)' : '') + ' — click to remove';
+                        box.addEventListener('click', function (ev) {
+                            ev.stopPropagation();
+                            removeAt(+this.parentNode.dataset.r, +this.parentNode.dataset.c);
+                        });
+                        slot.appendChild(box);
+                    } else if (pr) {
+                        if (pr.ctrl === r) {
+                            var dot = document.createElement('div');
+                            dot.className = 'qt-ctrl';
+                            dot.title = pr.kind + ' control — click to remove';
+                            dot.addEventListener('click', function (ev) {
+                                ev.stopPropagation();
+                                var pp = pairAt(+this.parentNode.dataset.r, +this.parentNode.dataset.c);
+                                if (pp) removePair(pp);
+                            });
+                            slot.appendChild(dot);
+                            var link = document.createElement('div');
+                            link.className = 'qt-link';
+                            var d = pr.targ - pr.ctrl;
+                            if (d > 0) { link.style.top = '50%'; link.style.height = (d * 50) + 'px'; }
+                            else { link.style.bottom = '50%'; link.style.height = (-d * 50) + 'px'; }
+                            slot.appendChild(link);
+                        } else {
+                            var tb = document.createElement('div');
+                            tb.className = 'qt-gbox';
+                            tb.dataset.family = 'two';
+                            tb.textContent = SYM[pr.kind] || pr.kind;
+                            tb.title = pr.kind + ' target — click to remove';
+                            tb.addEventListener('click', function (ev) {
+                                ev.stopPropagation();
+                                var pp = pairAt(+this.parentNode.dataset.r, +this.parentNode.dataset.c);
+                                if (pp) removePair(pp);
+                            });
+                            slot.appendChild(tb);
+                        }
+                    }
+                    host.appendChild(slot);
+                }
+            }
+
+            Array.prototype.forEach.call(host.querySelectorAll('.qt-slot'), function (s) {
+                s.addEventListener('click', onSlotClick);
+                s.addEventListener('dragover', function (e) { e.preventDefault(); s.classList.add('is-drop'); });
+                s.addEventListener('dragleave', function () { s.classList.remove('is-drop'); });
+                s.addEventListener('drop', function (e) {
+                    e.preventDefault();
+                    s.classList.remove('is-drop');
+                    var g = e.dataTransfer.getData('text/plain');
+                    if (g) dropGate(g, +s.dataset.r, +s.dataset.c);
+                });
+            });
+        }
+
+        function pairAt(r, c) {
+            for (var i = 0; i < pairs.length; i++) {
+                var p = pairs[i];
+                if (p.col === c && (p.ctrl === r || p.targ === r)) return p;
+            }
+            return null;
+        }
+
+        function removeAt(r, c) {
+            if (cells[r][c]) cells[r][c] = null;
+            var p = pairAt(r, c);
+            if (p) removePair(p);
+            recompute();
+        }
+
+        function removePair(p) {
+            pairs = pairs.filter(function (x) { return x !== p; });
+        }
+
+        function place(g, r, c) {
+            if (TWO[g]) {
+                if (pendingCtrl === null) {
+                    pendingCtrl = { r: r, c: c, kind: g };
+                    setStatus(g + ': now click the target row');
+                    renderCircuit();
+                    return;
+                }
+                var t = r;
+                if (t === pendingCtrl.r) { setStatus('control and target must differ'); return; }
+                removeAt(pendingCtrl.r, pendingCtrl.c);
+                removeAt(r, c);
+                pairs.push({ col: pendingCtrl.c, kind: pendingCtrl.kind, ctrl: pendingCtrl.r, targ: t });
+                pendingCtrl = null;
+                setStatus('placed');
+            } else {
+                var existing = pairAt(r, c);
+                if (existing) removePair(existing);
+                cells[r][c] = { g: g, ang: (g === 'RX' || g === 'RY' || g === 'RZ') ? parseFloat(elAngle.value) : undefined };
+                setStatus('placed');
+            }
+            recompute();
+        }
+
+        function dropGate(g, r, c) {
+            if (TWO[g]) {
+                var t = r + 1 < n ? r + 1 : r - 1;
+                if (t < 0) return;
+                var ex = pairAt(r, c); if (ex) removePair(ex);
+                var ex2 = pairAt(t, c); if (ex2) removePair(ex2);
+                cells[r][c] = null; cells[t][c] = null;
+                pairs.push({ col: c, kind: g, ctrl: r, targ: t });
+            } else {
+                var e2 = pairAt(r, c); if (e2) removePair(e2);
+                cells[r][c] = { g: g, ang: (g === 'RX' || g === 'RY' || g === 'RZ') ? parseFloat(elAngle.value) : undefined };
+            }
+            recompute();
+        }
+
+        function onSlotClick(e) {
+            var r = +this.dataset.r, c = +this.dataset.c;
+            if (!armed) { if (cells[r][c] || pairAt(r, c)) removeAt(r, c); return; }
+            place(armed, r, c);
+        }
+
+        function setStatus(s) {
+            document.getElementById('out-armed').textContent = s;
+        }
+
+        /* ---------------- simulation ---------------- */
+        function gateMatrix(g, ang) {
+            if (g === 'RX') return QC.Rx(ang * Math.PI / 180);
+            if (g === 'RY') return QC.Ry(ang * Math.PI / 180);
+            if (g === 'RZ') return QC.Rz(ang * Math.PI / 180);
+            return QC.GATES[g];
+        }
+
+        function applyColumn(st, c) {
+            for (var r = 0; r < n; r++) {
+                var g = cells[r][c];
+                if (g) st = QC.apply1q(st, gateMatrix(g.g, g.ang), r, n);
+            }
+            for (var i = 0; i < pairs.length; i++) {
+                var p = pairs[i];
+                if (p.col !== c) continue;
+                if (p.kind === 'CNOT') st = QC.cnot(st, p.ctrl, p.targ, n);
+                else if (p.kind === 'CZ') st = QC.cz(st, p.ctrl, p.targ, n);
+                else if (p.kind === 'CH') st = QC.ch(st, p.ctrl, p.targ, n);
+                else if (p.kind === 'SWAP') st = QC.swap(st, p.ctrl, p.targ, n);
+            }
+            return st;
+        }
+
+        function recompute() {
+            states = [QC.zeroState(n)];
+            for (var c = 0; c < m; c++) states.push(QC.canonical(applyColumn(states[c], c)));
+            if (stepIndex > m) stepIndex = m;
+            renderCircuit();
+            renderState();
+        }
+
+        /* ---------------- output rendering ---------------- */
+        function cur() { return states[Math.min(stepIndex, states.length - 1)]; }
+
+        function renderState() {
+            var st = cur();
+            var labs = QC.labels(n);
+            var p = QC.probs(st);
+            var host = document.getElementById('out-amps');
+            host.innerHTML = '';
+            for (var i = 0; i < p.length; i++) {
+                var pol = QC.polar(st[i]);
+                var row = document.createElement('div');
+                row.className = 'qt-amp' + (p[i] > 0.999 ? ' is-lit' : '');
+                row.innerHTML =
+                    '<div class="qt-amp__ket">|' + labs[i] + '⟩</div>' +
+                    '<div class="qt-amp__bar"><div class="qt-amp__fill" style="width:' + (p[i] * 100).toFixed(2) + '%"></div></div>' +
+                    '<div class="qt-amp__num">' + p[i].toFixed(3) +
+                    '<small>' + (pol.r < 1e-6 ? '—' : QC.num(pol.r, 2) + '∠' + QC.num(QC.deg(pol.th), 0) + '°') + '</small></div>';
+                host.appendChild(row);
+            }
+            document.getElementById('out-ket').textContent = '|ψ⟩ = ' + QC.ketString(st, n, 3);
+            document.getElementById('out-statelab').textContent = 'step ' + stepIndex;
+            document.getElementById('out-step').textContent = 'step ' + stepIndex + ' / ' + m;
+
+            for (var s = 0; s < spheres.length; s++) {
+                var b = QC.bloch(st, s, n);
+                spheres[s].main.x = b.x; spheres[s].main.y = b.y; spheres[s].main.z = b.z;
+                spheres[s].draw();
+            }
+            renderLog();
+        }
+
+        function renderLog() {
+            var host = document.getElementById('out-log');
+            var lines = [];
+            for (var c = 0; c < stepIndex; c++) {
+                var ops = [];
+                for (var r = 0; r < n; r++) {
+                    var g = cells[r][c];
+                    if (g) ops.push((LABEL[g.g] || g.g) + (g.ang !== undefined ? '(' + g.ang + '°)' : '') + ' q' + r);
+                }
+                for (var i = 0; i < pairs.length; i++) {
+                    var p = pairs[i];
+                    if (p.col === c) ops.push(p.kind + ' q' + p.ctrl + '→q' + p.targ);
+                }
+                lines.push('<div class="qt-kv__row"><span class="qt-kv__k">column ' + (c + 1) + '</span>' +
+                    '<span class="qt-kv__v">' + (ops.length ? ops.join(', ') : '— identity —') + '</span></div>');
+            }
+            host.innerHTML = lines.length ? '<div class="qt-kv">' + lines.join('') + '</div>'
+                : '<span class="qt-empty">Nothing executed yet.</span>';
+            host.scrollTop = host.scrollHeight;
+        }
+
+        function buildSpheres() {
+            var host = document.getElementById('out-blochs');
+            host.innerHTML = '';
+            spheres = [];
+            for (var i = 0; i < n; i++) {
+                var wrap = document.createElement('div');
+                wrap.innerHTML =
+                    '<div class="qt-card-note" style="text-align:center; font-weight:700; color:var(--primary); margin-bottom:6px;">q' + i + '</div>' +
+                    '<div class="qt-canvas-box qt-canvas-box--bloch" style="max-height:220px;"><canvas></canvas></div>';
+                host.appendChild(wrap);
+                spheres.push(new QC.Bloch(wrap.querySelector('canvas'), { maxTrail: 0, labels: false, drop: false }));
+            }
+        }
+
+        /* ---------------- controls ---------------- */
+        document.querySelectorAll('#palette [data-g]').forEach(function (b) {
+            b.draggable = true;
+            b.addEventListener('dragstart', function (e) {
+                e.dataTransfer.setData('text/plain', b.getAttribute('data-g'));
+            });
+            b.addEventListener('click', function () {
+                var g = b.getAttribute('data-g');
+                if (armed === g) { armed = null; setStatus('none'); }
+                else { armed = g; pendingCtrl = null; setStatus(g + (TWO[g] ? ' — pick control row' : ' armed')); }
+                document.querySelectorAll('#palette [data-g]').forEach(function (x) {
+                    x.classList.toggle('is-armed', x === b && armed !== null);
+                });
+                if (!armed) pendingCtrl = null;
+            });
+        });
+
+        document.getElementById('btn-step').addEventListener('click', function () {
+            if (stepIndex < m) { stepIndex++; recompute(); }
+        });
+        document.getElementById('btn-back').addEventListener('click', function () {
+            if (stepIndex > 0) { stepIndex--; recompute(); }
+        });
+        document.getElementById('btn-rewind').addEventListener('click', function () {
+            stepIndex = 0; recompute();
+        });
+        document.getElementById('btn-runall').addEventListener('click', function () {
+            if (runTimer) { clearInterval(runTimer); runTimer = null; }
+            stepIndex = 0; recompute();
+            runTimer = setInterval(function () {
+                if (stepIndex >= m) { clearInterval(runTimer); runTimer = null; return; }
+                stepIndex++; recompute();
+            }, 260);
+        });
+
+        document.getElementById('btn-clear').addEventListener('click', function () {
+            emptyGrid();
+            stepIndex = 0;
+            recompute();
+        });
+
+        document.getElementById('btn-measure').addEventListener('click', function () {
+            var st = cur();
+            var p = QC.probs(st);
+            var shots = parseInt(elShots.value, 10);
+            var counts = QC.sampleMany(p, shots);
+            var labs = QC.labels(n);
+            QC.barChart(document.getElementById('chart-meas'), labs, counts.map(function (c) { return c / shots; }), {
+                label: 'Measured frequency',
+                colors: 'rgba(0,15,145,0.75)',
+                data2: p,
+                label2: 'Theory |amplitude|^2',
+                colors2: 'rgba(180,83,9,0.5)',
+                max: 1
+            });
+            var host = document.getElementById('out-stats');
+            var rows = [];
+            var tvd = 0;
+            for (var i = 0; i < counts.length; i++) {
+                tvd += Math.abs(counts[i] / shots - p[i]);
+                rows.push('<div class="qt-kv__row"><span class="qt-kv__k">|' + labs[i] + '⟩</span>' +
+                    '<span class="qt-kv__v">' + counts[i] + ' / ' + shots + ' &nbsp;·&nbsp; ' +
+                    (counts[i] / shots).toFixed(3) + ' vs ' + p[i].toFixed(3) + '</span></div>');
+            }
+            rows.push('<div class="qt-kv__row"><span class="qt-kv__k">Total variation distance</span>' +
+                '<span class="qt-kv__v is-accent">' + (tvd / 2).toFixed(4) + '</span></div>');
+            host.innerHTML = rows.join('');
+        });
+
+        elN.addEventListener('change', function () {
+            n = parseInt(elN.value, 10);
+            stepIndex = 0;
+            emptyGrid();
+            buildSpheres();
+            recompute();
+        });
+        elM.addEventListener('change', function () {
+            m = parseInt(elM.value, 10);
+            stepIndex = 0;
+            emptyGrid();
+            recompute();
+        });
+        elAngle.addEventListener('input', function () {
+            document.getElementById('val-angle').textContent = QC.num(parseFloat(elAngle.value), 0) + '°';
+        });
+
+        /* ---------------- presets ---------------- */
+        var PRESETS = {
+            bell: function () {
+                needN(2); needM(4); emptyGrid();
+                cells[0][0] = { g: 'H' };
+                pairs.push({ col: 1, kind: 'CNOT', ctrl: 0, targ: 1 });
+            },
+            ghz: function () {
+                needN(3); needM(4); emptyGrid();
+                cells[0][0] = { g: 'H' };
+                pairs.push({ col: 1, kind: 'CNOT', ctrl: 0, targ: 1 });
+                pairs.push({ col: 2, kind: 'CNOT', ctrl: 1, targ: 2 });
+            },
+            qft: function () {
+                needN(3); needM(8); emptyGrid();
+                cells[0][0] = { g: 'H' };
+                pairs.push({ col: 1, kind: 'CZ', ctrl: 1, targ: 0 });
+                cells[1][3] = { g: 'H' };
+                pairs.push({ col: 4, kind: 'CZ', ctrl: 2, targ: 1 });
+                cells[2][5] = { g: 'H' };
+                pairs.push({ col: 6, kind: 'SWAP', ctrl: 0, targ: 2 });
+            },
+            grover: function () {
+                needN(2); needM(5); emptyGrid();
+                cells[0][0] = { g: 'H' }; cells[1][0] = { g: 'H' };
+                pairs.push({ col: 1, kind: 'CZ', ctrl: 0, targ: 1 });
+                cells[0][2] = { g: 'H' }; cells[1][2] = { g: 'H' };
+                cells[0][3] = { g: 'X' }; cells[1][3] = { g: 'X' };
+                pairs.push({ col: 4, kind: 'CZ', ctrl: 0, targ: 1 });
+            },
+            teleport: function () {
+                needN(3); needM(5); emptyGrid();
+                cells[2][0] = { g: 'H' };
+                pairs.push({ col: 1, kind: 'CNOT', ctrl: 2, targ: 1 });
+                pairs.push({ col: 2, kind: 'CNOT', ctrl: 2, targ: 0 });
+                cells[2][3] = { g: 'H' };
+            }
+        };
+
+        function needN(v) { if (n !== v) { n = v; elN.value = String(v); buildSpheres(); } }
+        function needM(v) { if (m < v) { m = v; elM.value = String(v); } }
+
+        document.querySelectorAll('[data-preset]').forEach(function (b) {
+            b.addEventListener('click', function () {
+                emptyGrid();
+                stepIndex = 0;
+                PRESETS[b.getAttribute('data-preset')]();
+                recompute();
+                stepIndex = m;
+                recompute();
+            });
+        });
+
+        window.addEventListener('resize', function () {
+            for (var i = 0; i < spheres.length; i++) spheres[i].resize();
+        });
+
+        buildSpheres();
+        emptyGrid();
+        recompute();
+        requestAnimationFrame(function () {
+            for (var i = 0; i < spheres.length; i++) spheres[i].resize();
+        });
+    })();
+    </script>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
+</body>
+</html>

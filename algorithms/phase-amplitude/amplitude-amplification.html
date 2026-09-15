@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -273,9 +285,15 @@
         </ul>
         <div class="simulation-placeholder" style="margin-top: 1.5rem;">
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualisation placeholder to be added later]</p>
+            <h3>Visualiser in development</h3>
+            <p>A step-by-step interactive module for this protocol is on the roadmap. Until it lands, you can run the
+                real Qiskit circuit below and inspect the recorded statevectors, density matrices and measurement
+                histograms.</p>
+            <span class="status-note">Roadmap · Interactive module</span>
+            <div class="placeholder-actions">
+                <a class="btn" href="#code-lab">Run the Qiskit code</a>
+                <a class="btn btn-outline" href="../../visualise.html">Browse live visualisers</a>
+            </div>
         </div>
     </section>
 
@@ -292,80 +310,62 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
 # CONFIGURATION
 # ==========================================
-target_string = &quot;11&quot;
+target_string = "101"
 n = len(target_string)
-iterations = 2           # Number of amplifications
-ry_angle = np.pi / 3     # The bias angle for our custom A operator
-
-# Helper function for multi-controlled Z (scales to n qubits)
-def apply_mcz(qc, qubits):
-    if len(qubits) == 1:
-        qc.z(qubits[0])
-    elif len(qubits) == 2:
-        qc.cz(qubits[0], qubits[1])
-    else:
-        qc.h(qubits[-1])
-        qc.mcx(qubits[:-1], qubits[-1])
-        qc.h(qubits[-1])
+# Calculate optimal number of Grover iterations: (pi/4) * sqrt(N)
+optimal_iterations = int(np.round((np.pi / 4) * np.sqrt(2**n)))
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(n, name=&quot;q&quot;)
-cr = ClassicalRegister(n, name=&quot;c&quot;)
+qr = QuantumRegister(n, name="q")
+cr = ClassicalRegister(n, name="c")
 qc = QuantumCircuit(qr, cr)
 
-# ==========================================
-# CUSTOM OPERATOR DEFINITIONS
-# ==========================================
-def append_A(circuit, register):
-    &quot;&quot;&quot;Custom algorithm A that biases the initial state.&quot;&quot;&quot;
-    for i in range(n):
-        circuit.ry(ry_angle, register[i])
-
-def append_A_inv(circuit, register):
-    &quot;&quot;&quot;The exact inverse of A (Ry(-theta)).&quot;&quot;&quot;
-    for i in range(n):
-        circuit.ry(-ry_angle, register[i])
-
-# 2. Initialisation (Apply A)
-append_A(qc, qr)
-qc.barrier(label=&quot;Init (A)&quot;)
+# 2. Initialisation (Equal Superposition)
+qc.h(qr)
+qc.barrier(label="Init")
 
 # ==========================================
-# AMPLITUDE AMPLIFICATION ITERATIONS
+# GROVER ITERATIONS
 # ==========================================
-for step in range(iterations):
-    # --- ORACLE (Flip target state) ---
+for step in range(optimal_iterations):
+    # --- ORACLE ---
+    # Reverse string to match Qiskit's little-endian ordering (q_0 is rightmost)
     reversed_target = target_string[::-1]
     
-    # Flip &#x27;0&#x27;s to apply MCZ correctly
+    # Flip qubits where target bit is '0'
     for i in range(n):
-        if reversed_target[i] == &#x27;0&#x27;:
+        if reversed_target[i] == '0':
             qc.x(qr[i])
             
-    apply_mcz(qc, list(range(n)))
+    # Multi-controlled Z (MCZ) via H - MCX - H
+    qc.h(qr[n-1])
+    qc.mcx(list(range(n-1)), qr[n-1])
+    qc.h(qr[n-1])
     
     # Undo X gates
     for i in range(n):
-        if reversed_target[i] == &#x27;0&#x27;:
+        if reversed_target[i] == '0':
             qc.x(qr[i])
-    qc.barrier(label=f&quot;Oracle {step+1}&quot;)
+    qc.barrier(label=f"Oracle {step+1}")
     
-    # --- CUSTOM DIFFUSER (A^-1 -&gt; Zero Reflection -&gt; A) ---
-    append_A_inv(qc, qr)
-    
-    # Zero reflection S_0 (flips sign of |0...0&gt;)
-    qc.x(qr)
-    apply_mcz(qc, list(range(n)))
+    # --- DIFFUSER (Inversion about Mean) ---
+    qc.h(qr)
     qc.x(qr)
     
-    append_A(qc, qr)
-    qc.barrier(label=f&quot;Diffuser {step+1}&quot;)
+    # MCZ via H - MCX - H
+    qc.h(qr[n-1])
+    qc.mcx(list(range(n-1)), qr[n-1])
+    qc.h(qr[n-1])
+    
+    qc.x(qr)
+    qc.h(qr)
+    qc.barrier(label=f"Diffuser {step+1}")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -387,49 +387,51 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;GAA Analysis: Target = $|{target_string}\\rangle$&quot;))
-print(f&quot;Iterations applied: {iterations}&quot;)
-print(f&quot;Initial bias angle (Ry): {ry_angle:.3f} radians&quot;)
+display(Markdown(f"### Grover's Algorithm Analysis: Target = $|{target_string}\\rangle$"))
+print(f"Optimal iterations applied: {optimal_iterations}")
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("#### 1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
+display(Markdown("#### 2. Unitary Evolution"))
+# Guardrail: Suppress matrix printout for n &gt; 3 to prevent Jupyter crashes
 if n &lt;= 3:
-    print(f&quot;The {2n}x{2n} unitary matrix describing the full circuit:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{GAA} = &quot;, max_size=16))
+    print(f"The {2**n}x{2**n} unitary matrix describing the full circuit:")
+    display(array_to_latex(unitary.data, prefix="U_{Grover} = ", max_size=16))
 else:
-    print(f&quot;Unitary matrix omitted: {n} qubits results in a matrix too large for clean display.&quot;)
+    print(f"Unitary matrix omitted: {n} qubits results in a matrix too large for clean display.")
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector prior to measurement:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("#### 3. Quantum State Representation"))
+print("Exact Statevector prior to measurement:")
+display(final_state.draw('latex'))
 
-print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix prior to measurement:")
+display(final_density.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("#### 4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
+# The Q-sphere is particularly useful here as it will show a massive amplitude 
+# concentrated on the target state, with minimal amplitudes elsewhere.
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis&quot;))
+display(Markdown("#### 5. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
 # 6. Final Verification Logic
-display(Markdown(&quot;6. Verification&quot;))
+display(Markdown("#### 6. Verification"))
 measured_bitstring = max(counts, key=counts.get)
 success_probability = counts[measured_bitstring] / 1024
 
 if measured_bitstring == target_string:
-    print(f&quot;Success: The algorithm correctly amplified the target state &#x27;{target_string}&#x27;.&quot;)
-    print(f&quot;Final Success Probability: {success_probability * 100:.2f}%&quot;)
+    print(f"Success: The algorithm correctly identified the target state '{target_string}'.")
+    print(f"Success Probability: {success_probability * 100:.2f}%")
 else:
-    print(f&quot;Error: The algorithm identified &#x27;{measured_bitstring}&#x27; instead of &#x27;{target_string}&#x27;.&quot;)</code></pre>
+    print(f"Error: The algorithm identified '{measured_bitstring}' instead of '{target_string}'.")</code></pre>
             </div>
         </div>
 
@@ -439,61 +441,61 @@ else:
                 <a href="../../assets/notebooks/amplitude-amplification.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Grover's Algorithm Analysis: Target = $|101\rangle$</p>
-                <pre class="notebook-output-text">Optimal iterations applied: 2
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Grover's Algorithm Analysis: Target = $|101\rangle$</p>
+<pre class="notebook-output-text">Optimal iterations applied: 2
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">The 8x8 unitary matrix describing the full circuit:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">The 8x8 unitary matrix describing the full circuit:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 U_{Grover} = 
 \begin{bmatrix}
--0.0883883476 & 0.4419417382 & 0.2651650429 & 0.4419417382 & 0.4419417382 & 0.2651650429 & 0.4419417382 & 0.2651650429  \\
- -0.0883883476 & -0.2651650429 & 0.2651650429 & -0.2651650429 & 0.4419417382 & -0.4419417382 & 0.4419417382 & -0.4419417382  \\
- -0.0883883476 & 0.4419417382 & -0.4419417382 & -0.2651650429 & 0.4419417382 & 0.2651650429 & -0.2651650429 & -0.4419417382  \\
- -0.0883883476 & -0.2651650429 & -0.4419417382 & 0.4419417382 & 0.4419417382 & -0.4419417382 & -0.2651650429 & 0.2651650429  \\
- -0.0883883476 & 0.4419417382 & 0.2651650429 & 0.4419417382 & -0.2651650429 & -0.4419417382 & -0.2651650429 & -0.4419417382  \\
- 0.9722718241 & 0.0883883476 & -0.0883883476 & 0.0883883476 & 0.0883883476 & -0.0883883476 & 0.0883883476 & -0.0883883476  \\
- -0.0883883476 & 0.4419417382 & -0.4419417382 & -0.2651650429 & -0.2651650429 & -0.4419417382 & 0.4419417382 & 0.2651650429  \\
- -0.0883883476 & -0.2651650429 & -0.4419417382 & 0.4419417382 & -0.2651650429 & 0.2651650429 & 0.4419417382 & -0.4419417382  \\
+-0.0883883476 &amp; 0.4419417382 &amp; 0.2651650429 &amp; 0.4419417382 &amp; 0.4419417382 &amp; 0.2651650429 &amp; 0.4419417382 &amp; 0.2651650429  \\
+ -0.0883883476 &amp; -0.2651650429 &amp; 0.2651650429 &amp; -0.2651650429 &amp; 0.4419417382 &amp; -0.4419417382 &amp; 0.4419417382 &amp; -0.4419417382  \\
+ -0.0883883476 &amp; 0.4419417382 &amp; -0.4419417382 &amp; -0.2651650429 &amp; 0.4419417382 &amp; 0.2651650429 &amp; -0.2651650429 &amp; -0.4419417382  \\
+ -0.0883883476 &amp; -0.2651650429 &amp; -0.4419417382 &amp; 0.4419417382 &amp; 0.4419417382 &amp; -0.4419417382 &amp; -0.2651650429 &amp; 0.2651650429  \\
+ -0.0883883476 &amp; 0.4419417382 &amp; 0.2651650429 &amp; 0.4419417382 &amp; -0.2651650429 &amp; -0.4419417382 &amp; -0.2651650429 &amp; -0.4419417382  \\
+ 0.9722718241 &amp; 0.0883883476 &amp; -0.0883883476 &amp; 0.0883883476 &amp; 0.0883883476 &amp; -0.0883883476 &amp; 0.0883883476 &amp; -0.0883883476  \\
+ -0.0883883476 &amp; 0.4419417382 &amp; -0.4419417382 &amp; -0.2651650429 &amp; -0.2651650429 &amp; -0.4419417382 &amp; 0.4419417382 &amp; 0.2651650429  \\
+ -0.0883883476 &amp; -0.2651650429 &amp; -0.4419417382 &amp; 0.4419417382 &amp; -0.2651650429 &amp; 0.2651650429 &amp; 0.4419417382 &amp; -0.4419417382  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$-0.0883883476 |000\rangle-0.0883883476 |001\rangle-0.0883883476 |010\rangle-0.0883883476 |011\rangle-0.0883883476 |100\rangle+0.9722718241 |101\rangle-0.0883883476 |110\rangle-0.0883883476 |111\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$-0.0883883476 |000\rangle-0.0883883476 |001\rangle-0.0883883476 |010\rangle-0.0883883476 |011\rangle-0.0883883476 |100\rangle+0.9722718241 |101\rangle-0.0883883476 |110\rangle-0.0883883476 |111\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
- 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
- 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
- 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
- 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
- -0.0859375 & -0.0859375 & -0.0859375 & -0.0859375 & -0.0859375 & 0.9453125 & -0.0859375 & -0.0859375  \\
- 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
- 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & 0.0078125 & -0.0859375 & 0.0078125 & 0.0078125  \\
+0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
+ 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
+ 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
+ 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
+ 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
+ -0.0859375 &amp; -0.0859375 &amp; -0.0859375 &amp; -0.0859375 &amp; -0.0859375 &amp; 0.9453125 &amp; -0.0859375 &amp; -0.0859375  \\
+ 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
+ 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; 0.0078125 &amp; -0.0859375 &amp; 0.0078125 &amp; 0.0078125  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'001': 8, '110': 6, '100': 11, '011': 6, '111': 11, '000': 3, '010': 6, '101': 973}
+<img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'001': 8, '110': 6, '100': 11, '011': 6, '111': 11, '000': 3, '010': 6, '101': 973}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
-                <pre class="notebook-output-text">Success: The algorithm correctly identified the target state '101'.
+<img class="notebook-output-img" src="../../assets/images/outputs/amplitude-amplification-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+<pre class="notebook-output-text">Success: The algorithm correctly identified the target state '101'.
 Success Probability: 95.02%
 </pre>
             </div>
@@ -547,7 +549,9 @@ Success Probability: 95.02%
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" data-page-node-id="9QDQHTPYE1mSdqyCzjFA0F">
+<head data-page-node-id="RkGmd9EKsYo9en1845ArNj">
+    <meta charset="UTF-8" data-page-node-id="Bs0rCA4NjHOcFk6ltiSn2C">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="4GFh6BMqVzC6jFoggDW8sl">
     <title>QPE Visualiser | AQCA</title>
     
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css" data-page-node-id="zhL787bCRxEC0CFfJfF34m">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
-    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+    <link rel="stylesheet" href="../../css/style.css" data-page-node-id="reAzYrwQyw0SjPD50JNJrw">
+    <link rel="stylesheet" href="../../css/responsive.css" data-page-node-id="xLv9YxGY10MP4hqBQsbGhI">
+    <link rel="stylesheet" href="../../css/sidebar.css" data-page-node-id="jQ6BF7Aidi3RIxkCGlUw8g">
+    <link rel="stylesheet" href="../../css/visualiser.css" data-page-node-id="dbrmaGGibQziXnE8OgUHxO">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png" data-page-node-id="W33BSMYX36VeL9B0Unf2gI">
 
     <!-- MathJax -->
     <script>
@@ -24,9 +27,7 @@
         :root {
             --dqa-primary: var(--primary); --dqa-card: var(--surface);
             --dqa-text: var(--text); --dqa-border: var(--border);
-        }
-
-        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        }.portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: auto; font-family: 'Inter', sans-serif; overflow: visible; }
         .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
         .config-sidebar::-webkit-scrollbar, .visualiser-main::-webkit-scrollbar { width: 6px; }
         .config-sidebar::-webkit-scrollbar-thumb, .visualiser-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
@@ -49,20 +50,13 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: #0f172a;
+        }.stat-box {
+            background: var(--viz-deep);
             border-radius: 12px;
             padding: 20px;
             text-align: center;
-            border: 1px solid #1e293b;
-        }
-
-        .stat-box .label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
-        .stat-box .value { font-family: 'JetBrains Mono'; font-size: 2rem; font-weight: 800; color: #fff; }
-        .stat-box.highlight { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
-        .stat-box.highlight .value { color: #38bdf8; }
+            border: 1px solid var(--viz-deep-border);
+        }.stat-box .label { font-size: 0.7rem; color: var(--viz-muted-strong); text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }.stat-box .value { font-family: 'JetBrains Mono'; font-size: 2rem; font-weight: 800; color: var(--viz-text); }.stat-box.highlight { border-color: var(--viz-info); box-shadow: 0 0 20px rgba(3, 105, 161, 0.1); }.stat-box.highlight .value { color: var(--viz-info); }
 
         .circuit-grid {
             display: grid;
@@ -103,112 +97,200 @@
         .anim-active.measure::after { border-color: #fff; }
     </style>
 </head>
-<body>
-    <header class="site-header">
-        <div class="header-left">
-            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
-            <div class="site-title">
-                <h1>AQCA</h1>
-                <span class="subtitle">All Quantum Computing Algorithms</span>
+<body class="viz-page" data-page-node-id="0UsJ7ACCQv29QEgqZtwxyH">
+    <header class="site-header" data-page-node-id="2zRAHms7rwFv5GkMmgITuR">
+        <div class="header-left" data-page-node-id="90AiFCWrJBiFzVcJV1Be4N">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo" data-page-node-id="AAtwmv3ErCFnAGNzAKZZFL">
+            <div class="site-title" data-page-node-id="GXTcXmCRRC8CiTifG0N91M">
+                <h1 data-page-node-id="q8verApAfTku5f28EMBpkZ">AQCA</h1>
+                <span class="subtitle" data-page-node-id="a09BkBSp0Fi7gCbdLYpArv">All Quantum Computing Algorithms</span>
             </div>
         </div>
         
-        <div class="header-right">
-            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
-            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        <div class="header-right" data-page-node-id="bDCQFhy6cadJTxEgHz8c0P">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo" data-page-node-id="US8vxA15ereABxV5eEIvYW">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation" data-page-node-id="CgemQMEFlb8AEc1K0QBk3B">☰</button>
         </div>
     </header>
 
-    <div class="layout-wrapper">
-        <aside class="sidebar">
-            <nav class="nav-menu">
-                <div class="nav-item"><a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
-                <div class="nav-item"><a href="../../algorithms.html" class="nav-link">Algorithms</a></div>
-                <div class="nav-item"><a href="qpe.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;" data-tooltip="Back to QPE">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.25rem;height:1.25rem;margin-right:0.75rem;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    <span>Back to QPE</span>
-</a></div>
-                <div class="nav-item">
-                    <a href="../../visualise.html" class="nav-link">Visualise</a>
+    <div class="layout-wrapper" data-page-node-id="UvEZVqFzEM1VXWXfynGIOr">
+        <aside class="sidebar" id="sidebar" data-page-node-id="AwgBN9XhLBgIJfXFekhISL">
+            <nav class="nav-menu" data-page-node-id="GNfL9dqKJ4fnKAWQA5aJWV">
+                <div class="nav-item" data-page-node-id="08WBg8yoIN9FhoGIucIqAj">
+                    <a href="../../index.html" class="nav-link" data-page-node-id="ZM3WhHxW5iG484boqeL5Ih"><span class="step-num" style="background: var(--primary); color:#ffffff;" data-page-node-id="gZPqC9iGg4Awm0RWeDOBgA">✦</span>Home</a>
+                </div>
+                <div class="nav-item" data-page-node-id="Ccl6Q3glxr54rYqGHfS6t8">
+                    <a href="../../about.html" class="nav-link" data-page-node-id="Ik2cTIJh4C2Zf0I82vsSPG">About AQCA</a>
+                </div>
+                <div class="nav-item" data-page-node-id="A7QudoF1z5ecSdUKgGGdK8">
+                    <a href="../../preface.html" class="nav-link" data-page-node-id="GVA9iQaFm29J8hGrnBBmNM">Preface</a>
+                </div>
+                <div class="nav-item" data-page-node-id="ixRAfO9tlGMQKjR39QqZCr">
+                    <a href="../../basics.html" class="nav-link" data-page-node-id="7kNDi13rZwS9xJoHJJNXfH">QC Basics</a>
+                </div>
+                <div class="nav-item" data-page-node-id="fJXNNhwFRF0crDoRpt3Uvg">
+                    <button class="nav-group-toggle" aria-expanded="true" data-page-node-id="2R8WspesVoh94kIxBNL5LY">
+                        <span data-page-node-id="m1PHr444J6ikEgfyBoHthf">Algorithms</span>
+                        <span class="nav-group-icon" data-page-node-id="ByDtzHBnsyDHDEtED77h9E">▼</span>
+                    </button>
+                    <ul class="nav-subgroup" data-page-node-id="JFYW54293n4LFYCN24k0j3">
+                        <li data-page-node-id="0XJZnpRCkz8lMWziuYv8lJ"><a href="../../algorithms.html" class="nav-link" data-page-node-id="eHXbZFK4TI19WXrIwRsGEp">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="6tZgITL9aHF4qNUl3v8bbW">1. Quantum Communication</li>
+                        <li data-page-node-id="53ajkpf0tSJ3TmYCUYj269"><a href="../../algorithms/foundations/bell-state.html" class="nav-link" data-page-node-id="rwGnWG4egP0bmy8PYSdc6w">• Bell State Generator</a></li>
+                        <li data-page-node-id="a13m5PyOie3QJBhWAzKwMu"><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link" data-page-node-id="xi70fjuxhRMYrSXxbaJOSS">• Superdense Coding</a></li>
+                        <li data-page-node-id="YHMru8pgxmCpRfed8TO4ZG"><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link" data-page-node-id="VWXqFXClRuXRaM8rQfCFm8">• Quantum Teleportation</a></li>
+                        <li data-page-node-id="rqaVp17G6VaenKcmkJCBQs"><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link" data-page-node-id="SB4jbk7nDF808MSuZ8OGEf">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="UImR0z9UbjGFPnKhdDDGjE">2. Early Oracle Algorithms</li>
+                        <li data-page-node-id="lz72wzudw0qdv506LaeRW5"><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link" data-page-node-id="YmL0ftwBfmWUpHXDPbF8Qm">• Deutsch's Algorithm</a></li>
+                        <li data-page-node-id="b4QZ1wSO6GWA3Vgo4U3JFf"><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link" data-page-node-id="2ZnC7xK7y5KPLFy6YcoKXw">• Deutsch–Jozsa</a></li>
+                        <li data-page-node-id="J6qAHCqvBTQXPcHn6QaH5w"><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link" data-page-node-id="3uWoXLFiLgMKRay7wKIdkj">• Bernstein–Vazirani</a></li>
+                        <li data-page-node-id="uHO3uejm1AkjoJFbwtE20d"><a href="../../algorithms/oracle-based/simon.html" class="nav-link" data-page-node-id="EvRubFRMo3UGXtXEO2vS3X">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="T7XNtqfdOqKrCtyEthYGtN">3. Core Algorithms</li>
+                        <li data-page-node-id="Of3Bh1ygunqxevTzTRnrwi"><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link" data-page-node-id="Keddi6XCpLlu6LhDcQdxPG">• Quantum Fourier Transform</a></li>
+                        <li data-page-node-id="2FGzCMOunuRSIUUMiuvjEl"><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link" data-page-node-id="q3CXsSfJ67OyKi1fA4qJDR">• Quantum Phase Estimation</a></li>
+                        <li data-page-node-id="KAh0Z7x2OG2GsjlAkNrYqS"><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link" data-page-node-id="Kx3fHZvlw59ZSF0imCY8jU">• Grover's Search</a></li>
+                        <li data-page-node-id="aDDXZy4Yw00gn6YnhnCdzp"><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link" data-page-node-id="F3zsXW75vwZpz8o0ApFOe5">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="HqaZRlFFDYldABR7ie5Ncb">4. Flagship & Hybrid Models <span class="badge-beta" data-page-node-id="ztO1kqadusp9jBgFBcEQ5D">In-Progress</span></li>
+                        <li data-page-node-id="FTMXyU1I5yvE2bVzNluDWz"><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link" data-page-node-id="dCAvurbb0MXRPcfD8wHwfi">• Shor's Algorithm</a></li>
+                        <li data-page-node-id="R8qYOGGenVUVmpNQzfynUg"><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link" data-page-node-id="40Rhua66bM90SEEUji5t7X">• Variational Quantum Eigensolver</a></li>
+                        <li data-page-node-id="4yb04k3GwGGzmqAL4rq13z"><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link" data-page-node-id="nN6St7yDy3LPcQXBlSXz57">• QAOA</a></li>
+                        <li data-page-node-id="yFQ8iOb7B7xxSaBfrHGQpH"><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link" data-page-node-id="WOz6KbmrEVljwAFmHViGOz">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="Z6hLNHrjp74GmspVZCU87W">5. Quantum Error Correction <span class="badge-beta" data-page-node-id="zQj8rosEsdztVZYKiNn3bM">In-Progress</span></li>
+                        <li data-page-node-id="90q4CXruEYm4P0lL3HOhbQ"><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link" data-page-node-id="yS3xPXCT7RiE3H5E0ahoeM">• 3-Qubit Code</a></li>
+                        <li data-page-node-id="kABILQ9SnQNzT0vXOuAIwk"><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link" data-page-node-id="1v52LDa6E4rDEUq7gBZhcs">• Shor's 9-Qubit Code</a></li>
+                        <li data-page-node-id="zmDuTa6AAGcugAcqbjdtx8"><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link" data-page-node-id="BWRuNTaPeccAmYX2d7DyOC">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label" data-page-node-id="G7JmqxMefoL826FfMMPUBC">6. Visualisation &amp; Interaction</li>
+                        <li data-page-node-id="HssVkkECi1yg7PE9nfVfO8"><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link" data-page-node-id="g6rlCkkNJhAYoT0w7r7f0H">• Bloch Sphere Visualiser</a></li>
+                        <li data-page-node-id="hQH2iWSdlos1gMcfHxQvNO"><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link" data-page-node-id="HZpnsMB3gaSETfafb9qeRk">• Multi-Qubit State Visualiser</a></li>
+                        <li data-page-node-id="2MpOIoEg80QpKBZU4AgVeb"><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link" data-page-node-id="crrFP6NxRn6dsCTE3RAnEl">• Quantum Circuit Simulator</a></li>
+                        <li data-page-node-id="znUbMDIVwcrvOfYbqF38BG"><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link" data-page-node-id="QO6f5Dz53yysSiDLOiH7KD">• Statevector → Bloch Sphere</a></li>
+                        <li data-page-node-id="hDDZNlegINtWh6kCFn5DNE"><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link" data-page-node-id="ojWz65Ka5qEplEWyAlFdDo">• Measurement Visualiser</a></li>
+                        <li data-page-node-id="sIREAEutwQRxNxqRbuFxkX"><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link" data-page-node-id="umV2GB2N6QfMoGNBrhhFpd">• Quantum Interference</a></li>
+                        <li data-page-node-id="mlAJ0JEdU6q0Bvcc6TcH86"><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link" data-page-node-id="kzTpqIhvnBIiQpuTD6IKE2">• Entanglement Visualiser</a></li>
+                        <li data-page-node-id="Dwridxleoy0RUsDH2hCcAO"><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link" data-page-node-id="8zaq3Vo61b97YC6ud47nvw">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item" data-page-node-id="yCMT9QBKhRcT6FFGxEDC2p">
+                    <a href="../../visualise.html" class="nav-link" data-page-node-id="YQ6QiY4o4feH7FLlaxow4T">Visualise</a>
+                </div>
+                <div class="nav-item" data-page-node-id="l1CVpzwqA3qE9xBRFO8Xo6">
+                    <a href="../../analysis.html" class="nav-link" data-page-node-id="nfFJmfdCCpB2R0pnxlheWt">Analysis Centre</a>
+                </div>
+                <div class="nav-item" data-page-node-id="BtFXXQjac3vcGWYeIgdY2K">
+                    <a href="../../resources.html" class="nav-link" data-page-node-id="PvUI5Yuk3sM37BjnDqCwwg">Resources</a>
+                </div>
+                <div class="nav-item" data-page-node-id="K6EOrwIiYGhR9TjGQfV5Zm">
+                    <a href="../../references.html" class="nav-link" data-page-node-id="VpNHUqDMECMTya7mFWRt8Y">References</a>
+                </div>
+                <div class="nav-item" data-page-node-id="qWrq4AUoiSfy0JiE4gdYIb">
+                    <a href="../../appendix.html" class="nav-link" data-page-node-id="5Q6rHV6nETXokQVZaYRoEy">Appendix</a>
+                </div>
+                <div class="nav-item" data-page-node-id="d6y1gYbVHE8MjJwQtO4JZn">
+                    <a href="../../developer.html" class="nav-link" data-page-node-id="ZYuaCBkjCSKaUFl0bPvoTp">Developer</a>
                 </div>
             </nav>
         </aside>
 
-        <main class="main-content" style="padding-top: 1rem;">
-            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
-                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Quantum Phase Estimation</h1>
+        <main class="main-content" style="padding-top: 1rem;" data-page-node-id="3LjBkBzzRy3UkpMHGwvBXU">
+            <div class="viz-shell" data-page-node-id="xTyjuEasO3O2dw2mC8899w">
+                <nav class="viz-crumbs" data-page-node-id="tx0y4J9Ej4Cvzc35LOAete">
+                    <a href="../../index.html" data-page-node-id="fxLoBVYDzfcgOsBxw7TQNw">Home</a><span class="sep" data-page-node-id="XONNFgbqIN3x0gvsPvNTc9">›</span>
+                    <a href="../../algorithms.html" data-page-node-id="XKBBlGBWTOfUPjEjtBvVQ5">Algorithms</a><span class="sep" data-page-node-id="Gwjf5XKjaqK7gREDG7DOEM">›</span>
+                    <a href="qpe.html" data-page-node-id="ed4n1TWGZ8uywjZKKej7qt">Core Algorithms</a><span class="sep" data-page-node-id="zc700rVZOBbmBBdvlNlwvL">›</span>
+                    <span class="current" data-page-node-id="VVsHSF684QxBxB8PE5T9zf">Quantum Phase Estimation</span>
+                </nav>
+                <div class="viz-head" data-page-node-id="sSGmiDSwD3RT3nmZhHsBMZ">
+                    <div class="viz-head__left" data-page-node-id="gWKoFiNGTCpzHZVKuAuKvq">
+                        <span class="viz-eyebrow" data-page-node-id="d8nWrZz7ABlartChebaDPe">Interactive Visualiser</span>
+                        <h1 class="viz-title" data-page-node-id="66jNPaGi3WC9GO3BZHCiGr">Quantum Phase Estimation</h1>
+                        <p class="viz-subtitle" data-page-node-id="Bg5e8vn8d9nZnxGv1v7YyK">Step through the circuit and watch the quantum state evolve. Every figure is computed live in your browser.</p>
+                    </div>
+                    <div class="viz-head__actions" data-page-node-id="RxD42iycQlsRTach6AwJyk">
+                        <a class="viz-btn viz-btn--primary" href="qpe.html" data-page-node-id="rfptOppr8f0jx380B8hNSl">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="uqQxgFlEEyoU4OAAkswg2Y"><line x1="19" y1="12" x2="5" y2="12" data-page-node-id="3Y2C6C2Xf0gnXGtMx2VkFj"></line><polyline points="12 19 5 12 12 5" data-page-node-id="xnDy52EYQM4zFPatjeR9Rq"></polyline></svg>
+                            Back to Quantum Phase Estimation (QPE)
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html" data-page-node-id="3ETNYoV34vk7J1Fh3agvBm">All visualisers</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="portal-grid">
-                <aside class="config-sidebar">
-                    <div class="pert-card">
-                        <h2>1. Configure Subroutine</h2>
-                        <div style="margin-bottom: 12px;">
-                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">True Phase θ (0 to 1)</label>
-                            <input type="number" id="inp-theta" class="modern-input" value="0.15" step="0.01" min="0" max="0.99">
+            <div class="portal-grid" data-page-node-id="XslRXgbLHqTFRGJB52C1TO">
+                <aside class="config-sidebar" data-page-node-id="41DrFLF0EWRP69uoEdj4MC">
+                    <div class="pert-card" data-page-node-id="vtKACZueGWL5XXCGGEGfPw">
+                        <h2 data-page-node-id="F02QYwHsn7OknvG6rh1pi6">1. Configure Subroutine</h2>
+                        <div style="margin-bottom: 12px;" data-page-node-id="DJRqlpEA3gZ0DotrSRQOVv">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;" data-page-node-id="hTEEo7qAoCEIQa9SPkV2cJ">True Phase θ (0 to 1)</label>
+                            <input type="number" id="inp-theta" class="modern-input" value="0.15" step="0.01" min="0" max="0.99" data-page-node-id="AeFBrsOmSFxGnyO4sCQCCF">
                         </div>
-                        <div style="margin-bottom: 12px;">
-                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Ancilla Qubits (t)</label>
-                            <select id="inp-ancilla" class="modern-input" style="text-align-last: center;">
-                                <option value="2">2 qubits</option>
-                                <option value="3">3 qubits</option>
-                                <option value="4" selected>4 qubits</option>
-                                <option value="5">5 qubits</option>
-                                <option value="6">6 qubits</option>
+                        <div style="margin-bottom: 12px;" data-page-node-id="dJaNj0qXGBK8HmPhId85B9">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;" data-page-node-id="G4uaSG6dFWeTmQiSRZoBA5">Ancilla Qubits (t)</label>
+                            <select id="inp-ancilla" class="modern-input" style="text-align-last: center;" data-page-node-id="YnOzIKTYWH6bYktPgFyzVY">
+                                <option value="2" data-page-node-id="BBiZhTDROK6WBBS0mTPXlv">2 qubits</option>
+                                <option value="3" data-page-node-id="U80VTBO57xcHX4vwIxobHS">3 qubits</option>
+                                <option value="4" selected data-page-node-id="Mz2ep7FFOxLeG0wEmmcBsu">4 qubits</option>
+                                <option value="5" data-page-node-id="EJQSpuGySCmu3CV4wt0Gz2">5 qubits</option>
+                                <option value="6" data-page-node-id="2x2sSceGQuyJBg0G1I5WmH">6 qubits</option>
                             </select>
                         </div>
-                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Lock Parameters</button>
+                        <button class="qt-btn qt-btn--primary" style="width:100%; margin-top:10px;" onclick="resetSystem()" data-page-node-id="IHRzj3HcJtqlBBT9Zu81gR">Lock Parameters</button>
                     </div>
 
-                    <div class="pert-card">
-                        <h2>2. Run QPE</h2>
-                        <button class="btn btn-primary btn-modern" id="btn-run" style="width:100%; padding: 15px;" onclick="runAnimation()">Execute Algorithm</button>
+                    <div class="pert-card" data-page-node-id="dCff5L9RExu9mWaBKFvbDq">
+                        <h2 data-page-node-id="HIdiH6ec46ydVnBGtypuo4">2. Run QPE</h2>
+                        <button class="qt-btn qt-btn--primary" id="btn-run" style="width:100%; padding: 15px;" onclick="runAnimation()" data-page-node-id="aLAY7vEKAmp4XOkfuHG4ho">Execute Algorithm</button>
                     </div>
 
-                    <div class="pert-card">
-                        <h2>3. Step Explanation</h2>
-                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
-                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Ready</div>
-                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Click Execute to begin the estimation.</div>
+                    <div class="pert-card" data-page-node-id="otdeEToMcL9hglSgQFpLTV">
+                        <h2 data-page-node-id="7AG7e2H4Ja2bzv7Br94oVq">3. Step Explanation</h2>
+                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;" data-page-node-id="yKABjHREIdWbrlyzJ0SVBA">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title" data-page-node-id="QvHFyL5gYrgAaMsM96qhLN">Ready</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);" data-page-node-id="fI2TsSfcrgsmcfxlu4GT5X">Click Execute to begin the estimation.</div>
                         </div>
                     </div>
                 </aside>
 
-                <div class="visualiser-main">
+                <div class="visualiser-main" data-page-node-id="HsjLPu2lrVrUIwXSwY4efs">
                     
-                    <div class="dash-grid">
-                        <div class="stat-box">
-                            <div class="label">Actual θ</div>
-                            <div class="value" id="disp-actual">--</div>
+                    <div class="qt-stat-grid">
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Actual θ</span>
+                            <span class="qt-stat__v" id="disp-actual">--</span>
                         </div>
-                        <div class="stat-box highlight">
-                            <div class="label">Estimated θ</div>
-                            <div class="value" id="disp-est">--</div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Estimated θ</span>
+                            <span class="qt-stat__v" id="disp-est">--</span>
                         </div>
-                        <div class="stat-box">
-                            <div class="label">Absolute Error</div>
-                            <div class="value" id="disp-error" style="color: #f43f5e;">--</div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Absolute Error</span>
+                            <span class="qt-stat__v" id="disp-error">--</span>
                         </div>
                     </div>
 
-                    <div class="pert-card" style="flex-grow: 1;">
-                        <h2 style="border: none;">Quantum Circuit Animation</h2>
-                        <div class="circuit-grid">
+                    <div class="pert-card" style="flex-grow: 1;" data-page-node-id="XdFYc8C2pS3pEEApb61cRX">
+                        <h2 style="border: none;" data-page-node-id="YlYPOx755H8cu0acGB4Qlk">Quantum Circuit Animation</h2>
+                        <div class="circuit-grid" data-page-node-id="OOwI9m5o7uRlSGe050hRfe">
                             <!-- Background Wires -->
-                            <div class="wire" style="grid-row: 1;"></div>
-                            <div class="wire" style="grid-row: 2;"></div>
+                            <div class="wire" style="grid-row: 1;" data-page-node-id="Xqe47V7hnyZCc75ruBju2m"></div>
+                            <div class="wire" style="grid-row: 2;" data-page-node-id="jbrEwqYalmx5VlqrQGrkPR"></div>
 
                             <!-- Row 1: Ancilla -->
-                            <div style="grid-row: 1; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 15px;" id="lbl-q">|0⟩<sup>⊗4</sup></div>
-                            <div class="gate" id="g-h" style="grid-row: 1; grid-column: 2;">H<sup>⊗t</sup></div>
-                            <div class="gate cu" id="g-cu" style="grid-row: 1; grid-column: 3;">CTRL-U</div>
-                            <div class="gate iqft" id="g-iqft" style="grid-row: 1; grid-column: 4;">IQFT</div>
-                            <div class="gate measure" id="g-m" style="grid-row: 1; grid-column: 5;"></div>
-                            <div style="grid-row: 1; grid-column: 6; font-family: 'JetBrains Mono'; color: #b45309; font-size: 1.5rem; z-index: 1; background: var(--surface); padding-left: 15px;" id="lbl-result">x</div>
+                            <div style="grid-row: 1; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 15px;" id="lbl-q" data-page-node-id="jNM3Es47FeFLFYWmPQjBXI">|0⟩<sup data-page-node-id="ktlSk5hx6n049VADCpDq0I">⊗4</sup></div>
+                            <div class="gate" id="g-h" style="grid-row: 1; grid-column: 2;" data-page-node-id="8l2y4KOvU67dEt94K5on6u">H<sup data-page-node-id="0boGEKpACg5FERGGmADGIj">⊗t</sup></div>
+                            <div class="gate cu" id="g-cu" style="grid-row: 1; grid-column: 3;" data-page-node-id="FSYQzU5h5c61PAekLwFeSQ">CTRL-U</div>
+                            <div class="gate iqft" id="g-iqft" style="grid-row: 1; grid-column: 4;" data-page-node-id="8hrVAKq0nDCyxBYpRfJrpw">IQFT</div>
+                            <div class="gate measure" id="g-m" style="grid-row: 1; grid-column: 5;" data-page-node-id="yYPRfCTOeRTdUPj8C3m1ve"></div>
+                            <div style="grid-row: 1; grid-column: 6; font-family: 'JetBrains Mono'; color: #b45309; font-size: 1.5rem; z-index: 1; background: var(--surface); padding-left: 15px;" id="lbl-result" data-page-node-id="cDcmoGrUvu0nkKkbE2dGdN">x</div>
 
                             <!-- Row 2: Target -->
-                            <div style="grid-row: 2; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 15px; color: var(--primary);">|ψ⟩</div>
-                            <div class="gate cu" id="g-cu-tgt" style="grid-row: 2; grid-column: 3;">U<sup>2^j</sup></div>
+                            <div style="grid-row: 2; grid-column: 1; z-index: 1; background: var(--surface); padding-right: 15px; color: var(--primary);" data-page-node-id="MrNSZV6AEBiPFtE6cI9N52">|ψ⟩</div>
+                            <div class="gate cu" id="g-cu-tgt" style="grid-row: 2; grid-column: 3;" data-page-node-id="MknkkSDal7PYSRiVKmZXKh">U<sup data-page-node-id="JkysZpaESg8TatcCjzGLlt">2^j</sup></div>
                         </div>
                     </div>
                 </div>
@@ -291,12 +373,15 @@
 
         resetSystem();
     </script>
-<footer class="site-footer">
-        <div class="footer-content" style="justify-content: center;">
-            <div>
+<footer class="site-footer" data-page-node-id="2A96ccmrUiF9QhWCMWY1iX">
+        <div class="footer-content" style="justify-content: center;" data-page-node-id="MV0FIQSwdSuznqkPGwuUEJ">
+            <div data-page-node-id="k6G1iEHBN5Z7uuNBcwHIws">
                 &copy; 2026 AQCA - All Quantum Computing Algorithms
             </div>
         </div>
     </footer>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
 </body>
 </html>

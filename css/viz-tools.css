@@ -1,0 +1,804 @@
+/* ==========================================================================
+   css/viz-tools.css
+   Shared component library for the "Visualisation & Interaction" tool pages
+   (Bloch sphere, multi-qubit state, circuit simulator, statevector animation,
+   measurement, interference, entanglement, CHSH).
+
+   Load AFTER css/style.css and css/visualiser.css.
+   Namespace: qt-  (quantum tools)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Layout shell
+   -------------------------------------------------------------------------- */
+/* Never let a wide child stretch the shell: the sidebar is position:fixed, so a
+   sideways-scrolling page slides the content underneath it. */
+body.viz-page .layout-wrapper,
+body.viz-page .main-content,
+body.viz-page .portal-grid > *,
+body.viz-page .pert-card {
+    min-width: 0;
+}
+
+/* Safety net for the sidebar offset. The authoritative fix lives in
+   css/visualiser.css (its `margin-inline: auto` used to zero the left offset);
+   this only re-asserts the offset in case that file is edited again.
+   Note: horizontal padding is deliberately NOT touched here — the page keeps
+   the `padding: 3rem 4rem` rhythm set in style.css. */
+body.viz-page .main-content {
+    margin-left: var(--sidebar-width);
+}
+
+@media (max-width: 768px) {
+    /* On phones the sidebar is an off-canvas drawer, so no left offset.
+       This must be repeated: a bare rule above would otherwise beat the
+       media-query rule in visualiser.css on source order. */
+    body.viz-page .main-content {
+        margin-left: 0;
+    }
+}
+
+body.viz-page .portal-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+    max-width: 100%;
+}
+
+body.viz-page .config-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 2px 8px 8px 0;
+    overflow-y: auto;
+    min-width: 0;
+}
+
+body.viz-page .visualiser-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    overflow: visible;
+    padding-right: 0;
+}
+
+body.viz-page .qt-2col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 20px;
+}
+
+body.viz-page .qt-2col--fixed {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* Hard stop: nothing inside a card may push the page wider than the viewport. */
+body.viz-page .pert-card > * {
+    max-width: 100%;
+}
+
+body.viz-page .qt-circuit-wrap,
+body.viz-page .qt-scroll,
+body.viz-page .qt-formula,
+body.viz-page .qt-history {
+    max-width: 100%;
+}
+
+@media (max-width: 900px) {
+    body.viz-page .qt-2col--fixed { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   2. Cards
+   -------------------------------------------------------------------------- */
+body.viz-page .pert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 18px 20px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.04);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+body.viz-page .pert-card:hover {
+    border-color: rgba(0, 15, 145, 0.25);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06), 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+body.viz-page .pert-card h2,
+body.viz-page .pert-card h3 {
+    margin: 0 0 14px 0;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    color: var(--primary);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+body.viz-page .pert-card h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+}
+
+.qt-card-note {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--muted-text);
+}
+
+/* --------------------------------------------------------------------------
+   3. Inputs & buttons
+   -------------------------------------------------------------------------- */
+body.viz-page .modern-input,
+body.viz-page .modern-select,
+body.viz-page select.modern-input {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.8rem;
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+body.viz-page .modern-input:focus,
+body.viz-page .modern-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 15, 145, 0.1);
+}
+
+.qt-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted-text);
+    margin-bottom: 5px;
+}
+
+.qt-field { margin-bottom: 14px; }
+.qt-field:last-child { margin-bottom: 0; }
+
+.qt-range-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qt-range-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary);
+    min-width: 0;
+}
+
+.qt-range-val {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.76rem;
+    min-width: 58px;
+    text-align: right;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.qt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 9px 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: var(--font-sans);
+}
+
+.qt-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.07);
+}
+
+.qt-btn:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+}
+
+.qt-btn--primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    border-color: transparent;
+    color: #fff;
+}
+
+.qt-btn--primary:hover:not(:disabled) { color: #fff; filter: brightness(1.08); }
+
+.qt-btn--ghost { background: var(--surface-hover); }
+
+.qt-btn--danger { color: #b91c1c; border-color: rgba(185, 28, 28, 0.3); }
+.qt-btn--danger:hover:not(:disabled) { color: #b91c1c; border-color: #b91c1c; }
+
+.qt-btn--sm { padding: 6px 10px; font-size: 0.66rem; border-radius: 8px; }
+
+.qt-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.qt-btn-row .qt-btn { flex: 1 1 auto; min-width: 88px; }
+
+/* --------------------------------------------------------------------------
+   4. Gate palette
+   -------------------------------------------------------------------------- */
+.qt-gate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 7px;
+}
+
+.qt-gate {
+    position: relative;
+    padding: 9px 4px;
+    border-radius: 9px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.16s ease;
+    user-select: none;
+}
+
+.qt-gate:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 15, 145, 0.14);
+}
+
+.qt-gate.is-armed {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(0, 15, 145, 0.3);
+}
+
+.qt-gate[data-family="pauli"]  { border-color: rgba(194, 65, 12, 0.35); color: #c2410c; }
+.qt-gate[data-family="had"]    { border-color: rgba(0, 15, 145, 0.35); color: var(--primary); }
+.qt-gate[data-family="phase"]  { border-color: rgba(4, 120, 87, 0.35); color: #047857; }
+.qt-gate[data-family="rot"]    { border-color: rgba(128, 90, 213, 0.4); color: #6d47c9; }
+.qt-gate[data-family="two"]    { border-color: rgba(180, 83, 9, 0.35); color: #b45309; }
+
+.qt-gate.is-armed,
+.qt-gate.is-armed[data-family] { color: #fff; }
+
+.qt-gate[draggable="true"] { cursor: grab; }
+.qt-gate[draggable="true"]:active { cursor: grabbing; }
+
+/* --------------------------------------------------------------------------
+   5. Readouts: key/value + stat tiles
+   -------------------------------------------------------------------------- */
+.qt-kv {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.qt-kv__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(15, 23, 42, 0.08);
+    font-size: 0.78rem;
+}
+
+.qt-kv__row:last-child { border-bottom: none; }
+
+.qt-kv__k {
+    color: var(--muted-text);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.qt-kv__v {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+    word-break: break-word;
+}
+
+.qt-kv__v.is-accent { color: var(--primary); }
+
+.qt-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 10px;
+}
+
+.qt-stat {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+.qt-stat__k {
+    display: block;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted-text);
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.qt-stat__v {
+    display: block;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.qt-stat--ok   .qt-stat__v { color: #047857; }
+.qt-stat--warn .qt-stat__v { color: #b45309; }
+.qt-stat--bad  .qt-stat__v { color: #b91c1c; }
+
+/* --------------------------------------------------------------------------
+   6. Amplitude / probability rows
+   -------------------------------------------------------------------------- */
+.qt-amp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.qt-amp {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr) 74px;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 9px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: #fff;
+    transition: border-color 0.16s, background 0.16s;
+}
+
+.qt-amp.is-lit {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.qt-amp__ket {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--primary);
+}
+
+.qt-amp__bar {
+    position: relative;
+    height: 16px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.qt-amp__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), #4f5bd5);
+    transition: width 0.28s ease;
+}
+
+.qt-amp__fill--phase {
+    background: linear-gradient(90deg, #047857, #34d399);
+}
+
+.qt-amp__num {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.74rem;
+    text-align: right;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.qt-amp__num small {
+    display: block;
+    color: var(--muted-text);
+    font-size: 0.66rem;
+}
+
+/* --------------------------------------------------------------------------
+   7. Circuit grid
+   -------------------------------------------------------------------------- */
+.qt-circuit-wrap {
+    overflow-x: auto;
+    padding: 6px 2px 10px;
+}
+
+.qt-circuit {
+    display: inline-grid;
+    gap: 6px 4px;
+    min-width: 100%;
+    align-items: center;
+}
+
+.qt-circuit__q {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted-text);
+    text-align: right;
+    padding-right: 6px;
+    white-space: nowrap;
+}
+
+.qt-circuit__head {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.62rem;
+    color: var(--muted-text);
+    text-align: center;
+    padding-bottom: 2px;
+}
+
+.qt-slot {
+    position: relative;
+    width: 48px;
+    height: 44px;
+    border-radius: 9px;
+    border: 1px dashed rgba(15, 23, 42, 0.16);
+    background: rgba(15, 23, 42, 0.015);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.qt-slot:hover { border-color: var(--primary); background: var(--primary-light); }
+.qt-slot.is-target { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0, 15, 145, 0.12); }
+.qt-slot.is-active { background: rgba(0, 15, 145, 0.08); border-style: solid; }
+
+.qt-slot.is-drop {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: scale(1.06);
+}
+
+/* the drawn wire running behind a row */
+.qt-slot::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    top: 50%;
+    height: 2px;
+    background: rgba(15, 23, 42, 0.16);
+    z-index: 0;
+}
+
+.qt-gbox {
+    position: relative;
+    z-index: 1;
+    min-width: 34px;
+    padding: 4px 6px;
+    border-radius: 7px;
+    background: #fff;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 15, 145, 0.12);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.qt-gbox[data-family="pauli"] { border-color: #c2410c; color: #c2410c; }
+.qt-gbox[data-family="had"]   { border-color: var(--primary); color: var(--primary); }
+.qt-gbox[data-family="phase"] { border-color: #047857; color: #047857; }
+.qt-gbox[data-family="rot"]   { border-color: #6d47c9; color: #6d47c9; }
+.qt-gbox[data-family="two"]   { border-color: #b45309; color: #b45309; }
+
+.qt-gbox.is-done { opacity: 0.55; }
+.qt-gbox.is-now {
+    box-shadow: 0 0 0 3px rgba(0, 15, 145, 0.18);
+    transform: scale(1.08);
+}
+
+.qt-ctrl {
+    position: relative;
+    z-index: 1;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--text);
+    cursor: pointer;
+}
+
+.qt-link {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px;
+    background: var(--text);
+    transform: translateX(-50%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.qt-measure {
+    position: relative;
+    z-index: 1;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text);
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   8. Canvas holders
+   -------------------------------------------------------------------------- */
+.qt-canvas-box {
+    position: relative;
+    width: 100%;
+    background:
+        radial-gradient(600px 260px at 50% 0%, rgba(0, 15, 145, 0.04), transparent 70%),
+        var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.qt-canvas-box canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.qt-canvas-box--bloch { height: clamp(280px, 42vw, 430px); }
+.qt-canvas-box--wide  { height: clamp(240px, 42vw, 340px); }
+.qt-canvas-box--chart { height: 260px; }
+.qt-canvas-box--chart-tall { height: 320px; }
+.qt-canvas-box--phasor { height: clamp(240px, 36vw, 300px); }
+
+/* --------------------------------------------------------------------------
+   9. Tabs, notes, formulas, legends
+   -------------------------------------------------------------------------- */
+.qt-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.qt-tab {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted-text);
+    cursor: pointer;
+    transition: all 0.16s;
+}
+
+.qt-tab:hover { border-color: var(--primary); color: var(--primary); }
+
+.qt-tab.is-active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.qt-note {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--muted-text);
+    background: var(--surface-hover);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 9px 12px;
+    margin-top: 12px;
+}
+
+.qt-note strong { color: var(--text); }
+
+/* Same specificity trap as the Code Lab console: style.css ships
+   `.main-content p { color: #2b3038 }` at (0,1,1), which beats a bare `.qt-note`
+   at (0,1,0) wherever the note is written as a <p> (e.g. bloch-sphere page) —
+   the muted grey silently renders as near-black ink. Re-assert at (0,2,1). */
+.main-content p.qt-note { color: var(--muted-text); }
+
+.qt-formula {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 11px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.qt-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.72rem;
+    color: var(--muted-text);
+    margin-top: 8px;
+}
+
+.qt-legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+.qt-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.qt-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid rgba(0, 15, 145, 0.16);
+}
+
+.qt-chip--ok   { background: #ecfdf5; color: #047857; border-color: rgba(4,120,87,0.2); }
+.qt-chip--warn { background: #fffbeb; color: #b45309; border-color: rgba(180,83,9,0.2); }
+.qt-chip--bad  { background: #fef2f2; color: #b91c1c; border-color: rgba(185,28,28,0.2); }
+
+/* --------------------------------------------------------------------------
+   10. Tables
+   -------------------------------------------------------------------------- */
+.qt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.76rem;
+}
+
+.qt-table th,
+.qt-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+
+.qt-table th {
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted-text);
+    font-weight: 700;
+}
+
+.qt-table td {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    color: var(--text);
+}
+
+.qt-table tbody tr:hover { background: var(--primary-light); }
+
+.qt-table td.is-pos { color: #047857; }
+.qt-table td.is-neg { color: #b91c1c; }
+
+/* --------------------------------------------------------------------------
+   11. Small utilities
+   -------------------------------------------------------------------------- */
+.qt-mono { font-family: 'JetBrains Mono', 'Menlo', monospace; }
+.qt-muted { color: var(--muted-text); }
+.qt-sm { font-size: 0.76rem; }
+.qt-mt { margin-top: 14px; }
+.qt-mb { margin-bottom: 14px; }
+.qt-center { text-align: center; }
+.qt-nowrap { white-space: nowrap; }
+
+.qt-hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 14px 0;
+}
+
+body.viz-page .qt-scroll {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+body.viz-page .qt-scroll::-webkit-scrollbar { width: 6px; }
+body.viz-page .qt-scroll::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+/* gate history list */
+.qt-history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-height: 108px;
+    overflow-y: auto;
+}
+
+.qt-history__item {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 0.7rem;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.qt-history__item.is-last {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.qt-empty {
+    font-size: 0.76rem;
+    color: var(--muted-text);
+    font-style: italic;
+    padding: 8px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.viz-page .qt-gate:hover,
+    body.viz-page .qt-btn:hover { transform: none; }
+}

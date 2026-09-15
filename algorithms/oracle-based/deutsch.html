@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -266,9 +278,15 @@
         </ul>
         <div class="simulation-placeholder" style="margin-top: 1.5rem;">
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualisation placeholder to be added later]</p>
+            <h3>Visualiser in development</h3>
+            <p>A step-by-step interactive module for this protocol is on the roadmap. Until it lands, you can run the
+                real Qiskit circuit below and inspect the recorded statevectors, density matrices and measurement
+                histograms.</p>
+            <span class="status-note">Roadmap · Interactive module</span>
+            <div class="placeholder-actions">
+                <a class="btn" href="#code-lab">Run the Qiskit code</a>
+                <a class="btn btn-outline" href="../../visualise.html">Browse live visualisers</a>
+            </div>
         </div>
     </section>
 
@@ -285,33 +303,33 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, Operator
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
-# You can toggle this between &quot;balanced&quot; and &quot;constant&quot;
-oracle_type = &quot;balanced&quot; 
+# You can toggle this between "balanced" and "constant"
+oracle_type = "balanced" 
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(2, name=&quot;q&quot;)
-cr = ClassicalRegister(1, name=&quot;c&quot;)
+qr = QuantumRegister(2, name="q")
+cr = ClassicalRegister(1, name="c")
 qc = QuantumCircuit(qr, cr)
 
 # 2. Initialisation: Prepare target qubit (q1) in |-&gt; and query qubit (q0) in |+&gt;
 qc.x(1)
 qc.h(0)
 qc.h(1)
-qc.barrier(label=&quot;Init&quot;)
+qc.barrier(label="Init")
 
 # 3. Oracle Application
-if oracle_type == &quot;balanced&quot;:
+if oracle_type == "balanced":
     qc.cx(0, 1)  # CNOT creates a balanced function (f(x) = x)
-elif oracle_type == &quot;constant&quot;:
+elif oracle_type == "constant":
     pass         # Identity creates a constant function (f(x) = 0)
-qc.barrier(label=&quot;Oracle&quot;)
+qc.barrier(label="Oracle")
 
 # 4. Final Interference
 qc.h(0)
-qc.barrier(label=&quot;Interference&quot;)
+qc.barrier(label="Interference")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -334,37 +352,37 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;Deutsch Algorithm Analysis: {oracle_type.capitalize()} Oracle&quot;))
+display(Markdown(f"Deutsch Algorithm Analysis: {oracle_type.capitalize()} Oracle"))
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
-print(&quot;The 4x4 unitary matrix describing this specific oracle circuit:&quot;)
-display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;))
+display(Markdown("2. Unitary Evolution"))
+print("The 4x4 unitary matrix describing this specific oracle circuit:")
+display(array_to_latex(unitary.data, prefix="U_{circuit} = "))
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector prior to measurement:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("3. Quantum State Representation"))
+print("Exact Statevector prior to measurement:")
+display(final_state.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis&quot;))
+display(Markdown("5. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
 # Verification statement
 measured_bit = list(counts.keys())[0]
-if measured_bit == &#x27;1&#x27;:
-    print(&quot;Conclusion: The measurement is 1. The function is BALANCED.&quot;)
+if measured_bit == '1':
+    print("Conclusion: The measurement is 1. The function is BALANCED.")
 else:
-    print(&quot;Conclusion: The measurement is 0. The function is CONSTANT.&quot;)</code></pre>
+    print("Conclusion: The measurement is 0. The function is CONSTANT.")</code></pre>
             </div>
         </div>
 
@@ -374,38 +392,38 @@ else:
                 <a href="../../assets/notebooks/deutsch.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Deutsch Algorithm Analysis: Balanced Oracle</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">The 4x4 unitary matrix describing this specific oracle circuit:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Deutsch Algorithm Analysis: Balanced Oracle</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">The 4x4 unitary matrix describing this specific oracle circuit:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 U_{circuit} = 
 \begin{bmatrix}
-0 & \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0  \\
- \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2}  \\
- 0 & - \frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} & 0  \\
- - \frac{\sqrt{2}}{2} & 0 & 0 & \frac{\sqrt{2}}{2}  \\
+0 &amp; \frac{\sqrt{2}}{2} &amp; \frac{\sqrt{2}}{2} &amp; 0  \\
+ \frac{\sqrt{2}}{2} &amp; 0 &amp; 0 &amp; \frac{\sqrt{2}}{2}  \\
+ 0 &amp; - \frac{\sqrt{2}}{2} &amp; \frac{\sqrt{2}}{2} &amp; 0  \\
+ - \frac{\sqrt{2}}{2} &amp; 0 &amp; 0 &amp; \frac{\sqrt{2}}{2}  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01\rangle- \frac{\sqrt{2}}{2} |11\rangle$$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01\rangle- \frac{\sqrt{2}}{2} |11\rangle$$</div>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'1': 1024}
+<img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'1': 1024}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-4.png" alt="Notebook output">
-                <pre class="notebook-output-text">Conclusion: The measurement is 1. The function is BALANCED.
+<img class="notebook-output-img" src="../../assets/images/outputs/deutsch-out-4.png" alt="Notebook output">
+<pre class="notebook-output-text">Conclusion: The measurement is 1. The function is BALANCED.
 </pre>
             </div>
         </div>
@@ -457,7 +475,9 @@ State prior to measurement (Q-Sphere):
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

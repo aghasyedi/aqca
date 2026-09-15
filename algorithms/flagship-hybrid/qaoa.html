@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -273,7 +285,7 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
@@ -285,25 +297,25 @@ gamma = 0.3                       # Problem angle
 beta = 0.4                        # Mixer angle
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(num_nodes, name=&quot;q&quot;)
-cr = ClassicalRegister(num_nodes, name=&quot;c&quot;)
+qr = QuantumRegister(num_nodes, name="q")
+cr = ClassicalRegister(num_nodes, name="c")
 qc = QuantumCircuit(qr, cr)
 
 # 2. Initialisation: Equal Superposition |+&gt;^n
 qc.h(qr)
-qc.barrier(label=&quot;Init&quot;)
+qc.barrier(label="Init")
 
 # 3. Problem Layer (Cost Hamiltonian: U(C, gamma))
 for u, v in edges:
     qc.cx(qr[u], qr[v])
     qc.rz(2 * gamma, qr[v])
     qc.cx(qr[u], qr[v])
-qc.barrier(label=&quot;Problem Layer&quot;)
+qc.barrier(label="Problem Layer")
 
 # 4. Mixer Layer (Transverse Field Hamiltonian: U(B, beta))
 for node in range(num_nodes):
     qc.rx(2 * beta, qr[node])
-qc.barrier(label=&quot;Mixer Layer&quot;)
+qc.barrier(label="Mixer Layer")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -325,46 +337,46 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;QAOA Max-Cut Analysis: {num_nodes}-Node Triangle Graph&quot;))
-print(f&quot;Graph Edges: {edges}&quot;)
-print(f&quot;Parameters: gamma = {gamma}, beta = {beta}&quot;)
+display(Markdown(f"QAOA Max-Cut Analysis: {num_nodes}-Node Triangle Graph"))
+print(f"Graph Edges: {edges}")
+print(f"Parameters: gamma = {gamma}, beta = {beta}")
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
+display(Markdown("2. Unitary Evolution"))
 if num_nodes &lt;= 3:
-    print(f&quot;The {2**num_nodes}x{2**num_nodes} unitary matrix describing the QAOA circuit:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{QAOA} = &quot;, max_size=16))
+    print(f"The {2**num_nodes}x{2**num_nodes} unitary matrix describing the QAOA circuit:")
+    display(array_to_latex(unitary.data, prefix="U_{QAOA} = ", max_size=16))
 else:
-    print(f&quot;Unitary matrix omitted: {num_nodes} qubits results in a matrix too large for clean display.&quot;)
+    print(f"Unitary matrix omitted: {num_nodes} qubits results in a matrix too large for clean display.")
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector prior to measurement:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("3. Quantum State Representation"))
+print("Exact Statevector prior to measurement:")
+display(final_state.draw('latex'))
 
-print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix prior to measurement:")
+display(final_density.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis&quot;))
+display(Markdown("5. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
 # 6. Final Max-Cut Verification Logic
-display(Markdown(&quot;6. Verification: Max-Cut Evaluation&quot;))
-print(&quot;Evaluating cut values for each measured bitstring (partition cut size):&quot;)
+display(Markdown("6. Verification: Max-Cut Evaluation"))
+print("Evaluating cut values for each measured bitstring (partition cut size):")
 
 def evaluate_max_cut(bitstring, graph_edges):
     cut_value = 0
-    # Reverse string to match Qiskit&#x27;s little-endian bit order
+    # Reverse string to match Qiskit's little-endian bit order
     rev_bit = bitstring[::-1]
     for u, v in graph_edges:
         if rev_bit[u] != rev_bit[v]:
@@ -373,7 +385,7 @@ def evaluate_max_cut(bitstring, graph_edges):
 
 for bitstring in counts.keys():
     c_val = evaluate_max_cut(bitstring, edges)
-    print(f&quot;Bitstring |{bitstring}\\rangle -&gt; Cut Size: {c_val} (Frequency: {counts[bitstring]})&quot;)</code></pre>
+    print(f"Bitstring |{bitstring}\\rangle -&gt; Cut Size: {c_val} (Frequency: {counts[bitstring]})")</code></pre>
             </div>
         </div>
 
@@ -383,62 +395,62 @@ for bitstring in counts.keys():
                 <a href="../../assets/notebooks/qaoa.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QAOA Max-Cut Analysis: 3-Node Triangle Graph</p>
-                <pre class="notebook-output-text">Graph Edges: [(0, 1), (1, 2), (2, 0)]
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">QAOA Max-Cut Analysis: 3-Node Triangle Graph</p>
+<pre class="notebook-output-text">Graph Edges: [(0, 1), (1, 2), (2, 0)]
 Parameters: gamma = 0.3, beta = 0.4
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">The 8x8 unitary matrix describing the QAOA circuit:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">The 8x8 unitary matrix describing the QAOA circuit:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 U_{QAOA} = 
 \begin{bmatrix}
-0.1501015272 - 0.5819594675 i & 0.2370663818 - 0.3263724492 i & 0.2370663818 - 0.3263724492 i & 0.2007417639 - 0.077246235 i & 0.2370663818 - 0.3263724492 i & 0.2007417639 - 0.077246235 i & 0.2007417639 - 0.077246235 i & -0.089711337 + 0.0615917283 i  \\
- 0.1102417855 - 0.1846915951 i & -0.4942783602 + 0.0209996287 i & 0.2092958323 - 0.0495932572 i & -0.379943075 - 0.1355090579 i & 0.2092958323 - 0.0495932572 i & -0.379943075 - 0.1355090579 i & 0.1608820222 + 0.3200216373 i & -0.1675006415 - 0.3669645489 i  \\
- 0.1102417855 - 0.1846915951 i & 0.2092958323 - 0.0495932572 i & -0.4942783602 + 0.0209996287 i & -0.379943075 - 0.1355090579 i & 0.2092958323 - 0.0495932572 i & 0.1608820222 + 0.3200216373 i & -0.379943075 - 0.1355090579 i & -0.1675006415 - 0.3669645489 i  \\
- 0.1102417855 - 0.1846915951 i & -0.2092958323 + 0.0495932572 i & -0.2092958323 + 0.0495932572 i & 0.1608820222 + 0.3200216373 i & 0.4942783602 - 0.0209996287 i & -0.379943075 - 0.1355090579 i & -0.379943075 - 0.1355090579 i & 0.1675006415 + 0.3669645489 i  \\
- 0.1102417855 - 0.1846915951 i & 0.2092958323 - 0.0495932572 i & 0.2092958323 - 0.0495932572 i & 0.1608820222 + 0.3200216373 i & -0.4942783602 + 0.0209996287 i & -0.379943075 - 0.1355090579 i & -0.379943075 - 0.1355090579 i & -0.1675006415 - 0.3669645489 i  \\
- 0.1102417855 - 0.1846915951 i & -0.2092958323 + 0.0495932572 i & 0.4942783602 - 0.0209996287 i & -0.379943075 - 0.1355090579 i & -0.2092958323 + 0.0495932572 i & 0.1608820222 + 0.3200216373 i & -0.379943075 - 0.1355090579 i & 0.1675006415 + 0.3669645489 i  \\
- 0.1102417855 - 0.1846915951 i & 0.4942783602 - 0.0209996287 i & -0.2092958323 + 0.0495932572 i & -0.379943075 - 0.1355090579 i & -0.2092958323 + 0.0495932572 i & -0.379943075 - 0.1355090579 i & 0.1608820222 + 0.3200216373 i & 0.1675006415 + 0.3669645489 i  \\
- 0.1501015272 - 0.5819594675 i & -0.2370663818 + 0.3263724492 i & -0.2370663818 + 0.3263724492 i & 0.2007417639 - 0.077246235 i & -0.2370663818 + 0.3263724492 i & 0.2007417639 - 0.077246235 i & 0.2007417639 - 0.077246235 i & 0.089711337 - 0.0615917283 i  \\
+0.1501015272 - 0.5819594675 i &amp; 0.2370663818 - 0.3263724492 i &amp; 0.2370663818 - 0.3263724492 i &amp; 0.2007417639 - 0.077246235 i &amp; 0.2370663818 - 0.3263724492 i &amp; 0.2007417639 - 0.077246235 i &amp; 0.2007417639 - 0.077246235 i &amp; -0.089711337 + 0.0615917283 i  \\
+ 0.1102417855 - 0.1846915951 i &amp; -0.4942783602 + 0.0209996287 i &amp; 0.2092958323 - 0.0495932572 i &amp; -0.379943075 - 0.1355090579 i &amp; 0.2092958323 - 0.0495932572 i &amp; -0.379943075 - 0.1355090579 i &amp; 0.1608820222 + 0.3200216373 i &amp; -0.1675006415 - 0.3669645489 i  \\
+ 0.1102417855 - 0.1846915951 i &amp; 0.2092958323 - 0.0495932572 i &amp; -0.4942783602 + 0.0209996287 i &amp; -0.379943075 - 0.1355090579 i &amp; 0.2092958323 - 0.0495932572 i &amp; 0.1608820222 + 0.3200216373 i &amp; -0.379943075 - 0.1355090579 i &amp; -0.1675006415 - 0.3669645489 i  \\
+ 0.1102417855 - 0.1846915951 i &amp; -0.2092958323 + 0.0495932572 i &amp; -0.2092958323 + 0.0495932572 i &amp; 0.1608820222 + 0.3200216373 i &amp; 0.4942783602 - 0.0209996287 i &amp; -0.379943075 - 0.1355090579 i &amp; -0.379943075 - 0.1355090579 i &amp; 0.1675006415 + 0.3669645489 i  \\
+ 0.1102417855 - 0.1846915951 i &amp; 0.2092958323 - 0.0495932572 i &amp; 0.2092958323 - 0.0495932572 i &amp; 0.1608820222 + 0.3200216373 i &amp; -0.4942783602 + 0.0209996287 i &amp; -0.379943075 - 0.1355090579 i &amp; -0.379943075 - 0.1355090579 i &amp; -0.1675006415 - 0.3669645489 i  \\
+ 0.1102417855 - 0.1846915951 i &amp; -0.2092958323 + 0.0495932572 i &amp; 0.4942783602 - 0.0209996287 i &amp; -0.379943075 - 0.1355090579 i &amp; -0.2092958323 + 0.0495932572 i &amp; 0.1608820222 + 0.3200216373 i &amp; -0.379943075 - 0.1355090579 i &amp; 0.1675006415 + 0.3669645489 i  \\
+ 0.1102417855 - 0.1846915951 i &amp; 0.4942783602 - 0.0209996287 i &amp; -0.2092958323 + 0.0495932572 i &amp; -0.379943075 - 0.1355090579 i &amp; -0.2092958323 + 0.0495932572 i &amp; -0.379943075 - 0.1355090579 i &amp; 0.1608820222 + 0.3200216373 i &amp; 0.1675006415 + 0.3669645489 i  \\
+ 0.1501015272 - 0.5819594675 i &amp; -0.2370663818 + 0.3263724492 i &amp; -0.2370663818 + 0.3263724492 i &amp; 0.2007417639 - 0.077246235 i &amp; -0.2370663818 + 0.3263724492 i &amp; 0.2007417639 - 0.077246235 i &amp; 0.2007417639 - 0.077246235 i &amp; 0.089711337 - 0.0615917283 i  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$(0.1501015272 - 0.5819594675 i) |000\rangle+(0.1102417855 - 0.1846915951 i) |001\rangle+(0.1102417855 - 0.1846915951 i) |010\rangle+(0.1102417855 - 0.1846915951 i) |011\rangle+(0.1102417855 - 0.1846915951 i) |100\rangle+(0.1102417855 - 0.1846915951 i) |101\rangle+(0.1102417855 - 0.1846915951 i) |110\rangle+(0.1501015272 - 0.5819594675 i) |111\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$(0.1501015272 - 0.5819594675 i) |000\rangle+(0.1102417855 - 0.1846915951 i) |001\rangle+(0.1102417855 - 0.1846915951 i) |010\rangle+(0.1102417855 - 0.1846915951 i) |011\rangle+(0.1102417855 - 0.1846915951 i) |100\rangle+(0.1102417855 - 0.1846915951 i) |101\rangle+(0.1102417855 - 0.1846915951 i) |110\rangle+(0.1501015272 - 0.5819594675 i) |111\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-0.3612072902 & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.3612072902  \\
- 0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
- 0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
- 0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
- 0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
- 0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
- 0.1240304827 + 0.0364337603 i & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.0462642366 & 0.1240304827 + 0.0364337603 i  \\
- 0.3612072902 & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.1240304827 - 0.0364337603 i & 0.3612072902  \\
+0.3612072902 &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.3612072902  \\
+ 0.1240304827 + 0.0364337603 i &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.1240304827 + 0.0364337603 i  \\
+ 0.1240304827 + 0.0364337603 i &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.1240304827 + 0.0364337603 i  \\
+ 0.1240304827 + 0.0364337603 i &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.1240304827 + 0.0364337603 i  \\
+ 0.1240304827 + 0.0364337603 i &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.1240304827 + 0.0364337603 i  \\
+ 0.1240304827 + 0.0364337603 i &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.1240304827 + 0.0364337603 i  \\
+ 0.1240304827 + 0.0364337603 i &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.0462642366 &amp; 0.1240304827 + 0.0364337603 i  \\
+ 0.3612072902 &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.1240304827 - 0.0364337603 i &amp; 0.3612072902  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'101': 35, '100': 49, '110': 47, '001': 42, '111': 376, '011': 53, '010': 51, '000': 371}
+<img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'101': 35, '100': 49, '110': 47, '001': 42, '111': 376, '011': 53, '010': 51, '000': 371}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification: Max-Cut Evaluation</p>
-                <pre class="notebook-output-text">Evaluating cut values for each measured bitstring (partition cut size):
+<img class="notebook-output-img" src="../../assets/images/outputs/qaoa-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification: Max-Cut Evaluation</p>
+<pre class="notebook-output-text">Evaluating cut values for each measured bitstring (partition cut size):
 Bitstring |101\rangle -&gt; Cut Size: 2 (Frequency: 35)
 Bitstring |100\rangle -&gt; Cut Size: 2 (Frequency: 49)
 Bitstring |110\rangle -&gt; Cut Size: 2 (Frequency: 47)
@@ -500,7 +512,9 @@ Bitstring |000\rangle -&gt; Cut Size: 0 (Frequency: 371)
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

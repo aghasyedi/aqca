@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -291,38 +303,38 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
 # CONFIGURATION
 # ==========================================
-secret_string = &quot;1011&quot;
+secret_string = "1011"
 n = len(secret_string)
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(n + 1, name=&quot;q&quot;)
-cr = ClassicalRegister(n, name=&quot;c&quot;)
+qr = QuantumRegister(n + 1, name="q")
+cr = ClassicalRegister(n, name="c")
 qc = QuantumCircuit(qr, cr)
 
 # 2. Initialisation
 qc.x(n) # Prepare target qubit in |1&gt;
 for i in range(n + 1):
     qc.h(i) # Apply Hadamard to all qubits
-qc.barrier(label=&quot;Init&quot;)
+qc.barrier(label="Init")
 
 # 3. Oracle Construction (f(x) = s * x)
-# Reversing string for Qiskit&#x27;s endianness (q_0 is the rightmost bit)
+# Reversing string for Qiskit's endianness (q_0 is the rightmost bit)
 reversed_secret = secret_string[::-1]
 for qubit in range(n):
-    if reversed_secret[qubit] == &#x27;1&#x27;:
+    if reversed_secret[qubit] == '1':
         qc.cx(qubit, n)
-qc.barrier(label=&quot;Oracle&quot;)
+qc.barrier(label="Oracle")
 
 # 4. Final Interference
 for i in range(n):
     qc.h(i)
-qc.barrier(label=&quot;Interference&quot;)
+qc.barrier(label="Interference")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -345,46 +357,46 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;Bernstein-Vazirani Analysis: Secret = &#x27;{secret_string}&#x27;&quot;))
+display(Markdown(f"Bernstein-Vazirani Analysis: Secret = '{secret_string}'"))
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
+display(Markdown("2. Unitary Evolution"))
 # Guardrail to prevent Jupyter output crashes on large matrices
 if n &lt;= 2: 
-    print(f&quot;The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;, max_size=16))
+    print(f"The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:")
+    display(array_to_latex(unitary.data, prefix="U_{circuit} = ", max_size=16))
 else:
-    print(f&quot;Unitary matrix omitted: {n} input qubits ({n+1} total) results in a matrix too large for clean display.&quot;)
+    print(f"Unitary matrix omitted: {n} input qubits ({n+1} total) results in a matrix too large for clean display.")
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector prior to measurement:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("3. Quantum State Representation"))
+print("Exact Statevector prior to measurement:")
+display(final_state.draw('latex'))
 
-print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix prior to measurement:")
+display(final_density.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis&quot;))
+display(Markdown("5. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
 # 6. Final Verification Logic
-display(Markdown(&quot;6. Verification&quot;))
+display(Markdown("6. Verification"))
 measured_bitstring = list(counts.keys())[0]
 
 if measured_bitstring == secret_string:
-    print(f&quot;Success: 100% of measurements returned &#x27;{measured_bitstring}&#x27;, which perfectly matches the secret string!&quot;)
+    print(f"Success: 100% of measurements returned '{measured_bitstring}', which perfectly matches the secret string!")
 else:
-    print(f&quot;Error: Measured &#x27;{measured_bitstring}&#x27;, expected &#x27;{secret_string}&#x27;.&quot;)</code></pre>
+    print(f"Error: Measured '{measured_bitstring}', expected '{secret_string}'.")</code></pre>
             </div>
         </div>
 
@@ -394,56 +406,56 @@ else:
                 <a href="../../assets/notebooks/bernstein-vazirani.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">&lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+<pre class="notebook-output-text">&lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
 &lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
 &lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
 &lt;&gt;:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Bernstein-Vazirani Analysis: Secret = '1011'</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Bernstein-Vazirani Analysis: Secret = '1011'</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">Unitary matrix omitted: 4 input qubits (5 total) results in a matrix too large for clean display.
 </pre>
-                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/3814462174.py:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
+<pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/3814462174.py:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
   print(f"The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:")
 /var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/3814462174.py:67: SyntaxWarning: 'int' object is not callable; perhaps you missed a comma?
   print(f"The {2(n+1)}x{2(n+1)} unitary matrix describing the full circuit:")
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$\frac{\sqrt{2}}{2} |01011\rangle- \frac{\sqrt{2}}{2} |11011\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'1011': 1024}
+<img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'1011': 1024}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
-                <pre class="notebook-output-text">Success: 100% of measurements returned '1011', which perfectly matches the secret string!
+<img class="notebook-output-img" src="../../assets/images/outputs/bernstein-vazirani-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+<pre class="notebook-output-text">Success: 100% of measurements returned '1011', which perfectly matches the secret string!
 </pre>
             </div>
         </div>
@@ -495,7 +507,9 @@ State prior to measurement (Q-Sphere):
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

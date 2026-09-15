@@ -1,0 +1,611 @@
+/* ==========================================================================
+   css/code-lab.css
+   AQCA Code Lab — the simulated Qiskit execution environment that ships with
+   every algorithm page. Editor on the left, animated runtime console on the
+   right. Purely presentational; behaviour lives in js/code-runner.js.
+   ========================================================================== */
+
+.codelab {
+    --cl-border: #d9dee7;
+    --cl-head: #f5f7fb;
+    --cl-editor-bg: #fbfcfe;
+    --cl-term-bg: #0d1424;
+    --cl-term-soft: #1a2438;
+    --cl-term-line: #8fa3c4;
+    /* The console background is very dark navy (#0d1424), so every text token
+       must be pure white. The old values (#e6ecf7 / #7f8ea8) read as dark grey
+       on this surface — #7f8ea8 in particular was unreadable at the 0.7–0.78rem
+       sizes used in the head, timer, captions and stage line. Section headings
+       (.cl-l--head) used to be tinted with --cl-accent; keep hierarchy with
+       font-weight instead of colour so nothing reads as grey or blue. */
+    --cl-term-text: #ffffff;
+    --cl-term-dim: #ffffff;
+    --cl-ok: #34d399;
+    --cl-warn: #fbbf24;
+    --cl-err: #f87171;
+    --cl-accent: #7dd3fc;
+
+    margin: 1.25rem 0 2.5rem 0;
+    border: 1px solid var(--cl-border);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 30px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+    font-family: var(--font-sans);
+}
+
+/* ------------------------------- toolbar ---------------------------------- */
+.codelab__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.7rem 0.9rem;
+    background: var(--cl-head);
+    border-bottom: 1px solid var(--cl-border);
+}
+
+.codelab__id {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.codelab__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.16);
+    flex: none;
+}
+
+.codelab__file {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.codelab__chips {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.cl-chip {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #475569;
+    background: #fff;
+    border: 1px solid var(--cl-border);
+    border-radius: 999px;
+    padding: 0.18rem 0.55rem;
+    white-space: nowrap;
+}
+
+.cl-chip--live {
+    color: #047857;
+    border-color: rgba(4, 120, 87, 0.3);
+    background: rgba(4, 120, 87, 0.08);
+}
+
+.codelab__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.cl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    border: 1px solid var(--cl-border);
+    background: #fff;
+    color: #334155;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.16s ease;
+    white-space: nowrap;
+}
+
+.cl-btn svg {
+    width: 13px;
+    height: 13px;
+}
+
+.cl-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.cl-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.cl-btn--run {
+    background: linear-gradient(135deg, #047857, #065f46);
+    border-color: transparent;
+    color: #fff;
+}
+
+.cl-btn--run:hover:not(:disabled) {
+    color: #fff;
+    filter: brightness(1.08);
+}
+
+.cl-btn--stop {
+    background: #fff;
+    border-color: rgba(185, 28, 28, 0.35);
+    color: #b91c1c;
+}
+
+.cl-btn--stop:hover:not(:disabled) {
+    border-color: #b91c1c;
+    color: #b91c1c;
+}
+
+/* -------------------------------- body ------------------------------------ */
+.codelab__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+}
+
+.codelab__pane {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.codelab__pane + .codelab__pane {
+    border-left: 1px solid var(--cl-border);
+}
+
+.cl-pane__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #64748b;
+    background: #fff;
+    border-bottom: 1px solid var(--cl-border);
+}
+
+.cl-pane__head .cl-hint {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+/* ------------------------------- editor ----------------------------------- */
+/* The editor reuses the page's existing `.code-block` element: it is moved
+   into the lab and restyled, so the source always stays in the document. */
+.codelab .code-block.codelab__editor {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 300px;
+    max-height: 460px;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--cl-editor-bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.codelab .code-block.codelab__editor .code-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 !important;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    background: transparent;
+}
+
+.cl-gutter {
+    flex: none;
+    padding: 0.85rem 0.6rem 0.85rem 0.9rem;
+    text-align: right;
+    color: #616c7c;
+    background: #f7f9fc;
+    border-right: 1px solid #eef1f6;
+    user-select: none;
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    font-variant-numeric: tabular-nums;
+}
+
+.cl-gutter div {
+    height: 1.65em;
+    transition: color 0.15s, background 0.15s;
+}
+
+.cl-gutter div.is-active {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.codelab__editor pre {
+    margin: 0;
+    padding: 0.85rem 1rem 0.85rem 0.9rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.codelab__editor code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.65;
+    color: #26303f;
+    white-space: pre;
+    tab-size: 4;
+}
+
+.cl-code-line {
+    display: block;
+    min-height: 1.65em;
+    border-radius: 4px;
+    padding: 0 0.25rem;
+    margin: 0 -0.25rem;
+}
+
+.cl-code-line.is-active {
+    background: rgba(0, 15, 145, 0.09);
+    box-shadow: inset 2px 0 0 0 var(--primary);
+}
+
+/* Python token colours (light editor) */
+.tk-com   { color: #64707f; font-style: italic; }
+.tk-str   { color: #0a7c5a; }
+.tk-kw    { color: #7c2d8b; font-weight: 600; }
+.tk-built { color: #1d4ed8; }
+.tk-num   { color: #b45309; }
+.tk-fn    { color: #0b6b8f; }
+.tk-dec   { color: #b45309; }
+.tk-op    { color: #475569; }
+.tk-self  { color: #c2410c; }
+
+/* ------------------------------- console ---------------------------------- */
+.codelab__console {
+    display: flex;
+    flex-direction: column;
+    background: var(--cl-term-bg);
+    color: var(--cl-term-text);
+    min-height: 100%;
+}
+
+.cl-console__head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.9rem;
+    background: #0a1120;
+    color: var(--cl-term-dim);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cl-dots {
+    display: inline-flex;
+    gap: 5px;
+}
+
+.cl-dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: block;
+}
+
+.cl-dots i:nth-child(1) { background: #f87171; }
+.cl-dots i:nth-child(2) { background: #fbbf24; }
+.cl-dots i:nth-child(3) { background: #34d399; }
+
+.cl-console__title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--cl-term-dim);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cl-timer {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--cl-term-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+.cl-console__body {
+    flex: 1;
+    padding: 0.85rem 0.95rem 1rem 0.95rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    overflow-y: auto;
+    max-height: 380px;
+    min-height: 300px;
+    scroll-behavior: smooth;
+}
+
+.cl-console__body::-webkit-scrollbar { width: 8px; }
+.cl-console__body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+}
+
+/* Every console line is a <p> (js/code-runner.js → addLine / typeLine).
+   style.css ships `.main-content p { color: #2b3038 }` at specificity (0,1,1),
+   which BEATS a bare `.cl-l--head` / `.cl-l--muted` at (0,1,0) — so the lines
+   rendered in dark grey ink on the navy console and looked invisible.
+   Scoping these to .codelab__console raises them to (0,2,0) and wins. */
+.codelab__console p.cl-l {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    color: #ffffff;
+    animation: clFade 0.18s ease both;
+}
+
+/* Plain body text, boot lines, section headings and muted output are all white.
+   Section headings ("Quantum Circuit", "Statevector", …) get their hierarchy
+   from weight + spacing, not colour — a tinted heading read as grey on navy. */
+.codelab__console p.cl-l--cmd,
+.codelab__console p.cl-l--sys,
+.codelab__console p.cl-l--head,
+.codelab__console p.cl-l--muted { color: #ffffff; }
+
+.codelab__console p.cl-l--cmd,
+.codelab__console p.cl-l--head { font-weight: 700; }
+.codelab__console p.cl-l--head { margin-top: 0.5rem; }
+
+.codelab__console .cl-l--cmd .cl-prompt { color: var(--cl-ok); margin-right: 0.45rem; }
+.codelab__console p.cl-l--ok   { color: var(--cl-ok); }
+.codelab__console p.cl-l--warn { color: var(--cl-warn); }
+.codelab__console p.cl-l--err  { color: var(--cl-err); }
+
+.cl-stage-line {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+}
+
+.cl-stage-line .cl-stage-name { color: var(--cl-term-text); }
+.cl-stage-line .cl-stage-dots {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.34);
+    overflow: hidden;
+    white-space: nowrap;
+}
+.cl-stage-line .cl-stage-val { color: #ffffff; font-weight: 600; }
+
+.cl-fig {
+    margin: 0.6rem 0 0.9rem 0;
+    animation: clFade 0.35s ease both;
+}
+
+.cl-fig img {
+    display: block;
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.cl-fig figcaption {
+    margin-top: 0.35rem;
+    font-size: 0.68rem;
+    color: var(--cl-term-dim);
+    letter-spacing: 0.02em;
+}
+
+/* Rendered LaTeX sits on a light card inside the dark console, so it must
+   carry its own dark ink — MathJax inherits currentColor by default. */
+.cl-math {
+    margin: 0.5rem 0 0.9rem 0;
+    padding: 0.6rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 8px;
+    overflow-x: auto;
+    color: #16202f;
+    animation: clFade 0.3s ease both;
+}
+
+.cl-math,
+.cl-math * {
+    color: #16202f;
+}
+
+.cl-math mjx-container {
+    margin: 0 !important;
+}
+
+.cl-caret {
+    display: inline-block;
+    width: 7px;
+    height: 1em;
+    vertical-align: text-bottom;
+    background: var(--cl-ok);
+    margin-left: 2px;
+    animation: clBlink 1s steps(2, start) infinite;
+}
+
+/* Both of these are <p> too (idle() and addLine('', 'cl-done')), so they need
+   the same .codelab__console scoping or .main-content p wins again. */
+.codelab__console .cl-idle {
+    color: #ffffff;
+}
+
+.codelab__console .cl-done {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.14);
+    color: var(--cl-ok);
+    font-weight: 700;
+}
+
+/* ------------------------------- footer ----------------------------------- */
+.cl-console__foot {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.95rem 0.65rem 0.95rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    background: #0a1120;
+    color: var(--cl-term-dim);
+}
+
+.cl-progress {
+    flex: 1;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.cl-progress i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #38bdf8, #34d399);
+    transition: width 0.25s ease;
+}
+
+.cl-progress.is-error i {
+    background: linear-gradient(90deg, #f87171, #fb923c);
+}
+
+.cl-stage {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--cl-term-dim);
+    min-width: 130px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* -------------------------------- note ------------------------------------ */
+.codelab__note {
+    margin: 0;
+    padding: 0.6rem 0.95rem;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: #64748b;
+    background: #fff;
+    border-top: 1px solid var(--cl-border);
+}
+
+.codelab__note code {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    background: #f1f5f9;
+    border-radius: 4px;
+    padding: 0.05rem 0.3rem;
+}
+
+.codelab__note kbd {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background: #f1f5f9;
+    border: 1px solid var(--cl-border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 0 0.25rem;
+}
+
+/* ------------------------------- states ----------------------------------- */
+.codelab.is-running .codelab__dot {
+    background: var(--cl-warn);
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+    animation: clPulse 1.1s ease-in-out infinite;
+}
+
+.codelab.is-done .codelab__dot {
+    background: var(--cl-ok);
+}
+
+@keyframes clFade {
+    from { opacity: 0; transform: translateY(3px); }
+    to   { opacity: 1; transform: none; }
+}
+
+@keyframes clBlink {
+    to { visibility: hidden; }
+}
+
+@keyframes clPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.25); opacity: 0.65; }
+}
+
+/* ------------------------------ responsive -------------------------------- */
+@media (max-width: 1100px) {
+    .codelab__body {
+        grid-template-columns: 1fr;
+    }
+
+    .codelab__pane + .codelab__pane {
+        border-left: none;
+        border-top: 1px solid var(--cl-border);
+    }
+
+    .codelab__editor {
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 640px) {
+    .codelab__bar {
+        gap: 0.6rem;
+    }
+
+    .codelab__actions {
+        width: 100%;
+    }
+
+    .cl-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cl-l, .cl-fig, .cl-math { animation: none; }
+    .cl-caret { animation: none; }
+    .cl-console__body { scroll-behavior: auto; }
+}

@@ -46,6 +46,13 @@
     margin-bottom: 40px;
 }
 
+/* The hero sits inside <main class="main-content">, and style.css ships
+   `.main-content p { color: #2b3038 }` at (0,1,1) — which beats a bare
+   `.hero-desc` at (0,1,0) and darkens the muted grey. Re-assert at (0,2,1). */
+.main-content p.hero-desc {
+    color: #475569;
+}
+
 /* Premium Buttons */
 .hero-actions {
     display: flex;

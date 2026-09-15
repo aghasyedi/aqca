@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -258,20 +270,20 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, partial_trace, state_fidelity
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
 from IPython.display import display, Markdown
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(3, name=&quot;q&quot;)
-crz = ClassicalRegister(1, name=&quot;crz&quot;)
-crx = ClassicalRegister(1, name=&quot;crx&quot;)
-cr_final = ClassicalRegister(1, name=&quot;q2_meas&quot;)
+qr = QuantumRegister(3, name="q")
+crz = ClassicalRegister(1, name="crz")
+crx = ClassicalRegister(1, name="crx")
+cr_final = ClassicalRegister(1, name="q2_meas")
 qc = QuantumCircuit(qr, crz, crx, cr_final)
 
 # 2. Initialise Qubit 0 to the arbitrary state |ψ&gt;
 theta = 2 * np.arccos(1 / np.sqrt(3))
 qc.ry(theta, 0)
-qc.barrier(label=&quot;Init |ψ&gt;&quot;)
+qc.barrier(label="Init |ψ&gt;")
 
 # Create a standalone 1-qubit reference state for the fidelity check
 reference_circuit = QuantumCircuit(1)
@@ -282,24 +294,24 @@ initial_state = Statevector(reference_circuit)
 # 3. Create shared Bell pair (|Φ+&gt;) between Alice (Q1) and Bob (Q2)
 qc.h(1)
 qc.cx(1, 2)
-qc.barrier(label=&quot;|Φ+&gt;&quot;)
+qc.barrier(label="|Φ+&gt;")
 
 # 4. Alice encodes the state
 qc.cx(0, 1)
 qc.h(0)
-qc.barrier(label=&quot;Alice Enc&quot;)
+qc.barrier(label="Alice Enc")
 
 # 5. Alice measures her qubits
 qc.measure(0, crz)
 qc.measure(1, crx)
-qc.barrier(label=&quot;Measure&quot;)
+qc.barrier(label="Measure")
 
-# 6. Bob applies dynamic corrections based on Alice&#x27;s classical bits
+# 6. Bob applies dynamic corrections based on Alice's classical bits
 with qc.if_test((crx, 1)):
     qc.x(2)
 with qc.if_test((crz, 1)):
     qc.z(2)
-qc.barrier(label=&quot;Bob Corr&quot;)
+qc.barrier(label="Bob Corr")
 
 # Save the full density matrix before the final measurement collapses it
 qc.save_density_matrix()
@@ -317,45 +329,45 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Quantum State Representation&quot;))
-print(&quot;Initial Statevector (Qubit 0 prior to teleportation):&quot;)
-display(initial_state.draw(&#x27;latex&#x27;))
+display(Markdown("2. Quantum State Representation"))
+print("Initial Statevector (Qubit 0 prior to teleportation):")
+display(initial_state.draw('latex'))
 
-# Extract Bob&#x27;s final state by tracing out Alice&#x27;s qubits (Q0 and Q1)
-rho_full = result.data()[&#x27;density_matrix&#x27;]
+# Extract Bob's final state by tracing out Alice's qubits (Q0 and Q1)
+rho_full = result.data()['density_matrix']
 rho_bob = partial_trace(rho_full, [0, 1])
 
-print(&quot;\nFinal DensityMatrix (Qubit 2 after corrections):&quot;)
-display(rho_bob.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix (Qubit 2 after corrections):")
+display(rho_bob.draw('latex'))
 
-display(Markdown(&quot;3. State Visualisation&quot;))
-print(&quot;Initial State (Bloch Sphere):&quot;)
+display(Markdown("3. State Visualisation"))
+print("Initial State (Bloch Sphere):")
 display(plot_bloch_multivector(initial_state))
 
-print(&quot;\nFinal State (Bloch Sphere):&quot;)
+print("\nFinal State (Bloch Sphere):")
 display(plot_bloch_multivector(rho_bob))
 
-print(&quot;\nFinal State (Q-Sphere):&quot;)
+print("\nFinal State (Q-Sphere):")
 display(plot_state_qsphere(rho_bob))
 
-display(Markdown(&quot;4. Measurement Analysis&quot;))
+display(Markdown("4. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
 # Note: Operator(qc) is omitted here because mid-circuit measurements 
 # and dynamic resets make the overall circuit non-unitary.
 
-display(Markdown(&quot;5. Verification&quot;))
+display(Markdown("5. Verification"))
 fidelity = state_fidelity(initial_state, rho_bob)
-print(f&quot;Teleportation Fidelity = {fidelity:.6f}&quot;)
+print(f"Teleportation Fidelity = {fidelity:.6f}")
 if np.isclose(fidelity, 1.0):
-    print(&quot;Success: The state was teleported perfectly.&quot;)
+    print("Success: The state was teleported perfectly.")
 else:
-    print(&quot;Warning: Teleportation fidelity is less than 1.&quot;)</code></pre>
+    print("Warning: Teleportation fidelity is less than 1.")</code></pre>
             </div>
         </div>
 
@@ -365,40 +377,40 @@ else:
                 <a href="../../assets/notebooks/quantum-teleportation.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
-                <pre class="notebook-output-text">Initial Statevector (Qubit 0 prior to teleportation):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
+<pre class="notebook-output-text">Initial Statevector (Qubit 0 prior to teleportation):
 </pre>
-                <div class="notebook-output-math">$$\frac{\sqrt{3}}{3} |0\rangle+\frac{\sqrt{6}}{3} |1\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$\frac{\sqrt{3}}{3} |0\rangle+\frac{\sqrt{6}}{3} |1\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix (Qubit 2 after corrections):
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-\frac{1}{3} & \frac{\sqrt{2}}{3}  \\
- \frac{\sqrt{2}}{3} & \frac{2}{3}  \\
+\frac{1}{3} &amp; \frac{\sqrt{2}}{3}  \\
+ \frac{\sqrt{2}}{3} &amp; \frac{2}{3}  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
-                <pre class="notebook-output-text">Initial State (Bloch Sphere):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
+<pre class="notebook-output-text">Initial State (Bloch Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 Final State (Bloch Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-3.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-3.png" alt="Notebook output">
+<pre class="notebook-output-text">
 Final State (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'1 0 0': 172, '1 1 0': 165, '0 0 1': 88, '0 1 0': 98, '0 0 0': 83, '1 0 1': 169, '0 1 1': 91, '1 1 1': 158}
+<img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'1 0 0': 172, '1 1 0': 165, '0 0 1': 88, '0 1 0': 98, '0 0 0': 83, '1 0 1': 169, '0 1 1': 91, '1 1 1': 158}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-5.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification</p>
-                <pre class="notebook-output-text">Teleportation Fidelity = 1.000000
+<img class="notebook-output-img" src="../../assets/images/outputs/quantum-teleportation-out-5.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification</p>
+<pre class="notebook-output-text">Teleportation Fidelity = 1.000000
 Success: The state was teleported perfectly.
 </pre>
             </div>
@@ -453,7 +465,9 @@ Success: The state was teleported perfectly.
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

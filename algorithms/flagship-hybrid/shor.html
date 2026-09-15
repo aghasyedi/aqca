@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -284,7 +296,7 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector
 from qiskit.circuit.library import QFT
-from qiskit.visualisation import plot_histogram
+from qiskit.visualization import plot_histogram
 from IPython.display import display, Markdown
 
 # ==========================================================
@@ -300,8 +312,7 @@ n_count = 8
 # ==========================================================
 
 def c_amod15(a, power):
-    &quot;&quot;&quot;Controlled multiplication by 7 mod 15.&quot;&quot;&quot;
-
+    """Controlled multiplication by 7 mod 15."""
     U = QuantumCircuit(4)
 
     for _ in range(power):
@@ -313,16 +324,16 @@ def c_amod15(a, power):
             U.x(q)
 
     U = U.to_gate()
-    U.name = f&quot;{a}^{power} mod 15&quot;
+    U.name = f"{a}^{power} mod 15"
     return U.control()
 
 # ==========================================================
 # Registers
 # ==========================================================
 
-qr_count = QuantumRegister(n_count, &quot;count&quot;)
-qr_target = QuantumRegister(4, &quot;target&quot;)
-cr = ClassicalRegister(n_count, &quot;c&quot;)
+qr_count = QuantumRegister(n_count, "count")
+qr_target = QuantumRegister(4, "target")
+cr = ClassicalRegister(n_count, "c")
 
 qc = QuantumCircuit(qr_count, qr_target, cr)
 
@@ -332,34 +343,35 @@ qc = QuantumCircuit(qr_count, qr_target, cr)
 
 qc.h(qr_count)
 qc.x(qr_target[0])
-qc.barrier(label=&quot;Init&quot;)
+qc.barrier(label="Init")
 
 # ==========================================================
 # Oracle
 # ==========================================================
 
 for q in range(n_count):
-    qc.append(c_amod15(a, 2  q), [qr_count[q]] + list(qr_target))
+    # FIXED: Replaced '2 q' with '2**q'
+    qc.append(c_amod15(a, 2**q), [qr_count[q]] + list(qr_target))
 
-qc.barrier(label=&quot;Oracle&quot;)
+qc.barrier(label="Oracle")
 
 # ==========================================================
 # Inverse QFT
 # ==========================================================
 
 iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
-iqft.name = &quot;IQFT&quot;
+iqft.name = "IQFT"
 
 qc.append(iqft, qr_count)
-qc.barrier(label=&quot;IQFT&quot;)
+qc.barrier(label="IQFT")
 
 # ==========================================================
 # Statevector
 # ==========================================================
 
-print(&quot;Calculating Statevector...&quot;)
+print("Calculating Statevector...")
 state = Statevector.from_instruction(qc)
-print(&quot;Statevector computed successfully.&quot;)
+print("Statevector computed successfully.")
 
 # ==========================================================
 # Measurement
@@ -371,7 +383,7 @@ qc.measure(qr_count, cr)
 # Simulation
 # ==========================================================
 
-print(&quot;Running Aer Simulator...&quot;)
+print("Running Aer Simulator...")
 
 simulator = AerSimulator()
 tqc = transpile(qc, simulator)
@@ -379,106 +391,33 @@ tqc = transpile(qc, simulator)
 result = simulator.run(tqc, shots=1024).result()
 counts = result.get_counts()
 
-print(&quot;Simulation Complete.&quot;)
+print("Simulation Complete.")
 
 # ==========================================================
 # Outputs
 # ==========================================================
 
-display(Markdown(f&quot;# Shor&#x27;s Algorithm (N={N}, a={a})&quot;))
+display(Markdown(f"# Shor's Algorithm (N={N}, a={a})"))
 
-display(Markdown(&quot;## 1. Circuit&quot;))
-display(qc.draw(&quot;mpl&quot;))
+display(Markdown("## 1. Circuit"))
+display(qc.draw("mpl"))
 
-display(Markdown(&quot;## 2. Quantum State&quot;))
+display(Markdown("## 2. Quantum State"))
 
-print(&quot;Statevector successfully calculated.&quot;)
-print(&quot;\nTotal amplitudes:&quot;, len(state))
+print("Statevector successfully calculated.")
+print("\nTotal amplitudes:", len(state))
 
-print(&quot;\nFirst 16 amplitudes:\n&quot;)
+print("\nFirst 16 amplitudes:\n")
 for i, amp in enumerate(state.data[:16]):
-    print(f&quot;|{i:012b}&gt; : {amp}&quot;)
+    print(f"|{i:012b}&gt; : {amp}")
 
-display(Markdown(&quot;## 3. Measurement Histogram&quot;))
+display(Markdown("## 3. Measurement Histogram"))
 display(plot_histogram(counts))
 
-display(Markdown(&quot;## 4. Raw Counts&quot;))
+display(Markdown("## 4. Raw Counts"))
 print(counts)
 
-display(Markdown(&quot;## 5. Classical Post-Processing&quot;))
-
-success = False
-
-for measured_binary in sorted(counts, key=counts.get, reverse=True):
-
-    measured_decimal = int(measured_binary, 2)
-    phase = measured_decimal / (2 
-
-qc.barrier(label=&quot;Oracle&quot;)
-
-# ==========================================================
-# Inverse QFT
-# ==========================================================
-
-iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
-iqft.name = &quot;IQFT&quot;
-
-qc.append(iqft, qr_count)
-qc.barrier(label=&quot;IQFT&quot;)
-
-# ==========================================================
-# Statevector
-# ==========================================================
-
-print(&quot;Calculating Statevector...&quot;)
-state = Statevector.from_instruction(qc)
-print(&quot;Statevector computed successfully.&quot;)
-
-# ==========================================================
-# Measurement
-# ==========================================================
-
-qc.measure(qr_count, cr)
-
-# ==========================================================
-# Simulation
-# ==========================================================
-
-print(&quot;Running Aer Simulator...&quot;)
-
-simulator = AerSimulator()
-tqc = transpile(qc, simulator)
-
-result = simulator.run(tqc, shots=1024).result()
-counts = result.get_counts()
-
-print(&quot;Simulation Complete.&quot;)
-
-# ==========================================================
-# Outputs
-# ==========================================================
-
-display(Markdown(f&quot;Shor&#x27;s Algorithm (N={N}, a={a})&quot;))
-
-display(Markdown(&quot;1. Circuit&quot;))
-display(qc.draw(&quot;mpl&quot;))
-
-display(Markdown(&quot;2. Quantum State&quot;))
-
-print(&quot;Statevector successfully calculated.&quot;)
-print(&quot;\nTotal amplitudes:&quot;, len(state))
-
-print(&quot;\nFirst 16 amplitudes:\n&quot;)
-for i, amp in enumerate(state.data[:16]):
-    print(f&quot;|{i:012b}&gt; : {amp}&quot;)
-
-display(Markdown(&quot;3. Measurement Histogram&quot;))
-display(plot_histogram(counts))
-
-display(Markdown(&quot;4. Raw Counts&quot;))
-print(counts)
-
-display(Markdown(&quot;5. Classical Post-Processing&quot;))
+display(Markdown("## 5. Classical Post-Processing"))
 
 success = False
 
@@ -490,34 +429,34 @@ for measured_binary in sorted(counts, key=counts.get, reverse=True):
     frac = Fraction(phase).limit_denominator(N)
     r = frac.denominator
 
-    print(&quot;-&quot; * 60)
-    print(f&quot;Measured Binary : {measured_binary}&quot;)
-    print(f&quot;Decimal         : {measured_decimal}&quot;)
-    print(f&quot;Estimated Phase : {phase:.6f}&quot;)
-    print(f&quot;Fraction        : {frac}&quot;)
-    print(f&quot;Estimated Order : {r}&quot;)
+    print("-" * 60)
+    print(f"Measured Binary : {measured_binary}")
+    print(f"Decimal         : {measured_decimal}")
+    print(f"Estimated Phase : {phase:.6f}")
+    print(f"Fraction        : {frac}")
+    print(f"Estimated Order : {r}")
 
     if r % 2 != 0 or r == 0:
-        print(&quot;Order invalid.\n&quot;)
+        print("Order invalid.\n")
         continue
 
-    guess1 = math.gcd(a ` (r // 2) - 1, N)
-    guess2 = math.gcd(a `
-    guess2 = math.gcd(a ** (r // 2) + 1, N)
+    # FIXED: Replaced backticks with proper Python exponentiation (**)
+    guess1 = math.gcd(a**(r // 2) - 1, N)
+    guess2 = math.gcd(a**(r // 2) + 1, N)
 
-    print(f&quot;gcd(a^(r/2)-1,N) = {guess1}&quot;)
-    print(f&quot;gcd(a^(r/2)+1,N) = {guess2}&quot;)
+    print(f"gcd(a^(r/2)-1,N) = {guess1}")
+    print(f"gcd(a^(r/2)+1,N) = {guess2}")
 
     if guess1 not in [1, N] or guess2 not in [1, N]:
-        print(&quot;\nSUCCESS!&quot;)
-        print(f&quot;Factors of {N} are {guess1} and {guess2}&quot;)
+        print("\nSUCCESS!")
+        print(f"Factors of {N} are {guess1} and {guess2}")
         success = True
         break
     else:
-        print(&quot;Only trivial factors obtained.&quot;)
+        print("Only trivial factors obtained.")
 
 if not success:
-    print(&quot;\nNo non-trivial factors found in this run.&quot;)</code></pre>
+    print("\nNo non-trivial factors found in this run.")</code></pre>
             </div>
         </div>
 
@@ -527,19 +466,19 @@ if not success:
                 <a href="../../assets/notebooks/shor.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">Calculating Statevector...
+<pre class="notebook-output-text">Calculating Statevector...
 Statevector computed successfully.
 Running Aer Simulator...
 Simulation Complete.
 </pre>
-                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/330659950.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. ('Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.',)
+<pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/330659950.py:71: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. ('Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.',)
   iqft = QFT(n_count, inverse=True, do_swaps=True).to_gate()
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor's Algorithm (N=15, a=7)</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/shor-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State</p>
-                <pre class="notebook-output-text">Statevector successfully calculated.
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor's Algorithm (N=15, a=7)</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/shor-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State</p>
+<pre class="notebook-output-text">Statevector successfully calculated.
 
 Total amplitudes: 4096
 
@@ -562,13 +501,13 @@ First 16 amplitudes:
 |000000001110&gt; : 0j
 |000000001111&gt; : 0j
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Measurement Histogram</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Raw Counts</p>
-                <pre class="notebook-output-text">{'00000000': 228, '11000000': 272, '10000000': 270, '01000000': 254}
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Measurement Histogram</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/shor-out-2.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Raw Counts</p>
+<pre class="notebook-output-text">{'00000000': 228, '11000000': 272, '10000000': 270, '01000000': 254}
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Classical Post-Processing</p>
-                <pre class="notebook-output-text">------------------------------------------------------------
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Classical Post-Processing</p>
+<pre class="notebook-output-text">------------------------------------------------------------
 Measured Binary : 11000000
 Decimal         : 192
 Estimated Phase : 0.750000
@@ -631,7 +570,9 @@ Factors of 15 are 3 and 5
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

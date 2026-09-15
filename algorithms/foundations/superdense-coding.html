@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -260,7 +272,7 @@
 <div class="code-content">
 <pre><code>from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualisation import (
+from qiskit.visualization import (
     plot_histogram,
     plot_bloch_multivector,
     plot_state_qsphere
@@ -273,7 +285,7 @@ from IPython.display import display
 # ---------------------------------------------------------
 # Superdense Coding Circuit
 # ---------------------------------------------------------
-def superdense_coding(message=&quot;00&quot;):
+def superdense_coding(message="00"):
 
     qc = QuantumCircuit(2, 2)
 
@@ -283,22 +295,22 @@ def superdense_coding(message=&quot;00&quot;):
     qc.h(0)
     qc.cx(0, 1)
 
-    qc.barrier(label=&quot;Bell Pair&quot;)
+    qc.barrier(label="Bell Pair")
 
     # -----------------------------------------------------
     # Step 2 : Alice Encodes Two Classical Bits
     # -----------------------------------------------------
-    if message == &quot;00&quot;:
+    if message == "00":
         pass
-    elif message == &quot;01&quot;:
+    elif message == "01":
         qc.x(0)
-    elif message == &quot;10&quot;:
+    elif message == "10":
         qc.z(0)
-    elif message == &quot;11&quot;:
+    elif message == "11":
         qc.z(0)
         qc.x(0)
 
-    qc.barrier(label=&quot;Encoding&quot;)
+    qc.barrier(label="Encoding")
 
     # -----------------------------------------------------
     # Step 3 : Bob Decodes
@@ -312,7 +324,7 @@ def superdense_coding(message=&quot;00&quot;):
 # =========================================================
 # Choose Message
 # =========================================================
-message = &quot;10&quot;
+message = "10"
 
 qc = superdense_coding(message)
 
@@ -320,8 +332,8 @@ qc = superdense_coding(message)
 # =========================================================
 # 1. Circuit Diagram
 # =========================================================
-print(&quot;Quantum Circuit&quot;)
-display(qc.draw(&quot;mpl&quot;))
+print("Quantum Circuit")
+display(qc.draw("mpl"))
 
 
 # =========================================================
@@ -329,8 +341,8 @@ display(qc.draw(&quot;mpl&quot;))
 # =========================================================
 state = Statevector.from_instruction(qc)
 
-print(&quot;Statevector&quot;)
-display(state.draw(&quot;latex&quot;))
+print("Statevector")
+display(state.draw("latex"))
 
 
 # =========================================================
@@ -338,28 +350,28 @@ display(state.draw(&quot;latex&quot;))
 # =========================================================
 density = DensityMatrix(state)
 
-print(&quot;Density Matrix&quot;)
-display(density.draw(&quot;latex&quot;))
+print("Density Matrix")
+display(density.draw("latex"))
 
 
 # =========================================================
 # 4. Bloch Sphere
 # =========================================================
-print(&quot;Bloch Sphere&quot;)
+print("Bloch Sphere")
 display(plot_bloch_multivector(state))
 
 
 # =========================================================
 # 5. QSphere
 # =========================================================
-print(&quot;QSphere&quot;)
+print("QSphere")
 display(plot_state_qsphere(state))
 
 
 # =========================================================
 # 6. Unitary Operator
 # =========================================================
-print(&quot;Unitary Operator&quot;)
+print("Unitary Operator")
 display(Operator(qc).data)
 
 
@@ -381,7 +393,7 @@ sampler_result = job.result()
 
 sampler_counts = sampler_result[0].data.c.get_counts()
 
-print(&quot;Sampler Counts&quot;)
+print("Sampler Counts")
 print(sampler_counts)
 
 
@@ -394,14 +406,14 @@ result = simulator.run(qc_measure, shots=1024).result()
 
 counts = result.get_counts()
 
-print(&quot;\nAer Simulator Counts&quot;)
+print("\nAer Simulator Counts")
 print(counts)
 
 
 # =========================================================
 # 10. Histogram
 # =========================================================
-print(&quot;Measurement Histogram&quot;)
+print("Measurement Histogram")
 display(plot_histogram(counts))</code></pre>
             </div>
         </div>
@@ -412,43 +424,43 @@ display(plot_histogram(counts))</code></pre>
                 <a href="../../assets/notebooks/superdense-coding.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">Quantum Circuit
+<pre class="notebook-output-text">Quantum Circuit
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-1.png" alt="Notebook output">
-                <pre class="notebook-output-text">Statevector
+<img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-1.png" alt="Notebook output">
+<pre class="notebook-output-text">Statevector
 </pre>
-                <div class="notebook-output-math">$$ |01\rangle$$</div>
-                <pre class="notebook-output-text">Density Matrix
+<div class="notebook-output-math">$$ |01\rangle$$</div>
+<pre class="notebook-output-text">Density Matrix
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-0 & 0 & 0 & 0  \\
- 0 & 1 & 0 & 0  \\
- 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0  \\
+0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 1 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0  \\
  \end{bmatrix}
 $$</div>
-                <pre class="notebook-output-text">Bloch Sphere
+<pre class="notebook-output-text">Bloch Sphere
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">QSphere
+<img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">QSphere
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-3.png" alt="Notebook output">
-                <pre class="notebook-output-text">Unitary Operator
+<img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-3.png" alt="Notebook output">
+<pre class="notebook-output-text">Unitary Operator
 </pre>
-                <pre class="notebook-output-text">array([[0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j],
+<pre class="notebook-output-text">array([[0.+0.j, 1.+0.j, 0.+0.j, 0.+0.j],
        [1.+0.j, 0.+0.j, 0.+0.j, 0.+0.j],
        [0.+0.j, 0.+0.j, 0.+0.j, 1.+0.j],
        [0.+0.j, 0.+0.j, 1.+0.j, 0.+0.j]])</pre>
-                <pre class="notebook-output-text">Sampler Counts
+<pre class="notebook-output-text">Sampler Counts
 {'01': 1024}
 
 Aer Simulator Counts
 {'01': 1024}
 Measurement Histogram
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-4.png" alt="Notebook output">
+<img class="notebook-output-img" src="../../assets/images/outputs/superdense-coding-out-4.png" alt="Notebook output">
             </div>
         </div>
     </section>
@@ -500,7 +512,9 @@ Measurement Histogram
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

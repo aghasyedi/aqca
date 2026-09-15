@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -292,26 +304,26 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
 # CONFIGURATION
 # ==========================================
-secret_string = &quot;11&quot;
+secret_string = "11"
 n = len(secret_string)
 
 # 1. Set up Registers &amp; Circuit
-# Simon&#x27;s algorithm requires n input qubits and n ancilla (output) qubits
-qr_in = QuantumRegister(n, name=&quot;q_in&quot;)
-qr_out = QuantumRegister(n, name=&quot;q_out&quot;)
-cr = ClassicalRegister(n, name=&quot;c&quot;)
+# Simon's algorithm requires n input qubits and n ancilla (output) qubits
+qr_in = QuantumRegister(n, name="q_in")
+qr_out = QuantumRegister(n, name="q_out")
+cr = ClassicalRegister(n, name="c")
 qc = QuantumCircuit(qr_in, qr_out, cr)
 
 # 2. Initialisation
 for i in range(n):
     qc.h(qr_in[i])
-qc.barrier(label=&quot;Init&quot;)
+qc.barrier(label="Init")
 
 # 3. Oracle Construction
 # First, copy inputs to outputs (f(x) = x initially)
@@ -319,19 +331,19 @@ for i in range(n):
     qc.cx(qr_in[i], qr_out[i])
 
 # Create the collision for the secret string s
-pivot = secret_string.find(&#x27;1&#x27;)
+pivot = secret_string.find('1')
 if pivot != -1:
-    # Reverse string to match Qiskit&#x27;s little-endian ordering
+    # Reverse string to match Qiskit's little-endian ordering
     reversed_s = secret_string[::-1] 
     for i in range(n):
-        if reversed_s[i] == &#x27;1&#x27;:
+        if reversed_s[i] == '1':
             qc.cx(qr_in[pivot], qr_out[i])
-qc.barrier(label=&quot;Oracle&quot;)
+qc.barrier(label="Oracle")
 
 # 4. Final Interference
 for i in range(n):
     qc.h(qr_in[i])
-qc.barrier(label=&quot;Interference&quot;)
+qc.barrier(label="Interference")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -354,59 +366,59 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;Simon&#x27;s Algorithm Analysis: Secret = &#x27;{secret_string}&#x27;&quot;))
+display(Markdown(f"Simon's Algorithm Analysis: Secret = '{secret_string}'"))
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
+display(Markdown("2. Unitary Evolution"))
 # Guardrail: A total of 4 qubits (n=2) yields a 16x16 matrix. 
 # Anything larger risks crashing the Jupyter output.
 total_qubits = 2 * n
 if total_qubits &lt;= 4: 
-    print(f&quot;The {2**total_qubits}x{2**total_qubits} unitary matrix describing the full circuit:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{circuit} = &quot;, max_size=16))
+    print(f"The {2**total_qubits}x{2**total_qubits} unitary matrix describing the full circuit:")
+    display(array_to_latex(unitary.data, prefix="U_{circuit} = ", max_size=16))
 else:
-    print(f&quot;Unitary matrix omitted: {total_qubits} total qubits results in a matrix too large for clean display.&quot;)
+    print(f"Unitary matrix omitted: {total_qubits} total qubits results in a matrix too large for clean display.")
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector prior to measurement:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("3. Quantum State Representation"))
+print("Exact Statevector prior to measurement:")
+display(final_state.draw('latex'))
 
-print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix prior to measurement:")
+display(final_density.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis&quot;))
+display(Markdown("5. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
 # 6. Final Verification Logic
-display(Markdown(&quot;6. Verification&quot;))
-print(f&quot;Secret string (s): {secret_string}&quot;)
-print(&quot;Verifying the dot product of measured strings (z) with secret string (s) modulo 2:&quot;)
+display(Markdown("6. Verification"))
+print(f"Secret string (s): {secret_string}")
+print("Verifying the dot product of measured strings (z) with secret string (s) modulo 2:")
 
 all_valid = True
 for z in counts.keys():
     # Calculate s·z mod 2
     dot_product = sum(int(s_bit) * int(z_bit) for s_bit, z_bit in zip(secret_string, z)) % 2
-    print(f&quot;z = {z} -&gt; s·z mod 2 = {dot_product}&quot;)
+    print(f"z = {z} -&gt; s·z mod 2 = {dot_product}")
     if dot_product != 0:
         all_valid = False
 
 if all_valid:
-    print(f&quot;\nSuccess: All measured strings are orthogonal to the secret string &#x27;{secret_string}&#x27;.&quot;)
-    if set(counts.keys()) == {&#x27;00&#x27;}:
-        print(&quot;Note: If only &#x27;00&#x27; was measured, the function is 1-to-1 (s=&#x27;00&#x27;).&quot;)
+    print(f"\nSuccess: All measured strings are orthogonal to the secret string '{secret_string}'.")
+    if set(counts.keys()) == {'00'}:
+        print("Note: If only '00' was measured, the function is 1-to-1 (s='00').")
 else:
-    print(&quot;\nError: Found a measurement not orthogonal to the secret string.&quot;)</code></pre>
+    print("\nError: Found a measurement not orthogonal to the secret string.")</code></pre>
             </div>
         </div>
 
@@ -416,67 +428,67 @@ else:
                 <a href="../../assets/notebooks/simon.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Simon's Algorithm Analysis: Secret = '11'</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Simon's Algorithm Analysis: Secret = '11'</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/simon-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">The 16x16 unitary matrix describing the full circuit:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 U_{circuit} = 
 \begin{bmatrix}
-\frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0  \\
- 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
- 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
- \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2}  \\
- 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & - \frac{1}{2} & 0  \\
- 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0  \\
- 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
- \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0  \\
- 0 & \frac{1}{2} & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
- 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0  \\
- - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
- 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0  \\
- 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & \frac{1}{2} & 0  \\
- 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+\frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; - \frac{1}{2}  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; - \frac{1}{2} &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; \frac{1}{2} &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2}  \\
+ \frac{1}{2} &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; \frac{1}{2} &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; - \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ - \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2}  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; \frac{1}{2} &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2}  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$\frac{1}{2} |0000\rangle+\frac{1}{2} |0011\rangle+\frac{1}{2} |1000\rangle- \frac{1}{2} |1011\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$\frac{1}{2} |0000\rangle+\frac{1}{2} |0011\rangle+\frac{1}{2} |1000\rangle- \frac{1}{2} |1011\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-\frac{1}{4} & 0 & 0 & \frac{1}{4} & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- \frac{1}{4} & 0 & 0 & \frac{1}{4} & \cdots & 0 & 0 & 0  \\
- \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
+\frac{1}{4} &amp; 0 &amp; 0 &amp; \frac{1}{4} &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ \frac{1}{4} &amp; 0 &amp; 0 &amp; \frac{1}{4} &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/simon-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'11': 511, '00': 513}
+<img class="notebook-output-img" src="../../assets/images/outputs/simon-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'11': 511, '00': 513}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/simon-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
-                <pre class="notebook-output-text">Secret string (s): 11
+<img class="notebook-output-img" src="../../assets/images/outputs/simon-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">6. Verification</p>
+<pre class="notebook-output-text">Secret string (s): 11
 Verifying the dot product of measured strings (z) with secret string (s) modulo 2:
 z = 11 -&gt; s·z mod 2 = 0
 z = 00 -&gt; s·z mod 2 = 0
@@ -533,7 +545,9 @@ Success: All measured strings are orthogonal to the secret string '11'.
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

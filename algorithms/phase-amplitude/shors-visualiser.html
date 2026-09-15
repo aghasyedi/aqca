@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" data-page-node-id="0V1f87OkY2xgDXbOt7BChl">
+<head data-page-node-id="DdonELiYAQU9ImhBBBwDJN">
+    <meta charset="UTF-8" data-page-node-id="EDZPOE1agN7gxd7cZRoEo5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="qzMmgiHqHlHohSA5omEQeA">
     <title>Shor's Algorithm Visualiser | AQCA</title>
     <script src="../../assets/vendor/chartjs/chart.js"></script>
     
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css" data-page-node-id="clFIB3N5t9TObwrSGefyFj">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
-    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+    <link rel="stylesheet" href="../../css/style.css" data-page-node-id="kXqfkB87jbCYRsvbwm71Ey">
+    <link rel="stylesheet" href="../../css/responsive.css" data-page-node-id="kbAqVm5dWC6H4KfvIrmLHD">
+    <link rel="stylesheet" href="../../css/sidebar.css" data-page-node-id="UdDn578qazYGEqoZ4RHsQp">
+    <link rel="stylesheet" href="../../css/visualiser.css" data-page-node-id="f7cVBzMyMoKUpy5yApZ2Lw">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png" data-page-node-id="2EeAVIrrOxLW6vmchRoQBs">
 
     <!-- MathJax -->
     <script>MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] } };</script>
@@ -23,9 +26,7 @@
         :root {
             --dqa-primary: var(--primary); --dqa-card: var(--surface);
             --dqa-text: var(--text); --dqa-border: var(--border);
-        }
-
-        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        }.portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: auto; font-family: 'Inter', sans-serif; overflow: visible; }
         .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
         .config-sidebar::-webkit-scrollbar, .visualiser-main::-webkit-scrollbar { width: 6px; }
         .config-sidebar::-webkit-scrollbar-thumb, .visualiser-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
@@ -45,154 +46,234 @@
         .btn-secondary:hover:not(:disabled) { border-color: var(--dqa-primary); color: var(--dqa-primary); }
         .btn-modern:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: #0f172a; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #1e293b; transition: all 0.3s; }
-        .stat-box .label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
-        .stat-box .value { font-family: 'JetBrains Mono'; font-size: 2rem; font-weight: 800; color: #fff; }
-        .stat-box.highlight { border-color: #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
-        .stat-box.highlight .value { color: #38bdf8; }
-        .stat-box.success { border-color: #34d399; box-shadow: 0 0 20px rgba(52, 211, 153, 0.1); }
-        .stat-box.success .value { color: #34d399; }
+        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }.stat-box { background: var(--viz-deep); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--viz-deep-border); transition: all 0.3s; }.stat-box .label { font-size: 0.7rem; color: var(--viz-muted-strong); text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }.stat-box .value { font-family: 'JetBrains Mono'; font-size: 2rem; font-weight: 800; color: var(--viz-text); }.stat-box.highlight { border-color: var(--viz-info); box-shadow: 0 0 20px rgba(3, 105, 161, 0.1); }.stat-box.highlight .value { color: var(--viz-info); }.stat-box.success { border-color: var(--viz-ok); box-shadow: 0 0 20px rgba(4, 120, 87, 0.1); }.stat-box.success .value { color: var(--viz-ok); }
 
         .chart-container { width: 100%; height: 300px; position: relative; }
 
         .flow-container { display: flex; flex-direction: column; gap: 10px; padding: 15px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
         .flow-step { display: flex; align-items: center; gap: 15px; opacity: 0.3; transition: 0.3s; }
         .flow-step.active { opacity: 1; }
-        .flow-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'JetBrains Mono'; }
-        .flow-step.active .flow-icon { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
+        .flow-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'JetBrains Mono'; }.flow-step.active .flow-icon { background: var(--primary); color: var(--viz-text); box-shadow: 0 0 15px var(--primary); }
         .flow-text { flex-grow: 1; font-size: 0.85rem; font-weight: 600; }
-        .flow-value { font-family: 'JetBrains Mono'; color: #38bdf8; font-weight: 800; font-size: 1.1rem; }
+        .flow-value { font-family: 'JetBrains Mono'; color: var(--viz-info); font-weight: 800; font-size: 1.1rem; }
     </style>
 </head>
-<body>
-    <header class="site-header">
-        <div class="header-left">
-            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
-            <div class="site-title">
-                <h1>AQCA</h1>
-                <span class="subtitle">All Quantum Computing Algorithms</span>
+<body class="viz-page" data-page-node-id="WpmBYIhGGEsZGcKdLNMwF9">
+    <header class="site-header" data-page-node-id="djpYK4OCPJlPkN7SZPvNaB">
+        <div class="header-left" data-page-node-id="uKdCK2OQ7dyHtvP2WsGVZx">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo" data-page-node-id="lXpof9AUSDMBnON1NFjFy1">
+            <div class="site-title" data-page-node-id="kYjsChp51ozBkXz6Fssz1e">
+                <h1 data-page-node-id="oZezpzslZiAC52iWO51Cmc">AQCA</h1>
+                <span class="subtitle" data-page-node-id="7vZWFCsXJw4m4q4Vp7Wq6l">All Quantum Computing Algorithms</span>
             </div>
         </div>
         
-        <div class="header-right">
-            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
-            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        <div class="header-right" data-page-node-id="bHOZY2wpOFfhEPFEZ2vrXd">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo" data-page-node-id="yWG4UGjmHowWgh9M1KZhMh">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation" data-page-node-id="E8sCgukcbaeBbrlmkHF4o6">☰</button>
         </div>
     </header>
 
-    <div class="layout-wrapper">
-        <aside class="sidebar">
-            <nav class="nav-menu">
-                <div class="nav-item"><a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
-                <div class="nav-item"><a href="../../algorithms.html" class="nav-link">Algorithms</a></div>
-                <div class="nav-item"><a href="shor.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;" data-tooltip="Back to Shor's">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.25rem;height:1.25rem;margin-right:0.75rem;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    <span>Back to Shor's</span>
-</a></div>
-                <div class="nav-item">
-                    <a href="../../visualise.html" class="nav-link">Visualise</a>
+    <div class="layout-wrapper" data-page-node-id="rRiiN0Etr6Y6k5BBGA3F5T">
+        <aside class="sidebar" id="sidebar" data-page-node-id="YgzAuBVVIekvF79BwPlneA">
+            <nav class="nav-menu" data-page-node-id="vN2AQzn5kU3XlRylcRQgBc">
+                <div class="nav-item" data-page-node-id="3u1mDAEQXz41UqMIcEFUxk">
+                    <a href="../../index.html" class="nav-link" data-page-node-id="rHdBiHPQqmG9WlIDWuB6zP"><span class="step-num" style="background: var(--primary); color:#ffffff;" data-page-node-id="nDwq4VkTz7l48w4ChqYpM8">✦</span>Home</a>
+                </div>
+                <div class="nav-item" data-page-node-id="eHa2R4GnSbwEpr2dE5IziH">
+                    <a href="../../about.html" class="nav-link" data-page-node-id="Xf6RKnLGiPGrKyXvXUUJO4">About AQCA</a>
+                </div>
+                <div class="nav-item" data-page-node-id="MRur2tM3xN0DOoZO7j6Ug6">
+                    <a href="../../preface.html" class="nav-link" data-page-node-id="buiPICqF7bpejwgAOvu6uV">Preface</a>
+                </div>
+                <div class="nav-item" data-page-node-id="0iu9SIZmtkoath9joK9dyV">
+                    <a href="../../basics.html" class="nav-link" data-page-node-id="Wp6YSVK52U7vQ8srIkOkKS">QC Basics</a>
+                </div>
+                <div class="nav-item" data-page-node-id="xuDzTflgOzHjjBNi2tNiNY">
+                    <button class="nav-group-toggle" aria-expanded="true" data-page-node-id="KHd342BGGwiPZEFbtpQHO9">
+                        <span data-page-node-id="n7tfYzgECWMkjdSj1OpHU7">Algorithms</span>
+                        <span class="nav-group-icon" data-page-node-id="z6z4bXDNFCoMdp8Sd7Oahd">▼</span>
+                    </button>
+                    <ul class="nav-subgroup" data-page-node-id="KfUBkw0Jqu50ugPZAh8EVk">
+                        <li data-page-node-id="6L4S6RiKYZvdlKwCHXaYHt"><a href="../../algorithms.html" class="nav-link" data-page-node-id="b8SmDyLEfTV6GWEvBASvgF">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="9YMiycAt2guPaUCOExy9R5">1. Quantum Communication</li>
+                        <li data-page-node-id="csAL16mKvGebmdWU4GePQi"><a href="../../algorithms/foundations/bell-state.html" class="nav-link" data-page-node-id="sYjxDlMwyIHhbBu5ajZZHw">• Bell State Generator</a></li>
+                        <li data-page-node-id="yiy3MnBQKsyez3Aam1Ex3z"><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link" data-page-node-id="JzJ3d6hdkhbGsDyATgCe4f">• Superdense Coding</a></li>
+                        <li data-page-node-id="VUDEAFosZoZDg0JzmLhkmt"><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link" data-page-node-id="XkHWBy6YIXunVeavuEY4zF">• Quantum Teleportation</a></li>
+                        <li data-page-node-id="wgYfQdT3kDLHg5T4rNoRKV"><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link" data-page-node-id="nO62yGvrRZV6rp1tFcRu8G">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="CXAGaKVTTpW4mv4QKr31St">2. Early Oracle Algorithms</li>
+                        <li data-page-node-id="GSGzg1zqFMDwOQ3U2x8kwA"><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link" data-page-node-id="8ZMWPYOzWo7xVL8lMhrIGx">• Deutsch's Algorithm</a></li>
+                        <li data-page-node-id="UNybWPtOuiwFdr4fjMECgl"><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link" data-page-node-id="tQYEtTo56oXhX1emrDP0rO">• Deutsch–Jozsa</a></li>
+                        <li data-page-node-id="fZmq8MKmNbrQm5UZeqcYzw"><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link" data-page-node-id="tHwziBHUkQff4ttw8699B6">• Bernstein–Vazirani</a></li>
+                        <li data-page-node-id="uclM4kJ94uoUKEdldIQGoG"><a href="../../algorithms/oracle-based/simon.html" class="nav-link" data-page-node-id="6A9NBtJTriwUcDMHhshs1e">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="80ewdfuMCRZZ4z1R67Izub">3. Core Algorithms</li>
+                        <li data-page-node-id="nxbyuSGqGi4h2C6RZRKAwx"><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link" data-page-node-id="ItnhMehFRjH24tE1FZarrc">• Quantum Fourier Transform</a></li>
+                        <li data-page-node-id="UUuJLDXudQ39QETM6BjUmL"><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link" data-page-node-id="8Il1dyvF809muUMGbuzfDg">• Quantum Phase Estimation</a></li>
+                        <li data-page-node-id="hz7lwqDPC89LVByOW5cpMD"><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link" data-page-node-id="NHAvesRm39ffUvNssQHrTd">• Grover's Search</a></li>
+                        <li data-page-node-id="cy5qQ346Qd1I6kQvp2KOwS"><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link" data-page-node-id="u7G2CaUdkmQQVzdUBNyzPX">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="qvw8wDAjfeB23562oLXsPW">4. Flagship & Hybrid Models <span class="badge-beta" data-page-node-id="yDwE806n7mRAF75XH0tUjk">In-Progress</span></li>
+                        <li data-page-node-id="MCTK08K8Tbswe3AbyzrMBT"><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link" data-page-node-id="yycFvr9KDtS7HBkXLd9XDz">• Shor's Algorithm</a></li>
+                        <li data-page-node-id="skIJ4BqLOEfmNPmNcE0vCU"><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link" data-page-node-id="GjF1AZDKmpM4zms83Tt8I1">• Variational Quantum Eigensolver</a></li>
+                        <li data-page-node-id="I4PpZaNXyRMwLLvAJSDP0t"><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link" data-page-node-id="5wtjWh1bBEJdeLxnXenBZA">• QAOA</a></li>
+                        <li data-page-node-id="CwDfo56gifhmKu00HabsPY"><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link" data-page-node-id="5TT7SH7eStgtZXA5SFohKl">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="mPVGnrUonPtGh2XijjfZWY">5. Quantum Error Correction <span class="badge-beta" data-page-node-id="asT9JW44sfHLCgcFOUcO2E">In-Progress</span></li>
+                        <li data-page-node-id="ng3AfiW3mxMqPAD3k47n2E"><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link" data-page-node-id="9XkVGvepFBN1DI7aapnwJJ">• 3-Qubit Code</a></li>
+                        <li data-page-node-id="LgdFY8RmtTuUxN4hEaL7vz"><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link" data-page-node-id="4iC6rpOHDTb0fwbjAss0NY">• Shor's 9-Qubit Code</a></li>
+                        <li data-page-node-id="FgAKoCfhEVfeboa5PEhuXv"><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link" data-page-node-id="HgjtL5bNcs84FryRCuz3qF">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label" data-page-node-id="VaazJ5vNYtQDv2uWQxlfqP">6. Visualisation &amp; Interaction</li>
+                        <li data-page-node-id="qWaNOncHGw7KEPhSTO7OLB"><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link" data-page-node-id="rh0Q13tlui2SByoYKWNcwB">• Bloch Sphere Visualiser</a></li>
+                        <li data-page-node-id="uQ6QPY70SmGx8upZxDWyOx"><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link" data-page-node-id="BKME6tbgwT8tDsCYYAFAlE">• Multi-Qubit State Visualiser</a></li>
+                        <li data-page-node-id="yUUcFLJtxyGDM9lMRSf5P9"><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link" data-page-node-id="yV3yVtZd0enxKYDk2C1g5u">• Quantum Circuit Simulator</a></li>
+                        <li data-page-node-id="qmjRgwRkNSFMxUnNtnSbCT"><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link" data-page-node-id="H7EY1dLhGAmaKJoBMTHbZ6">• Statevector → Bloch Sphere</a></li>
+                        <li data-page-node-id="rG2zvLxz8wEY7xHwI4bnea"><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link" data-page-node-id="UBgdg1d7CAB4G0YkFH5LdV">• Measurement Visualiser</a></li>
+                        <li data-page-node-id="p0kuTotXV1LvpEECGgWbOQ"><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link" data-page-node-id="21xEKaIU75tAAVYEaz1lWO">• Quantum Interference</a></li>
+                        <li data-page-node-id="UwnT7OHWSdsfZ3fHCNPTX8"><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link" data-page-node-id="cq1K4DL6011ApCSMFIptlp">• Entanglement Visualiser</a></li>
+                        <li data-page-node-id="2U7ySVUeYx2H7EvtJIJJbx"><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link" data-page-node-id="3UJ2CyZTAQSing1uvGhuju">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item" data-page-node-id="I6EFKrAs30oyQ9llAMqoMo">
+                    <a href="../../visualise.html" class="nav-link" data-page-node-id="iVWPbMYqyvbBKqI5Y0nY0C">Visualise</a>
+                </div>
+                <div class="nav-item" data-page-node-id="qRXoMjpjbBknHzfKDxCZPC">
+                    <a href="../../analysis.html" class="nav-link" data-page-node-id="zJISfUdROjoFeTVlGldwE1">Analysis Centre</a>
+                </div>
+                <div class="nav-item" data-page-node-id="hoWH13qZluW12JxEST6Feu">
+                    <a href="../../resources.html" class="nav-link" data-page-node-id="L10ufOFWhNV8gpbRezXTLs">Resources</a>
+                </div>
+                <div class="nav-item" data-page-node-id="rA3o5eIuatDP09EFeawxrz">
+                    <a href="../../references.html" class="nav-link" data-page-node-id="TqoCk4O64nANGSbCGu3iCa">References</a>
+                </div>
+                <div class="nav-item" data-page-node-id="6EXByAg2yYMBOCn1Ff9gAD">
+                    <a href="../../appendix.html" class="nav-link" data-page-node-id="CDOTNE3L41sAUYuhx50laM">Appendix</a>
+                </div>
+                <div class="nav-item" data-page-node-id="ckb4v3Ag9FGnN4AzwCI7NL">
+                    <a href="../../developer.html" class="nav-link" data-page-node-id="VGOFPnyDjyrwa5ADiuAskf">Developer</a>
                 </div>
             </nav>
         </aside>
 
-        <main class="main-content" style="padding-top: 1rem;">
-            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
-                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Shor's Algorithm Visualiser</h1>
+        <main class="main-content" style="padding-top: 1rem;" data-page-node-id="7xvy7NtnLifkmFpxzUc80A">
+            <div class="viz-shell" data-page-node-id="SMmdH1CKzoMM32g7oFnBqa">
+                <nav class="viz-crumbs" data-page-node-id="KEOU7NHW5LXe1vhxpf1hVM">
+                    <a href="../../index.html" data-page-node-id="gi9UTLA1Gxb72r9Non4GW7">Home</a><span class="sep" data-page-node-id="LYPGHHcoA18fCmM0GbTz5A">›</span>
+                    <a href="../../algorithms.html" data-page-node-id="5lSvYOKYAr76HoUscaHX38">Algorithms</a><span class="sep" data-page-node-id="91oacYFHRDQKcDhWENjJFq">›</span>
+                    <a href="../flagship-hybrid/shor.html" data-page-node-id="0M6TUr25GW0enAdIoDH4L5">Flagship & Hybrid Models</a><span class="sep" data-page-node-id="RynUIl4XX9v9WUfHZ2885l">›</span>
+                    <span class="current" data-page-node-id="yLFeOAL7qzJcutLryCNhZN">Shor's Algorithm Visualiser</span>
+                </nav>
+                <div class="viz-head" data-page-node-id="gwUn7BGbNhpk8Cb8WjArYT">
+                    <div class="viz-head__left" data-page-node-id="ZCRZzdM9kAhXR2GU4gF183">
+                        <span class="viz-eyebrow" data-page-node-id="bOVoTAHYcnycnxeXPIl4w5">Interactive Visualiser</span>
+                        <h1 class="viz-title" data-page-node-id="GKb2AoUs8yXItxAeePGl8T">Shor's Algorithm Visualiser</h1>
+                        <p class="viz-subtitle" data-page-node-id="uFPhtd2CWG34r2zU6SOQAR">Step through the circuit and watch the quantum state evolve. Every figure is computed live in your browser.</p>
+                    </div>
+                    <div class="viz-head__actions" data-page-node-id="7VO5tkpFH31dL2OltKU9bM">
+                        <a class="viz-btn viz-btn--primary" href="../flagship-hybrid/shor.html" data-page-node-id="4F5OmCDyXFznIwaMfK7ubY">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="CXsPM12yiaIxvpH468ElNC"><line x1="19" y1="12" x2="5" y2="12" data-page-node-id="YgKo31l6u5REQq8fHkrACt"></line><polyline points="12 19 5 12 12 5" data-page-node-id="7Qj0yIFnH1y2toUwzaJBTj"></polyline></svg>
+                            Back to Shor's Algorithm
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html" data-page-node-id="6nCqHylCp2dbaU50iPapvB">All visualisers</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="portal-grid">
-                <aside class="config-sidebar">
-                    <div class="pert-card">
-                        <h2>1. Configure Number</h2>
-                        <div style="margin-bottom: 12px;">
-                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Number to Factor (N)</label>
-                            <input type="number" id="inp-n" class="modern-input" value="15" min="15" max="999">
+            <div class="portal-grid" data-page-node-id="czR2RcbXuKFDredldc2crD">
+                <aside class="config-sidebar" data-page-node-id="UH1DltXGMTUTZEzWn1lPRt">
+                    <div class="pert-card" data-page-node-id="WRbL1HUwCv5YiFphv4vEHM">
+                        <h2 data-page-node-id="nBAeipeOJ7ZFOARzvzzkbl">1. Configure Number</h2>
+                        <div style="margin-bottom: 12px;" data-page-node-id="qSbtuOTP1l7cpPXVfwcF7K">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;" data-page-node-id="drnv1jeeavmKe04XsOA5UW">Number to Factor (N)</label>
+                            <input type="number" id="inp-n" class="modern-input" value="15" min="15" max="999" data-page-node-id="GNEMTNWbtZDcHCPpHADFwN">
                         </div>
-                        <div style="margin-bottom: 12px;">
-                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Coprime Guess (a)</label>
-                            <select id="inp-a" class="modern-input">
-                                <option value="2">2</option>
-                                <option value="7" selected>7</option>
-                                <option value="11">11</option>
-                                <option value="13">13</option>
+                        <div style="margin-bottom: 12px;" data-page-node-id="iEBjqN5YW6X3UN0l9VbxtI">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;" data-page-node-id="3xwvDwh1gAZPzW4qKpKlnd">Coprime Guess (a)</label>
+                            <select id="inp-a" class="modern-input" data-page-node-id="HFBPAOAEDWoI3HUvXzXQuI">
+                                <option value="2" data-page-node-id="Ju3suFbQkQlkpY7oSSeVMO">2</option>
+                                <option value="7" selected data-page-node-id="ovapGLJS7sg0N1UBvWhvVa">7</option>
+                                <option value="11" data-page-node-id="T1uliRFK7oAzCMW7oN8b07">11</option>
+                                <option value="13" data-page-node-id="DVy0ANugg1OtdKdZBc6yHe">13</option>
                             </select>
                         </div>
-                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Lock Target</button>
+                        <button class="qt-btn qt-btn--primary" style="width:100%; margin-top:10px;" onclick="resetSystem()" data-page-node-id="JrEed8hD3TSW4Nh12zDnzh">Lock Target</button>
                     </div>
 
-                    <div class="pert-card">
-                        <h2>2. Operation Console</h2>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                            <button class="btn btn-primary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
-                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                    <div class="pert-card" data-page-node-id="7zwscU6OlCrGDLG6L9HkT5">
+                        <h2 data-page-node-id="XDDwh9d0tFjUjgOcNAS4Kb">2. Operation Console</h2>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;" data-page-node-id="GCPpW1miCcZw33kqN3lSJX">
+                            <button class="qt-btn qt-btn--primary" id="btn-prev" onclick="prevStep()" disabled data-page-node-id="KY5FDtPwb8BVgQZervc2N3">Previous</button>
+                            <button class="qt-btn qt-btn--primary" id="btn-next" onclick="nextStep()" data-page-node-id="i8t0rFYWvkfEnna5PjlLYd">Next Step</button>
                         </div>
-                        <button class="btn btn-green btn-modern" id="btn-auto" style="margin-bottom: 10px; width:100%;" onclick="toggleAuto()">Play Animation</button>
-                        <button class="btn btn-yellow btn-modern" style="width:100%;" onclick="resetSystem()">↻ Restart Animation</button>
+                        <button class="qt-btn qt-btn--primary" id="btn-auto" style="margin-bottom: 10px; width:100%;" onclick="toggleAuto()" data-page-node-id="MuFGNE4XfZomf0DKNp0ebv">Play Animation</button>
+                        <button class="qt-btn qt-btn--primary" style="width:100%;" onclick="resetSystem()" data-page-node-id="otclrilzOEnfVjnooK3YIQ">↻ Restart Animation</button>
                     </div>
 
-                    <div class="pert-card">
-                        <h2>3. Step Explanation</h2>
-                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
-                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initialisation</div>
-                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">Setup to factor N using a random coprime guess a.</div>
+                    <div class="pert-card" data-page-node-id="Yufp5bjYdDP5xitFDSzSiX">
+                        <h2 data-page-node-id="IBtEai7lpLNH9QfRcjB3c1">3. Step Explanation</h2>
+                        <div class="qt-note" data-page-node-id="gGTevzzzHKGNPKPeChAxAJ">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--text);" id="panel-title" data-page-node-id="ADn2sT7cJ8EYhBj60516hK">Initialisation</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--text);" data-page-node-id="HO3vkG1VNgHJMoyiqap1nu">Setup to factor N using a random coprime guess a.</div>
                         </div>
                     </div>
                 </aside>
 
-                <div class="visualiser-main">
-                    <div class="dash-grid">
-                        <div class="stat-box">
-                            <div class="label">Target (N)</div>
-                            <div class="value" id="stat-n">15</div>
+                <div class="visualiser-main" data-page-node-id="DiSBsIqyl8iVpnsIbsv9hc">
+                    <div class="qt-stat-grid">
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Target (N)</span>
+                            <span class="qt-stat__v" id="stat-n">15</span>
                         </div>
-                        <div class="stat-box highlight">
-                            <div class="label">Quantum Period (r)</div>
-                            <div class="value" id="stat-r">?</div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Quantum Period (r)</span>
+                            <span class="qt-stat__v" id="stat-r">?</span>
                         </div>
-                        <div class="stat-box success">
-                            <div class="label">Factors (p, q)</div>
-                            <div class="value" id="stat-pq" style="font-size: 1.5rem; margin-top: 10px;">? , ?</div>
+                        <div class="qt-stat qt-stat--ok">
+                            <span class="qt-stat__k">Factors (p, q)</span>
+                            <span class="qt-stat__v" id="stat-pq" style="font-size: 1.15rem;">? , ?</span>
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 20px;">
-                        <div class="pert-card">
-                            <h2 style="border: none;">Modular Exponentiation: a<sup>x</sup> mod N</h2>
-                            <div class="chart-container">
-                                <canvas id="modChart"></canvas>
+                    <div class="viz-analytics" style="display: grid; grid-template-columns: 3fr 2fr; gap: 20px;" data-page-node-id="WfSdQJdx7X8Rw5XOmUdZiP">
+                        <div class="pert-card" data-page-node-id="pQHJ2jFZDXFVST10bJ1aZ2">
+                            <h2 style="border: none;" data-page-node-id="JPenaH2Sv1n59CF242E98F">Modular Exponentiation: a<sup data-page-node-id="YBeZgNqzXsMJdbkiI6I9XW">x</sup> mod N</h2>
+                            <div class="qt-canvas-box qt-canvas-box--chart" data-page-node-id="DDwN6us4MCV1RR7MbDkYLX">
+                                <canvas id="modChart" data-page-node-id="4c0zFFKsHyVFAmhqcBEruU"></canvas>
                             </div>
                         </div>
 
-                        <div class="pert-card">
-                            <h2 style="border: none;">Protocol Flow</h2>
-                            <div class="flow-container">
-                                <div class="flow-step" id="flow-1">
-                                    <div class="flow-icon">1</div>
-                                    <div class="flow-text">Pick Coprime <br><span style="font-size:0.7rem; color:var(--muted-text);">GCD(a, N) = 1</span></div>
-                                    <div class="flow-value" id="lbl-a">a=7</div>
+                        <div class="pert-card" data-page-node-id="7TjzjUuVqCJsOMKsEfF6Xo">
+                            <h2 style="border: none;" data-page-node-id="y2GhS2rFEKPnKKOteIK2Qi">Protocol Flow</h2>
+                            <div class="flow-container" data-page-node-id="Tx6WrjlF5Z7kxHIMkc4b1L">
+                                <div class="flow-step" id="flow-1" data-page-node-id="On8HlH3QzlEgYFxZtRgNTG">
+                                    <div class="flow-icon" data-page-node-id="slG0QkhXGYih9TSCM5ylIr">1</div>
+                                    <div class="flow-text" data-page-node-id="HywE5L0sflpATnfkX5RD4Y">Pick Coprime <br data-page-node-id="NlLXdkNO1ZFWeNAIIswa0u"><span style="font-size:0.7rem; color:var(--muted-text);" data-page-node-id="kFXbZ4V0LA2wPoCpuig2C2">GCD(a, N) = 1</span></div>
+                                    <div class="flow-value" id="lbl-a" data-page-node-id="RQPHKhxRxJunVXgkqeFon6">a=7</div>
                                 </div>
-                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
-                                <div class="flow-step" id="flow-2">
-                                    <div class="flow-icon">Q</div>
-                                    <div class="flow-text">Quantum Oracle <br><span style="font-size:0.7rem; color:var(--muted-text);">Superposition of f(x)</span></div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;" data-page-node-id="1ZbvBpUi6K8C3f5Z1qJfeh"></div>
+                                <div class="flow-step" id="flow-2" data-page-node-id="cOFteKZd81wAx9H4PoUW4B">
+                                    <div class="flow-icon" data-page-node-id="5lk6tDYeC865OIczacaE00">Q</div>
+                                    <div class="flow-text" data-page-node-id="UZqVZCZ3tPiTth7fUUMnDf">Quantum Oracle <br data-page-node-id="G0sdA33ImVyquU0c6idJCv"><span style="font-size:0.7rem; color:var(--muted-text);" data-page-node-id="9DYA8zChcHpdJZtpl1veda">Superposition of f(x)</span></div>
                                 </div>
-                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
-                                <div class="flow-step" id="flow-3">
-                                    <div class="flow-icon">Q</div>
-                                    <div class="flow-text">Period Finding (QFT) <br><span style="font-size:0.7rem; color:var(--muted-text);">Interfering amplitudes</span></div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;" data-page-node-id="Dje4dfRriFQQYheH485SxR"></div>
+                                <div class="flow-step" id="flow-3" data-page-node-id="BD7dCgDdEmRkXGBz26aj46">
+                                    <div class="flow-icon" data-page-node-id="rAF22y8t9XX0vx1vDW7WNC">Q</div>
+                                    <div class="flow-text" data-page-node-id="2NE4ALYfcJ7HjoMBCe4Na6">Period Finding (QFT) <br data-page-node-id="ZdCpzFuUTy0pAxACutgxTS"><span style="font-size:0.7rem; color:var(--muted-text);" data-page-node-id="SRuEmAQ9xqxWFcQarGfBDB">Interfering amplitudes</span></div>
                                 </div>
-                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
-                                <div class="flow-step" id="flow-4">
-                                    <div class="flow-icon">4</div>
-                                    <div class="flow-text">Extract Period (r)</div>
-                                    <div class="flow-value" id="lbl-r">r=?</div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;" data-page-node-id="LkE596xPCXXuMh5tQVJ9mr"></div>
+                                <div class="flow-step" id="flow-4" data-page-node-id="ClB5FabHzpLEnmsYXxcSwD">
+                                    <div class="flow-icon" data-page-node-id="4KChp8USoF3DJpdnzAsVCE">4</div>
+                                    <div class="flow-text" data-page-node-id="mmK8LVupYSvg6HlBQ7yDNo">Extract Period (r)</div>
+                                    <div class="flow-value" id="lbl-r" data-page-node-id="PjmQSXrfRzIe5VA86GhsND">r=?</div>
                                 </div>
-                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;"></div>
-                                <div class="flow-step" id="flow-5">
-                                    <div class="flow-icon">5</div>
-                                    <div class="flow-text">GCD(a<sup>r/2</sup> ± 1, N)</div>
-                                    <div class="flow-value" id="lbl-pq" style="color: #34d399;">?</div>
+                                <div style="width: 2px; height: 15px; background: var(--border); margin-left: 34px;" data-page-node-id="nRil9WzHVyej9J6OEmTTWx"></div>
+                                <div class="flow-step" id="flow-5" data-page-node-id="A9ScKZx2hIJdycBehMptpt">
+                                    <div class="flow-icon" data-page-node-id="5LmmDnbBavrBKpICKfEmtB">5</div>
+                                    <div class="flow-text" data-page-node-id="f6OFnnjvrXOQliwCeSTFLp">GCD(a<sup data-page-node-id="9VF3ZIMb9jTjNV3DT6W2OL">r/2</sup> ± 1, N)</div>
+                                    <div class="flow-value" id="lbl-pq" style="color: var(--viz-ok);" data-page-node-id="pwWeFQVyXssYGslJmIZEkK">?</div>
                                 </div>
                             </div>
                         </div>
@@ -339,12 +420,15 @@
 
         resetSystem();
     </script>
-<footer class="site-footer">
-        <div class="footer-content" style="justify-content: center;">
-            <div>
+<footer class="site-footer" data-page-node-id="TfwGuvJSzCXgTeTbIjhCyF">
+        <div class="footer-content" style="justify-content: center;" data-page-node-id="yjhUIy6FqN0nMtRqcGB6qL">
+            <div data-page-node-id="KXDpET6EUOjw0pN2xHSG2a">
                 &copy; 2026 AQCA - All Quantum Computing Algorithms
             </div>
         </div>
     </footer>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
 </body>
 </html>

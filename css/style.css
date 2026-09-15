@@ -14,6 +14,13 @@
   --muted-text: #5f6368;
   --link: #0044cc;
 
+  /* Semantic colors (also aliases for legacy names used across the pages) */
+  --error: #c0392b;
+  --success: #047857;
+  --warning: #b45309;
+  --bg-color: var(--background);
+  --text-color: var(--text);
+
   /* Layout variables */
   --sidebar-width: 280px;
   --header-height: 80px;
@@ -52,13 +59,15 @@ a:hover {
 /* Header */
 .site-header {
   height: var(--header-height);
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(140%) blur(8px);
   color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03), 0 6px 18px rgba(15, 23, 42, 0.04);
   position: fixed;
   top: 0;
   left: 0;
@@ -267,6 +276,10 @@ a:hover {
   margin-left: var(--sidebar-width);
   padding: 3rem 4rem;
   max-width: 1400px;
+  /* Without this a wide child (table, canvas grid, nowrap code block) makes the
+     flex item grow past the viewport, the page scrolls sideways and the fixed
+     sidebar ends up sitting on top of the content. */
+  min-width: 0;
 }
 
 /* Typography elements */
@@ -1208,4 +1221,355 @@ body.squeezed .nav-subgroup.flyout .nav-link span {
   align-items: center;
   justify-content: center;
   width: 20px;
+}
+
+/* ==========================================================================
+   AQCA — Professional Design Polish
+   Shared refinements applied across the whole platform. Purely additive:
+   every rule here either styles a new class or gently upgrades an existing one.
+   ========================================================================== */
+
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 2px 6px rgba(15, 23, 42, 0.06), 0 14px 32px rgba(15, 23, 42, 0.08);
+  --ring: 0 0 0 3px rgba(0, 15, 145, 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + 1.5rem);
+}
+
+/* --- Typography ---------------------------------------------------------- */
+.main-content h1 {
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.main-content h2 {
+  position: relative;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  margin-left: 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.main-content h2::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 0.35em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0.35;
+}
+
+/* No room for the marker once the page padding tightens. */
+@media (max-width: 992px) {
+  .main-content h2::before {
+    display: none;
+  }
+
+  .main-content h2 {
+    margin-left: 0;
+  }
+}
+
+.main-content h3 {
+  font-size: 1.22rem;
+  color: var(--primary-hover);
+}
+
+.main-content p,
+.main-content li {
+  color: #2b3038;
+}
+
+/* Reading measure: long prose lines are tiring on wide screens. */
+.main-content > .content-section > p,
+.main-content > p,
+.main-content p:not([style]) {
+    max-width: 84ch;
+}
+
+/* Inline code inside prose (never the Code Lab blocks). */
+.main-content p code,
+.main-content li code,
+.main-content td code,
+.main-content h2 code,
+.main-content h3 code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: #eef2f8;
+    border: 1px solid #e2e8f2;
+    border-radius: 5px;
+    padding: 0.08em 0.34em;
+    color: #1f2937;
+    white-space: nowrap;
+}
+
+.main-content hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 12%, var(--border) 88%, transparent);
+    margin: 2.25rem 0;
+}
+
+/* Boxed detail sections (appendix pages carry this inline) get the card treatment. */
+.main-content .content-section[style*="background-color"] {
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-sm);
+}
+
+.main-content blockquote {
+  margin: 1.5rem 0;
+  padding: 0.85rem 1.25rem;
+  border-left: 3px solid var(--primary);
+  background: var(--primary-light);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: #1f2937;
+}
+
+/* --- Sections ------------------------------------------------------------ */
+.content-section {
+  margin-bottom: 2.5rem;
+}
+
+/* --- Cards & surfaces ---------------------------------------------------- */
+.complexity-box,
+table {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.complexity-box {
+  border-color: var(--border);
+  padding: 1.75rem;
+}
+
+.complexity-box h3 {
+  color: var(--muted-text);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.complexity-value {
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+}
+
+table {
+  font-size: 0.94rem;
+}
+
+th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:hover td {
+  background-color: #fafbfd;
+}
+
+/* --- Badges -------------------------------------------------------------- */
+.badge {
+  font-size: 0.76rem;
+  padding: 0.28rem 0.8rem;
+  border-radius: 999px;
+  box-shadow: var(--shadow-xs);
+}
+
+.badge-category {
+  border-color: rgba(0, 15, 145, 0.18);
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+.btn {
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  font-weight: 600;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-button {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  background-color: #fff;
+}
+
+.nav-title {
+  font-size: 1.05rem;
+}
+
+/* --- Simulation placeholder --------------------------------------------- */
+.simulation-placeholder {
+  border-radius: var(--radius-lg);
+  border: 1px dashed rgba(0, 15, 145, 0.28);
+  background:
+    radial-gradient(600px 220px at 50% -20%, rgba(0, 15, 145, 0.05), transparent 70%),
+    #fafbfd;
+  padding: 2.75rem 2rem;
+  box-shadow: none;
+}
+
+.simulation-placeholder h3 {
+  font-size: 1.15rem;
+}
+
+.placeholder-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+}
+
+.status-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-text);
+}
+
+/* --- Math ---------------------------------------------------------------- */
+.math-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.35rem 0;
+}
+
+/* --- Code blocks (static, non Code Lab pages) ---------------------------- */
+.code-block {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border);
+}
+
+.code-header {
+  background: linear-gradient(180deg, #f8fafc, #f1f4f9);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.code-header button {
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* --- Breadcrumb ---------------------------------------------------------- */
+.breadcrumb {
+  font-size: 0.82rem;
+}
+
+.breadcrumb a {
+  font-weight: 500;
+}
+
+/* --- Sidebar ------------------------------------------------------------- */
+.sidebar {
+  background: linear-gradient(180deg, var(--primary) 0%, #000a63 100%);
+  box-shadow: 2px 0 18px rgba(0, 10, 80, 0.14);
+}
+
+.nav-link {
+  border-radius: 0;
+  font-size: 0.93rem;
+}
+
+.nav-link.active {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* --- Footer -------------------------------------------------------------- */
+.site-footer {
+  background: #fbfcfe;
+}
+
+/* --- Focus & accessibility ---------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgba(0, 15, 145, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* --- Scrollbars ----------------------------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c3ccd9 transparent;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #c3ccd9;
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: #a8b4c6; background-clip: content-box; }
+
+/* --- Print --------------------------------------------------------------- */
+@media print {
+  .site-header,
+  .sidebar,
+  .sidebar-overlay,
+  .site-footer,
+  .algorithm-nav,
+  .codelab__actions,
+  .codelab__console,
+  .menu-toggle {
+    display: none !important;
+  }
+
+  body { background: #fff; }
+  .layout-wrapper { display: block; }
+  .main-content { margin-left: 0 !important; padding: 0 !important; max-width: none; }
+  .codelab, .code-block, table, .complexity-box { box-shadow: none; break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  a { color: #000; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.75em; color: #555; }
 }

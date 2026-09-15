@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" data-page-node-id="JSLYfL6aP1f81MKsSYXxfp">
+<head data-page-node-id="FNkE30S8ZS6OpxqpGuYMCJ">
+    <meta charset="UTF-8" data-page-node-id="MuZEJYcw7AoHVpZ7KgKnT7">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="mBFiwv2Dw0v3QI57G2Tpsx">
     <title>Bell State Generator Visualiser | AQCA</title>
     <script src="../../assets/vendor/chartjs/chart.js"></script>
     
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css" data-page-node-id="8AkbRTIRVFsJPJGR7DyWVD">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/style.css" data-page-node-id="ZjDVuUADrIosh1VeYbXy3s">
+    <link rel="stylesheet" href="../../css/responsive.css" data-page-node-id="QpYnQCRQQcP5vvDwqGJss9">
+    <link rel="stylesheet" href="../../css/sidebar.css" data-page-node-id="1Tcldn7PJv5rJYbabucvQl">
+    <link rel="stylesheet" href="../../css/visualiser.css" data-page-node-id="kM9zkDiD84wdIQbuzuPEsZ">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png" data-page-node-id="kkzb1AOnUfT7jF3Mk2GAEE">
 
     <!-- MathJax -->
     <script>
@@ -42,14 +45,12 @@
             --dqa-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
             --radius-md: 12px;
             --radius-lg: 16px;
-        }
-
-        .portal-grid {
+        }.portal-grid {
             display: grid;
             grid-template-columns: 340px 1fr;
             gap: 24px;
-            height: calc(100vh - var(--header-height) - 4rem);
-            overflow: hidden;
+            height: auto;
+            overflow: visible;
             font-family: 'Inter', sans-serif;
         }
 
@@ -129,13 +130,21 @@
             border-radius: var(--radius-lg);
         }
 
-        #blochCanvas {
-            border: none;
-            background: transparent;
-            width: 100%;
-            height: 100%;
-            aspect-ratio: 16/9;
+        .bloch-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(4px);
+            border-radius: 12px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 4;
         }
+        .bloch-overlay.is-shown { display: flex; }
 
         .modern-input {
             width: 100%;
@@ -341,164 +350,254 @@
 
     </style>
 </head>
-<body>
-    <header class="site-header">
-        <div class="header-left">
-            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
-            <div class="site-title">
-                <h1>AQCA</h1>
-                <span class="subtitle">All Quantum Computing Algorithms</span>
+<body class="viz-page" data-page-node-id="XG6LBuPmmXLyyvwnA2LKXB">
+    <header class="site-header" data-page-node-id="8pGVLo7rDu3VcmINDmFqT6">
+        <div class="header-left" data-page-node-id="M93d9MO3ArZUq1qShKVB4Y">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo" data-page-node-id="Y3ajrwLthiryu2Z2EWTT5K">
+            <div class="site-title" data-page-node-id="9y5DcpXt5GiQZlwCPvd5ME">
+                <h1 data-page-node-id="Tq4RW3prZLW3gcX4wMNXMr">AQCA</h1>
+                <span class="subtitle" data-page-node-id="tEfKtEbTTbshOLalHrqxao">All Quantum Computing Algorithms</span>
             </div>
         </div>
         
-        <div class="header-right">
-            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
-            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        <div class="header-right" data-page-node-id="Usbn7EVm11T57dnztZ4KcR">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo" data-page-node-id="33956Nz0iUEiDMVuz15SjH">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation" data-page-node-id="p8wJ8EJPg2YSdG3yKBiXqc">☰</button>
         </div>
     </header>
 
-    <div class="layout-wrapper">
-        <aside class="sidebar" id="sidebar">
-            <nav class="nav-menu">
-                <div class="nav-item">
-                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+    <div class="layout-wrapper" data-page-node-id="bTglCVHu3b5B42aEcCd4oM">
+        <aside class="sidebar" id="sidebar" data-page-node-id="Tosu3BoUy9owZsY8zeinCG">
+            <nav class="nav-menu" data-page-node-id="0CmPVoeNA38h1PWNvvuMlx">
+                <div class="nav-item" data-page-node-id="P0uY2lrGhNxhrJcHwF4vW2">
+                    <a href="../../index.html" class="nav-link" data-page-node-id="mnd5z0j3XouegGhVEB9azI"><span class="step-num" style="background: var(--primary); color:#ffffff;" data-page-node-id="hlWDNCT9xY4b2dDGpzdslo">✦</span>Home</a>
                 </div>
-                <div class="nav-item">
-                    <a href="../../algorithms.html" class="nav-link">Algorithms</a>
+                <div class="nav-item" data-page-node-id="emGLM7abpeZMIdYdpJk85n">
+                    <a href="../../about.html" class="nav-link" data-page-node-id="3fqoJ6ShroPwo1uhuEptJQ">About AQCA</a>
                 </div>
-                <div class="nav-item">
-                    <a href="bell-state.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;" data-tooltip="Back to Bell State">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.25rem;height:1.25rem;margin-right:0.75rem;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    <span>Back to Bell State</span>
-</a>
+                <div class="nav-item" data-page-node-id="4t1tERRiWkbbh1ArEFWzx3">
+                    <a href="../../preface.html" class="nav-link" data-page-node-id="icYeE1dmhiHQQdT9AbUgQB">Preface</a>
                 </div>
-                <div class="nav-item">
-                    <a href="../../visualise.html" class="nav-link">Visualise</a>
+                <div class="nav-item" data-page-node-id="2Q2OyY9vzsVe56mbGzFjDz">
+                    <a href="../../basics.html" class="nav-link" data-page-node-id="XkSEmCFKOeOegDIfivBPRv">QC Basics</a>
+                </div>
+                <div class="nav-item" data-page-node-id="RqCTOwK8lD8dWTC1qFoQrS">
+                    <button class="nav-group-toggle" aria-expanded="true" data-page-node-id="ppErE0txlkgswosZqCyHCM">
+                        <span data-page-node-id="PkNaTTZyYBRAWHq3un3GHh">Algorithms</span>
+                        <span class="nav-group-icon" data-page-node-id="xegbYdLO9iUD63E841FFue">▼</span>
+                    </button>
+                    <ul class="nav-subgroup" data-page-node-id="pab2nqqkD06VW7ybmcHHAr">
+                        <li data-page-node-id="LWZENB2MVx93cjjwp5QGMT"><a href="../../algorithms.html" class="nav-link" data-page-node-id="NXYVoLU14i5WrF9dvPhR6T">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="vfqy1OjfiPywwF8rPV9bzH">1. Quantum Communication</li>
+                        <li data-page-node-id="E23OTQzWpwhC9lF2k3stZw"><a href="../../algorithms/foundations/bell-state.html" class="nav-link" data-page-node-id="HFXbkDUd7om3rEUUbM2fsU">• Bell State Generator</a></li>
+                        <li data-page-node-id="dGufzMLE3wHatdmevc0X02"><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link" data-page-node-id="13HbphsjxZdFqPIlFYONpm">• Superdense Coding</a></li>
+                        <li data-page-node-id="Wh8LaWY8uIXEPVSX9arad9"><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link" data-page-node-id="bCcY8Tq9rlncIJQEELkEGm">• Quantum Teleportation</a></li>
+                        <li data-page-node-id="yjV1KDybshMgKMF6HbummU"><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link" data-page-node-id="kHSlmLfUdlF6ALFTcZ3Lps">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="8Wuzr97eBhlEkMBeBSZJOh">2. Early Oracle Algorithms</li>
+                        <li data-page-node-id="KBF9HyTPoJ4ZXeO02kCRdK"><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link" data-page-node-id="KZ0B1onq5TjlOYKbBvzba1">• Deutsch's Algorithm</a></li>
+                        <li data-page-node-id="2v5ZchBwdQRoAMgtbWS7Qp"><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link" data-page-node-id="zFEQBwP2d7ViSnkKM5ILVO">• Deutsch–Jozsa</a></li>
+                        <li data-page-node-id="pqDsxhCJElcc7XgMbqBnAl"><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link" data-page-node-id="x85Ay4KTywCMjUujTnaEXu">• Bernstein–Vazirani</a></li>
+                        <li data-page-node-id="CgwTLRBf10e5RyAtN2UINm"><a href="../../algorithms/oracle-based/simon.html" class="nav-link" data-page-node-id="izeTi2cedS9nMVvx9PIUG4">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="cJ538RcXEwXEAOBCodQbLq">3. Core Algorithms</li>
+                        <li data-page-node-id="4OPfJhD8bOcH0tusEfVHKw"><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link" data-page-node-id="kgKO8p4i7raPjAvFx1DDF7">• Quantum Fourier Transform</a></li>
+                        <li data-page-node-id="Ks60lVw0S8J588FIZz3zHF"><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link" data-page-node-id="quZSCVFiwrARtDQlKDQTsc">• Quantum Phase Estimation</a></li>
+                        <li data-page-node-id="Wp5FIfsD00vRs2r3gxdYYW"><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link" data-page-node-id="f3xwFDpYf7rzcHreIncWwq">• Grover's Search</a></li>
+                        <li data-page-node-id="SFFFyMu9tiM3ZuukCmtuiz"><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link" data-page-node-id="pHrrBupr8e7UiA2ENaCqs3">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="DcMSF8gjcFEYxDGRyOQEzT">4. Flagship & Hybrid Models <span class="badge-beta" data-page-node-id="j98y98Zx7yMSZvZg9u1eGM">In-Progress</span></li>
+                        <li data-page-node-id="1l2uF9CE7F1UHKqF55FGcv"><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link" data-page-node-id="JNEzTmJHSvkphQwPHLF8k7">• Shor's Algorithm</a></li>
+                        <li data-page-node-id="5J2JUjSq9TuXRPAxIjvMci"><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link" data-page-node-id="TytynBmWmlpCPxMnqTARY0">• Variational Quantum Eigensolver</a></li>
+                        <li data-page-node-id="I2YPhwYCAVZMGevMatgTEZ"><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link" data-page-node-id="zd9RtgNNxOguNd0Ll2E6WN">• QAOA</a></li>
+                        <li data-page-node-id="DTEEVq3JAFvmfpxmndHB94"><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link" data-page-node-id="i0NSaSU6HACxyG3gohqpaw">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label" data-page-node-id="EYJ0eJYhhX0LbDSsb7HOUh">5. Quantum Error Correction <span class="badge-beta" data-page-node-id="GtMWJOD42HcdvzbI4JjXjn">In-Progress</span></li>
+                        <li data-page-node-id="dp3rggOWBAWDzQkckg7Dqc"><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link" data-page-node-id="S66ceDhaXlC3IkR8WAE84w">• 3-Qubit Code</a></li>
+                        <li data-page-node-id="UaOBfPZBKBmk7udsSXmQAB"><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link" data-page-node-id="m20qs2oUczuGHKjx4C7Y7Y">• Shor's 9-Qubit Code</a></li>
+                        <li data-page-node-id="aaysoQDpfCTr2WABl1Sxg8"><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link" data-page-node-id="PiMQQcnVQBnqoeXAgzn8Cw">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label" data-page-node-id="Swzgq2PGCfdNDbNnstyMMB">6. Visualisation &amp; Interaction</li>
+                        <li data-page-node-id="mmhapDRH4V325zhjMrzeEZ"><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link" data-page-node-id="InVyUB3hNHAMxQj6yoMd8I">• Bloch Sphere Visualiser</a></li>
+                        <li data-page-node-id="M6Sc8epPr3aWAcwEnSuEaA"><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link" data-page-node-id="9TZMTZ6kg5U8X0kOu60NBK">• Multi-Qubit State Visualiser</a></li>
+                        <li data-page-node-id="tFslImLK8vnRAzEIbcpTzv"><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link" data-page-node-id="7R62sU39QiJ04ogL3MjQ90">• Quantum Circuit Simulator</a></li>
+                        <li data-page-node-id="2joLsUMWr4ZCplVnPaFd12"><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link" data-page-node-id="40SLTzD86IU7aaTvRJaco8">• Statevector → Bloch Sphere</a></li>
+                        <li data-page-node-id="8gocmZ21oo5Ji5VSFpCdGm"><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link" data-page-node-id="wg2msZhh93omTUlUVSDU8M">• Measurement Visualiser</a></li>
+                        <li data-page-node-id="nwIOK2b67RKVKLvVG9NikR"><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link" data-page-node-id="UZuAr1RGgyGd3tDhqAyhzx">• Quantum Interference</a></li>
+                        <li data-page-node-id="J6wOiSgLjQk9uPxUOgJWtK"><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link" data-page-node-id="aAYZxB9243DGwGdMFcKb9o">• Entanglement Visualiser</a></li>
+                        <li data-page-node-id="ehxjysts1DygCCunIaZdVl"><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link" data-page-node-id="GuXMCw9jzNHCyrdwH7przn">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item" data-page-node-id="boalG9DSgzGJ5OwLIuennq">
+                    <a href="../../visualise.html" class="nav-link" data-page-node-id="LNL8gtyOlFsZCww0uiOsnF">Visualise</a>
+                </div>
+                <div class="nav-item" data-page-node-id="YbGJw4vCl75sEg2R2P5B3I">
+                    <a href="../../analysis.html" class="nav-link" data-page-node-id="BxRmouZWQoIZT1H98ZDOV6">Analysis Centre</a>
+                </div>
+                <div class="nav-item" data-page-node-id="MtbyCen72ICqPJTVzNAort">
+                    <a href="../../resources.html" class="nav-link" data-page-node-id="F5hh3bPoX31M4Ict5CstF4">Resources</a>
+                </div>
+                <div class="nav-item" data-page-node-id="jeusuXCV2bC1CwiyxlRsEV">
+                    <a href="../../references.html" class="nav-link" data-page-node-id="Cg8rCxeko8jWRZNIepWc65">References</a>
+                </div>
+                <div class="nav-item" data-page-node-id="EAFxjLHaKw1cspiGU7CThY">
+                    <a href="../../appendix.html" class="nav-link" data-page-node-id="TCIGEB6Fn6nYkFecrwbdfh">Appendix</a>
+                </div>
+                <div class="nav-item" data-page-node-id="tWesG92Iuv30okgol2HEfg">
+                    <a href="../../developer.html" class="nav-link" data-page-node-id="Nr6wwV5Wa4S6KJwOxr8VBo">Developer</a>
                 </div>
             </nav>
         </aside>
 
-        <main id="main-content" class="main-content" style="padding-top: 1rem;">
-            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
-                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Bell State Generator Visualiser</h1>
+        <main id="main-content" class="main-content" style="padding-top: 1rem;" data-page-node-id="vG29unAEwaN4kmJhglRr7M">
+            <div class="viz-shell" data-page-node-id="ieqc6DRLIIuDbORl2EXc3n">
+                <nav class="viz-crumbs" data-page-node-id="lwSxEnko2GakjYfpCfpJCY">
+                    <a href="../../index.html" data-page-node-id="qcNcRAuRa4KRzE1OTPOUZY">Home</a><span class="sep" data-page-node-id="Ht7MqQAB7GnDcbWPpvYt6x">›</span>
+                    <a href="../../algorithms.html" data-page-node-id="oBOfBQfQcoNPM0IspByEU5">Algorithms</a><span class="sep" data-page-node-id="Dr3jbVToTQtCnT8oDltAqS">›</span>
+                    <a href="bell-state.html" data-page-node-id="8EPLFHQ8UomAY3WWKxtUiF">Quantum Communication</a><span class="sep" data-page-node-id="qk8AqW9w1OabRUeCZ9HESL">›</span>
+                    <span class="current" data-page-node-id="Asbs99sEAqgiwwLdfKgPJC">Bell State Generator Visualiser</span>
+                </nav>
+                <div class="viz-head" data-page-node-id="8SSh15J3SMA1LZ0RAXT3sa">
+                    <div class="viz-head__left" data-page-node-id="L3NFbBrEvXavC2yQC4sU1L">
+                        <span class="viz-eyebrow" data-page-node-id="gyTM5RvjpUbEL88Glk5jeR">Interactive Visualiser</span>
+                        <h1 class="viz-title" data-page-node-id="JX0BpVMYUHlUkpRzcmFLI4">Bell State Generator Visualiser</h1>
+                        <p class="viz-subtitle" data-page-node-id="FFCRxjkN8jJWGzpt13ZRO8">Step through the circuit and watch the quantum state evolve. Every figure is computed live in your browser.</p>
+                    </div>
+                    <div class="viz-head__actions" data-page-node-id="juIvOnPe3898Ptr7TP85G5">
+                        <a class="viz-btn viz-btn--primary" href="bell-state.html" data-page-node-id="J9n9BFoMlZLPTXUdLDsFib">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="iRqU9r2hLDEY6hRZFMMDkx"><line x1="19" y1="12" x2="5" y2="12" data-page-node-id="bLWSgx5xyTg20VzY20vtWf"></line><polyline points="12 19 5 12 12 5" data-page-node-id="u6wrBrMkAEtTJvK0fo5E6V"></polyline></svg>
+                            Back to Bell State Generator
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html" data-page-node-id="bY9cFF8Sck9iq2CqotQm1G">All visualisers</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="portal-grid">
+            <div class="portal-grid" data-page-node-id="AocvjuXgcAwJ99a1sOt2ub">
                 <!-- Sidebar Configuration -->
-                <aside class="config-sidebar">
-                    <div class="pert-card">
-                        <h2>1. Initial State Config</h2>
-                        <div style="margin-bottom: 12px;">
-                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Starting Qubits |q₀ q₁⟩</label>
-                            <select id="inp-state" class="modern-input" onchange="resetSystem()">
-                                <option value="00">|00⟩ → Generates |Φ⁺⟩</option>
-                                <option value="01">|01⟩ → Generates |Φ⁻⟩</option>
-                                <option value="10">|10⟩ → Generates |Ψ⁺⟩</option>
-                                <option value="11">|11⟩ → Generates |Ψ⁻⟩</option>
+                <aside class="config-sidebar" data-page-node-id="0KWqneDlHrj27WrzOwSXOF">
+                    <div class="pert-card" data-page-node-id="4FypqKZ2Wy1Dsd1CGgx5RA">
+                        <h2 data-page-node-id="PKGDNt77LnLOeSuulbXsvw">1. Initial State Config</h2>
+                        <div style="margin-bottom: 12px;" data-page-node-id="ybbv2CCFBPjQ58vHke6nOd">
+                            <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;" data-page-node-id="BUO3occXfvUHz49RTXP5zF">Starting Qubits |q₀ q₁⟩</label>
+                            <select id="inp-state" class="modern-input" onchange="resetSystem()" data-page-node-id="4GGTqO2GTINMKAIMvDOT7q">
+                                <option value="00" data-page-node-id="Hkafm1vbtvsbN6CnvmdSot">|00⟩ → Generates |Φ⁺⟩</option>
+                                <option value="01" data-page-node-id="htYJVfDAkaOFORjvCEwwNu">|01⟩ → Generates |Φ⁻⟩</option>
+                                <option value="10" data-page-node-id="9iFNgG2dr5PzInrRBraEGN">|10⟩ → Generates |Ψ⁺⟩</option>
+                                <option value="11" data-page-node-id="bnnAw2qhdmCICuU0FRkuOi">|11⟩ → Generates |Ψ⁻⟩</option>
                             </select>
                         </div>
-                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Reset System</button>
+                        <button class="qt-btn qt-btn--primary" style="width:100%;" onclick="resetSystem()" data-page-node-id="4YomhWZwJhww92eFsImmrH">Reset System</button>
                     </div>
 
-                    <div class="pert-card">
-                        <h2>2. Operation Console</h2>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                            <button class="btn btn-primary btn-modern" id="btn-prev" onclick="prevStep()" disabled>Previous</button>
-                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()">Next Step</button>
+                    <div class="pert-card" data-page-node-id="DPkkkMHDD0jcKevJoklDOA">
+                        <h2 data-page-node-id="pUCVes0ZAovPFeBEBlDDXC">2. Operation Console</h2>
+                        <div class="qt-btn-row" style="margin-bottom:10px;">
+                            <button class="qt-btn" id="btn-prev" onclick="prevStep()" disabled data-page-node-id="dhWqg63cCrUyBri6VqS5ot">Previous</button>
+                            <button class="qt-btn qt-btn--primary" id="btn-next" onclick="nextStep()" data-page-node-id="F7iVbgGBpRfM7iudHqm7fo">Next Step</button>
                         </div>
-                        <button class="btn btn-green btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()">Play Animation</button>
-                        <button class="btn btn-yellow btn-modern" style="width:100%;" onclick="resetSystem()">↻ Restart Animation</button>
-                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
-                            <span>Speed</span>
-                            <input type="range" id="inp-speed" min="500" max="2500" value="1200" style="width:120px;" onchange="if(state.timer){stopAuto();toggleAuto();}">
+                        <button class="qt-btn qt-btn--primary" id="btn-auto" style="width:100%; margin-bottom:10px;" onclick="toggleAuto()" data-page-node-id="elL3rDE0FQ8iZBTiBSDlkf">▶ Play Animation</button>
+                        <button class="qt-btn" style="width:100%;" onclick="resetSystem()" data-page-node-id="yR3cg8ERNOtutkxT2FUwcp">↻ Restart</button>
+                        <div class="qt-field" style="margin-top:6px;">
+                            <label class="qt-label">Animation Speed</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-speed" min="500" max="2500" value="1200" onchange="if(state.timer){stopAuto();toggleAuto();}" oninput="document.getElementById('speed-val').innerText=this.value+' ms'" data-page-node-id="EPEz5Tl3QewpXMysj1oyno">
+                                <span class="qt-range-val" id="speed-val">1200 ms</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="pert-card">
-                        <h2>3. Explanation Panel</h2>
-                        <div class="expert-panel">
-                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Initial State</div>
-                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">System initialized in a computational basis state.</div>
-                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
-                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--muted-text); display: block; margin-bottom: 5px;">State Vector Equation</span>
-                                <div id="panel-math" style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #6d28d9; font-weight: 600;">|00⟩</div>
+                    <div class="pert-card" data-page-node-id="IGByDoHa2cNMKeFpdsKoAp">
+                        <h2 data-page-node-id="jtqlERgFvscumCI1HLcDEf">3. Explanation Panel</h2>
+                        <div class="qt-note" data-page-node-id="wqZdHTUZyLxNrQYW1WSN6d">
+                            <div id="panel-title" style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--primary);" data-page-node-id="OJNXOhBebnvieP0A637PdG">Initial State</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--text);" data-page-node-id="19DzDy4HBdlBiY2c5BA6WL">System initialized in a computational basis state.</div>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);" data-page-node-id="IqiVYgcNPJkX58uEr86DRA">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--muted-text); display: block; margin-bottom: 5px;" data-page-node-id="8hCLC8OFGWwDIeWR4OtPoo">State Vector Equation</span>
+                                <div id="panel-math" class="qt-formula" data-page-node-id="pEBlKG3l0mdZYSQRuzt4TP">|00⟩</div>
                             </div>
                         </div>
                     </div>
                 </aside>
 
                 <!-- Main Display -->
-                <div class="visualiser-main">
+                <div class="visualiser-main" data-page-node-id="JNFLrZAF9GByihs1ezehfi">
                     <!-- Live Dashboard -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 10px;">
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Current Step</div>
-                            <div id="stat-step" style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0 / 2</div>
-                        </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px; grid-column: span 2;">
-                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">State Vector |ψ⟩</div>
-                            <div id="stat-vector" style="font-size: 1.1rem; font-family: 'JetBrains Mono'; font-weight: 700; color: #b45309; margin-top: auto;">1.000 |00⟩</div>
-                        </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">Entangled?</div>
-                            <div id="stat-entangled" style="font-size: 1.2rem; font-weight: 800; color: var(--dqa-error); margin-top: auto;">No</div>
-                        </div>
+                    <div class="qt-stat-grid">
+                        <div class="qt-stat"><span class="qt-stat__k">Current Step</span><span class="qt-stat__v" id="stat-step">0 / 2</span></div>
+                        <div class="qt-stat"><span class="qt-stat__k">State Vector |ψ⟩</span><span class="qt-stat__v" id="stat-vector" style="font-size:0.92rem;">1.000 |00⟩</span></div>
+                        <div class="qt-stat"><span class="qt-stat__k">Entangled?</span><span class="qt-stat__v" id="stat-entangled">No</span></div>
                     </div>
 
-                    <!-- Analytics Grid -->
-                    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 15px; margin-bottom: 10px; height: 320px;">
-                        <div class="pert-card chart-container" style="min-height: 0; display: flex; flex-direction: column;">
-                            <h2 style="margin-bottom: 12px; border: none;">Probability Distribution</h2>
-                            <div style="flex: 1; min-height: 0;">
-                                <canvas id="probChart"></canvas>
-                            </div>
+                    <!-- Analytics: Probability + Bloch Spheres -->
+                    <div class="pert-card" style="margin-bottom: 20px;">
+                        <h2>Probability Distribution</h2>
+                        <div class="qt-canvas-box qt-canvas-box--chart">
+                            <canvas id="probChart" data-page-node-id="5hqahVGuf6clsXR3NEJf2U"></canvas>
                         </div>
-                        <div class="pert-card chart-container" style="min-height: 0; display: flex; flex-direction: column;">
-                            <h2 style="margin-bottom: 12px; border: none;">Bloch Spheres</h2>
-                            <div id="bloch-container" style="flex: 1; display: flex; align-items: center; justify-content: center; position: relative;">
-                                <canvas id="blochCanvas" style="max-height: 100%; max-width: 100%;"></canvas>
-                                <div id="entanglement-overlay" style="display: none; position: absolute; inset: 0; background: rgba(255,255,255,0.7); backdrop-filter: blur(4px); border-radius: 8px; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;">
-                                    <div style="font-size: 3rem; margin-bottom: 10px;">⚛️</div>
-                                    <h3 style="color: var(--primary); margin-bottom: 5px; font-weight: 800;">Fully Entangled</h3>
-                                    <p style="font-size: 0.85rem; color: var(--text); line-height: 1.5; margin: 0;">
-                                        Individual Bloch vectors do not exist for entangled states.<br>The system can only be described as a whole.
-                                    </p>
+                    </div>
+                    <div class="qt-2col qt-2col--fixed">
+                        <div class="pert-card">
+                            <h2>Bloch Sphere <span class="qt-card-note">Qubit 0 · Control</span></h2>
+                            <div class="qt-canvas-box qt-canvas-box--bloch">
+                                <canvas id="bloch0"></canvas>
+                                <div id="overlay0" class="bloch-overlay">
+                                    <div style="font-size: 2rem; margin-bottom: 8px;">⚛️</div>
+                                    <h3 style="color: var(--primary); margin: 0 0 4px; font-weight: 800;">Fully Entangled</h3>
+                                    <p style="font-size: 0.8rem; color: var(--text); line-height: 1.5; margin: 0;">Individual Bloch vectors do not exist for entangled states.<br>The system is described only as a whole.</p>
                                 </div>
                             </div>
                         </div>
+                        <div class="pert-card">
+                            <h2>Bloch Sphere <span class="qt-card-note">Qubit 1 · Target</span></h2>
+                            <div class="qt-canvas-box qt-canvas-box--bloch">
+                                <canvas id="bloch1"></canvas>
+                                <div id="overlay1" class="bloch-overlay">
+                                    <div style="font-size: 2rem; margin-bottom: 8px;">⚛️</div>
+                                    <h3 style="color: var(--primary); margin: 0 0 4px; font-weight: 800;">Fully Entangled</h3>
+                                    <p style="font-size: 0.8rem; color: var(--text); line-height: 1.5; margin: 0;">Individual Bloch vectors do not exist for entangled states.<br>The system is described only as a whole.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="qt-legend">
+                        <span><i class="qt-dot" style="background:#c2410c"></i>x ⇒ |±⟩</span>
+                        <span><i class="qt-dot" style="background:#047857"></i>y ⇒ |±i⟩</span>
+                        <span><i class="qt-dot" style="background:#000f91"></i>z ⇒ |0⟩/|1⟩</span>
                     </div>
 
                     <!-- Circuit Engine Card -->
-                    <div class="pert-card">
-                        <h2 style="border: none;">Quantum Circuit Protocol</h2>
-                        <div class="circuit-grid" id="circuit-box">
+                    <div class="pert-card" data-page-node-id="XIPsUSqd4IqEZGV1RjsxBM">
+                        <h2 style="border: none;" data-page-node-id="E7xow0nsstiWzby5F9GVGQ">Quantum Circuit Protocol</h2>
+                        <div class="circuit-grid" id="circuit-box" data-page-node-id="8FgfvsaDGm3bNEQJEBa2d8">
                             <!-- Q0 Row -->
-                            <div class="circuit-cell" style="grid-row: 1; grid-column: 1;">
-                                <div class="circuit-wire"></div>
-                                <div class="wire-label">q₀</div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 1;" data-page-node-id="j8vgST3sIYj993Goh0rQy7">
+                                <div class="circuit-wire" data-page-node-id="2kmrY9UYj2qkoYALdLysEQ"></div>
+                                <div class="wire-label" data-page-node-id="fxkOnDfQEBBWWR0su4BFJ3">q₀</div>
                             </div>
-                            <div class="circuit-cell" style="grid-row: 1; grid-column: 2;">
-                                <div class="circuit-wire"></div>
-                                <div class="circuit-gate" id="gate-h">H</div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 2;" data-page-node-id="oDjXoAqsbZVcqACOFCqdtN">
+                                <div class="circuit-wire" data-page-node-id="Kyve6CoKi6MT1rwA9Bjnhp"></div>
+                                <div class="circuit-gate" id="gate-h" data-page-node-id="BvZjzKU8hatEP4QtTlkIBW">H</div>
                             </div>
-                            <div class="circuit-cell" style="grid-row: 1; grid-column: 3;">
-                                <div class="circuit-wire"></div>
-                                <div class="cnot-wrapper" id="gate-cx" style="position: absolute; width: 100%; height: 50px; display: flex; justify-content: center; top: 0;">
-                                    <div class="cnot-control" style="margin-top: 19px;"></div>
-                                    <div class="cnot-line"></div>
+                            <div class="circuit-cell" style="grid-row: 1; grid-column: 3;" data-page-node-id="qRkEMXki76YyGEBfW82WGG">
+                                <div class="circuit-wire" data-page-node-id="9xKZ9B9CM1I4Q4SjofFgzZ"></div>
+                                <div class="cnot-wrapper" id="gate-cx" style="position: absolute; width: 100%; height: 50px; display: flex; justify-content: center; top: 0;" data-page-node-id="5scqa88TmpHkrbNudnwEcW">
+                                    <div class="cnot-control" style="margin-top: 19px;" data-page-node-id="ZFH6tVSTaGCkbcjRB12uf1"></div>
+                                    <div class="cnot-line" data-page-node-id="9lU2koz1gIXDW3Xltnr3Mi"></div>
                                 </div>
                             </div>
                             <!-- Q1 Row -->
-                            <div class="circuit-cell" style="grid-row: 2; grid-column: 1;">
-                                <div class="circuit-wire"></div>
-                                <div class="wire-label">q₁</div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 1;" data-page-node-id="igbXEAG3tj2OG7kUYvsVJU">
+                                <div class="circuit-wire" data-page-node-id="c8EHjUvCdllBXkgFA4U9LM"></div>
+                                <div class="wire-label" data-page-node-id="BJ7GcynL0gh6HITBUeoSpj">q₁</div>
                             </div>
-                            <div class="circuit-cell" style="grid-row: 2; grid-column: 2;">
-                                <div class="circuit-wire"></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 2;" data-page-node-id="pYikgwtJ8i8gWimbmUsRCq">
+                                <div class="circuit-wire" data-page-node-id="AkqQqx63cTjZFlfhtFVGSA"></div>
                             </div>
-                            <div class="circuit-cell" style="grid-row: 2; grid-column: 3;">
-                                <div class="circuit-wire"></div>
-                                <div class="cnot-target" id="gate-cx-target"></div>
+                            <div class="circuit-cell" style="grid-row: 2; grid-column: 3;" data-page-node-id="ODC9bSHhYc8N7FiJjeG8f5">
+                                <div class="circuit-wire" data-page-node-id="mczEkQPqDzuJAVsumXZVML"></div>
+                                <div class="cnot-target" id="gate-cx-target" data-page-node-id="oW0AVGB8hsaMGFGfaIfbtB"></div>
                             </div>
                         </div>
                     </div>
@@ -509,6 +608,8 @@
 
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
+    <script src="../../js/quantum-core.js"></script>
 
     <script>
         // State Machine
@@ -580,64 +681,15 @@
             }
         });
 
-        const blochCanvas = document.getElementById('blochCanvas');
-        const blochCtx = blochCanvas.getContext('2d');
-
-        function drawBlochSphere(cx, cy, radius, label, vector) {
-            blochCtx.strokeStyle = '#e0d8cc';
-            blochCtx.lineWidth = 1;
-            
-            // Sphere outline
-            blochCtx.beginPath(); blochCtx.arc(cx, cy, radius, 0, Math.PI * 2); blochCtx.stroke();
-            
-            // Equator
-            blochCtx.beginPath(); blochCtx.ellipse(cx, cy, radius, radius * 0.3, 0, 0, Math.PI * 2); blochCtx.stroke();
-            
-            // Axes
-            blochCtx.setLineDash([3, 3]);
-            blochCtx.beginPath(); blochCtx.moveTo(cx, cy - radius); blochCtx.lineTo(cx, cy + radius); blochCtx.stroke(); // Z
-            blochCtx.beginPath(); blochCtx.moveTo(cx - radius, cy); blochCtx.lineTo(cx + radius, cy); blochCtx.stroke(); // Y
-            blochCtx.beginPath(); blochCtx.moveTo(cx - radius * 0.7, cy + radius * 0.5); blochCtx.lineTo(cx + radius * 0.7, cy - radius * 0.5); blochCtx.stroke(); // X
-            blochCtx.setLineDash([]);
-            
-            // Labels
-            blochCtx.fillStyle = '#6b5a51'; blochCtx.font = '10px JetBrains Mono';
-            blochCtx.fillText("|0⟩", cx - 5, cy - radius - 5);
-            blochCtx.fillText("|1⟩", cx - 5, cy + radius + 15);
-            blochCtx.fillText("x", cx - radius * 0.7 - 10, cy + radius * 0.5 + 5);
-            blochCtx.fillText("y", cx + radius + 5, cy + 3);
-            
-            blochCtx.fillStyle = colorPrimary; blochCtx.font = 'bold 12px Inter';
-            blochCtx.fillText(label, cx - 25, cy + radius + 35);
-            
-            // Vector
-            if (vector) {
-                // Projection isometric
-                const vx = cx + (vector.y * radius) - (vector.x * radius * 0.7);
-                const vy = cy - (vector.z * radius) + (vector.x * radius * 0.5);
-                
-                blochCtx.strokeStyle = colorPrimary;
-                blochCtx.lineWidth = 3;
-                blochCtx.beginPath(); blochCtx.moveTo(cx, cy); blochCtx.lineTo(vx, vy); blochCtx.stroke();
-                
-                blochCtx.fillStyle = colorPrimary;
-                blochCtx.beginPath(); blochCtx.arc(vx, vy, 4, 0, Math.PI * 2); blochCtx.fill();
-            }
-        }
+        var bloch0 = new QC.Bloch(document.getElementById('bloch0'), { maxTrail: 60, color: '#000f91' });
+        var bloch1 = new QC.Bloch(document.getElementById('bloch1'), { maxTrail: 60, color: '#b45309' });
 
         function renderBloch() {
-            blochCtx.clearRect(0, 0, blochCanvas.width, blochCanvas.height);
-            
-            const rect = blochCanvas.getBoundingClientRect();
-            if(blochCanvas.width !== rect.width) blochCanvas.width = rect.width;
-            if(blochCanvas.height !== rect.height) blochCanvas.height = rect.height;
-            
-            const w = blochCanvas.width;
-            const h = blochCanvas.height;
-            const r = Math.min(w/4, h/2) - 30;
-            
-            drawBlochSphere(w/4, h/2 - 10, r, "Qubit 0 (Control)", state.bloch.q0);
-            drawBlochSphere((w/4)*3, h/2 - 10, r, "Qubit 1 (Target)", state.bloch.q1);
+            var p = physicsEngine[state.initialState][state.step];
+            if (state.step < 2 && p.q0 && p.q1) {
+                bloch0.set(p.q0.x || 0, p.q0.y || 0, p.q0.z || 0);
+                bloch1.set(p.q1.x || 0, p.q1.y || 0, p.q1.z || 0);
+            }
         }
 
         function resetSystem() {
@@ -694,11 +746,13 @@
             if (state.step === 2) {
                 document.getElementById('stat-entangled').innerText = "YES";
                 document.getElementById('stat-entangled').style.color = "var(--dqa-success)";
-                document.getElementById('entanglement-overlay').style.display = 'flex';
+                document.getElementById('overlay0').classList.add('is-shown');
+                document.getElementById('overlay1').classList.add('is-shown');
             } else {
                 document.getElementById('stat-entangled').innerText = "No";
                 document.getElementById('stat-entangled').style.color = "var(--dqa-error)";
-                document.getElementById('entanglement-overlay').style.display = 'none';
+                document.getElementById('overlay0').classList.remove('is-shown');
+                document.getElementById('overlay1').classList.remove('is-shown');
             }
 
             // 2. Buttons
@@ -751,14 +805,13 @@
             }
         }
 
-        // Init
-        window.addEventListener('resize', renderBloch);
+        // Init (QC.Bloch handles its own resizing via ResizeObserver)
         setTimeout(resetSystem, 100);
 
     </script>
-<footer class="site-footer">
-        <div class="footer-content" style="justify-content: center;">
-            <div>
+<footer class="site-footer" data-page-node-id="i9cME1E9zHAB8htn9duBUP">
+        <div class="footer-content" style="justify-content: center;" data-page-node-id="Cu4LH7XV0wnBS3r7HCIQhC">
+            <div data-page-node-id="DDEhG7wQI5DzsOjUzBQf5i">
                 &copy; 2026 AQCA - All Quantum Computing Algorithms
             </div>
         </div>

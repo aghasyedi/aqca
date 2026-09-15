@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -238,9 +250,15 @@
         </ul>
         <div class="simulation-placeholder" style="margin-top: 1.5rem;">
             <div class="simulation-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-            <h3>Dynamic State Tracking</h3>
-            <p>Interactive module (amplitude histograms, Bloch spheres) to simulate the algorithm live.</p>
-            <p style="margin-top: 0.5rem; font-style: italic; color: var(--muted-text);">[Interactive visualisation placeholder to be added later]</p>
+            <h3>Visualiser in development</h3>
+            <p>A step-by-step interactive module for this protocol is on the roadmap. Until it lands, you can run the
+                real Qiskit circuit below and inspect the recorded statevectors, density matrices and measurement
+                histograms.</p>
+            <span class="status-note">Roadmap · Interactive module</span>
+            <div class="placeholder-actions">
+                <a class="btn" href="#code-lab">Run the Qiskit code</a>
+                <a class="btn btn-outline" href="../../visualise.html">Browse live visualisers</a>
+            </div>
         </div>
     </section>
 
@@ -257,14 +275,14 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, partial_trace, state_fidelity
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
 from IPython.display import display, Markdown
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(4, name=&quot;q&quot;)
-crz = ClassicalRegister(1, name=&quot;crz&quot;)  # Charlie&#x27;s Z measurement
-crx = ClassicalRegister(1, name=&quot;crx&quot;)  # Charlie&#x27;s X measurement
-cr_ab = ClassicalRegister(2, name=&quot;ab_meas&quot;) # Final measurement for Alice and Bob
+qr = QuantumRegister(4, name="q")
+crz = ClassicalRegister(1, name="crz")  # Charlie's Z measurement
+crx = ClassicalRegister(1, name="crx")  # Charlie's X measurement
+cr_ab = ClassicalRegister(2, name="ab_meas") # Final measurement for Alice and Bob
 qc = QuantumCircuit(qr, crz, crx, cr_ab)
 
 # 2. Prepare Pair 1 (Alice q0, Charlie q1)
@@ -274,24 +292,24 @@ qc.cx(0, 1)
 # 3. Prepare Pair 2 (Charlie q2, Bob q3)
 qc.h(2)
 qc.cx(2, 3)
-qc.barrier(label=&quot;Pairs Ready&quot;)
+qc.barrier(label="Pairs Ready")
 
 # 4. Charlie performs Bell State Measurement on q1 and q2
 qc.cx(1, 2)
 qc.h(1)
-qc.barrier(label=&quot;Charlie BSM&quot;)
+qc.barrier(label="Charlie BSM")
 
 # 5. Charlie measures and sends classical bits
 qc.measure(1, crz)
 qc.measure(2, crx)
-qc.barrier(label=&quot;Classical&quot;)
+qc.barrier(label="Classical")
 
-# 6. Bob applies dynamic corrections to q3 based on Charlie&#x27;s bits
+# 6. Bob applies dynamic corrections to q3 based on Charlie's bits
 with qc.if_test((crx, 1)):
     qc.x(3)
 with qc.if_test((crz, 1)):
     qc.z(3)
-qc.barrier(label=&quot;Bob Corr&quot;)
+qc.barrier(label="Bob Corr")
 
 # Save the full density matrix before final measurement collapses the state
 qc.save_density_matrix()
@@ -310,32 +328,32 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Quantum State Representation&quot;))
+display(Markdown("2. Quantum State Representation"))
 # Extract the joint state of Alice (q0) and Bob (q3) by tracing out Charlie (q1, q2)
-rho_full = result.data()[&#x27;density_matrix&#x27;]
+rho_full = result.data()['density_matrix']
 rho_ab = partial_trace(rho_full, [1, 2])
 
-print(&quot;Final DensityMatrix (Alice Q0 and Bob Q3 after swap):&quot;)
-display(rho_ab.draw(&#x27;latex&#x27;))
+print("Final DensityMatrix (Alice Q0 and Bob Q3 after swap):")
+display(rho_ab.draw('latex'))
 
-display(Markdown(&quot;3. State Visualisation&quot;))
-print(&quot;Final State (Bloch Spheres for Q0 and Q3):&quot;)
+display(Markdown("3. State Visualisation"))
+print("Final State (Bloch Spheres for Q0 and Q3):")
 # Note: Bloch vectors will be length 0 (points at origin) because the individual 
 # qubits in a Bell state are completely mixed when viewed locally.
 display(plot_bloch_multivector(rho_ab))
 
-print(&quot;\nFinal State (Q-Sphere for Q0 and Q3):&quot;)
+print("\nFinal State (Q-Sphere for Q0 and Q3):")
 display(plot_state_qsphere(rho_ab))
 
-display(Markdown(&quot;4. Measurement Analysis&quot;))
+display(Markdown("4. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts: {counts}&quot;)
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))
 
-display(Markdown(&quot;5. Verification&quot;))
+display(Markdown("5. Verification"))
 # The ideal target state is a perfect Bell state between Q0 and Q3
 reference_circuit = QuantumCircuit(2)
 reference_circuit.h(0)
@@ -343,11 +361,11 @@ reference_circuit.cx(0, 1)
 ideal_state = Statevector(reference_circuit)
 
 fidelity = state_fidelity(ideal_state, rho_ab)
-print(f&quot;Entanglement Swapping Fidelity = {fidelity:.6f}&quot;)
+print(f"Entanglement Swapping Fidelity = {fidelity:.6f}")
 if np.isclose(fidelity, 1.0):
-    print(&quot;Success: Q0 and Q3 are maximally entangled without ever interacting.&quot;)
+    print("Success: Q0 and Q3 are maximally entangled without ever interacting.")
 else:
-    print(&quot;Warning: Fidelity is less than 1.&quot;)</code></pre>
+    print("Warning: Fidelity is less than 1.")</code></pre>
             </div>
         </div>
 
@@ -357,34 +375,34 @@ else:
                 <a href="../../assets/notebooks/entanglement-swapping.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
-                <pre class="notebook-output-text">Final DensityMatrix (Alice Q0 and Bob Q3 after swap):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
+<pre class="notebook-output-text">Final DensityMatrix (Alice Q0 and Bob Q3 after swap):
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-\frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
- 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0  \\
- \frac{1}{2} & 0 & 0 & \frac{1}{2}  \\
+\frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2}  \\
+ 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0  \\
+ \frac{1}{2} &amp; 0 &amp; 0 &amp; \frac{1}{2}  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
-                <pre class="notebook-output-text">Final State (Bloch Spheres for Q0 and Q3):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
+<pre class="notebook-output-text">Final State (Bloch Spheres for Q0 and Q3):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 Final State (Q-Sphere for Q0 and Q3):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'11 1 1': 137, '00 1 1': 132, '11 1 0': 134, '11 0 0': 122, '00 0 1': 131, '00 0 0': 114, '00 1 0': 135, '11 0 1': 119}
+<img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts: {'11 1 1': 137, '00 1 1': 132, '11 1 0': 134, '11 0 0': 122, '00 0 1': 131, '00 0 0': 114, '00 1 0': 135, '11 0 1': 119}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification</p>
-                <pre class="notebook-output-text">Entanglement Swapping Fidelity = 1.000000
+<img class="notebook-output-img" src="../../assets/images/outputs/entanglement-swapping-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification</p>
+<pre class="notebook-output-text">Entanglement Swapping Fidelity = 1.000000
 Success: Q0 and Q3 are maximally entangled without ever interacting.
 </pre>
             </div>
@@ -439,7 +457,9 @@ Success: Q0 and Q3 are maximally entangled without ever interacting.
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell / CHSH Experiment | AQCA</title>
+    <meta name="description" content="AQCA - Bell / CHSH Experiment">
+
+    <!-- Chart.js -->
+    <script src="../../assets/vendor/chartjs/chart.js"></script>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/visualiser.css">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../assets/vendor/mathjax/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body class="viz-page">
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num"
+                            style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../about.html" class="nav-link">About AQCA</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">QC Basics</a>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+
+                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+
+                        <li class="nav-category-label">6. Visualisation & Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item">
+                    <a href="../../visualise.html" class="nav-link">Visualise</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../analysis.html" class="nav-link">Analysis Centre</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="viz-shell">
+                <nav class="viz-crumbs">
+                    <a href="../../index.html">Home</a><span class="sep">›</span>
+                    <a href="../../visualise.html">Visualise</a><span class="sep">›</span>
+                    <span class="current">Bell / CHSH Experiment</span>
+                </nav>
+                <div class="viz-head">
+                    <div class="viz-head__left">
+                        <span class="viz-eyebrow">Interactive Visualiser</span>
+                        <h1 class="viz-title">Bell / CHSH Experiment</h1>
+                        <p class="viz-subtitle">Choose four measurement angles and watch the CHSH combination S move between the classical bound |S| ≤ 2 and the quantum Tsirelson bound 2√2, with real sampled statistics.</p>
+                    </div>
+                    <div class="viz-head__actions">
+                        <a class="viz-btn viz-btn--primary" href="../../basics.html">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            QC Basics
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html">All visualisers</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portal-grid">
+                <!-- ================= SIDEBAR ================= -->
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Shared State</h2>
+                        <div class="qt-field">
+                            <label class="qt-label">State held by Alice and Bob</label>
+                            <select id="inp-state" class="modern-input">
+                                <option value="phi">Φ⁺ = (|00⟩ + |11⟩)/√2</option>
+                                <option value="prod0">|00⟩ — no entanglement</option>
+                                <option value="prod+">|++⟩ — no entanglement</option>
+                                <option value="part">Partially entangled (θ below)</option>
+                            </select>
+                        </div>
+                        <div class="qt-field" id="box-tune" style="display:none;">
+                            <label class="qt-label">θ for cos(θ/2)|00⟩ + sin(θ/2)|11⟩</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-tune" min="0" max="180" step="1" value="90">
+                                <span class="qt-range-val" id="val-tune">90°</span>
+                            </div>
+                        </div>
+                        <div class="qt-formula" id="out-ket">|ψ⟩ = 0.707|00⟩ + 0.707|11⟩</div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Measurement Angles</h2>
+                        <p class="qt-sm qt-muted" style="margin-bottom:10px;">Analysers lie in the X–Z plane:
+                            A(θ) = cos θ · Z + sin θ · X.</p>
+                        <div class="qt-field">
+                            <label class="qt-label">a (Alice, setting 1)</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-a" min="0" max="180" step="1" value="0">
+                                <span class="qt-range-val" id="val-a">0°</span>
+                            </div>
+                        </div>
+                        <div class="qt-field">
+                            <label class="qt-label">a′ (Alice, setting 2)</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-a2" min="0" max="180" step="1" value="90">
+                                <span class="qt-range-val" id="val-a2">90°</span>
+                            </div>
+                        </div>
+                        <div class="qt-field">
+                            <label class="qt-label">b (Bob, setting 1)</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-b" min="0" max="180" step="1" value="45">
+                                <span class="qt-range-val" id="val-b">45°</span>
+                            </div>
+                        </div>
+                        <div class="qt-field">
+                            <label class="qt-label">b′ (Bob, setting 2)</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-b2" min="0" max="180" step="1" value="135">
+                                <span class="qt-range-val" id="val-b2">135°</span>
+                            </div>
+                        </div>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--sm" data-pr="tsirelson">Tsirelson optimal</button>
+                            <button class="qt-btn qt-btn--sm" data-pr="classical">Classical max</button>
+                            <button class="qt-btn qt-btn--sm" data-pr="opt-b">Optimise b, b′</button>
+                            <button class="qt-btn qt-btn--sm" data-pr="opt-all">Optimise all four</button>
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Run The Experiment</h2>
+                        <div class="qt-field">
+                            <label class="qt-label">Shots per correlation</label>
+                            <select id="inp-shots" class="modern-input">
+                                <option value="200">200</option>
+                                <option value="1000" selected>1000</option>
+                                <option value="5000">5000</option>
+                                <option value="20000">20000</option>
+                            </select>
+                        </div>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--primary" id="btn-run">Run 4 × N shots</button>
+                            <button class="qt-btn" id="btn-auto">Auto: OFF</button>
+                        </div>
+                        <div class="qt-note">Alice and Bob pick their setting independently and record ±1. Repeating
+                            for the four setting pairs gives the CHSH combination
+                            S = E(a,b) − E(a,b′) + E(a′,b) + E(a′,b′).</div>
+                    </div>
+                </aside>
+
+                <!-- ================= MAIN ================= -->
+                <div class="visualiser-main">
+                    <div class="pert-card">
+                        <h2>CHSH Value <span class="qt-card-note" id="out-verdict">theory only</span></h2>
+                        <div class="qt-2col qt-2col--fixed" style="align-items:center;">
+                            <div class="qt-stat-grid">
+                                <div class="qt-stat"><span class="qt-stat__k">|S| theory</span><span class="qt-stat__v" id="out-stheory">2.828</span></div>
+                                <div class="qt-stat"><span class="qt-stat__k">|S| measured</span><span class="qt-stat__v" id="out-smeas">—</span></div>
+                            </div>
+                            <div>
+                                <div style="position:relative; height:26px; border-radius:999px; background:var(--surface-hover); border:1px solid var(--border); overflow:hidden;">
+                                    <div id="gauge-fill" style="position:absolute; inset:0 auto 0 0; width:0%; background:linear-gradient(90deg,#047857,#34d399); transition:width .35s ease;"></div>
+                                    <div style="position:absolute; left:66.67%; top:0; bottom:0; width:2px; background:#b45309;"></div>
+                                    <div style="position:absolute; left:94.28%; top:0; bottom:0; width:2px; background:#6d47c9;"></div>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; font-size:0.66rem; color:var(--muted-text); margin-top:5px;">
+                                    <span>0</span>
+                                    <span style="color:#b45309; font-weight:700;">2 · classical bound</span>
+                                    <span style="color:#6d47c9; font-weight:700;">2√2 · Tsirelson</span>
+                                    <span>3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="qt-note" id="out-explain">Any local hidden-variable theory obeys |S| ≤ 2. Quantum
+                            mechanics allows up to 2√2 ≈ 2.828 — the Tsirelson bound. Crossing 2 rules out
+                            local realism.</div>
+                    </div>
+
+                    <div class="qt-2col qt-2col--fixed">
+                        <div class="pert-card">
+                            <h2>Correlations</h2>
+                            <table class="qt-table" id="out-table"></table>
+                            <div class="qt-kv qt-mt" id="out-extra"></div>
+                        </div>
+
+                        <div class="pert-card">
+                            <h2>Sampled Correlations <span class="qt-card-note">with ±1/√N</span></h2>
+                            <div class="qt-canvas-box" style="height:280px;">
+                                <canvas id="chart-e"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>Correlation Curves <span class="qt-card-note">E vs Bob's angle</span></h2>
+                        <div class="qt-canvas-box" style="height:280px;">
+                            <canvas id="chart-curve"></canvas>
+                        </div>
+                        <div class="qt-note">For Φ⁺ the correlation is E = cos(a − b): a smooth cosine that a
+                            local model can only imitate with a straight, kinked line — which is exactly why the
+                            linear CHSH combination is capped at 2.</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>&copy; 2026 AQCA - All Quantum Computing Algorithms</div>
+        </div>
+    </footer>
+
+    <script src="../../js/quantum-core.js"></script>
+
+<script>
+    (function () {
+        'use strict';
+
+        var state = QC.zeroState(2);
+        var autoTimer = null;
+        var lastSample = null;
+
+        var elState = document.getElementById('inp-state');
+        var elShots = document.getElementById('inp-shots');
+        var elTune = document.getElementById('inp-tune');
+        var A = { a: 0, a2: 90, b: 45, b2: 135 };
+
+        var FONT = { family: '"JetBrains Mono", monospace', size: 11 };
+        var INK = '#5f6368';
+
+        /* ---------------- state ---------------- */
+        function buildState() {
+            var k = elState.value;
+            document.getElementById('box-tune').style.display = k === 'part' ? '' : 'none';
+            state = QC.zeroState(2);
+            if (k === 'phi') {
+                state = QC.apply1q(state, QC.GATES.H, 0, 2);
+                state = QC.cnot(state, 0, 1, 2);
+            } else if (k === 'prod0') {
+                /* nothing */
+            } else if (k === 'prod+') {
+                state = QC.apply1q(state, QC.GATES.H, 0, 2);
+                state = QC.apply1q(state, QC.GATES.H, 1, 2);
+            } else {
+                state = QC.apply1q(state, QC.Ry(parseFloat(elTune.value) * Math.PI / 180), 0, 2);
+                state = QC.cnot(state, 0, 1, 2);
+            }
+            state = QC.canonical(state);
+            refreshCorr();
+            document.getElementById('out-ket').textContent = '|ψ⟩ = ' + QC.ketString(state, 2, 3);
+            lastSample = null;
+            update();
+        }
+
+        /* ---------------- analytic correlations ---------------- */
+        var CZZ = 0, CZX = 0, CXZ = 0, CXX = 0;
+        function refreshCorr() {
+            CZZ = QC.corr2(state, 'Z', 'Z');
+            CZX = QC.corr2(state, 'Z', 'X');
+            CXZ = QC.corr2(state, 'X', 'Z');
+            CXX = QC.corr2(state, 'X', 'X');
+        }
+
+        var COS = new Float64Array(361), SIN = new Float64Array(361);
+        for (var _i = 0; _i <= 360; _i++) {
+            COS[_i] = Math.cos(_i * Math.PI / 180);
+            SIN[_i] = Math.sin(_i * Math.PI / 180);
+        }
+
+        function Edeg(d1, d2) {
+            var i1 = Math.round(d1), i2 = Math.round(d2);
+            if (i1 === d1 && i2 === d2 && i1 >= 0 && i1 <= 360 && i2 >= 0 && i2 <= 360) {
+                return COS[i1] * COS[i2] * CZZ + COS[i1] * SIN[i2] * CZX +
+                       SIN[i1] * COS[i2] * CXZ + SIN[i1] * SIN[i2] * CXX;
+            }
+            var c1 = Math.cos(d1 * Math.PI / 180), s1 = Math.sin(d1 * Math.PI / 180);
+            var c2 = Math.cos(d2 * Math.PI / 180), s2 = Math.sin(d2 * Math.PI / 180);
+            return c1 * c2 * CZZ + c1 * s2 * CZX + s1 * c2 * CXZ + s1 * s2 * CXX;
+        }
+
+        function Sdeg(a, a2, b, b2) {
+            return Edeg(a, b) - Edeg(a, b2) + Edeg(a2, b) + Edeg(a2, b2);
+        }
+
+        /* ---------------- sampling ---------------- */
+        function sampleE(ta, tb, shots) {
+            var s = QC.apply1q(state, QC.Ry(-ta), 0, 2);
+            s = QC.apply1q(s, QC.Ry(-tb), 1, 2);
+            var c = QC.sampleMany(QC.probs(s), shots);
+            return (c[0] - c[1] - c[2] + c[3]) / shots;
+        }
+
+        function runExperiment() {
+            var shots = parseInt(elShots.value, 10);
+            var pairs = [['a', 'b'], ['a', 'b2'], ['a2', 'b'], ['a2', 'b2']];
+            var meas = pairs.map(function (p) { return sampleE(A[p[0]] * Math.PI / 180, A[p[1]] * Math.PI / 180, shots); });
+            var S = meas[0] - meas[1] + meas[2] + meas[3];
+            lastSample = { meas: meas, S: S, shots: shots };
+            update();
+        }
+
+        /* ---------------- rendering ---------------- */
+        function update() {
+            var pairs = [['a', 'b', 'E(a, b)'], ['a', 'b2', 'E(a, b′)'], ['a2', 'b', 'E(a′, b)'], ['a2', 'b2', 'E(a′, b′)']];
+            var th = pairs.map(function (p) { return Edeg(A[p[0]], A[p[1]]); });
+            var St = th[0] - th[1] + th[2] + th[3];
+            var absS = Math.abs(St);
+
+            document.getElementById('out-stheory').textContent = QC.num(St, 3);
+            var gauge = document.getElementById('gauge-fill');
+            gauge.style.width = QC.clamp(absS / 3 * 100, 0, 100) + '%';
+            gauge.style.background = absS > 2.001
+                ? 'linear-gradient(90deg,#047857,#34d399)'
+                : 'linear-gradient(90deg,#b45309,#f59e0b)';
+
+            var verdict = document.getElementById('out-verdict');
+            if (absS > 2.001) {
+                verdict.textContent = 'violates the classical bound';
+                verdict.className = 'qt-card-note';
+                verdict.style.color = '#047857';
+                verdict.style.fontWeight = '700';
+            } else {
+                verdict.textContent = 'within local-realism bound';
+                verdict.style.color = '#b45309';
+                verdict.style.fontWeight = '700';
+            }
+
+            var html = '<thead><tr><th>setting pair</th><th>E theory</th><th>E measured</th><th>±1/√N</th></tr></thead><tbody>';
+            var err = lastSample ? 1 / Math.sqrt(lastSample.shots) : null;
+            for (var i = 0; i < 4; i++) {
+                html += '<tr><td>' + pairs[i][2] + '</td><td>' + QC.num(th[i], 3) + '</td>' +
+                    '<td>' + (lastSample ? QC.num(lastSample.meas[i], 3) : '—') + '</td>' +
+                    '<td class="qt-muted">' + (lastSample ? '±' + QC.num(err, 3) : '—') + '</td></tr>';
+            }
+            html += '</tbody>';
+            document.getElementById('out-table').innerHTML = html;
+
+            if (lastSample) {
+                var Sm = lastSample.S;
+                document.getElementById('out-smeas').textContent = QC.num(Sm, 3);
+                var sigma = 2 / Math.sqrt(lastSample.shots);
+                document.getElementById('out-extra').innerHTML =
+                    '<div class="qt-kv__row"><span class="qt-kv__k">S measured (signed)</span><span class="qt-kv__v is-accent">' + QC.num(Sm, 3) + ' ± ' + QC.num(sigma, 3) + '</span></div>' +
+                    '<div class="qt-kv__row"><span class="qt-kv__k">S theory (signed)</span><span class="qt-kv__v">' + QC.num(St, 3) + '</span></div>' +
+                    '<div class="qt-kv__row"><span class="qt-kv__k">violation margin</span><span class="qt-kv__v">' + QC.num(Math.abs(Sm) - 2, 3) + '</span></div>' +
+                    '<div class="qt-kv__row"><span class="qt-kv__k">σ from the bound</span><span class="qt-kv__v">' + QC.num((Math.abs(Sm) - 2) / sigma, 1) + 'σ</span></div>';
+                drawBars(th, lastSample.meas, err);
+            } else {
+                document.getElementById('out-smeas').textContent = '—';
+                document.getElementById('out-extra').innerHTML = '';
+                drawBars(th, null, 0);
+            }
+
+            drawCurves();
+        }
+
+        function drawBars(th, meas, err) {
+            var cv = document.getElementById('chart-e');
+            if (!window.Chart) return;
+            var labels = ['E(a,b)', 'E(a,b′)', 'E(a′,b)', 'E(a′,b′)'];
+            if (cv.__chart) cv.__chart.destroy();
+            cv.__chart = new Chart(cv.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'theory',
+                        data: th,
+                        backgroundColor: 'rgba(180,83,9,0.55)',
+                        borderRadius: 5,
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.7
+                    }].concat(meas ? [{
+                        label: 'measured',
+                        data: meas,
+                        backgroundColor: 'rgba(0,15,145,0.78)',
+                        borderRadius: 5,
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.7
+                    }] : [])
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, animation: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: INK, font: FONT, boxWidth: 11, usePointStyle: true } },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: { ticks: { color: INK, font: FONT }, grid: { display: false } },
+                        y: { min: -1, max: 1, ticks: { color: INK, font: FONT }, grid: { color: 'rgba(15,23,42,0.06)' } }
+                    }
+                }
+            });
+        }
+
+        function drawCurves() {
+            var cv = document.getElementById('chart-curve');
+            if (!window.Chart) return;
+            var ds = [];
+            [[A.a, 'a', 'rgba(0,15,145,0.9)'], [A.a2, 'a′', 'rgba(180,83,9,0.9)']].forEach(function (cfg) {
+                var pts = [];
+                for (var d = 0; d <= 180; d += 2) pts.push({ x: d, y: Edeg(cfg[0], d) });
+                ds.push({ label: 'E(' + cfg[1] + ', θB)', data: pts, borderColor: cfg[2], borderWidth: 2, pointRadius: 0, fill: false, tension: 0.08 });
+            });
+            ds.push({
+                label: 'b, b′',
+                data: [{ x: A.b, y: Edeg(A.a, A.b) }, { x: A.b2, y: Edeg(A.a, A.b2) }],
+                backgroundColor: '#000f91', borderColor: '#fff', borderWidth: 2, pointRadius: 6, showLine: false
+            });
+            ds.push({
+                label: 'b, b′ (a′)',
+                data: [{ x: A.b, y: Edeg(A.a2, A.b) }, { x: A.b2, y: Edeg(A.a2, A.b2) }],
+                backgroundColor: '#b45309', borderColor: '#fff', borderWidth: 2, pointRadius: 6, showLine: false
+            });
+            if (cv.__chart) cv.__chart.destroy();
+            cv.__chart = new Chart(cv.getContext('2d'), {
+                type: 'line',
+                data: { datasets: ds },
+                options: {
+                    responsive: true, maintainAspectRatio: false, animation: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: INK, font: FONT, boxWidth: 11, usePointStyle: true } },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: { type: 'linear', min: 0, max: 180, title: { display: true, text: 'θB (degrees)', color: INK, font: FONT }, ticks: { color: INK, font: FONT, stepSize: 30 }, grid: { color: 'rgba(15,23,42,0.06)' } },
+                        y: { min: -1, max: 1, ticks: { color: INK, font: FONT }, grid: { color: 'rgba(15,23,42,0.06)' } }
+                    }
+                }
+            });
+        }
+
+        /* ---------------- wiring ---------------- */
+        var SL = { 'a': 'inp-a', 'a2': 'inp-a2', 'b': 'inp-b', 'b2': 'inp-b2' };
+        Object.keys(SL).forEach(function (k) {
+            var el = document.getElementById(SL[k]);
+            el.addEventListener('input', function () {
+                A[k] = parseFloat(el.value);
+                document.getElementById('val-' + k).textContent = QC.num(A[k], 0) + '°';
+                lastSample = null;
+                update();
+            });
+        });
+
+        function setAngles(a, a2, b, b2) {
+            A.a = a; A.a2 = a2; A.b = b; A.b2 = b2;
+            Object.keys(SL).forEach(function (k) {
+                document.getElementById(SL[k]).value = String(Math.round(A[k]));
+                document.getElementById('val-' + k).textContent = QC.num(A[k], 0) + '°';
+            });
+            lastSample = null;
+            update();
+        }
+
+        document.querySelectorAll('[data-pr]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var k = btn.getAttribute('data-pr');
+                if (k === 'tsirelson') setAngles(0, 90, 45, 135);
+                else if (k === 'classical') setAngles(0, 0, 0, 180);
+                else if (k === 'opt-b') { optimiseB(); }
+                else { optimiseAll(); }
+            });
+        });
+
+        /* Direct search for the angles that maximise |S| inside [0°, 180°]. */
+        function optimiseB() {
+            var best = { S: 0, b: A.b, b2: A.b2 };
+            for (var b = 0; b <= 180; b += 1) {
+                for (var b2 = 0; b2 <= 180; b2 += 1) {
+                    var S = Sdeg(A.a, A.a2, b, b2);
+                    if (Math.abs(S) > Math.abs(best.S)) best = { S: S, b: b, b2: b2 };
+                }
+            }
+            setAngles(A.a, A.a2, best.b, best.b2);
+        }
+
+        function optimiseAll() {
+            var best = { S: 0, a: A.a, a2: A.a2, b: A.b, b2: A.b2 };
+            var a, a2, b, b2, S;
+            for (a = 0; a <= 180; a += 5) {
+                for (a2 = 0; a2 <= 180; a2 += 5) {
+                    for (b = 0; b <= 180; b += 15) {
+                        for (b2 = 0; b2 <= 180; b2 += 15) {
+                            S = Sdeg(a, a2, b, b2);
+                            if (Math.abs(S) > Math.abs(best.S)) best = { S: S, a: a, a2: a2, b: b, b2: b2 };
+                        }
+                    }
+                }
+            }
+            /* refine */
+            var refined = { S: best.S, a: best.a, a2: best.a2, b: best.b, b2: best.b2 };
+            for (a = Math.max(0, best.a - 5); a <= Math.min(180, best.a + 5); a += 1) {
+                for (a2 = Math.max(0, best.a2 - 5); a2 <= Math.min(180, best.a2 + 5); a2 += 1) {
+                    for (b = Math.max(0, best.b - 15); b <= Math.min(180, best.b + 15); b += 1) {
+                        for (b2 = Math.max(0, best.b2 - 15); b2 <= Math.min(180, best.b2 + 15); b2 += 1) {
+                            S = Sdeg(a, a2, b, b2);
+                            if (Math.abs(S) > Math.abs(refined.S)) refined = { S: S, a: a, a2: a2, b: b, b2: b2 };
+                        }
+                    }
+                }
+            }
+            setAngles(refined.a, refined.a2, refined.b, refined.b2);
+        }
+
+        document.getElementById('btn-run').addEventListener('click', runExperiment);
+        var bAuto = document.getElementById('btn-auto');
+        bAuto.addEventListener('click', function () {
+            if (autoTimer) { clearInterval(autoTimer); autoTimer = null; bAuto.textContent = 'Auto: OFF'; bAuto.classList.remove('qt-btn--primary'); }
+            else { autoTimer = setInterval(runExperiment, 500); bAuto.textContent = 'Auto: ON'; bAuto.classList.add('qt-btn--primary'); }
+        });
+
+        elState.addEventListener('change', buildState);
+        elTune.addEventListener('input', function () {
+            document.getElementById('val-tune').textContent = QC.num(parseFloat(this.value), 0) + '°';
+            if (elState.value === 'part') buildState();
+        });
+        elShots.addEventListener('change', function () { lastSample = null; update(); });
+
+        buildState();
+    })();
+    </script>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
+</body>
+</html>

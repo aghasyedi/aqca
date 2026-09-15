@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -257,7 +269,7 @@
 <pre><code>import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
-from qiskit.visualisation import plot_histogram
+from qiskit.visualization import plot_histogram
 from IPython.display import display, Markdown
 
 # ==========================================
@@ -267,12 +279,12 @@ error_x_qubit = 1  # Bit-flip (X) on Qubit 1
 error_z_qubit = 4  # Phase-flip (Z) on Qubit 4
 
 # 1. Set up Registers &amp; Circuit (13 Qubits)
-qr_data = QuantumRegister(7, name=&quot;data&quot;)
-qr_sz = QuantumRegister(3, name=&quot;sz&quot;)     # Z-syndromes
-qr_sx = QuantumRegister(3, name=&quot;sx&quot;)     # X-syndromes
-cr_sz = ClassicalRegister(3, name=&quot;c_sz&quot;)
-cr_sx = ClassicalRegister(3, name=&quot;c_sx&quot;)
-cr_data = ClassicalRegister(7, name=&quot;c_data&quot;)
+qr_data = QuantumRegister(7, name="data")
+qr_sz = QuantumRegister(3, name="sz")     # Z-syndromes
+qr_sx = QuantumRegister(3, name="sx")     # X-syndromes
+cr_sz = ClassicalRegister(3, name="c_sz")
+cr_sx = ClassicalRegister(3, name="c_sx")
+cr_data = ClassicalRegister(7, name="c_data")
 
 qc = QuantumCircuit(qr_data, qr_sz, qr_sx, cr_sz, cr_sx, cr_data)
 
@@ -281,12 +293,12 @@ qc.h([qr_data[4], qr_data[5], qr_data[6]])
 qc.cx(qr_data[4], qr_data[0]); qc.cx(qr_data[4], qr_data[1]); qc.cx(qr_data[4], qr_data[3])
 qc.cx(qr_data[5], qr_data[0]); qc.cx(qr_data[5], qr_data[2]); qc.cx(qr_data[5], qr_data[3])
 qc.cx(qr_data[6], qr_data[1]); qc.cx(qr_data[6], qr_data[2]); qc.cx(qr_data[6], qr_data[3])
-qc.barrier(label=&quot;|0_L&gt; Encoded&quot;)
+qc.barrier(label="|0_L&gt; Encoded")
 
 # 3. Inject Errors
 if error_x_qubit is not None: qc.x(qr_data[error_x_qubit])
 if error_z_qubit is not None: qc.z(qr_data[error_z_qubit])
-qc.barrier(label=&quot;Errors Injected&quot;)
+qc.barrier(label="Errors Injected")
 
 # 4. Syndrome Extraction
 # Z-Checks for X-Errors
@@ -300,7 +312,7 @@ qc.cx(qr_sx[0], qr_data[0]); qc.cx(qr_sx[0], qr_data[1]); qc.cx(qr_sx[0], qr_dat
 qc.cx(qr_sx[1], qr_data[0]); qc.cx(qr_sx[1], qr_data[2]); qc.cx(qr_sx[1], qr_data[3]); qc.cx(qr_sx[1], qr_data[5])
 qc.cx(qr_sx[2], qr_data[1]); qc.cx(qr_sx[2], qr_data[2]); qc.cx(qr_sx[2], qr_data[3]); qc.cx(qr_sx[2], qr_data[6])
 qc.h(qr_sx)
-qc.barrier(label=&quot;Syndromes Extracted&quot;)
+qc.barrier(label="Syndromes Extracted")
 
 # Measure Syndromes
 qc.measure(qr_sz, cr_sz)
@@ -311,7 +323,7 @@ syndrome_map = {1: 4, 2: 5, 3: 0, 4: 6, 5: 1, 6: 2, 7: 3}
 for decimal_val, qubit_idx in syndrome_map.items():
     with qc.if_test((cr_sz, decimal_val)): qc.x(qr_data[qubit_idx])
     with qc.if_test((cr_sx, decimal_val)): qc.z(qr_data[qubit_idx])
-qc.barrier(label=&quot;Corrected&quot;)
+qc.barrier(label="Corrected")
 
 # 6. Fast Measurement (No Density Matrix)
 qc.measure(qr_data, cr_data)
@@ -325,26 +337,26 @@ counts = job.result().get_counts()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;Steane 7-Qubit Error Correction (Ultra-Fast Version)&quot;))
-display(Markdown(&quot;1. Circuit Visualisation (Compact Layout)&quot;))
+display(Markdown(f"Steane 7-Qubit Error Correction (Ultra-Fast Version)"))
+display(Markdown("1. Circuit Visualisation (Compact Layout)"))
 # scale=0.5 shrinks the image by 50%
 # fold=45 wraps the circuit to a new line much earlier to prevent horizontal scrolling
 # plot_barriers=False hides the grey vertical lines to tighten the gate spacing
-display(qc.draw(&#x27;mpl&#x27;, scale=0.5, fold=45, plot_barriers=False))
+display(qc.draw('mpl', scale=0.5, fold=45, plot_barriers=False))
 
-display(Markdown(&quot;2. Measurement Analysis&quot;))
-print(&quot;Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.&quot;)
+display(Markdown("2. Measurement Analysis"))
+print("Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.")
 display(plot_histogram(counts))
 
-display(Markdown(&quot;3. Verification&quot;))
+display(Markdown("3. Verification"))
 # These are the exact 8 valid codewords generated by our specific CNOT architecture
 valid_codewords = [
-    &quot;0000000&quot;, &quot;0011011&quot;, &quot;0101101&quot;, &quot;0110110&quot;, 
-    &quot;1001110&quot;, &quot;1010101&quot;, &quot;1100011&quot;, &quot;1111000&quot;
+    "0000000", "0011011", "0101101", "0110110", 
+    "1001110", "1010101", "1100011", "1111000"
 ]
 
 # Extract just the data qubit strings (split off the syndrome bits)
-# Qiskit output format: &quot;c_data c_sx c_sz&quot;
+# Qiskit output format: "c_data c_sx c_sz"
 success = True
 for output_string in counts.keys():
     data_string = output_string.split()[0]
@@ -353,9 +365,9 @@ for output_string in counts.keys():
         break
 
 if success:
-    print(&quot;Success: 100% of measurements collapsed into valid |0_L&gt; Hamming codewords despite the errors.&quot;)
+    print("Success: 100% of measurements collapsed into valid |0_L&gt; Hamming codewords despite the errors.")
 else:
-    print(&quot;Warning: Found invalid codewords. Error correction failed.&quot;)</code></pre>
+    print("Warning: Found invalid codewords. Error correction failed.")</code></pre>
             </div>
         </div>
 
@@ -367,15 +379,15 @@ else:
         <a href="../../assets/notebooks/steane-code.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
     </div>
                 <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Steane 7-Qubit Error Correction (Ultra-Fast Version)</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Compact Layout)</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Measurement Analysis</p>
-                <pre class="notebook-output-text">Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Steane 7-Qubit Error Correction (Ultra-Fast Version)</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Compact Layout)</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Measurement Analysis</p>
+<pre class="notebook-output-text">Because calculating a 13-qubit density matrix freezes the kernel, we verify success by checking if the final measurements form valid Hamming [7,4,3] codewords.
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-2.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Verification</p>
-                <pre class="notebook-output-text">Success: 100% of measurements collapsed into valid |0_L&gt; Hamming codewords despite the errors.
+<img class="notebook-output-img" src="../../assets/images/outputs/steane-code-out-2.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Verification</p>
+<pre class="notebook-output-text">Success: 100% of measurements collapsed into valid |0_L&gt; Hamming codewords despite the errors.
 </pre>
             </div>
 </div></section>
@@ -423,7 +435,9 @@ else:
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

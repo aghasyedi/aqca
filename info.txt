@@ -79,9 +79,15 @@ The `/details/` directory houses 15 specialised topics that explain the theoreti
 - Mathematics Rendering: MathJax v3 (LaTeX).
 - Quantum Backend / Notebooks: Python 3, Qiskit (Aer Simulator, Statevector Sampler), Matplotlib (for circuit plotting and Bloch spheres), Jupyter Notebook framework.
 - Automation Scripts: Bespoke Python extraction scripts (`extract_outputs.py`) engineered to parse Jupyter Notebook outputs and dynamically inject HTML/Base64 image assets seamlessly into the web interface.
+- Interactive Code Lab: `css/code-lab.css` + `js/code-runner.js` render a syntax-highlighted Qiskit editor beside an animated runtime console that replays each notebook's recorded execution (boot, transpile, shot run, streamed output, figures, LaTeX).
+- Shared Visualiser Shell: `css/visualiser.css` unifies all 13 visualiser pages (breadcrumb, title, back action, cards, controls, responsive grid).
+- Maintenance Tooling: `tools/rebuild_code_lab.py`, `tools/apply_design_system.py`, `tools/polish_placeholders.py` — idempotent scripts that regenerate page content from `assets/notebooks/*.ipynb` and (re)apply the design system.
 
 6. RECENT UPDATES & MILESTONES
 -------------------------------------------------------------------------------
+- Introduced the AQCA Code Lab: every algorithm page now "runs" its Qiskit program with an animated console that streams the genuine, pre-recorded notebook output.
+- Rebuilt every Python source block and output payload directly from the notebooks, repairing truncated/duplicated code.
+- Unified the design system across the platform and repaired all 13 visualisers (canonical sidebar navigation, shared header, responsive layout, canvas sizing, MathJax).
 - Implemented a specialised, collapsible sidebar for the Appendix/Details section for rapid navigation.
 - Extracted and injected genuine Qiskit outputs from `AQAC.ipynb` directly into the algorithm web pages.
 - Sorted out advanced CSS flexbox layout issues, ensuring massive mathematical arrays and density matrices render perfectly without collapsing.

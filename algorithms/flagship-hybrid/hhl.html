@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -270,7 +282,7 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, Operator
 from qiskit.circuit.library import QFT
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
@@ -279,16 +291,16 @@ from IPython.display import display, Markdown
 num_clock_qubits = 2
 
 # 1. Set up Registers &amp; Circuit
-ancilla = QuantumRegister(1, name=&#x27;ancilla&#x27;)
-clock = QuantumRegister(num_clock_qubits, name=&#x27;clock&#x27;)
-target = QuantumRegister(1, name=&#x27;target&#x27;) # 2x2 system
-c = ClassicalRegister(1, name=&#x27;measure&#x27;)
+ancilla = QuantumRegister(1, name='ancilla')
+clock = QuantumRegister(num_clock_qubits, name='clock')
+target = QuantumRegister(1, name='target') # 2x2 system
+c = ClassicalRegister(1, name='measure')
 
 qc = QuantumCircuit(ancilla, clock, target, c)
 
 # 2. State Preparation U_b (Loading vector b into target register)
 qc.ry(np.pi/3, target[0])
-qc.barrier(label=&quot;State Prep&quot;)
+qc.barrier(label="State Prep")
 
 # 3. Quantum Phase Estimation (QPE)
 qc.h(clock)
@@ -298,25 +310,25 @@ for i in range(num_clock_qubits):
     
 # Apply Inverse QFT to clock register
 iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()
-iqft.name = &quot;IQFT&quot;
+iqft.name = "IQFT"
 qc.append(iqft, clock)
-qc.barrier(label=&quot;QPE Complete&quot;)
+qc.barrier(label="QPE Complete")
 
 # 4. Controlled Eigenvalue Inversion (Conditional Rotation on Ancilla)
 # Rotations scaled inversely to the eigenvalues represented by the clock register
 qc.cry(np.pi/2, clock[0], ancilla[0])
 qc.cry(np.pi/4, clock[1], ancilla[0])
-qc.barrier(label=&quot;Eigenvalue Inv&quot;)
+qc.barrier(label="Eigenvalue Inv")
 
 # 5. Uncomputation / Inverse QPE (Reverse QPE steps)
 qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
-qft.name = &quot;QFT&quot;
+qft.name = "QFT"
 qc.append(qft, clock)
 
 for i in reversed(range(num_clock_qubits)):
     qc.cp(-np.pi / (2**i), clock[i], target[0])
 qc.h(clock)
-qc.barrier(label=&quot;IQPE Done&quot;)
+qc.barrier(label="IQPE Done")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE MEASUREMENT
@@ -338,42 +350,42 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(&quot;HHL Algorithm Structural Analysis&quot;))
-print(f&quot;Clock qubits: {num_clock_qubits} | Target system: 2x2 | Total qubits: {qc.num_qubits}&quot;)
+display(Markdown("HHL Algorithm Structural Analysis"))
+print(f"Clock qubits: {num_clock_qubits} | Target system: 2x2 | Total qubits: {qc.num_qubits}")
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
+display(Markdown("2. Unitary Evolution"))
 total_qubits = qc.num_qubits - 1  # Excluding classical register
 if total_qubits &lt;= 4:
-    print(f&quot;The {2**total_qubits}x{2**total_qubits} unitary matrix describing the structural circuit:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{HHL} = &quot;, max_size=16))
+    print(f"The {2**total_qubits}x{2**total_qubits} unitary matrix describing the structural circuit:")
+    display(array_to_latex(unitary.data, prefix="U_{HHL} = ", max_size=16))
 else:
-    print(f&quot;Unitary matrix omitted: {total_qubits} qubits results in a matrix too large for clean display.&quot;)
+    print(f"Unitary matrix omitted: {total_qubits} qubits results in a matrix too large for clean display.")
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector prior to measurement:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("3. Quantum State Representation"))
+print("Exact Statevector prior to measurement:")
+display(final_state.draw('latex'))
 
-print(&quot;\nFinal DensityMatrix prior to measurement:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix prior to measurement:")
+display(final_density.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis (Ancilla Post-Selection)&quot;))
+display(Markdown("5. Measurement Analysis (Ancilla Post-Selection)"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts (Ancilla state 0 vs 1): {counts}&quot;)
+print(f"Raw measurement counts (Ancilla state 0 vs 1): {counts}")
 display(plot_histogram(counts))
 
 # Verification note
-success_shots = counts.get(&#x27;1&#x27;, 0)
-print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% of shots successfully inverted the eigenvalue onto the ancilla.&quot;)</code></pre>
+success_shots = counts.get('1', 0)
+print(f"\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% of shots successfully inverted the eigenvalue onto the ancilla.")</code></pre>
             </div>
         </div>
 
@@ -383,73 +395,73 @@ print(f&quot;\nPost-Selection Success Rate: {(success_shots / 1024) * 100:.2f}% 
                 <a href="../../assets/notebooks/hhl.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/2807633593.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. ('Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.',)
+<pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/2807633593.py:33: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. ('Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.',)
   iqft = QFT(num_clock_qubits, inverse=True, do_swaps=True).to_gate()
 /var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/2807633593.py:45: DeprecationWarning: The class ``qiskit.circuit.library.basis_change.qft.QFT`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. ('Use qiskit.circuit.library.QFTGate or qiskit.synthesis.qft.synth_qft_full instead, for access to all previous arguments.',)
   qft = QFT(num_clock_qubits, inverse=False, do_swaps=True).to_gate()
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">HHL Algorithm Structural Analysis</p>
-                <pre class="notebook-output-text">Clock qubits: 2 | Target system: 2x2 | Total qubits: 4
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">HHL Algorithm Structural Analysis</p>
+<pre class="notebook-output-text">Clock qubits: 2 | Target system: 2x2 | Total qubits: 4
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">The 8x8 unitary matrix describing the structural circuit:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">The 8x8 unitary matrix describing the structural circuit:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 U_{HHL} = 
 \begin{bmatrix}
-\frac{\sqrt{3}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & \frac{\sqrt{3}}{2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0.8001031452 & -0.331413574 & 0 & 0 & 0 & 0 & 0 & 0 & -0.4619397663 & 0.1913417162 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0.331413574 & 0.8001031452 & 0 & 0 & 0 & 0 & 0 & 0 & -0.1913417162 & -0.4619397663 & 0 & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & 0.4718930049 & -0.7062377904 & 0.1404794308 i & 0.0938653547 i & 0 & 0 & 0 & 0 & -0.2724475534 & 0.4077465784 & - 0.0811058372 i & - 0.0541931878 i  \\
- 0 & 0 & 0 & 0 & 0.7062377904 & 0.4718930049 & - 0.0938653547 i & 0.1404794308 i & 0 & 0 & 0 & 0 & -0.4077465784 & -0.2724475534 & 0.0541931878 i & - 0.0811058372 i  \\
- 0 & 0 & 0 & 0 & - 0.1404794308 i & - 0.0938653547 i & 0.4718930049 & -0.7062377904 & 0 & 0 & 0 & 0 & 0.0811058372 i & 0.0541931878 i & -0.2724475534 & 0.4077465784  \\
- 0 & 0 & 0 & 0 & 0.0938653547 i & - 0.1404794308 i & 0.7062377904 & 0.4718930049 & 0 & 0 & 0 & 0 & - 0.0541931878 i & 0.0811058372 i & -0.4077465784 & -0.2724475534  \\
- 0.3671936598 & -0.2995441473 & - 0.0405529186 i & - 0.0270965939 i & - 0.0947461064 i & - 0.1082024311 i & 0.0405529186 & 0.0270965939 & 0.635998075 & -0.5188256822 & - 0.0702397154 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & - 0.1641050702 i & - 0.1874121082 i & 0.0702397154 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315}  \\
- 0.2995441473 & 0.3671936598 & 0.0270965939 i & - 0.0405529186 i & 0.1082024311 i & - 0.0947461064 i & -0.0270965939 & 0.0405529186 & 0.5188256822 & 0.635998075 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & - 0.0702397154 i & 0.1874121082 i & - 0.1641050702 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.0702397154  \\
- 0.0405529186 i & 0.0270965939 i & 0.3862237767 & -0.2038732892 & -0.0405529186 & -0.0270965939 & - 0.1137762233 i & - 0.2038732892 i & 0.0702397154 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.6689592043 & -0.3531188952 & -0.0702397154 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & - 0.1970661995 i & - 0.3531188952 i  \\
- - 0.0270965939 i & 0.0405529186 i & 0.2038732892 & 0.3862237767 & 0.0270965939 & -0.0405529186 & 0.2038732892 i & - 0.1137762233 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.0702397154 i & 0.3531188952 & 0.6689592043 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & -0.0702397154 & 0.3531188952 i & - 0.1970661995 i  \\
- 0.0947461064 i & 0.1082024311 i & -0.0405529186 & -0.0270965939 & 0.3671936598 & -0.2995441473 & - 0.0405529186 i & - 0.0270965939 i & 0.1641050702 i & 0.1874121082 i & -0.0702397154 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.635998075 & -0.5188256822 & - 0.0702397154 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315}  \\
- - 0.1082024311 i & 0.0947461064 i & 0.0270965939 & -0.0405529186 & 0.2995441473 & 0.3671936598 & 0.0270965939 i & - 0.0405529186 i & - 0.1874121082 i & 0.1641050702 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & -0.0702397154 & 0.5188256822 & 0.635998075 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & - 0.0702397154 i  \\
- 0.0405529186 & 0.0270965939 & 0.1137762233 i & 0.2038732892 i & 0.0405529186 i & 0.0270965939 i & 0.3862237767 & -0.2038732892 & 0.0702397154 & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.1970661995 i & 0.3531188952 i & 0.0702397154 i & \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.6689592043 & -0.3531188952  \\
- -0.0270965939 & 0.0405529186 & - 0.2038732892 i & 0.1137762233 i & - 0.0270965939 i & 0.0405529186 i & 0.2038732892 & 0.3862237767 & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0.0702397154 & - 0.3531188952 i & 0.1970661995 i & - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} & 0.0702397154 i & 0.3531188952 & 0.6689592043  \\
+\frac{\sqrt{3}}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; \frac{\sqrt{3}}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - \frac{1}{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0.8001031452 &amp; -0.331413574 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -0.4619397663 &amp; 0.1913417162 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0.331413574 &amp; 0.8001031452 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -0.1913417162 &amp; -0.4619397663 &amp; 0 &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.4718930049 &amp; -0.7062377904 &amp; 0.1404794308 i &amp; 0.0938653547 i &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -0.2724475534 &amp; 0.4077465784 &amp; - 0.0811058372 i &amp; - 0.0541931878 i  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.7062377904 &amp; 0.4718930049 &amp; - 0.0938653547 i &amp; 0.1404794308 i &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -0.4077465784 &amp; -0.2724475534 &amp; 0.0541931878 i &amp; - 0.0811058372 i  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; - 0.1404794308 i &amp; - 0.0938653547 i &amp; 0.4718930049 &amp; -0.7062377904 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.0811058372 i &amp; 0.0541931878 i &amp; -0.2724475534 &amp; 0.4077465784  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.0938653547 i &amp; - 0.1404794308 i &amp; 0.7062377904 &amp; 0.4718930049 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - 0.0541931878 i &amp; 0.0811058372 i &amp; -0.4077465784 &amp; -0.2724475534  \\
+ 0.3671936598 &amp; -0.2995441473 &amp; - 0.0405529186 i &amp; - 0.0270965939 i &amp; - 0.0947461064 i &amp; - 0.1082024311 i &amp; 0.0405529186 &amp; 0.0270965939 &amp; 0.635998075 &amp; -0.5188256822 &amp; - 0.0702397154 i &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; - 0.1641050702 i &amp; - 0.1874121082 i &amp; 0.0702397154 &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315}  \\
+ 0.2995441473 &amp; 0.3671936598 &amp; 0.0270965939 i &amp; - 0.0405529186 i &amp; 0.1082024311 i &amp; - 0.0947461064 i &amp; -0.0270965939 &amp; 0.0405529186 &amp; 0.5188256822 &amp; 0.635998075 &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; - 0.0702397154 i &amp; 0.1874121082 i &amp; - 0.1641050702 i &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; 0.0702397154  \\
+ 0.0405529186 i &amp; 0.0270965939 i &amp; 0.3862237767 &amp; -0.2038732892 &amp; -0.0405529186 &amp; -0.0270965939 &amp; - 0.1137762233 i &amp; - 0.2038732892 i &amp; 0.0702397154 i &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; 0.6689592043 &amp; -0.3531188952 &amp; -0.0702397154 &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; - 0.1970661995 i &amp; - 0.3531188952 i  \\
+ - 0.0270965939 i &amp; 0.0405529186 i &amp; 0.2038732892 &amp; 0.3862237767 &amp; 0.0270965939 &amp; -0.0405529186 &amp; 0.2038732892 i &amp; - 0.1137762233 i &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; 0.0702397154 i &amp; 0.3531188952 &amp; 0.6689592043 &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; -0.0702397154 &amp; 0.3531188952 i &amp; - 0.1970661995 i  \\
+ 0.0947461064 i &amp; 0.1082024311 i &amp; -0.0405529186 &amp; -0.0270965939 &amp; 0.3671936598 &amp; -0.2995441473 &amp; - 0.0405529186 i &amp; - 0.0270965939 i &amp; 0.1641050702 i &amp; 0.1874121082 i &amp; -0.0702397154 &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; 0.635998075 &amp; -0.5188256822 &amp; - 0.0702397154 i &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315}  \\
+ - 0.1082024311 i &amp; 0.0947461064 i &amp; 0.0270965939 &amp; -0.0405529186 &amp; 0.2995441473 &amp; 0.3671936598 &amp; 0.0270965939 i &amp; - 0.0405529186 i &amp; - 0.1874121082 i &amp; 0.1641050702 i &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; -0.0702397154 &amp; 0.5188256822 &amp; 0.635998075 &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; - 0.0702397154 i  \\
+ 0.0405529186 &amp; 0.0270965939 &amp; 0.1137762233 i &amp; 0.2038732892 i &amp; 0.0405529186 i &amp; 0.0270965939 i &amp; 0.3862237767 &amp; -0.2038732892 &amp; 0.0702397154 &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; 0.1970661995 i &amp; 0.3531188952 i &amp; 0.0702397154 i &amp; \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; 0.6689592043 &amp; -0.3531188952  \\
+ -0.0270965939 &amp; 0.0405529186 &amp; - 0.2038732892 i &amp; 0.1137762233 i &amp; - 0.0270965939 i &amp; 0.0405529186 i &amp; 0.2038732892 &amp; 0.3862237767 &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; 0.0702397154 &amp; - 0.3531188952 i &amp; 0.1970661995 i &amp; - \frac{2 \cdot 2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}} i}{315} &amp; 0.0702397154 i &amp; 0.3531188952 &amp; 0.6689592043  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector prior to measurement:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$\frac{\sqrt{3}}{2} |0000\rangle+0.3671936598 |1000\rangle+0.2995441473 |1001\rangle+0.0405529186 i |1010\rangle- 0.0270965939 i |1011\rangle+0.0947461064 i |1100\rangle- 0.1082024311 i |1101\rangle+0.0405529186 |1110\rangle-0.0270965939 |1111\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$\frac{\sqrt{3}}{2} |0000\rangle+0.3671936598 |1000\rangle+0.2995441473 |1001\rangle+0.0405529186 i |1010\rangle- 0.0270965939 i |1011\rangle+0.0947461064 i |1100\rangle- 0.1082024311 i |1101\rangle+0.0405529186 |1110\rangle-0.0270965939 |1111\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix prior to measurement:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-\frac{3}{4} & 0 & 0 & 0 & \cdots & 0.0937060541 i & 0.0351198577 & - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315}  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- 0 & 0 & 0 & 0 & \cdots & 0 & 0 & 0  \\
- \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
- - 0.0937060541 i & 0 & 0 & 0 & \cdots & 0.0117077661 & - 0.0043879244 i & 0.0029319173 i  \\
- 0.0351198577 & 0 & 0 & 0 & \cdots & 0.0043879244 i & 0.0016445392 & -0.001098846  \\
- - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} & 0 & 0 & 0 & \cdots & - 0.0029319173 i & -0.001098846 & 0.0007342254  \\
+\frac{3}{4} &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0.0937060541 i &amp; 0.0351198577 &amp; - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315}  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ 0 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0  \\
+ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\
+ - 0.0937060541 i &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0.0117077661 &amp; - 0.0043879244 i &amp; 0.0029319173 i  \\
+ 0.0351198577 &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; 0.0043879244 i &amp; 0.0016445392 &amp; -0.001098846  \\
+ - \frac{2^{\frac{79}{399}} \cdot 3^{\frac{236}{399}} \sqrt[57]{5} \cdot 7^{\frac{81}{133}}}{315} &amp; 0 &amp; 0 &amp; 0 &amp; \cdots &amp; - 0.0029319173 i &amp; -0.001098846 &amp; 0.0007342254  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Ancilla Post-Selection)</p>
-                <pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {'1': 123, '0': 901}
+<img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Ancilla Post-Selection)</p>
+<pre class="notebook-output-text">Raw measurement counts (Ancilla state 0 vs 1): {'1': 123, '0': 901}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-4.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/hhl-out-4.png" alt="Notebook output">
+<pre class="notebook-output-text">
 Post-Selection Success Rate: 12.01% of shots successfully inverted the eigenvalue onto the ancilla.
 </pre>
             </div>
@@ -505,7 +517,9 @@ Post-Selection Success Rate: 12.01% of shots successfully inverted the eigenvalu
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

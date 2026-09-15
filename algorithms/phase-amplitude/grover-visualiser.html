@@ -12,6 +12,9 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/visualiser.css">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
 
@@ -30,14 +33,12 @@
             --dqa-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
             --radius-md: 12px;
             --radius-lg: 16px;
-        }
-
-        .portal-grid {
+        }.portal-grid {
             display: grid;
             grid-template-columns: 340px 1fr;
             gap: 24px;
-            height: calc(100vh - var(--header-height) - 4rem);
-            overflow: hidden;
+            height: auto;
+            overflow: visible;
             font-family: 'Inter', sans-serif;
         }
 
@@ -295,8 +296,18 @@
             display: inline-block;
         }
     </style>
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="../../assets/vendor/mathjax/es5/tex-mml-chtml.js"></script>
 </head>
-<body>
+<body class="viz-page">
     <header class="site-header">
         <div class="header-left">
             <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
@@ -319,23 +330,105 @@
                     <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
                 </div>
                 <div class="nav-item">
-                    <a href="../../algorithms.html" class="nav-link">Algorithms</a>
+                    <a href="../../about.html" class="nav-link">About AQCA</a>
                 </div>
                 <div class="nav-item">
-                    <a href="grover.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;" data-tooltip="Back to Grover's">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.25rem;height:1.25rem;margin-right:0.75rem;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    <span>Back to Grover's</span>
-</a>
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">QC Basics</a>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
+                    </ul>
                 </div>
                 <div class="nav-item">
                     <a href="../../visualise.html" class="nav-link">Visualise</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../analysis.html" class="nav-link">Analysis Centre</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer</a>
                 </div>
             </nav>
         </aside>
 
         <main id="main-content" class="main-content" style="padding-top: 1rem;">
-            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
-                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Grover's Search Algorithm Visualiser</h1>
+            <div class="viz-shell">
+                <nav class="viz-crumbs">
+                    <a href="../../index.html">Home</a><span class="sep">›</span>
+                    <a href="../../algorithms.html">Algorithms</a><span class="sep">›</span>
+                    <a href="grover.html">Core Algorithms</a><span class="sep">›</span>
+                    <span class="current">Grover's Search Algorithm Visualiser</span>
+                </nav>
+                <div class="viz-head">
+                    <div class="viz-head__left">
+                        <span class="viz-eyebrow">Interactive Visualiser</span>
+                        <h1 class="viz-title">Grover's Search Algorithm Visualiser</h1>
+                        <p class="viz-subtitle">Step through the circuit and watch the quantum state evolve. Every figure is computed live in your browser.</p>
+                    </div>
+                    <div class="viz-head__actions">
+                        <a class="viz-btn viz-btn--primary" href="grover.html">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            Back to Grover's Search Algorithm
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html">All visualisers</a>
+                    </div>
+                </div>
             </div>
 
             <div class="portal-grid">
@@ -351,48 +444,48 @@
                             <label style="display:block; font-size:0.75rem; margin-bottom:5px; font-weight:600;">Search Targets
                                 (Binary/Regex)</label>
                             <input type="text" id="inp-target" value="1010" placeholder="e.g. 1010, 1*1*" class="modern-input">
-                            <button class="btn btn-primary btn-modern" style="width:100%; margin-top:10px;"
+                            <button class="qt-btn qt-btn--primary" style="width:100%; margin-top:10px;"
                                 onclick="randomiseTarget()">Random Target</button>
                             <div id="error-box"
                                 style="color: var(--dqa-error); font-size: 0.7rem; margin-top: 5px; font-weight: 700;"></div>
                         </div>
-                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:15px;" onclick="initialise()">Initialise
+                        <button class="qt-btn qt-btn--primary" style="width:100%; margin-top:15px;" onclick="initialise()">Initialise
                             System</button>
                     </div>
 
                     <div class="pert-card">
                         <h2>2. Operation Console</h2>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                            <button class="btn btn-primary btn-modern" id="btn-prev" onclick="undoStep()" disabled>Previous</button>
-                            <button class="btn btn-primary btn-modern" id="btn-next" onclick="nextStep()" disabled>Next Step</button>
+                            <button class="qt-btn qt-btn--primary" id="btn-prev" onclick="undoStep()" disabled>Previous</button>
+                            <button class="qt-btn qt-btn--primary" id="btn-next" onclick="nextStep()" disabled>Next Step</button>
                         </div>
-                        <button class="btn btn-green btn-modern" id="btn-auto" style="width:100%; margin-bottom:10px;"
+                        <button class="btn qt-btn qt-btn--primary" id="btn-auto" style="width:100%; margin-bottom:10px;"
                             onclick="toggleAuto()" disabled>Auto-Run Sequence</button>
-                        <button class="btn btn-yellow btn-modern" style="width:100%; margin-bottom: 5px;" onclick="initialise()">↻ Restart Animation</button>
+                        <button class="qt-btn qt-btn--primary" style="width:100%;" onclick="initialise()">↻ Restart Animation</button>
                         <div
-                            style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600;">
+                            style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--dqa-text-muted); font-weight: 600; margin-top:10px;">
                             <span>Operational Speed</span>
                             <input type="range" id="inp-speed" min="100" max="2000" value="800" style="width:120px;" onchange="if(state.timer){stopAuto();toggleAuto();}">
                         </div>
-                        <button class="btn btn-primary btn-modern"
-                            style="width:100%; margin-top:15px; background: #2c2420; border-color: #2c2420;"
+                        <button class="qt-btn qt-btn--primary"
+                            style="width:100%; margin-top:15px;"
                             onclick="jumpToOptimal()">Jump to Optimal</button>
                     </div>
 
                     <div class="pert-card">
                         <h2>3. Research Metrics</h2>
-                        <div class="expert-panel">
-                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem;">Angle Tracking</div>
+                        <div class="qt-note" style="margin-bottom: 10px;">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--text);">Angle Tracking</div>
                             <div id="val-theta"
-                                style="font-family: 'JetBrains Mono'; font-size: 1.1rem; color: var(--dqa-primary);">θ = 0.00°
+                                style="font-family: 'JetBrains Mono'; font-size: 1.1rem; color: var(--primary);">θ = 0.00°
                             </div>
                         </div>
-                        <div class="expert-panel" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600;">
-                            <div style="display:flex; justify-content:space-between;">
+                        <div class="qt-note">
+                            <div style="display:flex; justify-content:space-between; font-weight: 600;">
                                 <span>Classical (O(N))</span>
                                 <span id="label-classical" style="color: var(--dqa-error);">--</span>
                             </div>
-                            <div style="display:flex; justify-content:space-between; margin-top: 4px;">
+                            <div style="display:flex; justify-content:space-between; margin-top: 4px; font-weight: 600;">
                                 <span>Quantum (O(√N))</span>
                                 <span id="label-quantum" style="color: var(--dqa-success);">--</span>
                             </div>
@@ -403,59 +496,35 @@
                 <!-- Main Display -->
                 <div class="visualiser-main">
                     <!-- Live Dashboard -->
-                    <div
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 10px;">
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div
-                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Success Prob</div>
-                            <div id="stat-prob"
-                                style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0.0%
-                            </div>
+                    <div class="qt-stat-grid">
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Success Prob</span>
+                            <span class="qt-stat__v" id="stat-prob">0.0%</span>
                         </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div
-                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Iterations</div>
-                            <div id="stat-step"
-                                style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">0
-                            </div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Iterations</span>
+                            <span class="qt-stat__v" id="stat-step">0</span>
                         </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div
-                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Active Targets</div>
-                            <div id="stat-targets"
-                                style="font-size: 0.8rem; font-family: 'JetBrains Mono'; font-weight: 700; margin-top: 5px; word-break: break-all; overflow-y: auto; max-height: 35px; color: var(--dqa-accent);">
-                                --</div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Active Targets</span>
+                            <span class="qt-stat__v" id="stat-targets" style="font-size: 0.78rem; word-break: break-all; max-height: 34px; overflow-y: auto;">--</span>
                         </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div
-                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Resonance Limit</div>
-                            <div id="stat-limit"
-                                style="font-size: 1.5rem; font-weight: 800; color: var(--dqa-primary); margin-top: auto;">--
-                            </div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Resonance Limit</span>
+                            <span class="qt-stat__v" id="stat-limit">--</span>
                         </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div
-                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Speedup</div>
-                            <div id="stat-speedup"
-                                style="font-size: 1.5rem; font-weight: 800; color: #b45309; margin-top: auto;">--</div>
+                        <div class="qt-stat qt-stat--warn">
+                            <span class="qt-stat__k">Speedup</span>
+                            <span class="qt-stat__v" id="stat-speedup">--</span>
                         </div>
-                        <div class="pert-card stat-card" style="min-height: 80px; padding: 12px;">
-                            <div
-                                style="font-size: 0.6rem; color: var(--dqa-text-muted); font-weight: 800; text-transform: uppercase;">
-                                Stage</div>
-                            <div id="stat-stage" style="font-size: 0.9rem; font-weight: 800; color: #6d28d9; margin-top: auto;">
-                                READY</div>
+                        <div class="qt-stat">
+                            <span class="qt-stat__k">Stage</span>
+                            <span class="qt-stat__v" id="stat-stage" style="color: #6d28d9; font-size: 0.82rem;">READY</span>
                         </div>
                     </div>
 
                     <!-- Analytics Grid -->
-                    <div
-                        style="display: grid; grid-template-columns: 1fr 250px; gap: 15px; margin-bottom: 10px; height: 300px;">
+                    <div class="viz-analytics" style="display: grid; grid-template-columns: 1fr 250px; gap: 15px; margin-bottom: 10px; height: 300px;">
                         <div class="pert-card chart-container"
                             style="min-height: 0; display: flex; flex-direction: column;">
                             <div
@@ -472,14 +541,14 @@
                                     </label>
                                 </div>
                             </div>
-                            <div style="flex: 1; min-height: 0;">
+                            <div class="qt-canvas-box" style="flex: 1; min-height: 0; border-radius: 8px;">
                                 <canvas id="mainChart"></canvas>
                             </div>
                         </div>
                         <div class="pert-card chart-container"
                             style="min-height: 0; display: flex; flex-direction: column;">
                             <h2 style="margin-bottom: 12px; border: none;">State Evolution</h2>
-                            <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                            <div class="qt-canvas-box" style="flex: 1; min-height: 0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                 <canvas id="geoCanvas" style="max-height: 100%; max-width: 100%;"></canvas>
                             </div>
                         </div>
@@ -499,6 +568,7 @@
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
 
     <script>
         const state = {

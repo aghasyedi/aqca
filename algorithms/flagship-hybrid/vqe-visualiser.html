@@ -13,15 +13,16 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/visualiser.css">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
     <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
 
     <style>
         :root {
             --dqa-primary: var(--primary); --dqa-card: var(--surface);
             --dqa-text: var(--text); --dqa-border: var(--border);
-        }
-
-        .portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: calc(100vh - var(--header-height) - 4rem); font-family: 'Inter', sans-serif; overflow: hidden; }
+        }.portal-grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; height: auto; font-family: 'Inter', sans-serif; overflow: visible; }
         .config-sidebar { padding: 0 10px 20px 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
         .config-sidebar::-webkit-scrollbar, .visualiser-main::-webkit-scrollbar { width: 6px; }
         .config-sidebar::-webkit-scrollbar-thumb, .visualiser-main::-webkit-scrollbar-thumb { background-color: var(--dqa-border); border-radius: 10px; }
@@ -47,17 +48,14 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-        }
-
-        .loop-box {
-            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; position: relative; color: #e2e8f0;
-        }
-        .loop-box h3 { margin: 0; font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; }
+        }.loop-box {
+            background: var(--viz-deep); border: 1px solid var(--viz-deep-border); border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; position: relative; color: var(--viz-text);
+        }.loop-box h3 { margin: 0; font-size: 0.8rem; color: var(--viz-muted-strong); text-transform: uppercase; font-weight: 800; }
         
         .val-display { font-family: 'JetBrains Mono'; font-size: 1.5rem; font-weight: 800; color: #fff; }
         
         .loop-active { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 90, 156, 0.2); }
-        .loop-active .val-display { color: #38bdf8; }
+        .loop-active .val-display { color: var(--viz-info); }
 
         .q-circuit {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -68,8 +66,18 @@
         
         .arrow-down { margin: 10px auto; color: var(--border); font-size: 2rem; font-weight: 800; height: 30px; display: flex; align-items: center; justify-content: center; }
     </style>
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="../../assets/vendor/mathjax/es5/tex-mml-chtml.js"></script>
 </head>
-<body>
+<body class="viz-page">
     <header class="site-header">
         <div class="header-left">
             <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
@@ -86,23 +94,111 @@
     </header>
 
     <div class="layout-wrapper">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <nav class="nav-menu">
-                <div class="nav-item"><a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a></div>
-                <div class="nav-item"><a href="../../algorithms.html" class="nav-link">Algorithms</a></div>
-                <div class="nav-item"><a href="vqe.html" class="nav-link" style="padding-left: 2.5rem; font-size: 0.9rem;" data-tooltip="Back to VQE">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.25rem;height:1.25rem;margin-right:0.75rem;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    <span>Back to VQE</span>
-</a></div>
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num" style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../about.html" class="nav-link">About AQCA</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">QC Basics</a>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+                        
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+                        
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+                        
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+                        
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+                        
+                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
                 <div class="nav-item">
                     <a href="../../visualise.html" class="nav-link">Visualise</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../analysis.html" class="nav-link">Analysis Centre</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer</a>
                 </div>
             </nav>
         </aside>
 
         <main class="main-content" style="padding-top: 1rem;">
-            <div class="algorithm-header" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
-                <h1 style="color: var(--dqa-primary); margin-bottom: 0;">Variational Quantum Eigensolver (VQE)</h1>
+            <div class="viz-shell">
+                <nav class="viz-crumbs">
+                    <a href="../../index.html">Home</a><span class="sep">›</span>
+                    <a href="../../algorithms.html">Algorithms</a><span class="sep">›</span>
+                    <a href="vqe.html">Flagship & Hybrid Models</a><span class="sep">›</span>
+                    <span class="current">Variational Quantum Eigensolver (VQE)</span>
+                </nav>
+                <div class="viz-head">
+                    <div class="viz-head__left">
+                        <span class="viz-eyebrow">Interactive Visualiser</span>
+                        <h1 class="viz-title">Variational Quantum Eigensolver (VQE)</h1>
+                        <p class="viz-subtitle">Step through the circuit and watch the quantum state evolve. Every figure is computed live in your browser.</p>
+                    </div>
+                    <div class="viz-head__actions">
+                        <a class="viz-btn viz-btn--primary" href="vqe.html">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            Back to Variational Quantum Eigensolver (VQE)
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html">All visualisers</a>
+                    </div>
+                </div>
             </div>
 
             <div class="portal-grid">
@@ -128,19 +224,19 @@
                                 <option value="0.01">0.01 (Slow, precise)</option>
                             </select>
                         </div>
-                        <button class="btn btn-green btn-modern" style="width:100%; margin-top:10px;" onclick="resetSystem()">Initialize Optimiser</button>
+                        <button class="qt-btn qt-btn--primary" style="width:100%; margin-top:10px;" onclick="resetSystem()">Initialize Optimiser</button>
                     </div>
 
                     <div class="pert-card">
                         <h2>2. Optimisation Console</h2>
-                        <button class="btn btn-primary btn-modern" id="btn-run" style="width:100%; padding: 15px;" onclick="toggleOptimization()">Start Optimisation</button>
+                        <button class="qt-btn qt-btn--primary" id="btn-run" style="width:100%; padding: 15px;" onclick="toggleOptimization()">Start Optimisation</button>
                     </div>
 
                     <div class="pert-card">
                         <h2>3. Step Explanation</h2>
-                        <div style="background: var(--background); border: 1px solid var(--dqa-border); padding: 12px 16px; border-radius: 8px;">
-                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--dqa-primary);" id="panel-title">Ready</div>
-                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--dqa-text);">VQE is a hybrid algorithm. The quantum computer evaluates the energy of a parametrized state, and a classical optimizer updates the parameters to minimize that energy.</div>
+                        <div class="qt-note">
+                            <div style="font-weight: 700; margin-bottom: 5px; font-size: 0.8rem; color: var(--text);" id="panel-title">Ready</div>
+                            <div id="panel-desc" style="font-size: 0.85rem; line-height: 1.5; color: var(--text);">VQE is a hybrid algorithm. The quantum computer evaluates the energy of a parametrized state, and a classical optimizer updates the parameters to minimize that energy.</div>
                         </div>
                     </div>
                 </aside>
@@ -175,7 +271,7 @@
                             <span>Energy Landscape</span>
                             <span id="lbl-iter">Iteration: 0</span>
                         </h2>
-                        <div class="chart-container">
+                        <div class="qt-canvas-box qt-canvas-box--chart">
                             <canvas id="energyChart"></canvas>
                         </div>
                     </div>
@@ -307,5 +403,8 @@
             </div>
         </div>
     </footer>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
 </body>
 </html>

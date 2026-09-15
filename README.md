@@ -86,6 +86,34 @@ AQCA is built with a modular, responsive architecture featuring dynamic accordio
 
 ---
 
+## Interactive Code Lab (New)
+
+Every algorithm page now ships with an **AQCA Code Lab**: a simulated Qiskit execution
+environment built from two panes — a syntax-highlighted editor showing the real
+`assets/notebooks/<algorithm>.ipynb` source, and a runtime console that replays the
+recorded execution with animation (interpreter boot → transpile → shot run → output
+stream). Controls: **Run**, **Stop**, **Skip**, **Copy**, **Download .ipynb** and
+**Full output** (the original modal). Keyboard: `Ctrl`/`⌘` + `Enter`.
+
+The outputs are *not* computed in the browser — they are the genuine results captured
+from the project notebooks (statevectors, density matrices, Bloch spheres, Q-spheres,
+unitaries and measurement histograms), streamed back verbatim.
+
+Files: `css/code-lab.css`, `js/code-runner.js`.
+
+## Design System
+
+- `css/style.css` — platform design tokens, typography, components and polish.
+- `css/visualiser.css` — shared shell for all 13 interactive visualisers (breadcrumb +
+  title + back-action header, unified cards, controls and responsive layout).
+- `tools/rebuild_code_lab.py` — regenerates each page's Python source and recorded
+  output payload straight from the notebooks (idempotent).
+- `tools/apply_design_system.py` — wires the shared CSS/JS into every page, installs the
+  canonical sidebar and the unified visualiser header.
+- `tools/polish_placeholders.py` — upgrades "coming soon" cards.
+
+---
+
 ## Tech Stack & Infrastructure
 
 - **Frontend Interface:** Semantic HTML5, Vanilla CSS3 (Custom design system, glassmorphism, responsive grid), Vanilla JavaScript (ES6+).

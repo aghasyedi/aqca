@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -268,27 +280,27 @@
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector, DensityMatrix, partial_trace, state_fidelity
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere
 from IPython.display import display, Markdown
 
 # ==========================================
 # CONFIGURATION
 # ==========================================
 error_qubit = 4         # Qubit to inject the error (0 through 8)
-error_type = &#x27;Y&#x27;        # Choose &#x27;X&#x27; (Bit-flip), &#x27;Z&#x27; (Phase-flip), or &#x27;Y&#x27; (Both)
+error_type = 'Y'        # Choose 'X' (Bit-flip), 'Z' (Phase-flip), or 'Y' (Both)
 alpha, beta = 0.8, 0.6  # Initial state amplitudes
 
 # Calculate rotation angle to prepare the arbitrary state
 theta = 2 * np.arccos(alpha)
 
 # 1. Set up Registers &amp; Circuit
-qr = QuantumRegister(9, name=&quot;q&quot;)
-cr = ClassicalRegister(1, name=&quot;c_out&quot;) # We only need to measure the restored Q0
+qr = QuantumRegister(9, name="q")
+cr = ClassicalRegister(1, name="c_out") # We only need to measure the restored Q0
 qc = QuantumCircuit(qr, cr)
 
 # 2. Initialisation
 qc.ry(theta, qr[0])
-qc.barrier(label=&quot;Init&quot;)
+qc.barrier(label="Init")
 
 # Save exact initial state of Qubit 0 for fidelity check later
 ref_circ = QuantumCircuit(1)
@@ -296,7 +308,7 @@ ref_circ.ry(theta, 0)
 initial_state = Statevector(ref_circ)
 
 # ==========================================
-# SHOR&#x27;S 9-QUBIT ENCODING
+# SHOR'S 9-QUBIT ENCODING
 # ==========================================
 # Phase-flip encoding (outer code)
 qc.cx(qr[0], qr[3])
@@ -307,16 +319,16 @@ qc.h([qr[0], qr[3], qr[6]])
 qc.cx(qr[0], qr[1]); qc.cx(qr[0], qr[2])
 qc.cx(qr[3], qr[4]); qc.cx(qr[3], qr[5])
 qc.cx(qr[6], qr[7]); qc.cx(qr[6], qr[8])
-qc.barrier(label=&quot;Encoded&quot;)
+qc.barrier(label="Encoded")
 
 # ==========================================
 # ERROR INJECTION
 # ==========================================
 if error_qubit is not None:
-    if error_type == &#x27;X&#x27;: qc.x(qr[error_qubit])
-    elif error_type == &#x27;Z&#x27;: qc.z(qr[error_qubit])
-    elif error_type == &#x27;Y&#x27;: qc.y(qr[error_qubit])
-qc.barrier(label=f&quot;Error: {error_type} on Q{error_qubit}&quot;)
+    if error_type == 'X': qc.x(qr[error_qubit])
+    elif error_type == 'Z': qc.z(qr[error_qubit])
+    elif error_type == 'Y': qc.y(qr[error_qubit])
+qc.barrier(label=f"Error: {error_type} on Q{error_qubit}")
 
 # ==========================================
 # DECODING &amp; AUTONOMOUS CORRECTION
@@ -325,12 +337,12 @@ qc.barrier(label=f&quot;Error: {error_type} on Q{error_qubit}&quot;)
 qc.cx(qr[0], qr[1]); qc.cx(qr[0], qr[2]); qc.ccx(qr[1], qr[2], qr[0])
 qc.cx(qr[3], qr[4]); qc.cx(qr[3], qr[5]); qc.ccx(qr[4], qr[5], qr[3])
 qc.cx(qr[6], qr[7]); qc.cx(qr[6], qr[8]); qc.ccx(qr[7], qr[8], qr[6])
-qc.barrier(label=&quot;Bit Corrected&quot;)
+qc.barrier(label="Bit Corrected")
 
 # Decode phase-flip and correct via Toffoli majority vote
 qc.h([qr[0], qr[3], qr[6]])
 qc.cx(qr[0], qr[3]); qc.cx(qr[0], qr[6]); qc.ccx(qr[3], qr[6], qr[0])
-qc.barrier(label=&quot;Phase Corrected&quot;)
+qc.barrier(label="Phase Corrected")
 
 # ==========================================
 # EXTRACT EXACT MATH BEFORE FINAL MEASUREMENT
@@ -351,43 +363,43 @@ result = job.result()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;Shor&#x27;s 9-Qubit Error Correction Analysis&quot;))
-display(Markdown(f&quot;Target State: ${alpha}|0\\rangle + {beta}|1\\rangle$ | Error: {error_type} on Qubit {error_qubit}&quot;))
+display(Markdown(f"Shor's 9-Qubit Error Correction Analysis"))
+display(Markdown(f"Target State: ${alpha}|0\\rangle + {beta}|1\\rangle$ | Error: {error_type} on Qubit {error_qubit}"))
 
-display(Markdown(&quot;1. Circuit Visualisation&quot;))
-display(qc.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation"))
+display(qc.draw('mpl'))
 
-display(Markdown(&quot;2. Quantum State Representation&quot;))
+display(Markdown("2. Quantum State Representation"))
 # Trace out Qubits 1 through 8 to isolate the mathematical state of Qubit 0
-rho_full = result.data()[&#x27;density_matrix&#x27;]
+rho_full = result.data()['density_matrix']
 rho_q0 = partial_trace(rho_full, list(range(1, 9)))
 
-print(&quot;Initial target Statevector (Qubit 0):&quot;)
-display(initial_state.draw(&#x27;latex&#x27;))
-print(&quot;\nFinal restored DensityMatrix (Qubit 0):&quot;)
-display(rho_q0.draw(&#x27;latex&#x27;))
+print("Initial target Statevector (Qubit 0):")
+display(initial_state.draw('latex'))
+print("\nFinal restored DensityMatrix (Qubit 0):")
+display(rho_q0.draw('latex'))
 
-display(Markdown(&quot;3. State Visualisation&quot;))
-print(&quot;Initial target state (Bloch Sphere):&quot;)
+display(Markdown("3. State Visualisation"))
+print("Initial target state (Bloch Sphere):")
 display(plot_bloch_multivector(initial_state))
 
-print(&quot;\nFinal restored state (Bloch Sphere):&quot;)
+print("\nFinal restored state (Bloch Sphere):")
 display(plot_bloch_multivector(rho_q0))
 
-display(Markdown(&quot;4. Measurement Analysis&quot;))
+display(Markdown("4. Measurement Analysis"))
 counts = result.get_counts()
-print(f&quot;Raw measurement counts (Restored Qubit 0): {counts}&quot;)
+print(f"Raw measurement counts (Restored Qubit 0): {counts}")
 display(plot_histogram(counts))
 
 # 5. Verification Logic
-display(Markdown(&quot;5. Verification: State Fidelity&quot;))
+display(Markdown("5. Verification: State Fidelity"))
 fidelity = state_fidelity(initial_state, rho_q0)
-print(f&quot;Restoration Fidelity = {fidelity:.6f}&quot;)
+print(f"Restoration Fidelity = {fidelity:.6f}")
 
 if np.isclose(fidelity, 1.0):
-    print(f&quot;Success: The state was perfectly restored despite the lethal {error_type} error on Qubit {error_qubit}.&quot;)
+    print(f"Success: The state was perfectly restored despite the lethal {error_type} error on Qubit {error_qubit}.")
 else:
-    print(&quot;Warning: Fidelity is less than 1. Error correction failed.&quot;)</code></pre>
+    print("Warning: Fidelity is less than 1. Error correction failed.")</code></pre>
             </div>
         </div>
 
@@ -399,38 +411,38 @@ else:
         <a href="../../assets/notebooks/shors-9-qubit-code.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
     </div>
                 <div class="code-output-data" style="display: none;">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor's 9-Qubit Error Correction Analysis</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Target State: $0.8|0\rangle + 0.6|1\rangle$ | Error: Y on Qubit 4</p>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
-                <pre class="notebook-output-text">Initial target Statevector (Qubit 0):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Shor's 9-Qubit Error Correction Analysis</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">Target State: $0.8|0\rangle + 0.6|1\rangle$ | Error: Y on Qubit 4</p>
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Quantum State Representation</p>
+<pre class="notebook-output-text">Initial target Statevector (Qubit 0):
 </pre>
-                <div class="notebook-output-math">$$\frac{4}{5} |0\rangle+\frac{3}{5} |1\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$\frac{4}{5} |0\rangle+\frac{3}{5} |1\rangle$$</div>
+<pre class="notebook-output-text">
 Final restored DensityMatrix (Qubit 0):
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-\frac{16}{25} & \frac{12}{25}  \\
- \frac{12}{25} & \frac{9}{25}  \\
+\frac{16}{25} &amp; \frac{12}{25}  \\
+ \frac{12}{25} &amp; \frac{9}{25}  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
-                <pre class="notebook-output-text">Initial target state (Bloch Sphere):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. State Visualisation</p>
+<pre class="notebook-output-text">Initial target state (Bloch Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 Final restored state (Bloch Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
-                <pre class="notebook-output-text">Raw measurement counts (Restored Qubit 0): {'1': 377, '0': 647}
+<img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. Measurement Analysis</p>
+<pre class="notebook-output-text">Raw measurement counts (Restored Qubit 0): {'1': 377, '0': 647}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-4.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: State Fidelity</p>
-                <pre class="notebook-output-text">Restoration Fidelity = 1.000000
+<img class="notebook-output-img" src="../../assets/images/outputs/shors-9-qubit-code-out-4.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Verification: State Fidelity</p>
+<pre class="notebook-output-text">Restoration Fidelity = 1.000000
 Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
 </pre>
             </div>
@@ -483,7 +495,9 @@ Success: The state was perfectly restored despite the lethal Y error on Qubit 4.
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>

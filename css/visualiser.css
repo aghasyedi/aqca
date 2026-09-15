@@ -1,0 +1,806 @@
+/* ==========================================================================
+   css/visualiser.css
+   Shared design system for every AQCA interactive visualiser.
+   Loaded AFTER style.css so it can unify the shell without touching the
+   per-page simulation logic.
+
+   v2 — full redesign:
+     · one light, coherent palette (legacy dark-navy panels neutralised)
+     · consistent cards, controls, charts and circuit rendering
+     · charts get a definite height so Chart.js never collapses
+     · layout flows naturally instead of being locked to 100vh
+   ========================================================================== */
+
+:root {
+    /* Brand */
+    --viz-primary: var(--primary);
+    --viz-primary-hover: var(--primary-hover);
+    --viz-primary-soft: var(--primary-light);
+
+    /* Semantic accents */
+    --viz-info: #0369a1;
+    --viz-ok: #047857;
+    --viz-ok-soft: #e7f7ec;
+    --viz-warn: #b45309;
+    --viz-warn-soft: #fdf3e6;
+    --viz-bad: #b91c1c;
+    --viz-rose: #e11d48;
+    --viz-violet: #6d28d9;
+    --viz-teal: #0e7490;
+
+    /* Neutrals */
+    --viz-bg: var(--background);
+    --viz-card: var(--surface);
+    --viz-text: var(--text);
+    --viz-muted: var(--muted-text);
+    --viz-muted-strong: #5b6672;
+    --viz-border: var(--border);
+
+    /* Recessed "deep" surface — replaces the legacy #0f172a / #1e293b panels */
+    --viz-deep: #f4f7fb;
+    --viz-deep-border: #dbe3ee;
+    --viz-deep-line: #cbd5e1;
+
+    /* Shape */
+    --viz-radius: 14px;
+    --viz-radius-sm: 10px;
+    --viz-radius-xs: 7px;
+    --viz-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.04);
+    --viz-shadow-md: 0 2px 6px rgba(15, 23, 42, 0.06), 0 12px 28px rgba(15, 23, 42, 0.07);
+    --viz-shadow-lg: 0 8px 18px rgba(15, 23, 42, 0.08), 0 24px 48px rgba(15, 23, 42, 0.10);
+
+    --viz-mono: 'JetBrains Mono', var(--font-mono);
+    --viz-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   1. Page shell
+   -------------------------------------------------------------------------- */
+body.viz-page {
+    background:
+        radial-gradient(1100px 400px at 10% -10%, rgba(0, 15, 145, 0.055), transparent 62%),
+        radial-gradient(900px 360px at 100% -4%, rgba(109, 40, 217, 0.05), transparent 58%),
+        var(--viz-bg);
+}
+
+body.viz-page .main-content {
+    padding-top: 1.5rem;
+    padding-bottom: 3.5rem;
+    max-width: 1480px;
+    /* Do NOT use `margin-inline: auto` here.
+       It sets margin-left:auto, which beats the `margin-left: var(--sidebar-width)`
+       from style.css (higher specificity + loaded later). Because this element is a
+       flex item with `flex: 1`, flex-grow swallows the free space first, so the auto
+       left margin resolves to ~0 and the whole page slides underneath the fixed
+       sidebar — breadcrumbs clipped by the dark blue panel.
+       Keep the explicit sidebar offset and only auto the right-hand side. */
+    margin-left: var(--sidebar-width);
+    margin-right: auto;
+}
+
+/* On phones the sidebar becomes an off-canvas drawer, so drop the offset.
+   This must live here (not only in responsive.css) because the rule above is
+   more specific than `.main-content` and would otherwise win. */
+@media (max-width: 768px) {
+    body.viz-page .main-content {
+        margin-left: 0;
+        margin-right: auto;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   2. Header: breadcrumbs + title block
+   -------------------------------------------------------------------------- */
+.viz-shell {
+    margin-bottom: 1.5rem;
+}
+
+.viz-crumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    color: var(--viz-muted);
+    margin-bottom: 1rem;
+}
+
+.viz-crumbs a {
+    color: var(--viz-primary);
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.1rem 0.35rem;
+    border-radius: 6px;
+    transition: background 0.16s ease, color 0.16s ease;
+}
+
+.viz-crumbs a:hover {
+    background: var(--viz-primary-soft);
+    text-decoration: none;
+}
+
+.viz-crumbs .sep {
+    color: #b6bcca;
+}
+
+.viz-crumbs .current {
+    color: var(--viz-text);
+    font-weight: 600;
+}
+
+.viz-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+    border: 1px solid var(--viz-border);
+    border-radius: var(--viz-radius);
+    box-shadow: var(--viz-shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.viz-head::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--viz-primary), #6d28d9);
+}
+
+.viz-head__left {
+    min-width: 260px;
+    flex: 1 1 320px;
+}
+
+.viz-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--viz-primary);
+    background: var(--viz-primary-soft);
+    border: 1px solid rgba(0, 15, 145, 0.14);
+    padding: 0.26rem 0.65rem;
+    border-radius: 999px;
+    margin-bottom: 0.7rem;
+}
+
+.viz-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 2.4vw, 2.15rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--viz-primary);
+    margin: 0 0 0.45rem 0;
+    border: none;
+}
+
+.viz-subtitle {
+    margin: 0;
+    font-size: 0.93rem;
+    line-height: 1.55;
+    color: var(--viz-muted);
+    max-width: 72ch;
+}
+
+.viz-head__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+}
+
+.viz-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--viz-radius-sm);
+    border: 1px solid var(--viz-border);
+    background: #fff;
+    color: var(--viz-text);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.18s var(--viz-ease);
+    box-shadow: var(--viz-shadow-sm);
+    white-space: nowrap;
+}
+
+.viz-btn:hover {
+    border-color: var(--viz-primary);
+    color: var(--viz-primary);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: var(--viz-shadow-md);
+}
+
+.viz-btn svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.viz-btn--primary {
+    background: linear-gradient(135deg, var(--viz-primary), var(--viz-primary-hover));
+    border-color: transparent;
+    color: #fff;
+}
+
+.viz-btn--primary:hover {
+    color: #fff;
+    filter: brightness(1.08);
+}
+
+/* --------------------------------------------------------------------------
+   3. Layout
+   -------------------------------------------------------------------------- */
+body.viz-page .portal-grid {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 22px;
+    height: auto !important;
+    min-height: 0;
+    max-height: none !important;
+    overflow: visible !important;
+    align-items: start;
+}
+
+body.viz-page .config-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + 1.25rem);
+    max-height: calc(100vh - var(--header-height) - 3rem);
+    overflow-y: auto;
+    padding: 2px 8px 8px 0;
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+body.viz-page .visualiser-main {
+    overflow: visible !important;
+    padding-right: 0;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+@media (max-width: 1180px) {
+    body.viz-page .portal-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.viz-page .config-sidebar {
+        position: static;
+        max-height: none;
+        overflow: visible;
+    }
+}
+
+/* Nice thin scrollbars inside scrolling panes */
+body.viz-page .config-sidebar,
+body.viz-page .visualiser-main {
+    scrollbar-width: thin;
+    scrollbar-color: #c9d1dd transparent;
+}
+
+body.viz-page .config-sidebar::-webkit-scrollbar,
+body.viz-page .visualiser-main::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.viz-page .config-sidebar::-webkit-scrollbar-thumb,
+body.viz-page .visualiser-main::-webkit-scrollbar-thumb {
+    background: #c9d1dd;
+    border-radius: 99px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+/* --------------------------------------------------------------------------
+   4. Cards & panels
+   -------------------------------------------------------------------------- */
+body.viz-page .pert-card,
+body.viz-page .card,
+body.viz-page .panel {
+    background: var(--viz-card);
+    border: 1px solid var(--viz-border);
+    border-radius: var(--viz-radius);
+    box-shadow: var(--viz-shadow-sm);
+    transition: box-shadow 0.22s var(--viz-ease), border-color 0.22s var(--viz-ease), transform 0.22s var(--viz-ease);
+}
+
+body.viz-page .pert-card:hover {
+    border-color: rgba(0, 15, 145, 0.28);
+    box-shadow: var(--viz-shadow-md);
+}
+
+body.viz-page .pert-card h2,
+body.viz-page .pert-card h3 {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--viz-primary);
+    border-bottom: 1px solid var(--viz-border);
+    padding-bottom: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+/* Stat tiles */
+body.viz-page .stat-card,
+body.viz-page .stat-box {
+    background: linear-gradient(160deg, #ffffff 0%, #f7faff 100%);
+    border: 1px solid var(--viz-border);
+    border-radius: var(--viz-radius);
+    box-shadow: var(--viz-shadow-sm);
+    padding: 1rem 1.15rem;
+    transition: box-shadow 0.22s var(--viz-ease), border-color 0.22s var(--viz-ease);
+}
+
+body.viz-page .stat-card:hover,
+body.viz-page .stat-box:hover {
+    box-shadow: var(--viz-shadow-md);
+    border-color: rgba(0, 15, 145, 0.25);
+}
+
+body.viz-page .stat-card .label,
+body.viz-page .stat-box .label {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--viz-muted-strong);
+    margin-bottom: 0.45rem;
+}
+
+body.viz-page .stat-card .value,
+body.viz-page .stat-box .value {
+    font-family: var(--viz-mono);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--viz-text);
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+body.viz-page .stat-box.highlight {
+    border-color: var(--viz-info) !important;
+    box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.10) !important;
+}
+
+body.viz-page .stat-box.highlight .value { color: var(--viz-info) !important; }
+
+body.viz-page .stat-box.success {
+    border-color: var(--viz-ok) !important;
+    box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.10) !important;
+}
+
+body.viz-page .stat-box.success .value { color: var(--viz-ok) !important; }
+
+/* --------------------------------------------------------------------------
+   5. Legacy dark panels — neutralised for the light theme.
+      Every #0f172a / #1e293b / #334155 surface and its light-on-dark text
+      is remapped here so no visualiser ships an unreadable slab.
+   -------------------------------------------------------------------------- */
+body.viz-page .diagnostic-panel,
+body.viz-page .result-panel,
+body.viz-page .equation-solver,
+body.viz-page .phase-grid,
+body.viz-page .loop-box,
+body.viz-page .stat-box,
+body.viz-page .expert-panel {
+    background: var(--viz-deep) !important;
+    border: 1px solid var(--viz-deep-border) !important;
+    color: var(--viz-text) !important;
+    border-radius: var(--viz-radius) !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+body.viz-page .diag-row,
+body.viz-page .eq-row {
+    border-bottom: 1px dashed var(--viz-deep-line) !important;
+}
+
+body.viz-page .diag-label,
+body.viz-page .result-box .label,
+body.viz-page .loop-box h3 {
+    color: var(--viz-muted-strong) !important;
+}
+
+body.viz-page .diag-value,
+body.viz-page .result-box .value,
+body.viz-page .stat-box .value {
+    color: var(--viz-text) !important;
+}
+
+body.viz-page .result-box .value span {
+    border-bottom: 2px solid var(--viz-deep-line) !important;
+}
+
+body.viz-page .result-box .value span.revealed {
+    color: var(--viz-info) !important;
+    border-color: var(--viz-info) !important;
+    text-shadow: none !important;
+}
+
+body.viz-page .result-box .value span.success {
+    color: var(--viz-ok) !important;
+    border-color: var(--viz-ok) !important;
+    text-shadow: none !important;
+}
+
+body.viz-page .equation-solver {
+    color: var(--viz-info) !important;
+}
+
+body.viz-page .eq-row.resolved {
+    color: var(--viz-ok) !important;
+    background: var(--viz-ok-soft) !important;
+}
+
+/* QFT phase dials: legacy used translucent white on navy */
+body.viz-page .phase-cell { color: var(--viz-text); }
+
+body.viz-page .phase-canvas {
+    background: #ffffff !important;
+    border: 1px solid var(--viz-deep-border) !important;
+    box-shadow: var(--viz-shadow-sm);
+}
+
+body.viz-page .phase-label {
+    color: var(--viz-muted-strong) !important;
+}
+
+/* 3-Qubit / flow diagram: legacy light-grey-on-white text */
+body.viz-page .flow-text {
+    color: var(--viz-muted-strong) !important;
+}
+
+body.viz-page .flow-step.active .flow-text {
+    color: var(--viz-primary) !important;
+}
+
+body.viz-page .flow-icon {
+    background: #fff !important;
+    border: 1.5px solid var(--viz-border) !important;
+    color: var(--viz-muted-strong) !important;
+    box-shadow: var(--viz-shadow-sm);
+}
+
+body.viz-page .flow-line {
+    background: var(--viz-deep-line) !important;
+}
+
+body.viz-page .qubit-state,
+body.viz-page .val-display {
+    background: #eef2f8 !important;
+    border: 1px solid var(--viz-deep-border) !important;
+    color: var(--viz-text) !important;
+    font-family: var(--viz-mono);
+    border-radius: var(--viz-radius-xs) !important;
+}
+
+/* QAOA / VQE graph nodes */
+body.viz-page .node {
+    background: #fff !important;
+    box-shadow: var(--viz-shadow-sm);
+}
+
+body.viz-page .edge { background: var(--viz-deep-line) !important; }
+body.viz-page .edge-cut { background: var(--viz-ok) !important; box-shadow: 0 0 10px rgba(4, 120, 87, 0.35) !important; }
+body.viz-page .node-0 { border-color: var(--viz-rose) !important; color: var(--viz-rose) !important; }
+body.viz-page .node-1 { border-color: var(--viz-info) !important; color: var(--viz-info) !important; }
+body.viz-page .node-none { border-color: var(--viz-muted-strong) !important; color: var(--viz-muted-strong) !important; }
+
+/* --------------------------------------------------------------------------
+   6. Controls
+   -------------------------------------------------------------------------- */
+body.viz-page .modern-input,
+body.viz-page .modern-select,
+body.viz-page input[type="text"],
+body.viz-page input[type="number"],
+body.viz-page select {
+    font-family: var(--viz-mono);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--viz-text);
+    background: #fff;
+    border: 1px solid var(--viz-border);
+    border-radius: var(--viz-radius-sm);
+    padding: 0.6rem 0.75rem;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.viz-page .modern-input:hover,
+body.viz-page .modern-select:hover,
+body.viz-page select:hover {
+    border-color: #b9c2d0;
+}
+
+body.viz-page .modern-input:focus,
+body.viz-page .modern-select:focus,
+body.viz-page input:focus,
+body.viz-page select:focus {
+    outline: none;
+    border-color: var(--viz-primary);
+    box-shadow: 0 0 0 3px rgba(0, 15, 145, 0.10);
+}
+
+body.viz-page input[type="range"] {
+    accent-color: var(--viz-primary);
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+/* Only bare labels — pages using the qt- library style their own with .qt-label */
+body.viz-page label:not([class]) {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--viz-muted-strong);
+}
+
+/* Buttons */
+body.viz-page .btn-modern {
+    border-radius: var(--viz-radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.62rem 1.05rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    box-shadow: var(--viz-shadow-sm);
+    transition: transform 0.18s var(--viz-ease), box-shadow 0.18s var(--viz-ease), filter 0.18s var(--viz-ease);
+}
+
+body.viz-page .btn-modern:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--viz-shadow-md);
+    filter: brightness(1.05);
+}
+
+body.viz-page .btn-modern:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: var(--viz-shadow-sm);
+}
+
+body.viz-page .btn-modern:disabled {
+    opacity: 0.45;
+    filter: grayscale(0.6);
+    cursor: not-allowed;
+}
+
+body.viz-page .btn-primary {
+    color: #fff !important;
+    background: linear-gradient(135deg, var(--viz-primary), var(--viz-primary-hover));
+}
+
+body.viz-page .btn-green {
+    color: #fff !important;
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+body.viz-page .btn-yellow {
+    color: #fff !important;
+    background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+body.viz-page .btn-secondary,
+body.viz-page .btn-outline {
+    background: #fff;
+    border-color: var(--viz-border);
+    color: var(--viz-text);
+}
+
+body.viz-page .btn-secondary:hover:not(:disabled) {
+    border-color: var(--viz-primary);
+    color: var(--viz-primary);
+}
+
+/* --------------------------------------------------------------------------
+   7. Charts — give Chart.js a definite height so it never collapses
+   -------------------------------------------------------------------------- */
+body.viz-page .chart-container {
+    position: relative;
+    width: 100%;
+    height: clamp(260px, 34vh, 360px) !important;
+    min-height: 260px !important;
+    max-height: none !important;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border: 1px solid var(--viz-border);
+    border-radius: var(--viz-radius);
+    box-shadow: var(--viz-shadow-sm);
+    overflow: hidden;
+}
+
+body.viz-page .chart-container:hover {
+    box-shadow: var(--viz-shadow-md);
+}
+
+body.viz-page canvas {
+    border-radius: var(--viz-radius-sm);
+    max-width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   8. Circuit rendering
+   -------------------------------------------------------------------------- */
+body.viz-page .circuit-grid {
+    background:
+        linear-gradient(180deg, #fbfcfe 0%, #f7f9fc 100%);
+    border: 1px solid var(--viz-border);
+    border-radius: var(--viz-radius);
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+body.viz-page .circuit-wire,
+body.viz-page .wire,
+body.viz-page .classical-wire {
+    background: #c3ccdb !important;
+    border-radius: 2px;
+}
+
+body.viz-page .wire-label,
+body.viz-page .domain-label {
+    font-family: var(--viz-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--viz-muted-strong);
+}
+
+body.viz-page .gate,
+body.viz-page .circuit-gate {
+    background: #fff;
+    border: 2px solid var(--viz-primary);
+    color: var(--viz-primary);
+    border-radius: var(--viz-radius-sm);
+    font-family: var(--viz-mono);
+    font-weight: 800;
+    box-shadow: var(--viz-shadow-sm);
+    transition: transform 0.2s var(--viz-ease), box-shadow 0.2s var(--viz-ease);
+}
+
+body.viz-page .gate.cu,
+body.viz-page .gate.cp {
+    border-color: var(--viz-ok);
+    color: var(--viz-ok);
+}
+
+body.viz-page .gate.iqft {
+    border-color: var(--viz-violet);
+    color: var(--viz-violet);
+}
+
+body.viz-page .gate.measure,
+body.viz-page .measure-gate {
+    border-color: var(--viz-warn);
+    color: var(--viz-warn);
+}
+
+body.viz-page .gate.swap,
+body.viz-page .swap-gate {
+    border-color: var(--viz-teal);
+    color: var(--viz-teal);
+}
+
+body.viz-page .cnot-control,
+body.viz-page .cnot-target,
+body.viz-page .cnot-line {
+    border-color: var(--viz-primary) !important;
+    background: var(--viz-primary) !important;
+}
+
+body.viz-page .cnot-target {
+    background: #fff !important;
+    border: 2px solid var(--viz-primary) !important;
+}
+
+body.viz-page .loop-box {
+    border-style: dashed !important;
+    background: #fbfcfe !important;
+}
+
+/* Active / animating gate — keep the glow, tame it for light backgrounds */
+body.viz-page .anim-active {
+    box-shadow: 0 0 0 4px rgba(0, 15, 145, 0.12) !important;
+    transform: scale(1.06);
+    z-index: 3;
+}
+
+/* --------------------------------------------------------------------------
+   9. Small shared bits
+   -------------------------------------------------------------------------- */
+body.viz-page .expert-panel {
+    font-size: 0.86rem;
+    line-height: 1.6;
+}
+
+body.viz-page .expert-panel:hover {
+    border-color: var(--viz-primary) !important;
+}
+
+body.viz-page .site-footer {
+    border-top: 1px solid var(--viz-border);
+}
+
+/* --------------------------------------------------------------------------
+   10. Accessibility & motion
+   -------------------------------------------------------------------------- */
+body.viz-page a:focus-visible,
+body.viz-page button:focus-visible,
+body.viz-page input:focus-visible,
+body.viz-page select:focus-visible {
+    outline: 2px solid var(--viz-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.viz-page * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   11. Responsive: rigid legacy grids collapse instead of overflowing
+   -------------------------------------------------------------------------- */
+/* Chart rows that carried a hardcoded height + fixed second column */
+body.viz-page .viz-analytics {
+    height: auto !important;
+    align-items: stretch;
+}
+
+@media (max-width: 980px) {
+    body.viz-page .viz-analytics,
+    body.viz-page .hybrid-loop {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.viz-page .dash-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.viz-page .phase-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 680px) {
+    body.viz-page .dash-grid,
+    body.viz-page .phase-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.viz-page .viz-head {
+        padding: 1.1rem 1.15rem;
+    }
+
+    body.viz-page .viz-title {
+        font-size: 1.5rem;
+    }
+
+    body.viz-page .chart-container {
+        height: 280px !important;
+    }
+}

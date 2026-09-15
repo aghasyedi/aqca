@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Interference Visualiser | AQCA</title>
+    <meta name="description" content="AQCA - Quantum Interference Visualiser">
+
+    <!-- Chart.js -->
+    <script src="../../assets/vendor/chartjs/chart.js"></script>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fonts.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/visualiser.css">
+    <link rel="stylesheet" href="../../css/viz-tools.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/icons/icon.png">
+
+    <!-- MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../assets/vendor/mathjax/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body class="viz-page">
+    <header class="site-header">
+        <div class="header-left">
+            <img src="../../assets/logos/logo.png" alt="AQCA Logo" class="header-logo">
+            <div class="site-title">
+                <h1>AQCA</h1>
+                <span class="subtitle">All Quantum Computing Algorithms</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <img src="../../assets/icons/icon.png" alt="Institute Logo" class="header-logo">
+            <button id="mobile-menu-toggle" class="menu-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="../../index.html" class="nav-link"><span class="step-num"
+                            style="background: var(--primary); color:#ffffff;">✦</span>Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../about.html" class="nav-link">About AQCA</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../preface.html" class="nav-link">Preface</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../basics.html" class="nav-link">QC Basics</a>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-group-toggle" aria-expanded="true">
+                        <span>Algorithms</span>
+                        <span class="nav-group-icon">▼</span>
+                    </button>
+                    <ul class="nav-subgroup">
+                        <li><a href="../../algorithms.html" class="nav-link">Algorithm Catalogue</a></li>
+
+                        <li class="nav-category-label">1. Quantum Communication</li>
+                        <li><a href="../../algorithms/foundations/bell-state.html" class="nav-link">• Bell State Generator</a></li>
+                        <li><a href="../../algorithms/foundations/superdense-coding.html" class="nav-link">• Superdense Coding</a></li>
+                        <li><a href="../../algorithms/foundations/quantum-teleportation.html" class="nav-link">• Quantum Teleportation</a></li>
+                        <li><a href="../../algorithms/foundations/entanglement-swapping.html" class="nav-link">• Entanglement Swapping</a></li>
+
+                        <li class="nav-category-label">2. Early Oracle Algorithms</li>
+                        <li><a href="../../algorithms/oracle-based/deutsch.html" class="nav-link">• Deutsch's Algorithm</a></li>
+                        <li><a href="../../algorithms/oracle-based/deutsch-jozsa.html" class="nav-link">• Deutsch–Jozsa</a></li>
+                        <li><a href="../../algorithms/oracle-based/bernstein-vazirani.html" class="nav-link">• Bernstein–Vazirani</a></li>
+                        <li><a href="../../algorithms/oracle-based/simon.html" class="nav-link">• Simon's Algorithm</a></li>
+
+                        <li class="nav-category-label">3. Core Algorithms</li>
+                        <li><a href="../../algorithms/phase-amplitude/qft.html" class="nav-link">• Quantum Fourier Transform</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/qpe.html" class="nav-link">• Quantum Phase Estimation</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/grover.html" class="nav-link">• Grover's Search</a></li>
+                        <li><a href="../../algorithms/phase-amplitude/amplitude-amplification.html" class="nav-link">• Amplitude Amplification</a></li>
+
+                        <li class="nav-category-label">4. Flagship & Hybrid Models <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/flagship-hybrid/shor.html" class="nav-link">• Shor's Algorithm</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/vqe.html" class="nav-link">• Variational Quantum Eigensolver</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/qaoa.html" class="nav-link">• QAOA</a></li>
+                        <li><a href="../../algorithms/flagship-hybrid/hhl.html" class="nav-link">• HHL Algorithm</a></li>
+
+                        <li class="nav-category-label">5. Quantum Error Correction <span class="badge-beta">In-Progress</span></li>
+                        <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
+                        <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+
+                        <li class="nav-category-label">6. Visualisation & Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item">
+                    <a href="../../visualise.html" class="nav-link">Visualise</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../analysis.html" class="nav-link">Analysis Centre</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../resources.html" class="nav-link">Resources</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../references.html" class="nav-link">References</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../appendix.html" class="nav-link">Appendix</a>
+                </div>
+                <div class="nav-item">
+                    <a href="../../developer.html" class="nav-link">Developer</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div class="viz-shell">
+                <nav class="viz-crumbs">
+                    <a href="../../index.html">Home</a><span class="sep">›</span>
+                    <a href="../../visualise.html">Visualise</a><span class="sep">›</span>
+                    <span class="current">Quantum Interference Visualiser</span>
+                </nav>
+                <div class="viz-head">
+                    <div class="viz-head__left">
+                        <span class="viz-eyebrow">Interactive Visualiser</span>
+                        <h1 class="viz-title">Quantum Interference Visualiser</h1>
+                        <p class="viz-subtitle">A real two-qubit interferometer: a particle qubit plus a which-path detector. Watch the two path amplitudes add as phasors, and watch the fringes wash out as path information grows.</p>
+                    </div>
+                    <div class="viz-head__actions">
+                        <a class="viz-btn viz-btn--primary" href="../../basics.html">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            QC Basics
+                        </a>
+                        <a class="viz-btn" href="../../visualise.html">All visualisers</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portal-grid">
+                <!-- ================= SIDEBAR ================= -->
+                <aside class="config-sidebar">
+                    <div class="pert-card">
+                        <h2>1. Interferometer</h2>
+                        <div class="qt-field">
+                            <label class="qt-label">Relative phase φ between the two paths</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-phi" min="0" max="360" step="1" value="0">
+                                <span class="qt-range-val" id="val-phi">0°</span>
+                            </div>
+                        </div>
+                        <div class="qt-field">
+                            <label class="qt-label">Which-path marking θ</label>
+                            <div class="qt-range-row">
+                                <input type="range" id="inp-theta" min="0" max="180" step="1" value="0">
+                                <span class="qt-range-val" id="val-theta">0°</span>
+                            </div>
+                        </div>
+                        <div class="qt-btn-row">
+                            <button class="qt-btn qt-btn--sm" data-p="full">Perfect fringes</button>
+                            <button class="qt-btn qt-btn--sm" data-p="half">Partial (θ=90°)</button>
+                            <button class="qt-btn qt-btn--sm" data-p="none">Which-path known</button>
+                        </div>
+                        <p class="qt-note">θ rotates an internal "path detector" qubit. At θ = 0 the detector cannot
+                            distinguish the paths and interference is perfect. At θ = 180° the detector states are
+                            orthogonal, the paths are fully labelled and the fringes vanish.</p>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>2. Complementarity</h2>
+                        <div class="qt-stat-grid">
+                            <div class="qt-stat qt-stat--ok"><span class="qt-stat__k">Visibility V</span><span class="qt-stat__v" id="out-v">1.000</span></div>
+                            <div class="qt-stat qt-stat--warn"><span class="qt-stat__k">Distinguish. D</span><span class="qt-stat__v" id="out-d">0.000</span></div>
+                            <div class="qt-stat"><span class="qt-stat__k">D² + V²</span><span class="qt-stat__v" id="out-sum">1.000</span></div>
+                            <div class="qt-stat"><span class="qt-stat__k">P(0) − P(1)</span><span class="qt-stat__v" id="out-diff">1.000</span></div>
+                        </div>
+                        <div class="qt-kv qt-mt">
+                            <div class="qt-kv__row"><span class="qt-kv__k">P(q0 = 0)</span><span class="qt-kv__v is-accent" id="out-p0">1.000</span></div>
+                            <div class="qt-kv__row"><span class="qt-kv__k">P(q0 = 1)</span><span class="qt-kv__v is-accent" id="out-p1">0.000</span></div>
+                            <div class="qt-kv__row"><span class="qt-kv__k">amplitude → |00⟩</span><span class="qt-kv__v" id="out-a00">0.500</span></div>
+                            <div class="qt-kv__row"><span class="qt-kv__k">amplitude → |10⟩</span><span class="qt-kv__v" id="out-a10">0.500</span></div>
+                        </div>
+                        <div class="qt-note">D² + V² = 1 is the Englert–Greenberger–Yasin duality relation: you may
+                            know which path the particle took, or you may see interference — never both at full strength.</div>
+                    </div>
+
+                    <div class="pert-card">
+                        <h2>3. Circuit Being Simulated</h2>
+                        <div class="qt-formula" style="white-space:pre; line-height:1.8;">q0 : ──H──■──────P(φ)──H──
+                       │        │
+q1 : ──────Ry(θ)────────</div>
+                        <p class="qt-note">q0 is the interfering particle, q1 is the which-path detector. The whole
+                            two-qubit state is simulated exactly — nothing here is hard-coded.</p>
+                    </div>
+                </aside>
+
+                <!-- ================= MAIN ================= -->
+                <div class="visualiser-main">
+                    <div class="pert-card">
+                        <h2>Phasor Addition <span class="qt-card-note">how the two paths combine</span></h2>
+                        <div class="qt-canvas-box qt-canvas-box--wide" style="max-height:340px;">
+                            <canvas id="phasor"></canvas>
+                        </div>
+                        <div class="qt-legend">
+                            <span><i class="qt-dot" style="background:#047857"></i>path through |0⟩</span>
+                            <span><i class="qt-dot" style="background:#6d47c9"></i>path through |1⟩</span>
+                            <span><i class="qt-dot" style="background:#000f91"></i>resultant amplitude</span>
+                            <span><i class="qt-dot" style="background:#9ca3af"></i>leakage (adds as probability only)</span>
+                        </div>
+                    </div>
+
+                    <div class="qt-2col qt-2col--fixed">
+                        <div class="pert-card">
+                            <h2>Interference Fringe</h2>
+                            <div class="qt-canvas-box" style="height:280px;">
+                                <canvas id="chart-fringe"></canvas>
+                            </div>
+                            <div class="qt-note">P(0) = ½(1 + V cos φ). As the which-path marking grows, V falls and
+                                the fringes flatten towards the classical ½ / ½ mixture.</div>
+                        </div>
+
+                        <div class="pert-card">
+                            <h2>Amplitudes Stage By Stage</h2>
+                            <div class="qt-scroll">
+                                <table class="qt-table" id="out-stages"></table>
+                            </div>
+                            <div class="qt-note">Watch the |10⟩ and |11⟩ entries: the phase φ only rotates them, while
+                                θ moves amplitude from |10⟩ into |11⟩ — the component that can no longer interfere.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content" style="justify-content: center;">
+            <div>&copy; 2026 AQCA - All Quantum Computing Algorithms</div>
+        </div>
+    </footer>
+
+    <script src="../../js/quantum-core.js"></script>
+
+<script>
+    (function () {
+        'use strict';
+
+        var elPhi = document.getElementById('inp-phi');
+        var elTheta = document.getElementById('inp-theta');
+        var FONT = { family: '"JetBrains Mono", monospace', size: 11 };
+        var INK = '#5f6368';
+
+        function simulate(phiDeg, thetaDeg) {
+            var phi = phiDeg * Math.PI / 180;
+            var th = thetaDeg * Math.PI / 180;
+            var st = QC.zeroState(2);
+            st = QC.apply1q(st, QC.GATES.H, 0, 2);              // beam splitter
+            var s1 = QC.canonical(st.slice());
+            st = QC.applyCtrl(st, QC.Ry(th), 0, 1, 2);          // which-path marking
+            var s2 = QC.canonical(st.slice());
+            st = QC.apply1q(st, QC.P(phi), 0, 2);               // relative phase
+            var s3 = QC.canonical(st.slice());
+            st = QC.apply1q(st, QC.GATES.H, 0, 2);              // recombine
+            var s4 = QC.canonical(st.slice());
+            return { s1: s1, s2: s2, s3: s3, s4: s4, c: Math.cos(th / 2), s: Math.sin(th / 2) };
+        }
+
+        function drawPhasor(R) {
+            var cv = document.getElementById('phasor');
+            var dpr = window.devicePixelRatio || 1;
+            var w = cv.clientWidth || 640, h = cv.clientHeight || 340;
+            cv.width = w * dpr; cv.height = h * dpr;
+            var ctx = cv.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, w, h);
+
+            var panels = [
+                { title: 'amplitude → q0 = |0⟩', a: R.s4[0], leak: R.s4[1], sign: +1 },
+                { title: 'amplitude → q0 = |1⟩', a: R.s4[2], leak: R.s4[3], sign: -1 }
+            ];
+            var pw = w / 2;
+            var base = Math.min(pw * 0.42, h * 0.42);
+
+            for (var pi = 0; pi < 2; pi++) {
+                var P = panels[pi];
+                var cx = pw * pi + pw / 2;
+                var cy = h / 2 + 6;
+                var scale = base / 1.05;   // max |amp| is 1
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(pw * pi, 0, pw, h);
+                ctx.clip();
+
+                /* unit reference circle */
+                ctx.strokeStyle = 'rgba(15,23,42,0.10)';
+                ctx.lineWidth = 1;
+                [0.25, 0.5, 0.75, 1].forEach(function (f) {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, scale * f, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+                ctx.beginPath();
+                ctx.moveTo(cx - scale * 1.12, cy); ctx.lineTo(cx + scale * 1.12, cy);
+                ctx.moveTo(cx, cy - scale * 1.12); ctx.lineTo(cx, cy + scale * 1.12);
+                ctx.strokeStyle = 'rgba(15,23,42,0.22)';
+                ctx.stroke();
+
+                /* the two path amplitudes */
+                var a1 = QC.C(0.5, 0);
+                var a2 = QC.csub(P.a, a1);
+
+                arrow(ctx, cx, cy, a1, scale, '#047857', 'path |0⟩');
+                arrow(ctx, cx + a1.re * scale, cy - a1.im * scale, a2, scale, '#6d47c9', 'path |1⟩');
+                arrow(ctx, cx, cy, P.a, scale, '#000f91', null, 3.2);
+
+                /* leakage arrow drawn offset, dashed */
+                if (QC.cabs(P.leak) > 1e-6) {
+                    ctx.save();
+                    ctx.setLineDash([4, 3]);
+                    arrow(ctx, cx, cy, P.leak, scale, '#9ca3af', null, 2);
+                    ctx.restore();
+                    ctx.font = '10px "JetBrains Mono", monospace';
+                    ctx.fillStyle = 'rgba(107,114,128,0.95)';
+                    ctx.textAlign = 'left';
+                    ctx.fillText('leak ' + QC.num(QC.cabs(P.leak), 2),
+                        cx + P.leak.re * scale + 6, cy - P.leak.im * scale + 12);
+                }
+
+                ctx.font = '600 11px "Inter", sans-serif';
+                ctx.fillStyle = '#202124';
+                ctx.textAlign = 'center';
+                ctx.fillText(P.title, cx, 20);
+
+                ctx.font = '11px "JetBrains Mono", monospace';
+                ctx.fillStyle = '#000f91';
+                ctx.textAlign = 'left';
+                ctx.fillText('|result|² = ' + QC.num(Math.pow(QC.cabs(P.a), 2), 3), cx - scale * 1.05, h - 8);
+
+                ctx.restore();
+            }
+
+            ctx.strokeStyle = 'rgba(15,23,42,0.12)';
+            ctx.beginPath();
+            ctx.moveTo(pw, 8); ctx.lineTo(pw, h - 8);
+            ctx.stroke();
+        }
+
+        function arrow(ctx, ox, oy, a, scale, color, label, width) {
+            var ex = ox + a.re * scale, ey = oy - a.im * scale;
+            var dx = ex - ox, dy = ey - oy;
+            var L = Math.hypot(dx, dy);
+            ctx.beginPath();
+            ctx.moveTo(ox, oy); ctx.lineTo(ex, ey);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width || 2.2;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            if (L > 6) {
+                var ux = dx / L, uy = dy / L, hs = 8;
+                ctx.beginPath();
+                ctx.moveTo(ex, ey);
+                ctx.lineTo(ex - ux * hs - uy * hs * 0.42, ey - uy * hs + ux * hs * 0.42);
+                ctx.lineTo(ex - ux * hs + uy * hs * 0.42, ey - uy * hs - ux * hs * 0.42);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
+            if (label) {
+                ctx.font = '600 10px "JetBrains Mono", monospace';
+                ctx.fillStyle = color;
+                ctx.textAlign = 'left';
+                ctx.fillText(label, (ox + ex) / 2 + 5, (oy + ey) / 2 - 5);
+            }
+        }
+
+        function drawFringe(V, phiDeg, P0) {
+            var cv = document.getElementById('chart-fringe');
+            if (!window.Chart) return;
+            var pts0 = [], pts1 = [];
+            for (var d = 0; d <= 360; d += 3) {
+                var r = d * Math.PI / 180;
+                pts0.push({ x: d, y: 0.5 * (1 + V * Math.cos(r)) });
+                pts1.push({ x: d, y: 0.5 * (1 - V * Math.cos(r)) });
+            }
+            if (cv.__chart) cv.__chart.destroy();
+            cv.__chart = new Chart(cv.getContext('2d'), {
+                type: 'line',
+                data: {
+                    datasets: [
+                        { label: 'P(q0 = 0)', data: pts0, borderColor: 'rgba(0,15,145,0.9)', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.1 },
+                        { label: 'P(q0 = 1)', data: pts1, borderColor: 'rgba(180,83,9,0.85)', borderWidth: 1.6, borderDash: [5, 4], pointRadius: 0, fill: false, tension: 0.1 },
+                        {
+                            label: 'current φ',
+                            data: [{ x: phiDeg, y: 0 }, { x: phiDeg, y: 1 }],
+                            borderColor: 'rgba(109,71,201,0.9)', borderWidth: 1.4, pointRadius: 0, fill: false
+                        },
+                        {
+                            label: 'now',
+                            data: [{ x: phiDeg, y: P0 }],
+                            backgroundColor: '#6d47c9', borderColor: '#fff', borderWidth: 2, pointRadius: 6, showLine: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: INK, font: FONT, boxWidth: 11, usePointStyle: true, filter: function (i) { return i.text !== 'now'; } } },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear', min: 0, max: 360,
+                            title: { display: true, text: 'phase φ (degrees)', color: INK, font: FONT },
+                            ticks: { color: INK, font: FONT, stepSize: 90 },
+                            grid: { color: 'rgba(15,23,42,0.06)' }
+                        },
+                        y: {
+                            min: 0, max: 1,
+                            ticks: { color: INK, font: FONT },
+                            grid: { color: 'rgba(15,23,42,0.06)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function drawStages(R) {
+            var labs = QC.labels(2);
+            var cols = [R.s1, R.s2, R.s3, R.s4];
+            var heads = ['after H', 'after marking', 'after P(φ)', 'after H'];
+            var html = '<thead><tr><th>basis</th>' + heads.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>';
+            for (var i = 0; i < 4; i++) {
+                html += '<tr><td>|' + labs[i] + '⟩</td>';
+                for (var c = 0; c < 4; c++) {
+                    html += '<td>' + QC.fmt(cols[c][i], 3) + '</td>';
+                }
+                html += '</tr>';
+            }
+            html += '</tbody>';
+            document.getElementById('out-stages').innerHTML = html;
+        }
+
+        function update() {
+            var phiDeg = parseFloat(elPhi.value);
+            var thetaDeg = parseFloat(elTheta.value);
+            document.getElementById('val-phi').textContent = QC.num(phiDeg, 0) + '°';
+            document.getElementById('val-theta').textContent = QC.num(thetaDeg, 0) + '°';
+
+            var R = simulate(phiDeg, thetaDeg);
+            var p = QC.probs(R.s4);
+            var P0 = p[0] + p[1];
+            var P1 = p[2] + p[3];
+            var V = Math.abs(R.c);
+            var D = Math.abs(R.s);
+
+            document.getElementById('out-v').textContent = QC.num(V, 3);
+            document.getElementById('out-d').textContent = QC.num(D, 3);
+            document.getElementById('out-sum').textContent = QC.num(D * D + V * V, 3);
+            document.getElementById('out-diff').textContent = QC.num(P0 - P1, 3);
+            document.getElementById('out-p0').textContent = QC.num(P0, 3);
+            document.getElementById('out-p1').textContent = QC.num(P1, 3);
+            document.getElementById('out-a00').textContent = QC.fmtPolar(R.s4[0], 3);
+            document.getElementById('out-a10').textContent = QC.fmtPolar(R.s4[2], 3);
+
+            drawPhasor(R);
+            drawFringe(V, phiDeg, P0);
+            drawStages(R);
+        }
+
+        elPhi.addEventListener('input', update);
+        elTheta.addEventListener('input', update);
+
+        document.querySelectorAll('[data-p]').forEach(function (b) {
+            b.addEventListener('click', function () {
+                var k = b.getAttribute('data-p');
+                elTheta.value = k === 'full' ? 0 : (k === 'half' ? 90 : 180);
+                elPhi.value = k === 'none' ? 0 : 0;
+                update();
+            });
+        });
+
+        window.addEventListener('resize', update);
+        update();
+    })();
+    </script>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
+</body>
+</html>

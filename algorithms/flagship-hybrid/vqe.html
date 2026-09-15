@@ -9,6 +9,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/code-lab.css">
     
     
     <!-- Fonts -->
@@ -95,6 +97,16 @@
                         <li><a href="../../algorithms/fault-tolerance/3-qubit-code.html" class="nav-link">• 3-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/shors-9-qubit-code.html" class="nav-link">• Shor's 9-Qubit Code</a></li>
                         <li><a href="../../algorithms/fault-tolerance/steane-code.html" class="nav-link">• Steane 7-Qubit Code</a></li>
+                    
+                        <li class="nav-category-label">6. Visualisation &amp; Interaction</li>
+                        <li><a href="../../algorithms/visualisation/bloch-sphere-visualiser.html" class="nav-link">• Bloch Sphere Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/multi-qubit-state-visualiser.html" class="nav-link">• Multi-Qubit State Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-circuit-simulator.html" class="nav-link">• Quantum Circuit Simulator</a></li>
+                        <li><a href="../../algorithms/visualisation/statevector-bloch-animation.html" class="nav-link">• Statevector → Bloch Sphere</a></li>
+                        <li><a href="../../algorithms/visualisation/measurement-visualiser.html" class="nav-link">• Measurement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/quantum-interference-visualiser.html" class="nav-link">• Quantum Interference</a></li>
+                        <li><a href="../../algorithms/visualisation/entanglement-visualiser.html" class="nav-link">• Entanglement Visualiser</a></li>
+                        <li><a href="../../algorithms/visualisation/chsh-visualiser.html" class="nav-link">• Bell / CHSH Experiment</a></li>
                     </ul>
                 </div>
                 <div class="nav-item">
@@ -271,18 +283,18 @@ from qiskit.quantum_info import SparsePauliOp, Statevector, DensityMatrix, Opera
 from qiskit_algorithms.optimizers import COBYLA
 from qiskit.primitives import StatevectorEstimator
 from qiskit_aer import AerSimulator
-from qiskit.visualisation import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
+from qiskit.visualization import plot_histogram, plot_bloch_multivector, plot_state_qsphere, array_to_latex
 from IPython.display import display, Markdown
 
 # ==========================================
 # CONFIGURATION &amp; PROBLEM DEFINITION
 # ==========================================
 # 1. Define the Hamiltonian (e.g., a simple molecule or spin model)
-hamiltonian = SparsePauliOp.from_list([(&quot;ZZ&quot;, 1.0), (&quot;XX&quot;, -0.5), (&quot;IY&quot;, 0.2)])
+hamiltonian = SparsePauliOp.from_list([("ZZ", 1.0), ("XX", -0.5), ("IY", 0.2)])
 num_qubits = hamiltonian.num_qubits
 
 # 2. Define the Ansatz (Hardware-efficient heuristic)
-ansatz = EfficientSU2(num_qubits=num_qubits, reps=1, entanglement=&#x27;linear&#x27;)
+ansatz = EfficientSU2(num_qubits=num_qubits, reps=1, entanglement='linear')
 
 # ==========================================
 # CLASSICAL OPTIMISATION LOOP
@@ -292,7 +304,7 @@ optimiser = COBYLA(maxiter=100)
 energy_history = []
 
 def cost_function(params):
-    &quot;&quot;&quot;Evaluates the expectation value &lt;ψ(θ)|H|ψ(θ)&gt;&quot;&quot;&quot;
+    """Evaluates the expectation value &lt;ψ(θ)|H|ψ(θ)&gt;"""
 
     pub = (ansatz, hamiltonian, [params])
     job = estimator.run([pub])
@@ -307,7 +319,7 @@ np.random.seed(42) # Seeded for reproducible lab results
 initial_theta = np.random.rand(ansatz.num_parameters)
 
 # 3. Run Optimisation
-print(&quot;Running VQE Optimisation...&quot;)
+print("Running VQE Optimisation...")
 result = optimiser.minimize(fun=cost_function, x0=initial_theta)
 optimal_energy = result.fun
 optimal_params = result.x
@@ -315,9 +327,9 @@ optimal_params = result.x
 # ==========================================
 # EXTRACT EXACT MATH OF THE OPTIMAL STATE
 # ==========================================
-# Bind the classical optimiser&#x27;s results to the quantum circuit
+# Bind the classical optimiser's results to the quantum circuit
 optimal_circuit = ansatz.assign_parameters(optimal_params)
-optimal_circuit.barrier(label=&quot;Optimum State&quot;)
+optimal_circuit.barrier(label="Optimum State")
 
 unitary = Operator(optimal_circuit)
 final_state = Statevector(optimal_circuit)
@@ -337,36 +349,36 @@ counts = job.result().get_counts()
 # REQUIRED COURSEWORK OUTPUTS
 # ==========================================
 
-display(Markdown(f&quot;VQE Analysis: Ground State Estimation&quot;))
-print(f&quot;Optimal Energy Found: {optimal_energy:.6f}&quot;)
-print(f&quot;Total Iterations: {len(energy_history)}&quot;)
+display(Markdown(f"VQE Analysis: Ground State Estimation"))
+print(f"Optimal Energy Found: {optimal_energy:.6f}")
+print(f"Total Iterations: {len(energy_history)}")
 
-display(Markdown(&quot;1. Circuit Visualisation (Bound with Optimal Parameters)&quot;))
-display(optimal_circuit.draw(&#x27;mpl&#x27;))
+display(Markdown("1. Circuit Visualisation (Bound with Optimal Parameters)"))
+display(optimal_circuit.draw('mpl'))
 
-display(Markdown(&quot;2. Unitary Evolution&quot;))
+display(Markdown("2. Unitary Evolution"))
 if num_qubits &lt;= 3:
-    print(f&quot;The {2**num_qubits}x{2**num_qubits} unitary matrix of the optimised ansatz:&quot;)
-    display(array_to_latex(unitary.data, prefix=&quot;U_{VQE} = &quot;, max_size=16))
+    print(f"The {2**num_qubits}x{2**num_qubits} unitary matrix of the optimised ansatz:")
+    display(array_to_latex(unitary.data, prefix="U_{VQE} = ", max_size=16))
 else:
-    print(f&quot;Unitary matrix omitted: {num_qubits} qubits results in a matrix too large for clean display.&quot;)
+    print(f"Unitary matrix omitted: {num_qubits} qubits results in a matrix too large for clean display.")
 
-display(Markdown(&quot;3. Quantum State Representation&quot;))
-print(&quot;Exact Statevector of the ground state approximation:&quot;)
-display(final_state.draw(&#x27;latex&#x27;))
+display(Markdown("3. Quantum State Representation"))
+print("Exact Statevector of the ground state approximation:")
+display(final_state.draw('latex'))
 
-print(&quot;\nFinal DensityMatrix:&quot;)
-display(final_density.draw(&#x27;latex&#x27;))
+print("\nFinal DensityMatrix:")
+display(final_density.draw('latex'))
 
-display(Markdown(&quot;4. State Visualisation&quot;))
-print(&quot;State prior to measurement (Bloch Spheres):&quot;)
+display(Markdown("4. State Visualisation"))
+print("State prior to measurement (Bloch Spheres):")
 display(plot_bloch_multivector(final_state))
 
-print(&quot;\nState prior to measurement (Q-Sphere):&quot;)
+print("\nState prior to measurement (Q-Sphere):")
 display(plot_state_qsphere(final_state))
 
-display(Markdown(&quot;5. Measurement Analysis (Z-Basis)&quot;))
-print(f&quot;Raw measurement counts: {counts}&quot;)
+display(Markdown("5. Measurement Analysis (Z-Basis)"))
+print(f"Raw measurement counts: {counts}")
 display(plot_histogram(counts))</code></pre>
             </div>
         </div>
@@ -377,57 +389,57 @@ display(plot_histogram(counts))</code></pre>
                 <a href="../../assets/notebooks/vqe.ipynb" download class="view-output-btn secondary">Download .ipynb</a>
             </div>
                         <div class="code-output-data" style="display: none;">
-                <pre class="notebook-output-text">Running VQE Optimisation...
+<pre class="notebook-output-text">Running VQE Optimisation...
 </pre>
-                <pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/791349799.py:19: DeprecationWarning: The class ``qiskit.circuit.library.n_local.efficient_su2.EfficientSU2`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. Use the function qiskit.circuit.library.efficient_su2 instead.
+<pre class="notebook-output-text">/var/folders/bx/skxt34z93js03bl2brq7gw8m0000gn/T/ipykernel_76310/791349799.py:19: DeprecationWarning: The class ``qiskit.circuit.library.n_local.efficient_su2.EfficientSU2`` is deprecated as of Qiskit 2.1. It will be removed in Qiskit 3.0. Use the function qiskit.circuit.library.efficient_su2 instead.
   ansatz = EfficientSU2(num_qubits=num_qubits, reps=1, entanglement='linear')
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">VQE Analysis: Ground State Estimation</p>
-                <pre class="notebook-output-text">Optimal Energy Found: -1.327575
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">VQE Analysis: Ground State Estimation</p>
+<pre class="notebook-output-text">Optimal Energy Found: -1.327575
 Total Iterations: 100
 </pre>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Bound with Optimal Parameters)</p>
-                <img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-1.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
-                <pre class="notebook-output-text">The 4x4 unitary matrix of the optimised ansatz:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">1. Circuit Visualisation (Bound with Optimal Parameters)</p>
+<img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-1.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">2. Unitary Evolution</p>
+<pre class="notebook-output-text">The 4x4 unitary matrix of the optimised ansatz:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 U_{VQE} = 
 \begin{bmatrix}
-0.0945520728 + 0.1035822473 i & -0.0456557197 + 0.4198143279 i & -0.4263394763 + 0.3783851694 i & -0.5194887032 + 0.4551844799 i  \\
- 0.0926025841 + 0.4296620659 i & -0.0013122385 - 0.4858099428 i & -0.3312589781 + 0.5936941115 i & 0.1637740275 - 0.2859634721 i  \\
- 0.4910183778 + 0.7311979757 i & 0.1428314279 + 0.0764968308 i & 0.1377084483 - 0.3996601037 i & 0.0020456123 + 0.1389312468 i  \\
- 0.1042158962 - 0.0231390155 i & 0.5346752203 + 0.522999321 i & 0.0520269836 + 0.1773569386 i & -0.0707201324 - 0.6245271204 i  \\
+0.0945520728 + 0.1035822473 i &amp; -0.0456557197 + 0.4198143279 i &amp; -0.4263394763 + 0.3783851694 i &amp; -0.5194887032 + 0.4551844799 i  \\
+ 0.0926025841 + 0.4296620659 i &amp; -0.0013122385 - 0.4858099428 i &amp; -0.3312589781 + 0.5936941115 i &amp; 0.1637740275 - 0.2859634721 i  \\
+ 0.4910183778 + 0.7311979757 i &amp; 0.1428314279 + 0.0764968308 i &amp; 0.1377084483 - 0.3996601037 i &amp; 0.0020456123 + 0.1389312468 i  \\
+ 0.1042158962 - 0.0231390155 i &amp; 0.5346752203 + 0.522999321 i &amp; 0.0520269836 + 0.1773569386 i &amp; -0.0707201324 - 0.6245271204 i  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
-                <pre class="notebook-output-text">Exact Statevector of the ground state approximation:
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">3. Quantum State Representation</p>
+<pre class="notebook-output-text">Exact Statevector of the ground state approximation:
 </pre>
-                <div class="notebook-output-math">$$(0.0945520728 + 0.1035822473 i) |00\rangle+(0.0926025841 + 0.4296620659 i) |01\rangle+(0.4910183778 + 0.7311979757 i) |10\rangle+(0.1042158962 - 0.0231390155 i) |11\rangle$$</div>
-                <pre class="notebook-output-text">
+<div class="notebook-output-math">$$(0.0945520728 + 0.1035822473 i) |00\rangle+(0.0926025841 + 0.4296620659 i) |01\rangle+(0.4910183778 + 0.7311979757 i) |10\rangle+(0.1042158962 - 0.0231390155 i) |11\rangle$$</div>
+<pre class="notebook-output-text">
 Final DensityMatrix:
 </pre>
-                <div class="notebook-output-math">$$
+<div class="notebook-output-math">$$
 
 \begin{bmatrix}
-0.0196693764 & 0.0532611287 - 0.0310334552 i & 0.122165935 - 0.0182754972 i & 0.0074570378 + 0.0129827586 i  \\
- 0.0532611287 + 0.0310334552 i & 0.1931847295 & 0.3596376035 + 0.1432611486 i & -0.0002912959 + 0.0469203499 i  \\
- 0.122165935 + 0.0182754972 i & 0.3596376035 - 0.1432611486 i & \frac{2^{\frac{67}{724}} \cdot 3^{\frac{127}{362}} \cdot 5^{\frac{175}{181}} \cdot 7^{\frac{4}{181}}}{10} & 0.034252719 + 0.0875641342 i  \\
- 0.0074570378 - 0.0129827586 i & -0.0002912959 - 0.0469203499 i & 0.034252719 - 0.0875641342 i & 0.0113963671  \\
+0.0196693764 &amp; 0.0532611287 - 0.0310334552 i &amp; 0.122165935 - 0.0182754972 i &amp; 0.0074570378 + 0.0129827586 i  \\
+ 0.0532611287 + 0.0310334552 i &amp; 0.1931847295 &amp; 0.3596376035 + 0.1432611486 i &amp; -0.0002912959 + 0.0469203499 i  \\
+ 0.122165935 + 0.0182754972 i &amp; 0.3596376035 - 0.1432611486 i &amp; \frac{2^{\frac{67}{724}} \cdot 3^{\frac{127}{362}} \cdot 5^{\frac{175}{181}} \cdot 7^{\frac{4}{181}}}{10} &amp; 0.034252719 + 0.0875641342 i  \\
+ 0.0074570378 - 0.0129827586 i &amp; -0.0002912959 - 0.0469203499 i &amp; 0.034252719 - 0.0875641342 i &amp; 0.0113963671  \\
  \end{bmatrix}
 $$</div>
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
-                <pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">4. State Visualisation</p>
+<pre class="notebook-output-text">State prior to measurement (Bloch Spheres):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-2.png" alt="Notebook output">
-                <pre class="notebook-output-text">
+<img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-2.png" alt="Notebook output">
+<pre class="notebook-output-text">
 State prior to measurement (Q-Sphere):
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-3.png" alt="Notebook output">
-                <p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Z-Basis)</p>
-                <pre class="notebook-output-text">Raw measurement counts: {'01': 193, '11': 12, '00': 18, '10': 801}
+<img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-3.png" alt="Notebook output">
+<p class="notebook-output-text" style="font-weight: 600; margin-top: 1rem;">5. Measurement Analysis (Z-Basis)</p>
+<pre class="notebook-output-text">Raw measurement counts: {'01': 193, '11': 12, '00': 18, '10': 801}
 </pre>
-                <img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-4.png" alt="Notebook output">
+<img class="notebook-output-img" src="../../assets/images/outputs/vqe-out-4.png" alt="Notebook output">
             </div>
         </div>
     </section>
@@ -480,7 +492,9 @@ State prior to measurement (Q-Sphere):
     <!-- JS -->
     <script src="../../js/main.js"></script>
     <script src="../../js/navigation.js"></script>
+    <script src="../../js/sidebar.js"></script>
     <script src="../../js/algorithm-ui.js"></script>
+    <script src="../../js/code-runner.js"></script>
     
 </body>
 </html>
