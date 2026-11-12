@@ -1346,7 +1346,7 @@ html {
 .main-content>.content-section>p,
 .main-content>p,
 .main-content p:not([style]) {
-  max-width: 84ch;
+  /* max-width: 84ch; */
 }
 
 /* Inline code inside prose (never the Code Lab blocks). */
